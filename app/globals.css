@@ -151,3 +151,58 @@
     transform: translate(-50%, -50%) translate(var(--px), var(--py)) scale(0.2);
   }
 }
+
+/* === Codrops Shu grid-load animation === */
+/* SVG rectangle outline traces each item, then fades. Image fades-in + scales. */
+.shu-item {
+  position: relative;
+  --shu-stagger: 120ms;
+  --shu-delay: calc(min(var(--shu-i, 0), 12) * var(--shu-stagger));
+}
+.shu-outline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+  opacity: 0;
+  animation: shu-line-opacity 700ms linear forwards;
+  animation-delay: var(--shu-delay);
+}
+.shu-outline rect {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1.25;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  animation: shu-line-draw 800ms ease-in-out forwards;
+  animation-delay: var(--shu-delay);
+}
+.shu-content {
+  opacity: 0;
+  transform: scale(0.5);
+  transform-origin: 50% 50%;
+  animation: shu-item-in 800ms cubic-bezier(0.2, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--shu-delay) + 800ms);
+}
+@keyframes shu-line-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes shu-line-opacity {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  72% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes shu-item-in {
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shu-outline { display: none; }
+  .shu-content {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

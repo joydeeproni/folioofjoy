@@ -42,19 +42,33 @@ function GalleryContent({ items, onClose }: { items: GalleryItem[]; onClose: () 
         </button>
       </div>
 
-      {/* Masonry grid */}
+      {/* Masonry grid — items reveal with codrops "Shu" animation */}
       <div className="px-3 pb-20 flex gap-3">
         {[col1, col2].map((col, colIdx) => (
           <div key={colIdx} className="flex-1 flex flex-col gap-3">
             {col.map((item) => (
-              <div key={item.idx}>
-                <div className="rounded-xl overflow-hidden border border-white/10">
-                  <img
-                    src={item.src}
-                    alt={item.caption}
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                  />
+              <div
+                key={item.idx}
+                className="shu-item"
+                style={{ ['--shu-i' as string]: item.idx } as React.CSSProperties}
+              >
+                <div className="relative rounded-xl overflow-hidden border border-white/10">
+                  <div className="shu-content">
+                    <img
+                      src={item.src}
+                      alt={item.caption}
+                      className="w-full h-auto object-cover block"
+                      loading="lazy"
+                    />
+                  </div>
+                  <svg
+                    className="shu-outline"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <rect x="0.6" y="0.6" width="98.8" height="98.8" pathLength="1" rx="2" />
+                  </svg>
                 </div>
                 {item.url && (
                   <a

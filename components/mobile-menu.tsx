@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+
 interface MobileMenuProps {
   onExplore: () => void;
   toolbarColor?: string;
@@ -66,6 +68,14 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
             >
               What&apos;s this pattern?
             </button>
+
+            <Link
+              href="/lounge"
+              onClick={() => setOpen(false)}
+              className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
+            >
+              Lounge
+            </Link>
           </nav>
         </div>
       )}
