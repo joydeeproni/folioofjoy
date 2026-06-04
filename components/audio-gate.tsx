@@ -18,7 +18,8 @@ export function AudioGate({ onChoice }: AudioGateProps) {
 
   const handleChoice = (muted: boolean) => {
     setExiting(true);
-    setTimeout(() => onChoice(muted), 600);
+    // Call immediately so audio.play() runs within the user gesture
+    onChoice(muted);
   };
 
   return (
@@ -36,7 +37,7 @@ export function AudioGate({ onChoice }: AudioGateProps) {
       >
         {/* Description */}
         <p className="text-base font-sans text-white/50 leading-relaxed" style={{ textWrap: 'balance' } as React.CSSProperties}>
-          An experiment to see what makes a song catchy and visualize repetition in music.
+          This website has music playing in the background.
         </p>
 
         {/* Question */}

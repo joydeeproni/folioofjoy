@@ -57,6 +57,12 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
             >
               LinkedIn
             </a>
+            <a
+              href="/work"
+              className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
+            >
+              Work
+            </a>
 
             <div className="w-12 h-px bg-white/10 my-2" />
 

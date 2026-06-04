@@ -27,6 +27,7 @@ interface MatrixVisualizationProps {
   backgroundColor?: string;
   onCellHover?: (cell: { i: number; j: number } | null) => void;
   exploreSettings?: ExploreSettings;
+  audioProgress?: number; // 0-1, syncs cell reveal to audio playback
 }
 
 function getWordShape(word: string): CellShape {
@@ -172,6 +173,7 @@ export function MatrixVisualization({
   backgroundColor = 'rgb(10, 10, 12)',
   onCellHover,
   exploreSettings,
+  audioProgress,
 }: MatrixVisualizationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
@@ -181,7 +183,11 @@ export function MatrixVisualization({
     lastTickTime: number;
     looping: boolean;
     ripples: Map<string, number>; // "i,j" -> reveal timestamp
-  }>({ revealedCount: 0, cells: [], lastTickTime: 0, looping: false, ripples: new Map() });
+    audioProgress: number | undefined;
+  }>({ revealedCount: 0, cells: [], lastTickTime: 0, looping: false, ripples: new Map(), audioProgress: undefined });
+
+  // Keep audioProgress in ref so the draw loop reads the latest value without re-triggering the effect
+  useEffect(() => { stateRef.current.audioProgress = audioProgress; }, [audioProgress]);
 
   const wave = exploreSettings?.wave || 'center';
   const shapeMode = exploreSettings?.shapeMode || 'mixed';
@@ -192,8 +198,7 @@ export function MatrixVisualization({
     if (!n) return null;
     const w = window.innerWidth;
     const h = window.innerHeight;
-    // Fill the entire viewport — use the larger dimension to cover everything
-    const cellSize = Math.max(1, Math.ceil(Math.max(w, h) / n));
+    const cellSize = Math.max(4, Math.min(22, Math.floor(Math.min(w, h) / n)));
     const matrixW = n * cellSize;
     const matrixH = n * cellSize;
     const offsetX = (w - matrixW) / 2;
@@ -244,23 +249,33 @@ export function MatrixVisualization({
 
       const { cellSize, offsetX, offsetY, w, h, matrixW, matrixH, n } = geo;
 
-      if (state.lastTickTime === 0) state.lastTickTime = timestamp;
-      const elapsed = timestamp - state.lastTickTime;
-      const toReveal = Math.floor(elapsed / MS_PER_CELL);
+      const prevCount = state.revealedCount;
 
-      if (toReveal > 0) {
-        state.lastTickTime = timestamp;
-        const prevCount = state.revealedCount;
+      if (state.audioProgress != null) {
+        // Time-synced: reveal cells proportional to audio position
         state.revealedCount = Math.min(
-          state.revealedCount + toReveal,
+          Math.floor(state.audioProgress * state.cells.length),
           state.cells.length
         );
-        // Track new reveals for ripple
-        if (isRipple) {
-          for (let k = prevCount; k < state.revealedCount; k++) {
-            const c = state.cells[k];
-            state.ripples.set(`${c.i},${c.j}`, timestamp);
-          }
+      } else {
+        // Fallback: timer-based reveal
+        if (state.lastTickTime === 0) state.lastTickTime = timestamp;
+        const elapsed = timestamp - state.lastTickTime;
+        const toReveal = Math.floor(elapsed / MS_PER_CELL);
+        if (toReveal > 0) {
+          state.lastTickTime = timestamp;
+          state.revealedCount = Math.min(
+            state.revealedCount + toReveal,
+            state.cells.length
+          );
+        }
+      }
+
+      // Track new reveals for ripple
+      if (isRipple && state.revealedCount > prevCount) {
+        for (let k = prevCount; k < state.revealedCount; k++) {
+          const c = state.cells[k];
+          state.ripples.set(`${c.i},${c.j}`, timestamp);
         }
       }
 
@@ -350,8 +365,8 @@ export function MatrixVisualization({
         }
       }
 
-      // Loop
-      if (state.revealedCount >= state.cells.length) {
+      // Loop (only in timer-based mode — audio-synced mode resets via restartKey on track change)
+      if (state.audioProgress == null && state.revealedCount >= state.cells.length) {
         if (!state.looping) {
           state.looping = true;
           setTimeout(() => {

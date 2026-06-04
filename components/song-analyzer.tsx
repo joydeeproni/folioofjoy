@@ -12,7 +12,7 @@ import { ScrollReveal } from './scroll-reveal';
 import { WorkLink } from './work-preview';
 import { ExperimentsLink } from './experiments-preview';
 import { AudioGate } from './audio-gate';
-import { getTracks, searchTrackLyrics, type Track, type PlaylistType } from '@/lib/music';
+import { getTracks, type Track } from '@/lib/music';
 import { extractDominantColor, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
 
 export function SongAnalyzer() {
@@ -31,7 +31,7 @@ export function SongAnalyzer() {
   const [theme, setTheme] = useState<ThemeColors>(DEFAULT_THEME);
   const [exploreMode, setExploreMode] = useState(false);
   const [hoveredCell, setHoveredCell] = useState<{ i: number; j: number } | null>(null);
-  const [playlist] = useState<PlaylistType>('top50');
+  const [audioDuration, setAudioDuration] = useState(0);
   const [exploreSettings, setExploreSettings] = useState<ExploreSettings>({
     wave: 'center',
     colorMode: 'white',
@@ -49,18 +49,11 @@ export function SongAnalyzer() {
   }, [theme]);
 
   useEffect(() => {
-    async function loadTracks() {
-      setLoading(true);
-      try {
-        const fetchedTracks = await getTracks(playlist);
-        setTracks(fetchedTracks);
-        if (fetchedTracks.length > 0) setCurrentTrack(fetchedTracks[0]);
-        setError(null);
-      } catch (err) { console.error('Error loading tracks:', err); setError(null); }
-      finally { setLoading(false); }
-    }
-    loadTracks();
-  }, [playlist]);
+    const localTracks = getTracks();
+    setTracks(localTracks);
+    if (localTracks.length > 0) setCurrentTrack(localTracks[0]);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     const imageUrl = currentTrack?.album?.images[0]?.url;
@@ -69,32 +62,26 @@ export function SongAnalyzer() {
   }, [currentTrack]);
 
   useEffect(() => {
-    async function fetchLyrics() {
-      if (!currentTrack) { setLyrics(''); return; }
-      try {
-        const artistName = currentTrack.artists[0]?.name || '';
-        const trackName = currentTrack.name;
-        const fetchedLyrics = await searchTrackLyrics(trackName, artistName);
-        setLyrics(fetchedLyrics || 'No lyrics available for this track');
-      } catch (err) { console.error('Failed to fetch lyrics:', err); setLyrics('Failed to load lyrics'); }
-    }
-    fetchLyrics();
+    if (!currentTrack) { setLyrics(''); return; }
+    setLyrics(currentTrack.lyrics || '');
   }, [currentTrack]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const captureDuration = () => { if (audio.duration && isFinite(audio.duration)) setAudioDuration(audio.duration); };
+    const handleTimeUpdate = () => { setCurrentTime(audio.currentTime); captureDuration(); };
     const handleEnded = () => { setIsPlaying(false); playNext(); };
     audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('durationchange', captureDuration);
+    audio.addEventListener('loadedmetadata', captureDuration);
     audio.addEventListener('ended', handleEnded);
-    return () => { audio.removeEventListener('timeupdate', handleTimeUpdate); audio.removeEventListener('ended', handleEnded); };
+    return () => { audio.removeEventListener('timeupdate', handleTimeUpdate); audio.removeEventListener('durationchange', captureDuration); audio.removeEventListener('loadedmetadata', captureDuration); audio.removeEventListener('ended', handleEnded); };
   }, [tracks, currentTrack]);
 
   const handleGateChoice = useCallback((muted: boolean) => {
     setIsMuted(muted);
-    setGateOpen(false);
-    // Auto-start playback after gate
+    // Start playback immediately (within user gesture)
     if (audioRef.current) {
       audioRef.current.muted = muted;
     }
@@ -102,10 +89,13 @@ export function SongAnalyzer() {
       audioRef.current.src = currentTrack.preview_url;
       audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
+    // Delay gate close so the fade-out animation plays
+    setTimeout(() => setGateOpen(false), 600);
   }, [currentTrack]);
 
   const playTrack = async (track: Track) => {
-    setCurrentTrack(track); setCurrentTime(0);
+    setCurrentTrack(track); setCurrentTime(0); setAudioDuration(0);
+    setRestartKey((k) => k + 1);
     if (audioRef.current && track.preview_url) {
       audioRef.current.src = track.preview_url;
       try { await audioRef.current.play(); setIsPlaying(true); } catch { setIsPlaying(false); }
@@ -180,6 +170,7 @@ export function SongAnalyzer() {
             restartKey={restartKey} backgroundColor={theme.backgroundRgb}
             onCellHover={exploreMode ? setHoveredCell : undefined}
             exploreSettings={exploreSettings}
+            audioProgress={audioDuration > 0 ? currentTime / audioDuration : undefined}
           />
         )}
 
@@ -193,6 +184,7 @@ export function SongAnalyzer() {
           <a href="https://www.instagram.com/joyingntravelling/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Instagram</a>
           <a href="https://www.threads.com/@joydeep.roni" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Threads</a>
           <a href="https://www.linkedin.com/in/joydeeproni/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">LinkedIn</a>
+          <a href="/work" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Work</a>
         </div>
 
         {/* Mobile: Menu button + overlay */}
