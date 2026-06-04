@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import Link from 'next/link';
 import { HelpCircle, X } from 'lucide-react';
 import { MatrixVisualization, type ExploreSettings } from './matrix-visualization';
-import { FloatingPill } from './floating-pill';
 import { HeroOverlay } from './hero-overlay';
 import { PatternGuide } from './pattern-guide';
 import { ExploreToolbar } from './explore-toolbar';
@@ -11,27 +11,22 @@ import { MobileMenu } from './mobile-menu';
 import { ScrollReveal } from './scroll-reveal';
 import { WorkLink } from './work-preview';
 import { ExperimentsLink } from './experiments-preview';
-import { AudioGate } from './audio-gate';
-import { getTracks, type Track } from '@/lib/music';
-import { extractDominantColor, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
+import { useAudio } from '@/lib/audio-context';
+import { DEFAULT_THEME } from '@/lib/color';
 
 export function SongAnalyzer() {
+  const {
+    tracks, currentTrack, loading, error,
+    isPlaying, isMuted, currentTime, audioDuration,
+    theme, gateOpen, restartKey, dimmed,
+    playTrack, togglePlayPause, toggleMute, playNext, playPrevious,
+    triggerRestart, setDimmed, setPlayerVisible,
+  } = useAudio();
+
   const [lyrics, setLyrics] = useState('');
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showSingleMatches, setShowSingleMatches] = useState(true);
-  const [gateOpen, setGateOpen] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [restartKey, setRestartKey] = useState(0);
-  const [dimmed, setDimmed] = useState(false);
-  const [theme, setTheme] = useState<ThemeColors>(DEFAULT_THEME);
   const [exploreMode, setExploreMode] = useState(false);
   const [hoveredCell, setHoveredCell] = useState<{ i: number; j: number } | null>(null);
-  const [audioDuration, setAudioDuration] = useState(0);
   const [exploreSettings, setExploreSettings] = useState<ExploreSettings>({
     wave: 'center',
     colorMode: 'white',
@@ -40,97 +35,35 @@ export function SongAnalyzer() {
     hue: DEFAULT_THEME.hue,
     saturation: DEFAULT_THEME.saturation,
   });
-  const audioRef = useRef<HTMLAudioElement>(null);
 
+  // Sync explore settings when theme changes
   useEffect(() => {
     setExploreSettings((s) => ({
       ...s, shades: theme.shades, hue: theme.hue, saturation: theme.saturation,
     }));
   }, [theme]);
 
-  useEffect(() => {
-    const localTracks = getTracks();
-    setTracks(localTracks);
-    if (localTracks.length > 0) setCurrentTrack(localTracks[0]);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const imageUrl = currentTrack?.album?.images[0]?.url;
-    if (!imageUrl) return;
-    extractDominantColor(imageUrl).then(setTheme);
-  }, [currentTrack]);
-
+  // Update lyrics when track changes
   useEffect(() => {
     if (!currentTrack) { setLyrics(''); return; }
     setLyrics(currentTrack.lyrics || '');
   }, [currentTrack]);
 
+  // Hide FloatingPill during explore mode; restore on unmount
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const captureDuration = () => { if (audio.duration && isFinite(audio.duration)) setAudioDuration(audio.duration); };
-    const handleTimeUpdate = () => { setCurrentTime(audio.currentTime); captureDuration(); };
-    const handleEnded = () => { setIsPlaying(false); playNext(); };
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('durationchange', captureDuration);
-    audio.addEventListener('loadedmetadata', captureDuration);
-    audio.addEventListener('ended', handleEnded);
-    return () => { audio.removeEventListener('timeupdate', handleTimeUpdate); audio.removeEventListener('durationchange', captureDuration); audio.removeEventListener('loadedmetadata', captureDuration); audio.removeEventListener('ended', handleEnded); };
-  }, [tracks, currentTrack]);
-
-  const handleGateChoice = useCallback((muted: boolean) => {
-    setIsMuted(muted);
-    // Start playback immediately (within user gesture)
-    if (audioRef.current) {
-      audioRef.current.muted = muted;
-    }
-    if (currentTrack?.preview_url && audioRef.current) {
-      audioRef.current.src = currentTrack.preview_url;
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    }
-    // Delay gate close so the fade-out animation plays
-    setTimeout(() => setGateOpen(false), 600);
-  }, [currentTrack]);
-
-  const playTrack = async (track: Track) => {
-    setCurrentTrack(track); setCurrentTime(0); setAudioDuration(0);
-    setRestartKey((k) => k + 1);
-    if (audioRef.current && track.preview_url) {
-      audioRef.current.src = track.preview_url;
-      try { await audioRef.current.play(); setIsPlaying(true); } catch { setIsPlaying(false); }
-    } else { setIsPlaying(false); }
-  };
-
-  const togglePlayPause = () => {
-    if (!audioRef.current || !currentTrack?.preview_url) return;
-    if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
-    else { audioRef.current.src = currentTrack.preview_url; audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false)); }
-  };
-
-  const toggleMute = () => { if (audioRef.current) { audioRef.current.muted = !isMuted; setIsMuted(!isMuted); } };
-
-  const playNext = () => {
-    const ci = tracks.findIndex((t) => t.id === currentTrack?.id) ?? -1;
-    if (tracks[(ci + 1) % tracks.length]) playTrack(tracks[(ci + 1) % tracks.length]);
-  };
-
-  const playPrevious = () => {
-    const ci = tracks.findIndex((t) => t.id === currentTrack?.id) ?? -1;
-    if (tracks[(ci - 1 + tracks.length) % tracks.length]) playTrack(tracks[(ci - 1 + tracks.length) % tracks.length]);
-  };
-
-  const handleRestart = useCallback(() => { setRestartKey((k) => k + 1); }, []);
+    setPlayerVisible(!exploreMode);
+    return () => setPlayerVisible(true);
+  }, [exploreMode, setPlayerVisible]);
 
   const enterExplore = useCallback(() => {
-    setExploreMode(true); setHoveredCell(null); setRestartKey((k) => k + 1);
-  }, []);
+    setExploreMode(true); setHoveredCell(null); triggerRestart();
+  }, [triggerRestart]);
 
   const exitExplore = useCallback(() => {
     setExploreMode(false); setHoveredCell(null);
     setExploreSettings((s) => ({ ...s, wave: 'center', colorMode: 'white', shapeMode: 'circles-ripple' }));
-    setRestartKey((k) => k + 1);
-  }, []);
+    triggerRestart();
+  }, [triggerRestart]);
 
   const { words, wordMap } = useMemo(() => {
     if (!lyrics) return { words: [], wordMap: new Map() };
@@ -147,18 +80,11 @@ export function SongAnalyzer() {
     return null;
   }, [exploreMode, hoveredCell, words, wordMap, showSingleMatches]);
 
-  if (gateOpen) {
-    return (
-      <>
-        <audio ref={audioRef} crossOrigin="anonymous" muted={isMuted} />
-        <AudioGate onChoice={handleGateChoice} />
-      </>
-    );
-  }
+  // Don't render page content until the audio gate is dismissed (preserves mount animations)
+  if (gateOpen) return null;
 
   return (
     <div className={`relative w-full transition-colors duration-1000 ease-in-out${exploreMode ? ' h-screen overflow-hidden' : ''}`} style={{ backgroundColor: theme.background }}>
-      <audio ref={audioRef} crossOrigin="anonymous" muted={isMuted} />
 
       {/* ===== FIRST FOLD — full screen ===== */}
       <div className="relative h-screen w-full overflow-hidden">
@@ -181,10 +107,10 @@ export function SongAnalyzer() {
 
         {/* Desktop: Social links — top left */}
         <div className={`hidden md:flex fixed top-7 left-8 z-50 items-center gap-5 transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <a href="https://www.instagram.com/joyingntravelling/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Instagram</a>
+          <Link href="/work" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Work</Link>
+          <a href="https://www.instagram.com/joyingntravelling/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Photography</a>
           <a href="https://www.threads.com/@joydeep.roni" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Threads</a>
           <a href="https://www.linkedin.com/in/joydeeproni/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans text-white/40 hover:text-white transition-colors">LinkedIn</a>
-          <a href="/work" className="text-sm font-sans text-white/40 hover:text-white transition-colors">Work</a>
         </div>
 
         {/* Mobile: Menu button + overlay */}
@@ -221,23 +147,11 @@ export function SongAnalyzer() {
         {/* Explore toolbar */}
         <ExploreToolbar
           active={exploreMode} settings={exploreSettings} onChange={setExploreSettings}
-          onRestart={handleRestart} toolbarColor={theme.toolbar} accentColor={theme.accent}
+          onRestart={triggerRestart} toolbarColor={theme.toolbar} accentColor={theme.accent}
           currentTrack={currentTrack} isPlaying={isPlaying} isMuted={isMuted} currentTime={currentTime}
           onTogglePlayPause={togglePlayPause} onPlayNext={playNext} onPlayPrevious={playPrevious} onToggleMute={toggleMute}
           lyrics={lyrics} wordMap={wordMap}
         />
-
-        {/* Floating Pill */}
-        <div className={`transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <FloatingPill
-            currentTrack={currentTrack} tracks={tracks} loading={loading} error={error}
-            isPlaying={isPlaying} currentTime={currentTime}
-            onPlayTrack={playTrack} onTogglePlayPause={togglePlayPause}
-            onPlayNext={playNext} onPlayPrevious={playPrevious}
-            isMuted={isMuted} onToggleMute={toggleMute} onRestart={handleRestart}
-            dimmed={dimmed} onToggleDimmed={() => setDimmed((d) => !d)} toolbarColor={theme.toolbar}
-          />
-        </div>
       </div>
 
       {/* ===== BELOW FOLD — mobile only, scrollable, hidden in explore ===== */}

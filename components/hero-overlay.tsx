@@ -119,16 +119,17 @@ export function HeroOverlay({ accentColor, toolbarColor }: HeroOverlayProps) {
         </div>
       </div>
 
-      {/* Footer — desktop */}
-      <div className="hidden md:block px-8 pb-6 text-center pointer-events-none" style={{ textWrap: 'balance' } as React.CSSProperties}>
-        <p className="text-xs font-sans text-white/20 leading-relaxed">
-          Folio of Joy is always work in progress because learning and building never stops
-          <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />
-          Joydeep Sengupta &copy; 2077
-          <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />
-          K&oslash;benhavn, Danmark
-        </p>
-      </div>
+      {/* Footer — rotated on left edge, hidden on mobile */}
+      <p
+        className="hidden md:block fixed top-1/2 left-3 text-[10px] font-mono uppercase tracking-[0.2em] text-white/20 whitespace-nowrap pointer-events-none z-50"
+        style={{ transform: 'rotate(-90deg) translateX(-50%)', transformOrigin: '0 0' }}
+      >
+        Folio of Joy — always work in progress
+        <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />
+        Joydeep Sengupta &copy; 2077
+        <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />
+        K&oslash;benhavn, Danmark
+      </p>
     </div>
   );
 }

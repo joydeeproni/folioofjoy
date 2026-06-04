@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 interface MobileMenuProps {
   onExplore: () => void;
   toolbarColor?: string;
@@ -39,7 +40,7 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
               rel="noopener noreferrer"
               className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
             >
-              Instagram
+              Photography
             </a>
             <a
               href="https://www.threads.com/@joydeep.roni"
@@ -57,12 +58,12 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
             >
               LinkedIn
             </a>
-            <a
+            <Link
               href="/work"
               className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
             >
               Work
-            </a>
+            </Link>
 
             <div className="w-12 h-px bg-white/10 my-2" />
 
