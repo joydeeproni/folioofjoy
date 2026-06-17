@@ -49,6 +49,20 @@ export default function RootLayout({
             })(window, document, "clarity", "script", "x8e0ps4d6h");`}
           </Script>
         )}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-L37PFWXGRK"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-L37PFWXGRK');`}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   )
