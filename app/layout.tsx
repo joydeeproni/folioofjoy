@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
+import { DialRoot } from 'dialkit'
 import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
+import { DitherTransition } from '@/components/dither-transition'
+import 'dialkit/styles.css'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -38,7 +41,9 @@ export default function RootLayout({
         <Providers>
           {children}
           <AudioUI />
+          <DitherTransition />
         </Providers>
+        {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}
         {process.env.NODE_ENV === 'production' && <Analytics />}
         {process.env.NODE_ENV === 'production' && (
           <Script id="microsoft-clarity" strategy="afterInteractive">
