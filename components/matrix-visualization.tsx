@@ -25,9 +25,17 @@ interface MatrixVisualizationProps {
   opacity: number;
   restartKey: number;
   backgroundColor?: string;
+  cellColor?: string; // hex; the theme highlight used for default (white-mode) cells
   onCellHover?: (cell: { i: number; j: number } | null) => void;
   exploreSettings?: ExploreSettings;
   audioProgress?: number; // 0-1, syncs cell reveal to audio playback
+}
+
+function hexToRgbStr(hex: string): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
 }
 
 function getWordShape(word: string): CellShape {
@@ -145,9 +153,10 @@ function getCellColor(
   idx: number,
   settings: ExploreSettings | undefined,
   opacity: number,
+  cellRgb: string,
 ): string {
   if (!settings || settings.colorMode === 'white') {
-    return `rgba(255, 255, 255, ${opacity})`;
+    return `rgba(${cellRgb}, ${opacity})`;
   }
   if (settings.colorMode === 'shades') {
     const hash = wordHash(cell.word);
@@ -171,10 +180,12 @@ export function MatrixVisualization({
   opacity,
   restartKey,
   backgroundColor = 'rgb(10, 10, 12)',
+  cellColor = '#ffffff',
   onCellHover,
   exploreSettings,
   audioProgress,
 }: MatrixVisualizationProps) {
+  const cellRgb = hexToRgbStr(cellColor);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number | null>(null);
   const stateRef = useRef<{
@@ -341,7 +352,7 @@ export function MatrixVisualization({
             const shade = settings.shades[val.colorIdx % settings.shades.length];
             ctx.fillStyle = shade.replace(')', `, ${val.opacity * opacity})`).replace('hsl(', 'hsla(');
           } else {
-            ctx.fillStyle = `rgba(255, 255, 255, ${val.opacity * opacity * 0.5})`;
+            ctx.fillStyle = `rgba(${cellRgb}, ${val.opacity * opacity * 0.5})`;
           }
           drawCircle(ctx, px, py, cellSize);
         });
@@ -349,7 +360,7 @@ export function MatrixVisualization({
         // Draw main cells as circles
         for (let idx = 0; idx < state.revealedCount; idx++) {
           const cell = state.cells[idx];
-          ctx.fillStyle = getCellColor(cell, idx, exploreSettings, opacity);
+          ctx.fillStyle = getCellColor(cell, idx, exploreSettings, opacity, cellRgb);
           const px = offsetX + cell.j * cellSize;
           const py = offsetY + cell.i * cellSize;
           drawCircle(ctx, px, py, cellSize);
@@ -358,7 +369,7 @@ export function MatrixVisualization({
         // Standard mode
         for (let idx = 0; idx < state.revealedCount; idx++) {
           const cell = state.cells[idx];
-          ctx.fillStyle = getCellColor(cell, idx, exploreSettings, opacity);
+          ctx.fillStyle = getCellColor(cell, idx, exploreSettings, opacity, cellRgb);
           const px = offsetX + cell.j * cellSize;
           const py = offsetY + cell.i * cellSize;
           drawCell(ctx, px, py, cellSize, cell.shape);
@@ -387,7 +398,7 @@ export function MatrixVisualization({
       window.removeEventListener('resize', setupCanvas);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [getCellGeometry, opacity, backgroundColor, isRipple, exploreSettings]);
+  }, [getCellGeometry, opacity, backgroundColor, cellRgb, isRipple, exploreSettings]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

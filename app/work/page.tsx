@@ -73,23 +73,23 @@ export default function Work() {
       style={{ backgroundColor: theme.background }}
     >
       {/* Navigation */}
-      <nav className="fixed top-7 left-8 z-50 hidden md:flex items-center gap-5">
+      <nav className="fixed top-7 left-8 z-50 hidden md:flex items-center gap-5" style={{ color: theme.accent }}>
         <Link
           href="/"
-          className="text-sm font-sans text-white/40 hover:text-white transition-colors"
+          className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"
         >
           Back Home
         </Link>
-        <span className="text-sm font-sans text-white/40 hover:text-white transition-colors cursor-default">
+        <span className="text-sm font-sans opacity-70 transition-opacity cursor-default">
           Projects
         </span>
       </nav>
 
       {/* Mobile navigation */}
-      <nav className="md:hidden fixed top-5 left-5 z-50 flex items-center gap-4">
+      <nav className="md:hidden fixed top-5 left-5 z-50 flex items-center gap-4" style={{ color: theme.accent }}>
         <Link
           href="/"
-          className="text-sm font-sans text-white/40 hover:text-white transition-colors"
+          className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"
         >
           Back Home
         </Link>
@@ -103,7 +103,7 @@ export default function Work() {
 
       {/* Quote text */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-8 md:px-16 lg:px-24">
-        <p className="font-heading font-light text-white text-3xl md:text-7xl lg:text-8xl tracking-wide lowercase text-justify max-w-[900px]" style={{ lineHeight: '1.15' }}>
+        <p className="font-heading font-light text-3xl md:text-7xl lg:text-8xl tracking-wide lowercase text-justify max-w-[900px]" style={{ lineHeight: '1.15', color: theme.foreground }}>
           i awoke and saw that life was service. i acted and behold, service was joy.
         </p>
       </div>

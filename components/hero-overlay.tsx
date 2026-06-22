@@ -8,6 +8,7 @@ import { ExperimentsLink } from './experiments-preview';
 interface HeroOverlayProps {
   accentColor: string;
   toolbarColor?: string;
+  foregroundRgb?: string;  // "r, g, b" — text colored to read against the page bg
 }
 
 function JoyLogo({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -43,7 +44,7 @@ const GREETINGS = [
 
 const HERO_LINES = ['th1s i5', 'j0y', 'pr0duct', 'd3signer'];
 
-export function HeroOverlay({ accentColor, toolbarColor }: HeroOverlayProps) {
+export function HeroOverlay({ accentColor, toolbarColor, foregroundRgb = '255, 255, 255' }: HeroOverlayProps) {
   const [greeting, setGreeting] = useState(GREETINGS[0]);
   const lineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
   const hasAnimated = useRef(false);
@@ -91,8 +92,10 @@ export function HeroOverlay({ accentColor, toolbarColor }: HeroOverlayProps) {
             }}
           />
 
-          {/* Text — each line scrambles in on load */}
-          <div className="relative z-10 font-heading text-white space-y-1">
+          {/* Text — each line scrambles in on load.
+              Spans far wider than the narrow accent bar, so it's colored to read
+              against the page background (the dominant backdrop). */}
+          <div className="relative z-10 font-heading space-y-1" style={{ color: `rgba(${foregroundRgb}, 1)` }}>
             {[greeting, ...HERO_LINES].map((line, i) => (
               <p
                 key={i}
@@ -110,10 +113,10 @@ export function HeroOverlay({ accentColor, toolbarColor }: HeroOverlayProps) {
       {/* Bottom Text — hidden on mobile (shown below fold instead) */}
       <div className="hidden md:flex justify-center px-8 pb-4 pointer-events-auto">
         <div className="flex gap-12 max-w-4xl">
-          <p className="flex-1 text-base font-sans text-white/60 leading-relaxed" style={{ textWrap: 'balance' } as React.CSSProperties}>
+          <p className="flex-1 text-base font-sans leading-relaxed" style={{ textWrap: 'balance', color: `rgba(${foregroundRgb}, 0.7)` } as React.CSSProperties}>
             A dry, observant, tool-pilled in a practical way, and just self-aware enough to admit he&apos;s become the sort of product designer who can tell you exactly why your app feels slightly off, why your onboarding leaks users, why your AI feature is mostly a nervous mood board and might just look like a GPT wrapper.
           </p>
-          <span className="flex-1 text-base font-sans text-white/60 leading-relaxed block" style={{ textWrap: 'balance' } as React.CSSProperties}>
+          <span className="flex-1 text-base font-sans leading-relaxed block" style={{ textWrap: 'balance', color: `rgba(${foregroundRgb}, 0.7)` } as React.CSSProperties}>
             This site is perpetually half-built — no case studies, no past-work gallery, mostly because things are moving faster than any of us can keep up with, and he&apos;s made peace with being the sort of designer who&apos;s always a quarter behind her own work. Some of it lives <WorkLink /> and some experiments are <ExperimentsLink />.
           </span>
         </div>
@@ -121,8 +124,8 @@ export function HeroOverlay({ accentColor, toolbarColor }: HeroOverlayProps) {
 
       {/* Footer — rotated on left edge, hidden on mobile */}
       <p
-        className="hidden md:block fixed top-1/2 left-3 text-[10px] font-mono uppercase tracking-[0.2em] text-white/20 whitespace-nowrap pointer-events-none z-50"
-        style={{ transform: 'rotate(-90deg) translateX(-50%)', transformOrigin: '0 0' }}
+        className="hidden md:block fixed top-1/2 left-3 text-[10px] font-mono uppercase tracking-[0.2em] whitespace-nowrap pointer-events-none z-50"
+        style={{ transform: 'rotate(-90deg) translateX(-50%)', transformOrigin: '0 0', color: `rgba(${foregroundRgb}, 0.25)` }}
       >
         Folio of Joy — always work in progress
         <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />

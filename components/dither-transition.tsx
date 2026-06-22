@@ -119,7 +119,6 @@ export function DitherTransition() {
         default: 'easeOut',
       },
       useThemeColor: true,
-      themeLightness: [10, 0, 100, 1],
       color: '#000000',
       varyEachTime: true,
       replay: { type: 'action', label: 'Replay' },
@@ -127,16 +126,13 @@ export function DitherTransition() {
     { onAction: (path) => { if (path === 'replay') play(); } }
   ) as unknown as Omit<DitherSettings, 'color'> & {
     useThemeColor: boolean;
-    themeLightness: number;
     color: string;
     varyEachTime: boolean;
     replay: unknown;
   };
 
-  // Tint the dither from the music's theme (album-art hue) when enabled.
-  const ditherColor = dial.useThemeColor
-    ? `hsl(${theme.hue}, ${theme.saturation}%, ${dial.themeLightness}%)`
-    : dial.color;
+  // Tint the dither with the current palette's highlight when enabled.
+  const ditherColor = dial.useThemeColor ? theme.accent : dial.color;
 
   // Keep the latest control values available to imperative callbacks.
   cfgRef.current = {

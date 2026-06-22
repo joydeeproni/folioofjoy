@@ -10,9 +10,10 @@ import {
   type ReactNode,
 } from 'react';
 import { getTracks, type Track } from '@/lib/music';
-import { extractDominantColor, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
+import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
 import { AudioGate } from '@/components/audio-gate';
 import { FloatingPill } from '@/components/floating-pill';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 interface AudioContextValue {
   tracks: Track[];
@@ -28,6 +29,8 @@ interface AudioContextValue {
   restartKey: number;
   dimmed: boolean;
   playerVisible: boolean;
+  accessibleMode: boolean;
+  toggleAccessibleMode: () => void;
   playTrack: (track: Track) => void;
   togglePlayPause: () => void;
   toggleMute: () => void;
@@ -61,13 +64,15 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [restartKey, setRestartKey] = useState(0);
   const [dimmed, setDimmed] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(true);
+  const [accessibleMode, setAccessibleMode] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Hydration-safe: read sessionStorage after mount
+  // Hydration-safe: read storage after mount
   useEffect(() => {
     try {
       if (sessionStorage.getItem('audio-gate-dismissed') === 'true') setGateOpen(false);
       if (sessionStorage.getItem('audio-muted') === 'false') setIsMuted(false);
+      if (localStorage.getItem('a11y-mode') === 'true') setAccessibleMode(true);
     } catch {}
   }, []);
 
@@ -95,17 +100,28 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gateOpen, currentTrack]);
 
-  // Extract colors from album art
+  // Theme = the playing track's curated palette (one per track, wraps), unless
+  // the accessible high-contrast theme is toggled on.
   useEffect(() => {
-    const imageUrl = currentTrack?.album?.images[0]?.url;
-    if (!imageUrl) return;
-    extractDominantColor(imageUrl).then(setTheme);
-  }, [currentTrack]);
+    if (accessibleMode) { setTheme(accessibleTheme()); return; }
+    const idx = tracks.findIndex((t) => t.id === currentTrack?.id);
+    setTheme(themeForTrack(idx < 0 ? 0 : idx));
+  }, [currentTrack, tracks, accessibleMode]);
 
-  // Persist theme to localStorage
+  // Publish theme tokens as CSS variables so any element can reference them.
   useEffect(() => {
-    try { localStorage.setItem('folio-theme', JSON.stringify(theme)); } catch {}
+    const root = document.documentElement;
+    root.style.setProperty('--theme-bg', theme.background);
+    root.style.setProperty('--theme-fg', theme.foreground);
+    root.style.setProperty('--theme-highlight', theme.accent);
   }, [theme]);
+
+  // Persist the accessibility preference across sessions.
+  useEffect(() => {
+    try { localStorage.setItem('a11y-mode', String(accessibleMode)); } catch {}
+  }, [accessibleMode]);
+
+  const toggleAccessibleMode = useCallback(() => setAccessibleMode((m) => !m), []);
 
   // Play next track (defined before event listener effect)
   const playNextRef = useRef<() => void>(() => {});
@@ -199,6 +215,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     tracks, currentTrack, loading, error,
     isPlaying, isMuted, currentTime, audioDuration,
     theme, gateOpen, restartKey, dimmed, playerVisible,
+    accessibleMode, toggleAccessibleMode,
     playTrack, togglePlayPause, toggleMute, playNext, playPrevious,
     handleGateChoice, triggerRestart,
     setDimmed, setPlayerVisible,
@@ -230,6 +247,7 @@ export function AudioUI() {
   return (
     <>
       {gateOpen && <AudioGate onChoice={handleGateChoice} />}
+      {!gateOpen && playerVisible && <ThemeToggle />}
       {!gateOpen && playerVisible && (
         <FloatingPill
           currentTrack={currentTrack}

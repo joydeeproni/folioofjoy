@@ -1,11 +1,99 @@
 export interface ThemeColors {
   background: string;
-  accent: string;
+  accent: string;          // the "highlight": links, matrix dots, hero/work shape, dither
   toolbar: string;
   backgroundRgb: string;
+  foreground: string;      // WCAG black/white picked against the background
+  foregroundRgb: string;   // "0, 0, 0" or "255, 255, 255" — for building rgba() at any opacity
+  onAccent: string;        // WCAG black/white picked against the accent (text over the shape)
   hue: number;
   saturation: number;
-  shades: string[];        // 6 shades from album art hue at different lightness
+  shades: string[];        // 6 shades from the highlight hue at different lightness
+}
+
+// Curated two-tone palettes: [background, highlight]. One per track (wraps).
+export const PALETTES: Array<{ bg: string; highlight: string }> = [
+  { bg: '#9EFFFF', highlight: '#006E57' },
+  { bg: '#2F0250', highlight: '#97FBA3' },
+  { bg: '#5B1F04', highlight: '#FFC3FE' },
+  { bg: '#E5F0FF', highlight: '#0E3A15' },
+  { bg: '#393939', highlight: '#FFD6FF' },
+  { bg: '#D74C00', highlight: '#D2FFD8' },
+  { bg: '#A69B21', highlight: '#FFECEC' },
+  { bg: '#FFFF7E', highlight: '#005756' },
+];
+
+// High-contrast accessible theme: black bg, dark-grey highlight, white text.
+export const ACCESSIBLE_THEME: { bg: string; highlight: string } = {
+  bg: '#000000',
+  highlight: '#3F3F3F',
+};
+
+function hexToRgbTuple(hex: string): [number, number, number] {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// Relative luminance per WCAG 2.x.
+function luminance([r, g, b]: [number, number, number]): number {
+  const lin = [r, g, b].map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+}
+
+function contrast(a: number, b: number): number {
+  const lo = Math.min(a, b);
+  const hi = Math.max(a, b);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+// Pick black or white — whichever has the higher contrast ratio against the surface.
+function pickReadable(surfaceHex: string): { hex: string; rgb: string } {
+  const L = luminance(hexToRgbTuple(surfaceHex));
+  const white = contrast(L, 1);
+  const black = contrast(L, 0);
+  return black >= white
+    ? { hex: '#000000', rgb: '0, 0, 0' }
+    : { hex: '#FFFFFF', rgb: '255, 255, 255' };
+}
+
+function hexToHsl(hex: string): [number, number, number] {
+  const [r, g, b] = hexToRgbTuple(hex);
+  return rgbToHsl(r, g, b);
+}
+
+export function buildTheme(palette: { bg: string; highlight: string }): ThemeColors {
+  const [r, g, b] = hexToRgbTuple(palette.bg);
+  const fg = pickReadable(palette.bg);
+  const onAccent = pickReadable(palette.highlight);
+  const [hHue, hSat] = hexToHsl(palette.highlight);
+  return {
+    background: palette.bg,
+    accent: palette.highlight,
+    // Self-contained dark glass for the floating controls — readable on any palette.
+    toolbar: 'rgba(20, 20, 22, 0.9)',
+    backgroundRgb: `rgb(${r}, ${g}, ${b})`,
+    foreground: fg.hex,
+    foregroundRgb: fg.rgb,
+    onAccent: onAccent.hex,
+    hue: hHue,
+    saturation: hSat,
+    shades: generateShades(hHue, Math.max(20, Math.min(80, hSat))),
+  };
+}
+
+// Map a track index to a palette (wraps around the 8).
+export function themeForTrack(index: number): ThemeColors {
+  const i = ((index % PALETTES.length) + PALETTES.length) % PALETTES.length;
+  return buildTheme(PALETTES[i]);
+}
+
+export function accessibleTheme(): ThemeColors {
+  return buildTheme(ACCESSIBLE_THEME);
 }
 
 function generateShades(hue: number, sat: number): string[] {
@@ -17,8 +105,11 @@ function generateShades(hue: number, sat: number): string[] {
 const DEFAULT_THEME: ThemeColors = {
   background: 'hsl(210, 30%, 10%)',
   accent: 'hsl(170, 70%, 50%)',
-  toolbar: 'hsl(210, 30%, 5%)',
+  toolbar: 'rgba(20, 20, 22, 0.9)',
   backgroundRgb: 'rgb(18, 23, 29)',
+  foreground: '#FFFFFF',
+  foregroundRgb: '255, 255, 255',
+  onAccent: '#000000',
   hue: 210,
   saturation: 30,
   shades: generateShades(210, 30),
