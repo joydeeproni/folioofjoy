@@ -106,7 +106,7 @@ export function SongAnalyzer() {
         </div>
 
         {/* Desktop: Social links — top left */}
-        <div className={`hidden md:flex fixed top-7 left-8 z-50 items-center gap-5 transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ color: theme.accent }}>
+        <div className={`hidden md:flex fixed top-7 left-8 z-50 items-center gap-5 transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ color: theme.link }}>
           <Link href="/work" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Work</Link>
           <a href="https://www.instagram.com/joyingntravelling/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Photography</a>
           <a href="https://www.threads.com/@joydeep.roni" target="_blank" rel="noopener noreferrer" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Threads</a>

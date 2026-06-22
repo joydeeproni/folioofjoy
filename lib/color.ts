@@ -1,6 +1,7 @@
 export interface ThemeColors {
   background: string;
-  accent: string;          // the "highlight": links, matrix dots, hero/work shape, dither
+  accent: string;          // the "highlight": matrix dots, hero/work shape, dither
+  link: string;            // nav links — = highlight per-palette, near-white in accessible mode
   toolbar: string;
   backgroundRgb: string;
   foreground: string;      // WCAG black/white picked against the background
@@ -74,6 +75,7 @@ export function buildTheme(palette: { bg: string; highlight: string }): ThemeCol
   return {
     background: palette.bg,
     accent: palette.highlight,
+    link: palette.highlight,
     // Self-contained dark glass for the floating controls — readable on any palette.
     toolbar: 'rgba(20, 20, 22, 0.9)',
     backgroundRgb: `rgb(${r}, ${g}, ${b})`,
@@ -93,7 +95,9 @@ export function themeForTrack(index: number): ThemeColors {
 }
 
 export function accessibleTheme(): ThemeColors {
-  return buildTheme(ACCESSIBLE_THEME);
+  // The dark-grey highlight is intentional for the decorative shape, but it's
+  // unreadable as link text on black — use near-white for links instead.
+  return { ...buildTheme(ACCESSIBLE_THEME), link: '#FFFFFF' };
 }
 
 function generateShades(hue: number, sat: number): string[] {
@@ -105,6 +109,7 @@ function generateShades(hue: number, sat: number): string[] {
 const DEFAULT_THEME: ThemeColors = {
   background: 'hsl(210, 30%, 10%)',
   accent: 'hsl(170, 70%, 50%)',
+  link: 'hsl(170, 70%, 50%)',
   toolbar: 'rgba(20, 20, 22, 0.9)',
   backgroundRgb: 'rgb(18, 23, 29)',
   foreground: '#FFFFFF',

@@ -73,7 +73,7 @@ export default function Work() {
       style={{ backgroundColor: theme.background }}
     >
       {/* Navigation */}
-      <nav className="fixed top-7 left-8 z-50 hidden md:flex items-center gap-5" style={{ color: theme.accent }}>
+      <nav className="fixed top-7 left-8 z-50 hidden md:flex items-center gap-5" style={{ color: theme.link }}>
         <Link
           href="/"
           className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"
@@ -86,7 +86,7 @@ export default function Work() {
       </nav>
 
       {/* Mobile navigation */}
-      <nav className="md:hidden fixed top-5 left-5 z-50 flex items-center gap-4" style={{ color: theme.accent }}>
+      <nav className="md:hidden fixed top-5 left-5 z-50 flex items-center gap-4" style={{ color: theme.link }}>
         <Link
           href="/"
           className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"

@@ -71,6 +71,7 @@ interface DriftSettings {
 
 interface DitherSettings {
   cellSize: number;
+  gap: number;
   duration: number;
   pattern: string;
   shape: string;
@@ -101,13 +102,14 @@ export function DitherTransition() {
     'Dither Transition',
     {
       cellSize: [14, 4, 48, 1],
-      duration: [900, 100, 4000, 50],
+      gap: [0, 0, 24, 1],
+      duration: [1550, 100, 4000, 50],
       pattern: { type: 'select', options: ['drift', 'bayer', 'random'], default: 'drift' },
       shape: { type: 'select', options: ['square', 'dot'], default: 'square' },
-      feather: [0.1, 0, 0.6, 0.01],
+      feather: [0.2, 0, 0.6, 0.01],
       drift: {
         scale: [7, 2, 40, 0.5],
-        spread: { type: 'select', options: ['linear', 'center', 'edges'], default: 'linear' },
+        spread: { type: 'select', options: ['linear', 'center', 'edges'], default: 'edges' },
         direction: [90, 0, 360, 1],
         directionStrength: [0.5, 0, 1, 0.01],
         grain: [0.2, 0, 1, 0.01],
@@ -137,6 +139,7 @@ export function DitherTransition() {
   // Keep the latest control values available to imperative callbacks.
   cfgRef.current = {
     cellSize: dial.cellSize,
+    gap: dial.gap,
     duration: dial.duration,
     pattern: dial.pattern,
     shape: dial.shape,
@@ -227,7 +230,11 @@ export function DitherTransition() {
 
     const feather = cfg.feather;
     const isDot = cfg.shape === 'dot';
-    const rMax = cell / 2;
+    // Gap insets each dot within its grid cell, leaving space between dots.
+    const gap = Math.min(cfg.gap, cell - 1);
+    const drawn = Math.max(1, cell - gap);
+    const inset = gap / 2;
+    const rMax = drawn / 2;
     // Scale progress so even the highest-threshold cells fully clear at progress = 1.
     const eff = progress * (1 + feather);
 
@@ -250,11 +257,13 @@ export function DitherTransition() {
           ctx.globalAlpha = 1;
           const rad = a * rMax * 1.15;
           ctx.beginPath();
-          ctx.arc(x + rMax, y + rMax, rad, 0, Math.PI * 2);
+          ctx.arc(x + cell / 2, y + cell / 2, rad, 0, Math.PI * 2);
           ctx.fill();
         } else {
           ctx.globalAlpha = a;
-          ctx.fillRect(x, y, cell + 1, cell + 1);
+          // No gap: overlap by 1px to avoid seams; with a gap, inset the square.
+          if (gap <= 0) ctx.fillRect(x, y, cell + 1, cell + 1);
+          else ctx.fillRect(x + inset, y + inset, drawn, drawn);
         }
       }
     }
