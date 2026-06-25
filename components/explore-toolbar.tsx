@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import type { WaveFunction, ColorMode, ShapeMode, ExploreSettings } from './matrix-visualization';
 import type { Track } from '@/lib/music';
+import { WinampVisualizer } from './winamp-visualizer';
 
 interface ExploreToolbarProps {
   active: boolean;
@@ -152,6 +153,8 @@ export function ExploreToolbar({
           </button>
           <span className="text-[10px] font-mono text-white/30 ml-auto">{formatTime(currentTime)}</span>
         </div>
+        {/* Winamp-style visualizer — click to cycle modes */}
+        <WinampVisualizer active={active} accentColor={accent} width={180} height={48} showChrome={false} className="w-full" />
       </div>
 
       <div className="h-px bg-white/10" />

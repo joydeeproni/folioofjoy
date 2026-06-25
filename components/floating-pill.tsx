@@ -14,6 +14,7 @@ import {
   Music,
 } from 'lucide-react';
 import type { Track } from '@/lib/music';
+import { WinampVisualizer } from './winamp-visualizer';
 
 interface FloatingPillProps {
   currentTrack: Track | null;
@@ -32,6 +33,7 @@ interface FloatingPillProps {
   dimmed: boolean;
   onToggleDimmed: () => void;
   toolbarColor?: string;
+  accentColor?: string;
 }
 
 export function FloatingPill({
@@ -51,6 +53,7 @@ export function FloatingPill({
   dimmed,
   onToggleDimmed,
   toolbarColor,
+  accentColor,
 }: FloatingPillProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -234,6 +237,9 @@ export function FloatingPill({
               <div className="text-[10px] font-mono text-white/40 px-1 flex-shrink-0">
                 {formatTime(currentTime)}
               </div>
+
+              {/* Winamp-style visualizer — click to cycle modes */}
+              <WinampVisualizer active={expanded} accentColor={accentColor} width={56} height={24} showChrome={false} className="mx-0.5" />
 
               <div className="w-px h-6 bg-white/10 flex-shrink-0" />
 

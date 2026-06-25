@@ -7,7 +7,6 @@ import { MatrixVisualization, type ExploreSettings } from './matrix-visualizatio
 import { HeroOverlay } from './hero-overlay';
 import { PatternGuide } from './pattern-guide';
 import { ExploreToolbar } from './explore-toolbar';
-import { WinampVisualizer } from './winamp-visualizer';
 import { MobileMenu } from './mobile-menu';
 import { ScrollReveal } from './scroll-reveal';
 import { WorkLink } from './work-preview';
@@ -139,11 +138,6 @@ export function SongAnalyzer() {
         >
           {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><Music className="w-3.5 h-3.5" /><span className="text-sm font-sans">Lounge Mode</span></>)}
         </button>
-
-        {/* Winamp-style visualizers — only in Lounge Mode */}
-        <div className={`fixed bottom-6 left-6 z-50 transition-all duration-500 ${exploreMode ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-          <WinampVisualizer active={exploreMode} accentColor={theme.accent} />
-        </div>
 
         {/* Mobile: Back button in explore mode */}
         {exploreMode && (

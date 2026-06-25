@@ -289,6 +289,7 @@ export function AudioUI() {
           dimmed={dimmed}
           onToggleDimmed={() => setDimmed(!dimmed)}
           toolbarColor={theme.toolbar}
+          accentColor={theme.accent}
         />
       )}
     </>
