@@ -14,7 +14,6 @@ export interface ThemeColors {
 
 // Curated two-tone palettes: [background, highlight]. One per track (wraps).
 export const PALETTES: Array<{ bg: string; highlight: string }> = [
-  { bg: '#9EFFFF', highlight: '#006E57' },
   { bg: '#2F0250', highlight: '#97FBA3' },
   { bg: '#5B1F04', highlight: '#FFC3FE' },
   { bg: '#E5F0FF', highlight: '#0E3A15' },

@@ -11,7 +11,6 @@ import {
 } from 'react';
 import { getTracks, type Track } from '@/lib/music';
 import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
-import { AudioGate } from '@/components/audio-gate';
 import { FloatingPill } from '@/components/floating-pill';
 import { ThemeToggle } from '@/components/theme-toggle';
 
@@ -36,7 +35,8 @@ interface AudioContextValue {
   toggleMute: () => void;
   playNext: () => void;
   playPrevious: () => void;
-  handleGateChoice: (muted: boolean) => void;
+  startMusic: () => void;
+  getAnalyser: () => AnalyserNode | null;
   triggerRestart: () => void;
   setDimmed: (dimmed: boolean) => void;
   setPlayerVisible: (visible: boolean) => void;
@@ -60,17 +60,49 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
   const [theme, setTheme] = useState<ThemeColors>(DEFAULT_THEME);
-  const [gateOpen, setGateOpen] = useState(true);
+  // The intro gate was removed — the page renders immediately and audio stays
+  // muted by default until the visitor enters Lounge Mode (or unmutes the pill).
+  const gateOpen = false;
   const [restartKey, setRestartKey] = useState(0);
   const [dimmed, setDimmed] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(true);
   const [accessibleMode, setAccessibleMode] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  // Web Audio graph for the Winamp-style visualizers. Created lazily on the
+  // first user gesture (createMediaElementSource can only run once per element).
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+
+  const ensureAnalyser = useCallback((): AnalyserNode | null => {
+    if (!audioRef.current) return null;
+    try {
+      if (!audioCtxRef.current) {
+        const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        audioCtxRef.current = new Ctx();
+      }
+      if (audioCtxRef.current.state === 'suspended') void audioCtxRef.current.resume();
+      if (!sourceRef.current) {
+        sourceRef.current = audioCtxRef.current.createMediaElementSource(audioRef.current);
+        const analyser = audioCtxRef.current.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.8;
+        sourceRef.current.connect(analyser);
+        analyser.connect(audioCtxRef.current.destination);
+        analyserRef.current = analyser;
+      }
+    } catch {
+      return analyserRef.current;
+    }
+    return analyserRef.current;
+  }, []);
+
+  const getAnalyser = useCallback(() => analyserRef.current, []);
+
   // Hydration-safe: read storage after mount
   useEffect(() => {
     try {
-      if (sessionStorage.getItem('audio-gate-dismissed') === 'true') setGateOpen(false);
       if (sessionStorage.getItem('audio-muted') === 'false') setIsMuted(false);
       if (localStorage.getItem('a11y-mode') === 'true') setAccessibleMode(true);
     } catch {}
@@ -90,16 +122,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  // Auto-start playback when gate was already dismissed (returning in same session)
-  useEffect(() => {
-    if (gateOpen || !currentTrack?.preview_url || !audioRef.current) return;
-    if (audioRef.current.src) return; // already playing
-    audioRef.current.muted = isMuted;
-    audioRef.current.src = currentTrack.preview_url;
-    audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gateOpen, currentTrack]);
-
   // Theme = the playing track's curated palette (one per track, wraps), unless
   // the accessible high-contrast theme is toggled on.
   useEffect(() => {
@@ -108,13 +130,18 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setTheme(themeForTrack(idx < 0 ? 0 : idx));
   }, [currentTrack, tracks, accessibleMode]);
 
-  // Publish theme tokens as CSS variables so any element can reference them.
+  // Publish theme tokens as CSS variables so any element can reference them,
+  // and sync the mobile browser-chrome color (status bar / address bar) so it
+  // blends with the page instead of showing a black crop. While the gate is
+  // open the screen is a black overlay, so keep the chrome black until dismissed.
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--theme-bg', theme.background);
     root.style.setProperty('--theme-fg', theme.foreground);
     root.style.setProperty('--theme-highlight', theme.accent);
-  }, [theme]);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', gateOpen ? '#000000' : theme.background);
+  }, [theme, gateOpen]);
 
   // Persist the accessibility preference across sessions.
   useEffect(() => {
@@ -174,40 +201,38 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const handleGateChoice = useCallback((muted: boolean) => {
-    setIsMuted(muted);
-    try { sessionStorage.setItem('audio-muted', String(!muted)); } catch {}
-    if (audioRef.current) {
-      audioRef.current.muted = muted;
-    }
+  // Entering Lounge Mode starts the music audibly. Runs inside the click gesture,
+  // so unmuted playback and the AudioContext are both allowed by the browser.
+  const startMusic = useCallback(() => {
     const ct = currentTrackRef.current;
-    if (ct?.preview_url && audioRef.current) {
-      audioRef.current.src = ct.preview_url;
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    }
-    setTimeout(() => {
-      setGateOpen(false);
-      try { sessionStorage.setItem('audio-gate-dismissed', 'true'); } catch {}
-    }, 600);
-  }, []);
+    if (!audioRef.current || !ct?.preview_url) return;
+    ensureAnalyser();
+    audioRef.current.muted = false;
+    setIsMuted(false);
+    try { sessionStorage.setItem('audio-muted', 'false'); } catch {}
+    if (!audioRef.current.src) audioRef.current.src = ct.preview_url;
+    audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+  }, [ensureAnalyser]);
 
   const togglePlayPause = useCallback(() => {
     const ct = currentTrackRef.current;
     if (!audioRef.current || !ct?.preview_url) return;
     if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
     else {
-      audioRef.current.src = ct.preview_url;
+      ensureAnalyser();
+      if (!audioRef.current.src) audioRef.current.src = ct.preview_url;
       audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
-  }, [isPlaying]);
+  }, [isPlaying, ensureAnalyser]);
 
   const toggleMute = useCallback(() => {
     if (audioRef.current) {
+      if (isMuted) ensureAnalyser();
       audioRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
       try { sessionStorage.setItem('audio-muted', String(isMuted)); } catch {}
     }
-  }, [isMuted]);
+  }, [isMuted, ensureAnalyser]);
 
   const triggerRestart = useCallback(() => { setRestartKey((k) => k + 1); }, []);
 
@@ -217,7 +242,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     theme, gateOpen, restartKey, dimmed, playerVisible,
     accessibleMode, toggleAccessibleMode,
     playTrack, togglePlayPause, toggleMute, playNext, playPrevious,
-    handleGateChoice, triggerRestart,
+    startMusic, getAnalyser, triggerRestart,
     setDimmed, setPlayerVisible,
   };
 
@@ -231,7 +256,6 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
 export function AudioUI() {
   const {
-    gateOpen, handleGateChoice,
     currentTrack, tracks, loading, error,
     isPlaying, currentTime, isMuted,
     playTrack, togglePlayPause, playNext, playPrevious, toggleMute,
@@ -246,9 +270,8 @@ export function AudioUI() {
 
   return (
     <>
-      {gateOpen && <AudioGate onChoice={handleGateChoice} />}
-      {!gateOpen && playerVisible && <ThemeToggle />}
-      {!gateOpen && playerVisible && (
+      {playerVisible && <ThemeToggle />}
+      {playerVisible && (
         <FloatingPill
           currentTrack={currentTrack}
           tracks={tracks}

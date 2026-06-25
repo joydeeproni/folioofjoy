@@ -100,7 +100,7 @@ export function HeroOverlay({ accentColor, toolbarColor, foregroundRgb = '255, 2
               <p
                 key={i}
                 ref={(el) => { lineRefs.current[i] = el; }}
-                className="text-3xl md:text-7xl lg:text-8xl font-light tracking-wide"
+                className="text-[13vw] leading-[1.05] md:text-7xl md:leading-none lg:text-8xl font-light tracking-wide"
                 suppressHydrationWarning
               >
                 {line}

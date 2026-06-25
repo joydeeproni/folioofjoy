@@ -31,6 +31,9 @@
 :root {
   /* Dark theme by default - deep charcoal background */
   --background: oklch(0.12 0 0);
+  /* Live theme background (set per-track by the audio context); default to the
+     dark background so the first paint / audio gate has no flash. */
+  --theme-bg: oklch(0.12 0 0);
   --foreground: oklch(0.92 0 0);
   --card: oklch(0.16 0 0);
   --card-foreground: oklch(0.92 0 0);
@@ -112,8 +115,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Root background tracks the live theme so the mobile status bar / address
+     bar area and desktop overscroll blend with the page instead of showing
+     a black crop. */
+  html,
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--theme-bg);
+  }
+  body {
+    @apply text-foreground;
+    transition: background-color 1000ms ease-in-out;
   }
 }
 

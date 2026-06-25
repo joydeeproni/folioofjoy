@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Music } from 'lucide-react';
 interface MobileMenuProps {
   onExplore: () => void;
   toolbarColor?: string;
@@ -69,9 +70,10 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
 
             <button
               onClick={() => { setOpen(false); onExplore(); }}
-              className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-2xl font-sans text-white/70 hover:text-white transition-colors"
             >
-              What&apos;s this pattern?
+              <Music className="w-5 h-5" />
+              Lounge Mode
             </button>
           </nav>
         </div>

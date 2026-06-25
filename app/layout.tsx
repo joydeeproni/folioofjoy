@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import { DialRoot } from 'dialkit'
@@ -30,13 +30,19 @@ export const metadata: Metadata = {
   },
 }
 
+// Dark default so the mobile browser chrome matches the initial audio gate;
+// updated live per-track by the audio context.
+export const viewport: Viewport = {
+  themeColor: '#000000',
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en">
       <body className="font-sans antialiased min-h-screen">
         <Providers>
           {children}

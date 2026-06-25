@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
-import { HelpCircle, X } from 'lucide-react';
+import { Music, X } from 'lucide-react';
 import { MatrixVisualization, type ExploreSettings } from './matrix-visualization';
 import { HeroOverlay } from './hero-overlay';
 import { PatternGuide } from './pattern-guide';
 import { ExploreToolbar } from './explore-toolbar';
+import { WinampVisualizer } from './winamp-visualizer';
 import { MobileMenu } from './mobile-menu';
 import { ScrollReveal } from './scroll-reveal';
 import { WorkLink } from './work-preview';
@@ -20,7 +21,7 @@ export function SongAnalyzer() {
     isPlaying, isMuted, currentTime, audioDuration,
     theme, gateOpen, restartKey, dimmed,
     playTrack, togglePlayPause, toggleMute, playNext, playPrevious,
-    triggerRestart, setDimmed, setPlayerVisible,
+    triggerRestart, setDimmed, setPlayerVisible, startMusic,
   } = useAudio();
 
   const [lyrics, setLyrics] = useState('');
@@ -57,7 +58,8 @@ export function SongAnalyzer() {
 
   const enterExplore = useCallback(() => {
     setExploreMode(true); setHoveredCell(null); triggerRestart();
-  }, [triggerRestart]);
+    startMusic(); // Lounge Mode starts the music playing
+  }, [triggerRestart, startMusic]);
 
   const exitExplore = useCallback(() => {
     setExploreMode(false); setHoveredCell(null);
@@ -129,14 +131,19 @@ export function SongAnalyzer() {
         {/* Pattern guide */}
         <PatternGuide active={exploreMode} restartKey={restartKey} />
 
-        {/* Desktop: "What's this pattern?" — top right */}
+        {/* Desktop: "Lounge Mode" — top right */}
         <button
           onClick={() => { if (exploreMode) exitExplore(); else enterExplore(); }}
           className={`hidden md:flex fixed top-6 right-6 z-50 items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
           style={{ color: theme.foreground }}
         >
-          {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><HelpCircle className="w-4 h-4" /><span className="text-sm font-sans">What&apos;s this pattern?</span></>)}
+          {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><Music className="w-3.5 h-3.5" /><span className="text-sm font-sans">Lounge Mode</span></>)}
         </button>
+
+        {/* Winamp-style visualizers — only in Lounge Mode */}
+        <div className={`fixed bottom-6 left-6 z-50 transition-all duration-500 ${exploreMode ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+          <WinampVisualizer active={exploreMode} accentColor={theme.accent} />
+        </div>
 
         {/* Mobile: Back button in explore mode */}
         {exploreMode && (
