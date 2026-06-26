@@ -103,10 +103,10 @@ export function FloatingPill({
   const toolbarBg = toolbarColor || 'rgba(15, 15, 18, 0.9)';
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50">
       {/* Now Playing toast */}
       <div
-        className={`absolute bottom-full left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-0 mb-2 whitespace-nowrap px-4 py-2 rounded-full backdrop-blur-xl border border-white/10 transition-all duration-500 ease-out ${
+        className={`absolute bottom-full right-0 mb-2 whitespace-nowrap px-4 py-2 rounded-full backdrop-blur-xl border border-white/10 transition-all duration-500 ease-out ${
           nowPlayingToast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
         }`}
         style={{ backgroundColor: toolbarBg }}
@@ -163,9 +163,26 @@ export function FloatingPill({
         </div>
       </div>
 
-      {/* Toolbar Pill — collapsible, expands on hover */}
+      {/* Mobile: slim chip — album art (left) + song name, matches the A11Y chip */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`md:hidden flex items-center gap-2 px-3 py-2 rounded-full backdrop-blur-xl border border-white/10 shadow-2xl transition-all ${isOpen ? 'ring-1 ring-white/20' : ''}`}
+        style={{ backgroundColor: toolbarBg }}
+        title={currentTrack ? `${currentTrack.name} — ${currentTrack.artists[0]?.name}` : 'Song queue'}
+      >
+        {currentTrack?.album?.images[0]?.url ? (
+          <img src={currentTrack.album.images[0].url} alt="" className="w-4 h-4 rounded object-cover flex-shrink-0" />
+        ) : (
+          <Music className="w-4 h-4 text-white/60 flex-shrink-0" />
+        )}
+        <span className="text-[10px] font-sans text-white/70 truncate max-w-[130px]">
+          {currentTrack?.name || 'Music'}
+        </span>
+      </button>
+
+      {/* Desktop: Toolbar Pill — collapsible, expands on hover */}
       <div
-        className="group relative"
+        className="hidden md:block group relative"
         onMouseEnter={() => { setExpanded(true); resetInactivityTimer(); }}
         onMouseLeave={() => { if (!isOpen) setExpanded(false); }}
         onMouseMove={() => { if (expanded) resetInactivityTimer(); }}

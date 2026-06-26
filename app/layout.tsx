@@ -30,10 +30,11 @@ export const metadata: Metadata = {
   },
 }
 
-// Dark default so the mobile browser chrome matches the initial audio gate;
-// updated live per-track by the audio context.
+// Default to the themed dark background (not pure black) so the mobile browser
+// chrome blends with the page on first paint; updated live per-track by the
+// audio context.
 export const viewport: Viewport = {
-  themeColor: '#000000',
+  themeColor: '#12171d',
 }
 
 export default function RootLayout({

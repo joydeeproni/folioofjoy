@@ -132,16 +132,17 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   // Publish theme tokens as CSS variables so any element can reference them,
   // and sync the mobile browser-chrome color (status bar / address bar) so it
-  // blends with the page instead of showing a black crop. While the gate is
-  // open the screen is a black overlay, so keep the chrome black until dismissed.
+  // blends with the page instead of showing a black crop.
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--theme-bg', theme.background);
     root.style.setProperty('--theme-fg', theme.foreground);
     root.style.setProperty('--theme-highlight', theme.accent);
+    root.style.backgroundColor = theme.background;
+    document.body.style.backgroundColor = theme.background;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', gateOpen ? '#000000' : theme.background);
-  }, [theme, gateOpen]);
+    if (meta) meta.setAttribute('content', theme.background);
+  }, [theme]);
 
   // Persist the accessibility preference across sessions.
   useEffect(() => {

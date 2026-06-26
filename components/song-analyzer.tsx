@@ -131,13 +131,21 @@ export function SongAnalyzer() {
         <PatternGuide active={exploreMode} restartKey={restartKey} />
 
         {/* Desktop: "Lounge Mode" — top right */}
-        <button
-          onClick={() => { if (exploreMode) exitExplore(); else enterExplore(); }}
-          className={`hidden md:flex fixed top-6 right-6 z-50 items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
-          style={{ color: theme.foreground }}
-        >
-          {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><Music className="w-3.5 h-3.5" /><span className="text-sm font-sans">Lounge Mode</span></>)}
-        </button>
+        <div className="hidden md:block fixed top-6 right-6 z-50 group">
+          <button
+            onClick={() => { if (exploreMode) exitExplore(); else enterExplore(); }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+            style={{ color: theme.foreground }}
+          >
+            {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><Music className="w-3.5 h-3.5" /><span className="text-sm font-sans">Lounge Mode</span></>)}
+          </button>
+          {/* Tooltip — appears immediately on hover, only before entering Lounge Mode */}
+          {!exploreMode && (
+            <span className="pointer-events-none absolute top-full right-0 mt-1 whitespace-nowrap px-3 py-1.5 rounded-lg bg-white text-black text-xs font-sans shadow-lg opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150">
+              This will play music
+            </span>
+          )}
+        </div>
 
         {/* Mobile: Back button in explore mode */}
         {exploreMode && (
