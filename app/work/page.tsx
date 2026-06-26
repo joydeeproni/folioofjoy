@@ -3,69 +3,56 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useAudio } from '@/lib/audio-context';
+import { WORK_ITEMS } from '@/components/work-preview';
 
-const WORK_IMAGES = [
-  '/work/project-01.png',
-  '/work/project-02.png',
-  '/work/project-03.png',
-  '/work/project-04.png',
-  '/work/carbondash-01.png',
-  '/work/netflix-01.png',
-  '/work/verizon-red.png',
-  '/work/urbyn-banner.png',
-  '/work/dribbble-08.jpg',
-  '/work/widgets.png',
-  '/work/dribbble-04.jpg',
-  '/work/dribbble-10.jpg',
-  '/work/dribbble-01.jpg',
-  '/work/dribbble-06.jpg',
-  '/work/tactile-create-01.png',
-  '/work/tactile-create-02.png',
-  '/work/verizon-red-02.png',
-  '/work/urbyn-banner-02.png',
-  '/work/urbyn-value-drivers.png',
-  '/work/urbyn-historical.png',
-  '/work/email-illustration.png',
-  '/work/module-selector.png',
-  '/work/property-widgets.png',
-  '/work/hotel-cards.jpg',
-  '/work/carbon-dashboard.jpg',
-  '/work/carbondash-brand.png',
-  '/work/carbondash-logos.png',
-  '/work/carbondash-marketing.png',
-];
-
-const INTERVAL_MS = 1000; // ~every 2 beats at 120bpm
-const INITIAL_DELAY_MS = 3000;
+// Images pile up one every SLIDE_MS, each held long enough to read its
+// description. The dots count the seconds the top image has been up.
+const SLIDE_MS = 3000;
+const INITIAL_DELAY_MS = 1500;
 const PAUSE_AFTER_ALL_MS = 3000;
+const MAX_DOTS = Math.max(1, Math.round(SLIDE_MS / 1000));
 
 export default function Work() {
   const { theme } = useAudio();
   const [visibleCount, setVisibleCount] = useState(0);
+  const [dots, setDots] = useState(1);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const runSequence = useCallback(() => {
-    let count = 0;
+    let count = 1;
+    setVisibleCount(1);
     const tick = () => {
-      count++;
-      setVisibleCount(count);
-      if (count < WORK_IMAGES.length) {
-        timerRef.current = setTimeout(tick, INTERVAL_MS);
+      if (count < WORK_ITEMS.length) {
+        count++;
+        setVisibleCount(count);
+        timerRef.current = setTimeout(tick, SLIDE_MS);
       } else {
-        // All shown — pause, then reset and restart
+        // All shown — pause on the full collage, then reset and restart.
         timerRef.current = setTimeout(() => {
           setVisibleCount(0);
           timerRef.current = setTimeout(runSequence, 500);
         }, PAUSE_AFTER_ALL_MS);
       }
     };
-    timerRef.current = setTimeout(tick, INTERVAL_MS);
+    timerRef.current = setTimeout(tick, SLIDE_MS);
   }, []);
 
+  // Brief pause on the opening quote, then start the pile-up.
   useEffect(() => {
     timerRef.current = setTimeout(runSequence, INITIAL_DELAY_MS);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [runSequence]);
+
+  // Dot count = seconds the current top image has been visible (1 → MAX_DOTS).
+  useEffect(() => {
+    if (visibleCount === 0) return;
+    setDots(1);
+    const id = setInterval(() => setDots((d) => Math.min(d + 1, MAX_DOTS)), 1000);
+    return () => clearInterval(id);
+  }, [visibleCount]);
+
+  const activeIndex = visibleCount - 1;
+  const activeItem = activeIndex >= 0 ? WORK_ITEMS[activeIndex] : null;
 
   return (
     <main
@@ -108,29 +95,60 @@ export default function Work() {
         </p>
       </div>
 
-      {/* Overlapping project images — stacked on top of the text */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-        {WORK_IMAGES.map((src, i) => {
-          const visible = i < visibleCount;
-          // Small deterministic offsets so images overlap but don't perfectly align
-          const xOff = ((i * 37) % 40) - 20;
-          const yOff = ((i * 53) % 30) - 15;
-          return (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              className="absolute shadow-2xl"
-              style={{
-                display: visible ? 'block' : 'none',
-                transform: `translate(${xOff}px, ${yOff}px)`,
-                maxWidth: '80vw',
-                maxHeight: '80vh',
-              }}
-            />
-          );
-        })}
+      {/* Overlapping project images — pile up, lifted to leave room below */}
+      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pb-28 pointer-events-none">
+        <div className="relative">
+          {WORK_ITEMS.map((item, i) => {
+            const visible = i < visibleCount;
+            // Small deterministic offsets so images overlap but don't align.
+            const xOff = ((i * 37) % 40) - 20;
+            const yOff = ((i * 53) % 30) - 15;
+            return (
+              <img
+                key={item.src}
+                src={item.src}
+                alt={item.caption}
+                className="absolute -translate-x-1/2 -translate-y-1/2 shadow-2xl"
+                style={{
+                  display: visible ? 'block' : 'none',
+                  left: `calc(50% + ${xOff}px)`,
+                  top: `calc(50% + ${yOff}px)`,
+                  zIndex: i,
+                  maxWidth: '78vw',
+                  maxHeight: '70vh',
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
+
+      {/* Active description — only the top image's caption, bottom centre */}
+      {activeItem && (
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 w-full px-6 pointer-events-none">
+          <div className="flex items-center gap-1.5" style={{ height: 5 }}>
+            {Array.from({ length: MAX_DOTS }).map((_, i) => (
+              <span
+                key={i}
+                className="rounded-full transition-opacity duration-200"
+                style={{
+                  width: 5,
+                  height: 5,
+                  backgroundColor: theme.foreground,
+                  opacity: i < dots ? 0.9 : 0.18,
+                }}
+              />
+            ))}
+          </div>
+          <p
+            key={`cap-${activeIndex}`}
+            className="text-base md:text-lg font-sans text-center leading-relaxed max-w-xl animate-caption-fade"
+            style={{ color: theme.foreground, textWrap: 'balance' } as React.CSSProperties}
+          >
+            {activeItem.caption}
+          </p>
+        </div>
+      )}
     </main>
   );
 }

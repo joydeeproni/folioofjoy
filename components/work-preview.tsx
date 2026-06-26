@@ -5,12 +5,12 @@ import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { MobileGallery } from './mobile-gallery';
 
-interface WorkItem {
+export interface WorkItem {
   src: string;
   caption: string;
 }
 
-const WORK_ITEMS: WorkItem[] = [
+export const WORK_ITEMS: WorkItem[] = [
   { src: '/work/project-01.png', caption: 'AI home-management app — made the welcome screen feel like arriving home, not signing up for one.' },
   { src: '/work/project-02.png', caption: 'Mobile loan application — turned six screens of underwriting into something you would actually finish on the bus.' },
   { src: '/work/project-03.png', caption: 'Home maintenance on mobile — a fix-it list that reads like a to-do, not a contract.' },
