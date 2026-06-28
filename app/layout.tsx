@@ -5,6 +5,7 @@ import { DialRoot } from 'dialkit'
 import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
+import { Toaster } from '@/components/ui/sonner'
 import 'dialkit/styles.css'
 import './globals.css'
 
@@ -49,6 +50,7 @@ export default function RootLayout({
           {children}
           <AudioUI />
           <DitherTransition />
+          <Toaster position="bottom-center" />
         </Providers>
         {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}
         {process.env.NODE_ENV === 'production' && <Analytics />}

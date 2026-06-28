@@ -2,8 +2,10 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Mail, Send, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { MobileGallery } from './mobile-gallery';
+import { DitherSwipe, type DitherSwipeHandle } from './dither-swipe';
 
 export interface WorkItem {
   src: string;
@@ -49,6 +51,12 @@ export const WORK_ITEMS: WorkItem[] = [
 
 const PREVIEW_IMAGES = WORK_ITEMS.slice(0, 4);
 
+// Auto-cycle advances every AUTO_MS; any visitor interaction pauses it and it
+// resumes after RESUME_MS of inactivity.
+const AUTO_MS = 4200;
+const RESUME_MS = 10000;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function useIsMobile() {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
@@ -75,34 +83,178 @@ export function WorkLink() {
   const [captionKey, setCaptionKey] = useState(0);
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
   const [zoomOrigin, setZoomOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
+  const [showTooltip, setShowTooltip] = useState(false);
 
-  const next = useCallback(() => { setCurrentIndex((i) => (i + 1) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, []);
-  const prev = useCallback(() => { setCurrentIndex((i) => (i - 1 + WORK_ITEMS.length) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, []);
+  // Contact-me state
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactValue, setContactValue] = useState('');
+  const [contactSending, setContactSending] = useState(false);
+  const contactOpenRef = useRef(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Imperative handles / timers / gesture bookkeeping.
+  const ditherRef = useRef<DitherSwipeHandle>(null);
+  const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragStartX = useRef<number | null>(null);
+  const draggedRef = useRef(false);
+  const wheelLock = useRef(false);
+
+  // Swap the active preview, looping at either end. The dither plays the swap
+  // at peak coverage so the change reads as a dither-into-particles transition.
+  const advance = useCallback((dir: number) => {
+    setZoomedIdx(null);
+    setCurrentIndex((i) => (i + dir + WORK_ITEMS.length) % WORK_ITEMS.length);
+    setCaptionKey((k) => k + 1);
+  }, []);
+
+  const transition = useCallback((dir: number) => {
+    if (ditherRef.current) ditherRef.current.play(() => advance(dir));
+    else advance(dir);
+  }, [advance]);
+
+  const clearAuto = useCallback(() => {
+    if (autoTimer.current) { clearInterval(autoTimer.current); autoTimer.current = null; }
+  }, []);
+
+  const startAuto = useCallback(() => {
+    clearAuto();
+    autoTimer.current = setInterval(() => {
+      if (contactOpenRef.current) return; // don't shuffle while someone's typing
+      transition(1);
+    }, AUTO_MS);
+  }, [clearAuto, transition]);
+
+  // Called on every visitor interaction: pause the auto-cycle, hide the tooltip,
+  // and schedule a resume after RESUME_MS of inactivity.
+  const registerInteraction = useCallback(() => {
+    setShowTooltip(false);
+    clearAuto();
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => { startAuto(); }, RESUME_MS);
+  }, [clearAuto, startAuto]);
+
+  const goNext = useCallback(() => { registerInteraction(); transition(1); }, [registerInteraction, transition]);
+  const goPrev = useCallback(() => { registerInteraction(); transition(-1); }, [registerInteraction, transition]);
 
   const openCarousel = useCallback(() => {
-    setCurrentIndex(0); setCarouselMounted(true);
+    setCurrentIndex(0);
+    setZoomedIdx(null);
+    setContactOpen(false);
+    contactOpenRef.current = false;
+    setContactValue('');
+    setShowTooltip(false);
+    setCarouselMounted(true);
     requestAnimationFrame(() => { requestAnimationFrame(() => setCarouselVisible(true)); });
   }, []);
 
   const closeCarousel = useCallback(() => {
     setCarouselVisible(false);
+    clearAuto();
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
+    setShowTooltip(false);
+    setContactOpen(false);
+    contactOpenRef.current = false;
     setTimeout(() => setCarouselMounted(false), 400);
-  }, []);
+  }, [clearAuto]);
+
+  // Start the auto-cycle and reveal the tooltip once the carousel is open.
+  useEffect(() => {
+    if (!carouselMounted) return;
+    startAuto();
+    tooltipTimer.current = setTimeout(() => setShowTooltip(true), 900);
+    return () => {
+      clearAuto();
+      if (resumeTimer.current) clearTimeout(resumeTimer.current);
+      if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
+    };
+  }, [carouselMounted, startAuto, clearAuto]);
 
   useEffect(() => {
     if (!carouselMounted) return;
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeCarousel();
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'Escape') {
+        if (contactOpenRef.current) { setContactOpen(false); contactOpenRef.current = false; }
+        else closeCarousel();
+        return;
+      }
+      if (contactOpenRef.current) return; // arrows shouldn't navigate while typing
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [carouselMounted, next, prev, closeCarousel]);
+  }, [carouselMounted, goNext, goPrev, closeCarousel]);
 
   const handleClick = () => {
     if (isMobile) setMobileOpen(true);
     else openCarousel();
+  };
+
+  // --- Contact me ---------------------------------------------------------
+  const openContact = () => {
+    setContactOpen(true);
+    contactOpenRef.current = true;
+    registerInteraction();
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
+
+  const submitContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = contactValue.trim();
+    if (!EMAIL_RE.test(email)) {
+      toast.error('Please enter a valid email.');
+      inputRef.current?.focus();
+      return;
+    }
+    setContactSending(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data?.error === 'string' ? data.error : 'failed');
+      toast.success('Sent ✓', { description: 'Joydeep will be in touch.' });
+      setContactValue('');
+      setContactOpen(false);
+      contactOpenRef.current = false;
+    } catch (err) {
+      const msg = err instanceof Error && err.message !== 'failed' ? err.message : 'Could not send — try again.';
+      toast.error(msg);
+    } finally {
+      setContactSending(false);
+    }
+  };
+
+  // --- Swipe gestures -----------------------------------------------------
+  const onStagePointerDown = (e: React.PointerEvent) => {
+    dragStartX.current = e.clientX;
+    draggedRef.current = false;
+  };
+  const onStagePointerUp = (e: React.PointerEvent) => {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    dragStartX.current = null;
+    if (Math.abs(dx) > 60) {
+      // Suppress the click that follows the drag so it doesn't toggle zoom.
+      draggedRef.current = true;
+      setTimeout(() => { draggedRef.current = false; }, 0);
+      if (dx < 0) goNext();
+      else goPrev();
+    }
+  };
+  const onStageWheel = (e: React.WheelEvent) => {
+    // Trackpad two-finger horizontal swipe.
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 24) return;
+    if (wheelLock.current) return;
+    wheelLock.current = true;
+    setTimeout(() => { wheelLock.current = false; }, 700);
+    if (e.deltaX > 0) goNext();
+    else goPrev();
   };
 
   return (
@@ -157,19 +309,66 @@ export function WorkLink() {
         <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-400 ease-out ${carouselVisible ? 'opacity-100' : 'opacity-0'}`} onClick={closeCarousel}>
           <div className={`absolute inset-0 bg-black backdrop-blur-xl transition-all duration-400 ${carouselVisible ? 'opacity-100' : 'opacity-0'}`} />
 
-          <button onClick={closeCarousel} className={`absolute top-6 left-6 z-10 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`} style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}>
+          <button onClick={closeCarousel} className={`absolute top-6 left-6 z-20 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`} style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}>
             <X className="w-5 h-5 text-white" />
           </button>
 
-          <button onClick={(e) => { e.stopPropagation(); prev(); }} className={`absolute left-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
+          {/* Contact me — expands into an email input; Enter sends. */}
+          <div
+            className={`absolute top-6 right-6 z-20 transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
+            style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <form onSubmit={submitContact} className="flex items-center rounded-full bg-white/10 hover:bg-white/15 backdrop-blur transition-colors duration-300">
+              {!contactOpen ? (
+                <button type="button" onClick={openContact} className="flex items-center gap-2 px-4 py-2 text-sm text-white/90 cursor-pointer">
+                  <Mail className="w-4 h-4" />
+                  Contact me
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 pl-4 pr-1.5 py-1.5">
+                  <Mail className="w-4 h-4 text-white/60 shrink-0" />
+                  <input
+                    ref={inputRef}
+                    type="email"
+                    value={contactValue}
+                    onChange={(e) => setContactValue(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Escape') { setContactOpen(false); contactOpenRef.current = false; } }}
+                    placeholder="your@email.com — press ↵"
+                    disabled={contactSending}
+                    className="w-56 bg-transparent text-sm text-white placeholder-white/40 outline-none"
+                  />
+                  <button type="submit" disabled={contactSending} className="p-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white shrink-0 transition-colors disabled:opacity-50 cursor-pointer">
+                    {contactSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  </button>
+                </div>
+              )}
+            </form>
+          </div>
+
+          {/* Fade-in tooltip above the previews. */}
+          <div className={`absolute left-1/2 -translate-x-1/2 top-24 z-10 pointer-events-none transition-all duration-700 ease-out ${showTooltip ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+            <span className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur text-white/70 text-xs font-sans whitespace-nowrap">
+              Swipe ← or → to see them again.
+            </span>
+          </div>
+
+          <button onClick={(e) => { e.stopPropagation(); goPrev(); }} className={`absolute left-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
             <ChevronLeft className="w-5 h-5 text-white" />
           </button>
-          <button onClick={(e) => { e.stopPropagation(); next(); }} className={`absolute right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
+          <button onClick={(e) => { e.stopPropagation(); goNext(); }} className={`absolute right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
             <ChevronRight className="w-5 h-5 text-white" />
           </button>
 
           <div className="relative z-10 flex flex-col items-center gap-6 max-w-5xl w-full px-20" onClick={(e) => e.stopPropagation()}>
-            <div className="relative w-full flex items-center justify-center" style={{ height: '65vh' }}>
+            <div
+              className="relative w-full flex items-center justify-center"
+              style={{ height: '65vh', touchAction: 'pan-y' }}
+              onPointerDown={onStagePointerDown}
+              onPointerUp={onStagePointerUp}
+              onPointerLeave={() => { dragStartX.current = null; }}
+              onWheel={onStageWheel}
+            >
               {WORK_ITEMS.map((item, idx) => {
                 let offset = idx - currentIndex;
                 if (offset > WORK_ITEMS.length / 2) offset -= WORK_ITEMS.length;
@@ -187,7 +386,13 @@ export function WorkLink() {
                       transition: 'all 700ms cubic-bezier(0.16, 1, 0.3, 1)',
                       pointerEvents: isVisible ? 'auto' : 'none',
                     }}
-                    onClick={(e) => { e.stopPropagation(); if (offset === -1) prev(); else if (offset === 1) next(); else setZoomedIdx(zoomedIdx === idx ? null : idx); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (draggedRef.current) return; // ignore the click that ends a swipe
+                      if (offset === -1) goPrev();
+                      else if (offset === 1) goNext();
+                      else setZoomedIdx(zoomedIdx === idx ? null : idx);
+                    }}
                     onMouseEnter={(e) => {
                       if (!isCenter) return;
                       const rect = e.currentTarget.getBoundingClientRect();
@@ -209,6 +414,7 @@ export function WorkLink() {
                   >
                     <img src={item.src} alt={item.caption}
                       className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
+                      draggable={false}
                       style={{
                         transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
                         transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
@@ -222,6 +428,9 @@ export function WorkLink() {
               {WORK_ITEMS[currentIndex].caption}
             </p>
           </div>
+
+          {/* Dither-into-particles transition overlay (6px cells, Bayer 8x8). */}
+          <DitherSwipe ref={ditherRef} />
         </div>
       ), document.body)}
     </>
