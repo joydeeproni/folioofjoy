@@ -25,6 +25,7 @@ interface MatrixVisualizationProps {
   opacity: number;
   restartKey: number;
   backgroundColor?: string;
+  transparentBackground?: boolean; // skip the opaque bg fill so content behind shows through
   cellColor?: string; // hex; the theme highlight used for default (white-mode) cells
   onCellHover?: (cell: { i: number; j: number } | null) => void;
   exploreSettings?: ExploreSettings;
@@ -180,6 +181,7 @@ export function MatrixVisualization({
   opacity,
   restartKey,
   backgroundColor = 'rgb(10, 10, 12)',
+  transparentBackground = false,
   cellColor = '#ffffff',
   onCellHover,
   exploreSettings,
@@ -291,8 +293,10 @@ export function MatrixVisualization({
       }
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = backgroundColor;
-      ctx.fillRect(0, 0, w, h);
+      if (!transparentBackground) {
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, w, h);
+      }
 
       // Subtle grid
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
@@ -398,7 +402,7 @@ export function MatrixVisualization({
       window.removeEventListener('resize', setupCanvas);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [getCellGeometry, opacity, backgroundColor, cellRgb, isRipple, exploreSettings]);
+  }, [getCellGeometry, opacity, backgroundColor, transparentBackground, cellRgb, isRipple, exploreSettings]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

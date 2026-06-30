@@ -11,6 +11,7 @@ import { MobileMenu } from './mobile-menu';
 import { ScrollReveal } from './scroll-reveal';
 import { WorkLink } from './work-preview';
 import { ExperimentsLink } from './experiments-preview';
+import { DitheredVideo } from './dithered-video';
 import { useAudio } from '@/lib/audio-context';
 import { DEFAULT_THEME } from '@/lib/color';
 
@@ -89,12 +90,15 @@ export function SongAnalyzer() {
 
       {/* ===== FIRST FOLD — full screen ===== */}
       <div className="relative h-screen w-full overflow-hidden">
-        {/* Matrix */}
+        {/* Dithered music video — backmost layer */}
+        <DitheredVideo />
+
+        {/* Matrix — transparent background so the dithered video shows through */}
         {words.length > 0 && (
           <MatrixVisualization
             words={words} wordMap={wordMap} showSingleMatches={showSingleMatches}
             opacity={exploreMode ? 1 : dimmed ? 0.08 : 0.35}
-            restartKey={restartKey} backgroundColor={theme.backgroundRgb} cellColor={theme.accent}
+            restartKey={restartKey} backgroundColor={theme.backgroundRgb} transparentBackground cellColor={theme.accent}
             onCellHover={exploreMode ? setHoveredCell : undefined}
             exploreSettings={exploreSettings}
             audioProgress={audioDuration > 0 ? currentTime / audioDuration : undefined}

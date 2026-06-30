@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { animate } from 'motion';
-import { useDialKit } from 'dialkit';
 import { useAudio } from '@/lib/audio-context';
 
 // Classic recursive 8x8 ordered (Bayer) dither matrix, values 0..63.
@@ -98,64 +97,27 @@ export function DitherTransition() {
   const pathname = usePathname();
   const { gateOpen, theme } = useAudio();
 
-  const dial = useDialKit(
-    'Dither Transition',
-    {
-      cellSize: [14, 4, 48, 1],
-      gap: [0, 0, 24, 1],
-      duration: [1550, 100, 4000, 50],
-      pattern: { type: 'select', options: ['drift', 'bayer', 'random'], default: 'drift' },
-      shape: { type: 'select', options: ['square', 'dot'], default: 'square' },
-      feather: [0.2, 0, 0.6, 0.01],
-      drift: {
-        scale: [7, 2, 40, 0.5],
-        spread: { type: 'select', options: ['linear', 'center', 'edges'], default: 'edges' },
-        direction: [90, 0, 360, 1],
-        directionStrength: [0.5, 0, 1, 0.01],
-        grain: [0.2, 0, 1, 0.01],
-        octaves: [3, 1, 5, 1],
-      },
-      easing: {
-        type: 'select',
-        options: ['easeOut', 'easeInOut', 'linear', 'circOut', 'backOut', 'anticipate'],
-        default: 'easeOut',
-      },
-      useThemeColor: true,
-      color: '#000000',
-      varyEachTime: true,
-      replay: { type: 'action', label: 'Replay' },
-    },
-    { onAction: (path) => { if (path === 'replay') play(); } }
-  ) as unknown as Omit<DitherSettings, 'color'> & {
-    useThemeColor: boolean;
-    color: string;
-    varyEachTime: boolean;
-    replay: unknown;
-  };
-
-  // Tint the dither with the current palette's highlight when enabled.
-  const ditherColor = dial.useThemeColor ? theme.accent : dial.color;
-
-  // Keep the latest control values available to imperative callbacks.
+  // Fixed configuration (previously exposed via DialKit). The dither is tinted
+  // with the current palette's highlight.
   cfgRef.current = {
-    cellSize: dial.cellSize,
-    gap: dial.gap,
-    duration: dial.duration,
-    pattern: dial.pattern,
-    shape: dial.shape,
-    feather: dial.feather,
+    cellSize: 14,
+    gap: 0,
+    duration: 1550,
+    pattern: 'drift',
+    shape: 'square',
+    feather: 0.2,
     drift: {
-      scale: dial.drift.scale,
-      spread: dial.drift.spread,
-      direction: dial.drift.direction,
-      directionStrength: dial.drift.directionStrength,
-      grain: dial.drift.grain,
-      octaves: Math.round(dial.drift.octaves),
+      scale: 7,
+      spread: 'edges',
+      direction: 90,
+      directionStrength: 0.5,
+      grain: 0.2,
+      octaves: 3,
     },
-    easing: dial.easing,
-    color: ditherColor,
+    easing: 'easeOut',
+    color: theme.accent,
   };
-  const varyEachTime = dial.varyEachTime;
+  const varyEachTime = true;
 
   const buildGrid = useCallback((cfg: DitherSettings, seed: number): Grid => {
     const cell = Math.max(2, Math.round(cfg.cellSize));
