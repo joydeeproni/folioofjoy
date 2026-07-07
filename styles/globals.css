@@ -29,6 +29,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Geist Pixel';
+  src: url('/fonts/GeistPixel-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -107,6 +114,7 @@
   --font-mono: 'Praktikal', monospace;
   --font-heading: 'Praktikal', sans-serif;
   --font-body: 'Galeria', sans-serif;
+  --font-pixel: 'Geist Pixel', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

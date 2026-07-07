@@ -34,6 +34,7 @@ interface FloatingPillProps {
   onToggleDimmed: () => void;
   toolbarColor?: string;
   accentColor?: string;
+  onOpenLounge: () => void;
 }
 
 export function FloatingPill({
@@ -54,6 +55,7 @@ export function FloatingPill({
   onToggleDimmed,
   toolbarColor,
   accentColor,
+  onOpenLounge,
 }: FloatingPillProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -165,10 +167,10 @@ export function FloatingPill({
 
       {/* Mobile: slim chip — album art (left) + song name, matches the A11Y chip */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`md:hidden flex items-center gap-2 px-3 py-2 rounded-full backdrop-blur-xl border border-white/10 shadow-2xl transition-all ${isOpen ? 'ring-1 ring-white/20' : ''}`}
+        onClick={onOpenLounge}
+        className="md:hidden flex items-center gap-2 px-3 py-2 rounded-full backdrop-blur-xl border border-white/10 shadow-2xl transition-all"
         style={{ backgroundColor: toolbarBg }}
-        title={currentTrack ? `${currentTrack.name} — ${currentTrack.artists[0]?.name}` : 'Song queue'}
+        title="Open Lounge Mode"
       >
         {currentTrack?.album?.images[0]?.url ? (
           <img src={currentTrack.album.images[0].url} alt="" className="w-4 h-4 rounded object-cover flex-shrink-0" />
@@ -195,11 +197,9 @@ export function FloatingPill({
           <div className={`flex items-center px-2 py-2 ${expanded ? 'gap-1' : 'gap-0'}`} style={{ transition: 'all 700ms cubic-bezier(0.16, 1, 0.3, 1)' }}>
             {/* Album art / queue toggle — always visible */}
             <button
-              onClick={() => { setIsOpen(!isOpen); }}
-              className={`flex items-center gap-2 p-1.5 rounded-full transition-all flex-shrink-0 ${
-                isOpen ? 'bg-white/15 hover:bg-white/20 text-white' : 'hover:bg-white/10'
-              }`}
-              title={currentTrack ? `${currentTrack.name} — ${currentTrack.artists[0]?.name}` : 'Song queue'}
+              onClick={onOpenLounge}
+              className="flex items-center gap-2 p-1.5 rounded-full transition-all flex-shrink-0 bg-white text-black hover:bg-white/90"
+              title="Open Lounge Mode"
             >
               {currentTrack?.album?.images[0]?.url ? (
                 <img
@@ -208,7 +208,7 @@ export function FloatingPill({
                   className="w-8 h-8 rounded-lg object-cover"
                 />
               ) : (
-                <Music className="w-5 h-5 text-white/60" />
+                <Music className="w-5 h-5 text-black/60" />
               )}
             </button>
 

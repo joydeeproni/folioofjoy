@@ -40,6 +40,9 @@ interface AudioContextValue {
   triggerRestart: () => void;
   setDimmed: (dimmed: boolean) => void;
   setPlayerVisible: (visible: boolean) => void;
+  loungeOpen: boolean;
+  openLounge: () => void;
+  closeLounge: () => void;
 }
 
 const AudioCtx = createContext<AudioContextValue | null>(null);
@@ -67,6 +70,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   const [dimmed, setDimmed] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(true);
   const [accessibleMode, setAccessibleMode] = useState(false);
+  const [loungeOpen, setLoungeOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Web Audio graph for the Winamp-style visualizers. Created lazily on the
@@ -215,6 +219,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     audioRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
   }, [ensureAnalyser]);
 
+  // Lounge Mode: the pattern experience behind the music circle. Opening it
+  // also starts the music (inside the click gesture, so playback is allowed).
+  const openLounge = useCallback(() => { setLoungeOpen(true); startMusic(); }, [startMusic]);
+  const closeLounge = useCallback(() => { setLoungeOpen(false); }, []);
+
   const togglePlayPause = useCallback(() => {
     const ct = currentTrackRef.current;
     if (!audioRef.current || !ct?.preview_url) return;
@@ -245,6 +254,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     playTrack, togglePlayPause, toggleMute, playNext, playPrevious,
     startMusic, getAnalyser, triggerRestart,
     setDimmed, setPlayerVisible,
+    loungeOpen, openLounge, closeLounge,
   };
 
   return (
@@ -261,7 +271,7 @@ export function AudioUI() {
     isPlaying, currentTime, isMuted,
     playTrack, togglePlayPause, playNext, playPrevious, toggleMute,
     triggerRestart, dimmed, setDimmed,
-    theme, playerVisible,
+    theme, playerVisible, openLounge,
   } = useAudio();
 
   // Avoid SSR mismatch — render nothing on the server
@@ -291,6 +301,7 @@ export function AudioUI() {
           onToggleDimmed={() => setDimmed(!dimmed)}
           toolbarColor={theme.toolbar}
           accentColor={theme.accent}
+          onOpenLounge={openLounge}
         />
       )}
     </>
