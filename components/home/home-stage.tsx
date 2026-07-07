@@ -8,9 +8,16 @@ const INSTAGRAM = 'https://www.instagram.com/joyingntravelling/';
 
 export function HomeStage() {
   const [hover, setHover] = useState<HoverTarget>(null);
+  const [hoverOrigin, setHoverOrigin] = useState<{ x: number; y: number } | null>(null);
   const dim = (t: HoverTarget) => hover !== null && hover !== t;
   const cls = (t: HoverTarget) =>
     `transition-opacity duration-300 ${dim(t) ? 'opacity-40' : 'opacity-90 hover:opacity-100'}`;
+  // On hover, record the link's centre so the dither can drift out from it.
+  const enter = (t: HoverTarget) => (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setHoverOrigin({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+    setHover(t);
+  };
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black text-white">
@@ -20,7 +27,7 @@ export function HomeStage() {
           href={INSTAGRAM}
           target="_blank"
           rel="noopener noreferrer"
-          onMouseEnter={() => setHover('photography')}
+          onMouseEnter={enter('photography')}
           onMouseLeave={() => setHover(null)}
           className={cls('photography')}
         >
@@ -28,7 +35,7 @@ export function HomeStage() {
         </a>
         <Link
           href="/about"
-          onMouseEnter={() => setHover('about')}
+          onMouseEnter={enter('about')}
           onMouseLeave={() => setHover(null)}
           className={cls('about')}
         >
@@ -36,7 +43,7 @@ export function HomeStage() {
         </Link>
         <Link
           href="/writings"
-          onMouseEnter={() => setHover('writings')}
+          onMouseEnter={enter('writings')}
           onMouseLeave={() => setHover(null)}
           className={cls('writings')}
         >
@@ -56,7 +63,7 @@ export function HomeStage() {
         K&oslash;benhavn, Danmark
       </p>
 
-      <CenterStage hoverTarget={hover} />
+      <CenterStage hoverTarget={hover} hoverOrigin={hoverOrigin} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import {
   RefreshCw,
   Accessibility,
   Music,
+  LayoutGrid,
 } from 'lucide-react';
 import type { Track } from '@/lib/music';
 import { WinampVisualizer } from './winamp-visualizer';
@@ -259,6 +260,11 @@ export function FloatingPill({
               <WinampVisualizer active={expanded} accentColor={accentColor} width={56} height={24} showChrome={false} className="mx-0.5" />
 
               <div className="w-px h-6 bg-white/10 flex-shrink-0" />
+
+              {/* Lounge Mode */}
+              <button onClick={onOpenLounge} className="p-1.5 hover:bg-white/10 rounded-full transition-all flex-shrink-0" title="Open Lounge Mode">
+                <LayoutGrid className="w-3.5 h-3.5 text-white/70" />
+              </button>
 
               {/* Restart */}
               <button onClick={onRestart} className="p-1.5 hover:bg-white/10 rounded-full transition-all flex-shrink-0" title="Restart pattern">

@@ -29,16 +29,22 @@ function useIsMobile() {
   return mobile;
 }
 
-export function CenterStage({ hoverTarget }: { hoverTarget: HoverTarget }) {
+export function CenterStage({
+  hoverTarget,
+  hoverOrigin,
+}: {
+  hoverTarget: HoverTarget;
+  hoverOrigin?: { x: number; y: number } | null;
+}) {
   const isMobile = useIsMobile();
 
   // Live controls for the hero quote (dialkit panel, dev only). Defaults are
   // the current baked-in values; tune here, then bake the final numbers.
   const q = useDialKit('Homepage Quote', {
     sizeVw: [6.5, 2, 16, 0.05],
-    maxWidth: [1400, 300, 1800, 10],
-    lineHeight: [1.2, 0.8, 2, 0.01],
-    letterSpacing: [0.01, -0.08, 0.4, 0.005],
+    maxWidth: [800, 300, 1800, 10],
+    lineHeight: [0.9, 0.6, 2, 0.01],
+    letterSpacing: [-0.025, -0.08, 0.4, 0.005],
     wordSpacing: [0.03, -0.2, 1.5, 0.01],
     color: GREEN,
   }) as unknown as {
@@ -140,8 +146,8 @@ export function CenterStage({ hoverTarget }: { hoverTarget: HoverTarget }) {
           className="font-pixel"
           style={{
             color: q.color,
-            fontSize: `${q.sizeVw}vw`,
-            maxWidth: `${q.maxWidth}px`,
+            fontSize: isMobile ? '10.5vw' : `${q.sizeVw}vw`,
+            maxWidth: isMobile ? '90vw' : `${q.maxWidth}px`,
             lineHeight: q.lineHeight,
             letterSpacing: `${q.letterSpacing}em`,
             wordSpacing: `${q.wordSpacing}em`,
@@ -179,7 +185,10 @@ export function CenterStage({ hoverTarget }: { hoverTarget: HoverTarget }) {
                   src={item.src}
                   alt={item.caption}
                   className="animate-work-drop shadow-2xl"
-                  style={{ maxWidth: '78vw', maxHeight: '68vh' }}
+                  style={{
+                    maxWidth: isMobile ? '90vw' : '78vw',
+                    maxHeight: isMobile ? '72vh' : '68vh',
+                  }}
                 />
               </div>
             );
@@ -257,7 +266,7 @@ export function CenterStage({ hoverTarget }: { hoverTarget: HoverTarget }) {
 
       {/* Full-page dither transition only for nav-hover previews (which replace
           the page). The work reveal instead drops images on top of the hero. */}
-      <DitherReveal trigger={hoverTarget ?? 'none'} color={GREEN} duration={1200} />
+      <DitherReveal trigger={hoverTarget ?? 'none'} origin={hoverOrigin} />
     </div>
   );
 }
