@@ -11,7 +11,7 @@ export function HomeStage() {
   const [hoverOrigin, setHoverOrigin] = useState<{ x: number; y: number } | null>(null);
   const dim = (t: HoverTarget) => hover !== null && hover !== t;
   const cls = (t: HoverTarget) =>
-    `transition-opacity duration-300 ${dim(t) ? 'opacity-40' : 'opacity-90 hover:opacity-100'}`;
+    `transition-all duration-300 hover:text-[#2CA152] ${dim(t) ? 'opacity-40' : 'opacity-90 hover:opacity-100'}`;
   // On hover, record the link's centre so the dither can drift out from it.
   const enter = (t: HoverTarget) => (e: React.MouseEvent<HTMLElement>) => {
     const r = e.currentTarget.getBoundingClientRect();

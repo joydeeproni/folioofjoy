@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useDialKit } from 'dialkit';
-import { WORK_ITEMS } from '@/components/work-preview';
+import { WORK_ITEMS, type WorkCategory } from '@/components/work-preview';
 import { WRITINGS } from '@/lib/writings';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
@@ -10,13 +10,21 @@ import { DitherReveal } from './dither-reveal';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
 
+// Category filters shown under the hero. Clicking one stacks that category's
+// project previews on top of the hero; RND = everything.
+type Cat = WorkCategory | 'RND';
+const CATEGORIES: { key: Cat; full: string }[] = [
+  { key: 'SVC', full: 'Service — products built to help others (dashboards, apps)' },
+  { key: 'JOY', full: 'Joy — pure fun, experiments, random stuff' },
+  { key: 'BIZ', full: 'Business — ecommerce, landing pages, money work' },
+  { key: 'DTY', full: 'Duty — design systems, busywork, organization' },
+  { key: 'RND', full: 'Random — everything' },
+];
+
 const QUOTE = 'i awoke and saw that life was service. i acted and behold, service was joy.';
 const GREEN = '#2CA152';
 const YELLOW = '#F2E30C';
-const START_DELAY = 450; // sustained movement before the work pile begins
-const IDLE_MS = 800; // stop-moving delay before the hero returns
-const ADVANCE_MS = 320; // min gap between pile advances while moving
-const AUTO_MS = 3000; // mobile auto-cycle cadence
+const STACK_MS = 650; // gap between each preview dropping onto the pile
 
 function useIsMobile() {
   const [mobile, setMobile] = useState(false);
@@ -38,8 +46,7 @@ export function CenterStage({
 }) {
   const isMobile = useIsMobile();
 
-  // Live controls for the hero quote (dialkit panel, dev only). Defaults are
-  // the current baked-in values; tune here, then bake the final numbers.
+  // Live controls for the hero quote (dialkit panel, dev only).
   const q = useDialKit('Homepage Quote', {
     sizeVw: [6.5, 2, 16, 0.05],
     maxWidth: [800, 300, 1800, 10],
@@ -55,14 +62,12 @@ export function CenterStage({
     wordSpacing: number;
     color: string;
   };
-  const [count, setCount] = useState(0); // 0 = hero; >0 = piled work screens
+
+  const [activeCat, setActiveCat] = useState<Cat | null>(null);
+  const [count, setCount] = useState(0); // number of piled previews (0 = none)
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
-  const activeRef = useRef(false);
-  const startTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastMove = useRef(0);
-  const lastAdvance = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Scramble the quote once on first mount.
   useEffect(() => {
@@ -71,74 +76,41 @@ export function CenterStage({
     scrambleReveal(quoteRef.current, QUOTE, 1.6, 0.2);
   }, []);
 
-  const clearTimers = useCallback(() => {
-    if (startTimer.current) { clearTimeout(startTimer.current); startTimer.current = null; }
-    if (idleTimer.current) { clearTimeout(idleTimer.current); idleTimer.current = null; }
-  }, []);
+  const items = useMemo(() => {
+    if (!activeCat) return [];
+    if (activeCat === 'RND') return WORK_ITEMS;
+    return WORK_ITEMS.filter((w) => w.category === activeCat);
+  }, [activeCat]);
 
-  // A nav hover suppresses the work pile (the preview takes over the page).
+  // On category select, drop its previews onto the pile one at a time.
   useEffect(() => {
-    if (hoverTarget) {
-      activeRef.current = false;
-      clearTimers();
-      setCount(0);
-    }
-  }, [hoverTarget, clearTimers]);
-
-  useEffect(() => () => clearTimers(), [clearTimers]);
-
-  // Desktop: sustained movement starts the pile after a delay; idle hides it.
-  const handleMove = useCallback(() => {
-    if (isMobile || hoverTarget) return;
-    const now = performance.now();
-    lastMove.current = now;
-
-    if (idleTimer.current) clearTimeout(idleTimer.current);
-    idleTimer.current = setTimeout(() => {
-      activeRef.current = false;
-      if (startTimer.current) { clearTimeout(startTimer.current); startTimer.current = null; }
-      setCount(0);
-    }, IDLE_MS);
-
-    if (!activeRef.current) {
-      if (!startTimer.current) {
-        startTimer.current = setTimeout(() => {
-          startTimer.current = null;
-          // Only begin if the mouse is still moving when the delay elapses.
-          if (performance.now() - lastMove.current <= 200) {
-            activeRef.current = true;
-            lastAdvance.current = performance.now();
-            setCount(1);
-          }
-        }, START_DELAY);
-      }
-    } else if (now - lastAdvance.current >= ADVANCE_MS) {
-      lastAdvance.current = now;
-      setCount((c) => Math.min(c + 1, WORK_ITEMS.length));
-    }
-  }, [isMobile, hoverTarget]);
-
-  // Mobile: no hover — auto-cycle the pile on a timer (like /work).
-  useEffect(() => {
-    if (!isMobile || hoverTarget) return;
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (!activeCat || items.length === 0) { setCount(0); return; }
     setCount(1);
-    const id = setInterval(() => {
-      setCount((c) => (c >= WORK_ITEMS.length ? 0 : c + 1));
-    }, AUTO_MS);
-    return () => clearInterval(id);
-  }, [isMobile, hoverTarget]);
+    timerRef.current = setInterval(() => {
+      setCount((c) => {
+        if (c >= items.length) {
+          if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+          return c;
+        }
+        return c + 1;
+      });
+    }, STACK_MS);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [activeCat, items.length]);
 
-  const workActive = count > 0;
-  const scene: 'hero' | 'work' | 'about' | 'photography' | 'writings' =
-    hoverTarget ?? (workActive ? 'work' : 'hero');
+  // A nav hover clears any active category (the preview takes over the page).
+  useEffect(() => { if (hoverTarget) setActiveCat(null); }, [hoverTarget]);
 
-  const activeIndex = workActive ? (count - 1) % WORK_ITEMS.length : -1;
-  const activeItem = activeIndex >= 0 ? WORK_ITEMS[activeIndex] : null;
+  const toggle = (c: Cat) => setActiveCat((prev) => (prev === c ? null : c));
+
+  const showStack = !hoverTarget && count > 0 && items.length > 0;
+  const activeItem = showStack ? items[Math.min(count, items.length) - 1] : null;
 
   return (
-    <div className="absolute inset-0" onMouseMove={handleMove}>
+    <div className="absolute inset-0">
       {/* HERO — green pixel quote behind the teetering seesaw. Stays visible
-          while work images drop and stack on top (only nav previews replace it). */}
+          while the selected previews drop and stack on top. */}
       <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null}>
         <p
           ref={quoteRef}
@@ -162,10 +134,10 @@ export function CenterStage({
         <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto" />
       </div>
 
-      {/* WORK — screens drop and stack on top of the hero as the mouse moves */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-6 pb-28 pointer-events-none" hidden={hoverTarget !== null || count === 0}>
+      {/* WORK STACK — category previews drop and stack on top of the hero */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center px-6 pb-28 pointer-events-none" hidden={!showStack}>
         <div className="relative">
-          {WORK_ITEMS.map((item, i) => {
+          {items.map((item, i) => {
             const visible = i < count;
             const xOff = ((i * 37) % 40) - 20;
             const yOff = ((i * 53) % 30) - 15;
@@ -196,11 +168,11 @@ export function CenterStage({
         </div>
       </div>
 
-      {/* WORK caption — feature description, bottom centre */}
-      {scene === 'work' && activeItem && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center w-full px-6 pointer-events-none">
+      {/* Feature caption — the top preview's description */}
+      {activeItem && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center w-full px-6 pointer-events-none">
           <p
-            key={activeIndex}
+            key={`${activeCat}-${count}`}
             className="text-base md:text-lg font-sans text-center leading-relaxed max-w-xl text-white animate-caption-fade"
             style={{ textWrap: 'balance' } as React.CSSProperties}
           >
@@ -209,8 +181,28 @@ export function CenterStage({
         </div>
       )}
 
+      {/* Category abbreviations — click to stack that category (homepage only) */}
+      <div
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-5 font-mono text-xs uppercase tracking-[0.2em]"
+        hidden={hoverTarget !== null}
+      >
+        {CATEGORIES.map((c) => (
+          <button
+            key={c.key}
+            onClick={() => toggle(c.key)}
+            title={c.full}
+            className="transition-colors hover:!opacity-100"
+            style={{ color: activeCat === c.key ? GREEN : 'rgba(255,255,255,0.5)' }}
+            onMouseEnter={(e) => { if (activeCat !== c.key) e.currentTarget.style.color = GREEN; }}
+            onMouseLeave={(e) => { if (activeCat !== c.key) e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+          >
+            {c.key}
+          </button>
+        ))}
+      </div>
+
       {/* ABOUT preview — yellow pixel "about" + 6502 + seesaw */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none" hidden={scene !== 'about'}>
+      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none" hidden={hoverTarget !== 'about'}>
         <span className="font-pixel font-light leading-none select-none text-[15vw] md:text-[11vw]" style={{ color: YELLOW }}>
           about
         </span>
@@ -221,7 +213,7 @@ export function CenterStage({
       </div>
 
       {/* PHOTOGRAPHY preview — yellow "snap!" behind a photo pile */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none" hidden={scene !== 'photography'}>
+      <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none" hidden={hoverTarget !== 'photography'}>
         <span className="font-pixel font-light text-[16vw] leading-none select-none" style={{ color: YELLOW }}>
           snap!
         </span>
@@ -253,7 +245,7 @@ export function CenterStage({
       </div>
 
       {/* WRITINGS preview — big pixel word + post titles */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-6 pointer-events-none" hidden={scene !== 'writings'}>
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-6 pointer-events-none" hidden={hoverTarget !== 'writings'}>
         <span className="font-pixel font-light text-white text-[15vw] md:text-[9vw] leading-none select-none">
           writings
         </span>
@@ -264,8 +256,7 @@ export function CenterStage({
         </div>
       </div>
 
-      {/* Full-page dither transition only for nav-hover previews (which replace
-          the page). The work reveal instead drops images on top of the hero. */}
+      {/* Full-page dither transition for nav-hover previews (drifts from link) */}
       <DitherReveal trigger={hoverTarget ?? 'none'} origin={hoverOrigin} />
     </div>
   );
