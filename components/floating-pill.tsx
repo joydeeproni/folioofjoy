@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Play,
   Pause,
@@ -35,7 +36,6 @@ interface FloatingPillProps {
   onToggleDimmed: () => void;
   toolbarColor?: string;
   accentColor?: string;
-  onOpenLounge: () => void;
 }
 
 export function FloatingPill({
@@ -56,8 +56,8 @@ export function FloatingPill({
   onToggleDimmed,
   toolbarColor,
   accentColor,
-  onOpenLounge,
 }: FloatingPillProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showUnmuteTip, setShowUnmuteTip] = useState(true);
@@ -168,7 +168,7 @@ export function FloatingPill({
 
       {/* Mobile: slim chip — album art (left) + song name, matches the A11Y chip */}
       <button
-        onClick={onOpenLounge}
+        onClick={() => router.push('/zen')}
         className="md:hidden flex items-center gap-2 px-3 py-2 rounded-full backdrop-blur-xl border border-white/10 shadow-2xl transition-all"
         style={{ backgroundColor: toolbarBg }}
         title="Open Lounge Mode"
@@ -198,7 +198,7 @@ export function FloatingPill({
           <div className={`flex items-center px-2 py-2 ${expanded ? 'gap-1' : 'gap-0'}`} style={{ transition: 'all 700ms cubic-bezier(0.16, 1, 0.3, 1)' }}>
             {/* Album art / queue toggle — always visible */}
             <button
-              onClick={onOpenLounge}
+              onClick={() => router.push('/zen')}
               className="flex items-center gap-2 p-1.5 rounded-full transition-all flex-shrink-0 bg-white text-black hover:bg-white/90"
               title="Open Lounge Mode"
             >
@@ -262,7 +262,7 @@ export function FloatingPill({
               <div className="w-px h-6 bg-white/10 flex-shrink-0" />
 
               {/* Lounge Mode */}
-              <button onClick={onOpenLounge} className="p-1.5 hover:bg-white/10 rounded-full transition-all flex-shrink-0" title="Open Lounge Mode">
+              <button onClick={() => router.push('/zen')} className="p-1.5 hover:bg-white/10 rounded-full transition-all flex-shrink-0" title="Open Lounge Mode">
                 <LayoutGrid className="w-3.5 h-3.5 text-white/70" />
               </button>
 

@@ -271,7 +271,7 @@ export function AudioUI() {
     isPlaying, currentTime, isMuted,
     playTrack, togglePlayPause, playNext, playPrevious, toggleMute,
     triggerRestart, dimmed, setDimmed,
-    theme, playerVisible, openLounge,
+    theme, playerVisible,
   } = useAudio();
 
   // Avoid SSR mismatch — render nothing on the server
@@ -301,7 +301,6 @@ export function AudioUI() {
           onToggleDimmed={() => setDimmed(!dimmed)}
           toolbarColor={theme.toolbar}
           accentColor={theme.accent}
-          onOpenLounge={openLounge}
         />
       )}
     </>

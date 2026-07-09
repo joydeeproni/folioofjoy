@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { X } from 'lucide-react';
+import { X, Settings } from 'lucide-react';
 import { getTracks, type Track } from '@/lib/music';
 import { useAudio } from '@/lib/audio-context';
 import { ZenVisualizer } from './zen-visualizer';
+import { ZenControls } from './zen-controls';
+import { DEFAULT_ZEN_CONFIG, loadZenConfig, saveZenConfig, type ZenConfig } from './zen-config';
 
 const RADIO = [
   { name: 'bigFM Lo-Fi Focus', url: 'https://stream.bigfm.de/exlofifocus/mp3-192/' },
@@ -21,9 +23,11 @@ export function ZenStage() {
   const { setPlayerVisible } = useAudio();
   const [sourceLabel, setSourceLabel] = useState<string | null>(null);
   const [showPicker, setShowPicker] = useState(true);
+  const [showControls, setShowControls] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [albumUrl, setAlbumUrl] = useState<string | null>(null);
+  const [config, setConfig] = useState<ZenConfig>(DEFAULT_ZEN_CONFIG);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -34,6 +38,9 @@ export function ZenStage() {
   const tracksRef = useRef<Track[]>([]);
 
   const getAnalyser = useCallback(() => analyserRef.current, []);
+
+  // Load any saved visualizer config after mount (SSR-safe).
+  useEffect(() => { setConfig(loadZenConfig()); }, []);
 
   // Hide the global music pill / theme toggle while in Zen (no distraction).
   useEffect(() => {
@@ -64,7 +71,6 @@ export function ZenStage() {
     if (audioElRef.current) audioElRef.current.pause();
   }, []);
 
-  // Element sources (our songs / uploaded file / radio) — heard + analysed.
   const playElement = useCallback((url: string, label: string, onEnded?: () => void) => {
     const ctx = ensureCtx();
     disconnectCurrent();
@@ -102,7 +108,6 @@ export function ZenStage() {
     playElement(URL.createObjectURL(file), `File · ${file.name}`);
   }, [playElement]);
 
-  // Stream sources (mic / system audio) — analysed only, not routed to speakers.
   const useStream = useCallback((stream: MediaStream, label: string) => {
     const ctx = ensureCtx();
     disconnectCurrent();
@@ -144,7 +149,7 @@ export function ZenStage() {
     void audioCtxRef.current?.close();
   }, [disconnectCurrent]);
 
-  // Auto-hide controls when idle.
+  // Auto-hide the chrome when idle.
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     const show = () => {
@@ -162,32 +167,51 @@ export function ZenStage() {
     };
   }, []);
 
+  const patchConfig = (patch: Partial<ZenConfig>) => setConfig((c) => ({ ...c, ...patch }));
+  const chromeShown = controlsVisible || showControls;
+
   return (
     <main className="fixed inset-0 bg-black overflow-hidden">
-      <ZenVisualizer getAnalyser={getAnalyser} imageUrl={albumUrl} />
+      <ZenVisualizer getAnalyser={getAnalyser} imageUrl={albumUrl} config={config} />
       <audio ref={audioElRef} crossOrigin="anonymous" />
 
       {/* Exit — auto-hiding */}
-      <div className={`fixed top-6 left-6 z-20 transition-opacity duration-500 ${controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed top-6 left-6 z-20 transition-opacity duration-500 ${chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <Link href="/" aria-label="Back home" className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
           <X className="w-5 h-5" />
         </Link>
       </div>
 
-      {/* Source label + change — auto-hiding */}
-      {sourceLabel && !showPicker && (
-        <div className={`fixed top-6 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <span className="text-xs font-mono uppercase tracking-widest text-white/60">{sourceLabel}</span>
-          <button onClick={() => setShowPicker(true)} className="text-xs font-mono uppercase tracking-widest text-white/60 hover:text-white underline underline-offset-4">
-            change
-          </button>
+      {/* Top-right chrome: source label, change, settings — auto-hiding */}
+      <div className={`fixed top-6 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        {sourceLabel && !showPicker && (
+          <>
+            <span className="text-xs font-mono uppercase tracking-widest text-white/60">{sourceLabel}</span>
+            <button onClick={() => setShowPicker(true)} className="text-xs font-mono uppercase tracking-widest text-white/60 hover:text-white underline underline-offset-4">change</button>
+          </>
+        )}
+        <button onClick={() => setShowControls((v) => !v)} aria-label="Visualizer settings" className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
+          <Settings className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Controls panel */}
+      {showControls && (
+        <div className="fixed top-20 right-6 z-30">
+          <ZenControls
+            config={config}
+            onChange={patchConfig}
+            onSave={() => saveZenConfig(config)}
+            onReset={() => { setConfig(DEFAULT_ZEN_CONFIG); saveZenConfig(DEFAULT_ZEN_CONFIG); }}
+            onClose={() => setShowControls(false)}
+          />
         </div>
       )}
 
-      {/* Source picker */}
+      {/* Source picker — no blur; the slow plasma shows through behind it */}
       {showPicker && (
         <div
-          className="fixed inset-0 z-30 flex items-center justify-center bg-black/70 backdrop-blur-md"
+          className="fixed inset-0 z-10 flex items-center justify-center"
           onClick={() => { if (sourceLabel) setShowPicker(false); }}
         >
           <div className="w-full max-w-md px-8" onClick={(e) => e.stopPropagation()}>

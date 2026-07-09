@@ -5,7 +5,6 @@ import { DialRoot } from 'dialkit'
 import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
-import { LoungeMode } from '@/components/lounge-mode'
 import 'dialkit/styles.css'
 import './globals.css'
 
@@ -49,7 +48,6 @@ export default function RootLayout({
         <Providers>
           {children}
           <AudioUI />
-          <LoungeMode />
           <DitherTransition />
         </Providers>
         {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}

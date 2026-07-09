@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useDialKit } from 'dialkit';
+import type { ZenConfig } from './zen-config';
 
 // 8x8 ordered Bayer matrix (0..63) for the dither threshold.
 const BAYER_8 = [
@@ -34,33 +34,10 @@ function fbm(x: number, y: number): number {
   return 0.6 * valueNoise(x, y) + 0.3 * valueNoise(x * 2, y * 2) + 0.1 * valueNoise(x * 4, y * 4);
 }
 
-interface ZenCfg {
-  mode: string;
-  cellSize: number;
-  shape: string;
-  sizeVariation: number;
-  gain: number;
-  smoothing: number;
-  feather: number;
-  scale: number;
-  color: string;
-  background: string;
-}
-
-// Draw one dither mark. Intensity is encoded as SIZE (alpha stays 1) so the
-// +/x/- marks read crisply; `sf` is the per-cell size-variation factor.
-function drawMark(
-  ctx: CanvasRenderingContext2D,
-  shape: string,
-  x: number,
-  y: number,
-  cell: number,
-  a: number,
-  sf: number,
-) {
-  const cx = x + cell / 2;
-  const cy = y + cell / 2;
-  const len = a * sf * cell;
+// One dither mark. Intensity is encoded as SIZE (alpha stays 1) so +/x/- marks
+// read crisply; `sf` is the per-cell size-variation factor.
+function drawMark(ctx: CanvasRenderingContext2D, shape: string, cx: number, cy: number, size: number, a: number, sf: number) {
+  const len = a * sf * size;
   if (len < 0.4) return;
   const half = len * 0.5;
   switch (shape) {
@@ -68,18 +45,18 @@ function drawMark(
       ctx.fillRect(cx - half, cy - half, len, len);
       break;
     case 'minus': {
-      const th = Math.max(1, cell * 0.16);
+      const th = Math.max(1, size * 0.16);
       ctx.fillRect(cx - half * 0.95, cy - th / 2, len * 0.95, th);
       break;
     }
     case 'plus': {
-      const th = Math.max(1, cell * 0.16);
+      const th = Math.max(1, size * 0.16);
       ctx.fillRect(cx - half * 0.95, cy - th / 2, len * 0.95, th);
       ctx.fillRect(cx - th / 2, cy - half * 0.95, th, len * 0.95);
       break;
     }
     case 'cross': {
-      ctx.lineWidth = Math.max(1, cell * 0.16);
+      ctx.lineWidth = Math.max(1, size * 0.16);
       const d = half * 0.72;
       ctx.beginPath();
       ctx.moveTo(cx - d, cy - d); ctx.lineTo(cx + d, cy + d);
@@ -94,49 +71,35 @@ function drawMark(
   }
 }
 
-// Full-viewport, audio-reactive dither field with multiple modes. Reads the
-// shared AnalyserNode each frame; idles with slow breathing when there's none.
+// Full-viewport, audio-reactive dither field. Reads the shared AnalyserNode
+// each frame; idles with slow breathing when there's no audio yet.
 export function ZenVisualizer({
   getAnalyser,
   imageUrl,
+  config,
 }: {
   getAnalyser: () => AnalyserNode | null;
   imageUrl?: string | null;
+  config: ZenConfig;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number | null>(null);
-  const cfgRef = useRef<ZenCfg | null>(null);
+  const cfgRef = useRef<ZenConfig>(config);
+  cfgRef.current = config;
 
   // Album-art sampling state for 'image' mode.
   const imgRef = useRef<HTMLImageElement | null>(null);
   const lumRef = useRef<Float32Array | null>(null);
   const lumDimsRef = useRef<{ cols: number; rows: number }>({ cols: 0, rows: 0 });
   const offRef = useRef<HTMLCanvasElement | null>(null);
-  const imgFailedRef = useRef(false);
 
-  const dial = useDialKit('Zen Visualizer', {
-    mode: { type: 'select', options: ['field', 'radial', 'ripple', 'plasma', 'spectrum', 'waveform', 'image'], default: 'field' },
-    cellSize: [12, 4, 40, 1],
-    shape: { type: 'select', options: ['dot', 'square', 'plus', 'cross', 'minus', 'mix'], default: 'dot' },
-    sizeVariation: [0, 0, 1, 0.05],
-    gain: [1.6, 0.2, 5, 0.1],
-    smoothing: [0.82, 0, 0.97, 0.01],
-    feather: [0.15, 0, 0.6, 0.01],
-    scale: [0.06, 0.01, 0.3, 0.005],
-    color: '#FFFFFF',
-    background: '#000000',
-  }) as unknown as ZenCfg;
-  cfgRef.current = dial;
-
-  // Load the album art when it changes (for 'image' mode).
   useEffect(() => {
     lumRef.current = null;
-    imgFailedRef.current = false;
     if (!imageUrl) { imgRef.current = null; return; }
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => { imgRef.current = img; lumRef.current = null; };
-    img.onerror = () => { imgRef.current = null; imgFailedRef.current = true; };
+    img.onerror = () => { imgRef.current = null; };
     img.src = imageUrl;
     return () => { imgRef.current = null; };
   }, [imageUrl]);
@@ -164,7 +127,6 @@ export function ZenVisualizer({
     let wave = new Uint8Array(0);
     let t0 = 0;
 
-    // Sample the album art into a per-cell luminance buffer (0..1).
     const sampleImage = (cols: number, rows: number) => {
       const img = imgRef.current;
       if (!img) return null;
@@ -176,7 +138,6 @@ export function ZenVisualizer({
         off.width = cols; off.height = rows;
         const octx = off.getContext('2d', { willReadFrequently: true });
         if (!octx) return null;
-        // cover-fit the image into the grid
         const ir = img.width / img.height;
         const gr = cols / rows;
         let sw = img.width, sh = img.height, sx = 0, sy = 0;
@@ -193,15 +154,14 @@ export function ZenVisualizer({
         lumDimsRef.current = { cols, rows };
         return lum;
       } catch {
-        imgFailedRef.current = true; // tainted (no CORS) — fall back
-        return null;
+        return null; // tainted (no CORS) — fall back
       }
     };
 
     const draw = (ts: number) => {
       if (!t0) t0 = ts;
       const time = (ts - t0) / 1000;
-      const cfg = cfgRef.current!;
+      const cfg = cfgRef.current;
       const analyser = getAnalyser();
 
       let overall = 0, bass = 0;
@@ -220,7 +180,8 @@ export function ZenVisualizer({
       }
 
       const cell = Math.max(3, Math.round(cfg.cellSize));
-      const cols = Math.ceil(w / cell), rows = Math.ceil(h / cell);
+      const pitch = Math.max(2, cell * cfg.spacing);
+      const cols = Math.ceil(w / pitch), rows = Math.ceil(h / pitch);
       const cxN = cols / 2, cyN = rows / 2;
       const maxD = Math.hypot(cxN, cyN) || 1;
       const gain = cfg.gain;
@@ -235,7 +196,7 @@ export function ZenVisualizer({
       let lum: Float32Array | null = null;
       if (mode === 'image') {
         lum = sampleImage(cols, rows);
-        if (!lum) mode = 'field'; // no art / not loaded / tainted → fall back
+        if (!lum) mode = 'field';
       }
       if (mode === 'waveform' && analyser) {
         if (wave.length !== analyser.fftSize) wave = new Uint8Array(analyser.fftSize);
@@ -258,8 +219,8 @@ export function ZenVisualizer({
               intensity = pulse - Math.hypot(c - cxN, r - cyN) / maxD;
               break;
             case 'ripple': {
-              const d = Math.hypot(c - cxN, r - cyN);
-              intensity = (0.5 + 0.5 * Math.sin(d * (scale * 3) - time * 2.4 - bass * 7)) * (0.5 + energy * gain) - 0.35;
+              const dd = Math.hypot(c - cxN, r - cyN);
+              intensity = (0.5 + 0.5 * Math.sin(dd * (scale * 3) - time * 2.4 - bass * 7)) * (0.5 + energy * gain) - 0.35;
               break;
             }
             case 'plasma': {
@@ -289,8 +250,8 @@ export function ZenVisualizer({
               intensity = lum![r * cols + c] * (0.55 + energy * gain * 0.7);
               break;
             default: { // field
-              const n = fbm(c * scale + time * 0.3, r * scale - time * 0.2);
-              intensity = n * (0.4 + energy * gain) - 0.15;
+              const nz = fbm(c * scale + time * 0.3, r * scale - time * 0.2);
+              intensity = nz * (0.4 + energy * gain) - 0.15;
             }
           }
 
@@ -303,7 +264,7 @@ export function ZenVisualizer({
           const sf = 1 - sv * (1 - hash2(c + 0.5, r + 0.5));
           let shape = cfg.shape;
           if (shape === 'mix') shape = ['plus', 'cross', 'minus'][Math.floor(hash2(c, r) * 3) % 3];
-          drawMark(ctx, shape, c * cell, r * cell, cell, a, sf);
+          drawMark(ctx, shape, c * pitch + pitch / 2, r * pitch + pitch / 2, cell, a, sf);
         }
       }
       rafRef.current = requestAnimationFrame(draw);
