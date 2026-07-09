@@ -20,7 +20,7 @@ export function LoungeMode() {
 
   const [hoveredCell, setHoveredCell] = useState<{ i: number; j: number } | null>(null);
   const [settings, setSettings] = useState<ExploreSettings>({
-    wave: 'center', colorMode: 'white', shapeMode: 'circles-ripple',
+    wave: 'corners', colorMode: 'white', shapeMode: 'circles-ripple',
     shades: theme.shades, hue: theme.hue, saturation: theme.saturation,
   });
 

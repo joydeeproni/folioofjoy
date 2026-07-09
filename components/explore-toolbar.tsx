@@ -31,6 +31,7 @@ interface ExploreToolbarProps {
 
 const WAVE_OPTIONS: { value: WaveFunction; label: string }[] = [
   { value: 'center', label: 'Center Out' },
+  { value: 'corners', label: 'Corners In' },
   { value: 'sweep', label: 'Left Sweep' },
   { value: 'diagonal', label: 'Diagonal' },
   { value: 'spiral', label: 'Spiral' },

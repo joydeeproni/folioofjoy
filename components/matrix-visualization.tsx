@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 
-export type WaveFunction = 'center' | 'sweep' | 'diagonal' | 'spiral' | 'random';
+export type WaveFunction = 'center' | 'corners' | 'sweep' | 'diagonal' | 'spiral' | 'random';
 export type ColorMode = 'white' | 'shades' | 'hue-shift';
 export type ShapeMode = 'mixed' | 'circles-ripple';
 
@@ -86,6 +86,15 @@ function buildCellList(
         return da - db;
       });
       break;
+    case 'corners': {
+      // Reveal from all four corners inward: sort by distance to the nearest corner.
+      const m = n - 1;
+      const corners: [number, number][] = [[0, 0], [0, m], [m, 0], [m, m]];
+      const nearest = (i: number, j: number) =>
+        Math.min(...corners.map(([ci, cj]) => (j - cj) ** 2 + (i - ci) ** 2));
+      cells.sort((a, b) => nearest(a.i, a.j) - nearest(b.i, b.j));
+      break;
+    }
     case 'sweep':
       cells.sort((a, b) => a.j - b.j || a.i - b.i);
       break;
@@ -225,6 +234,7 @@ export function MatrixVisualization({
       lastTickTime: 0,
       looping: false,
       ripples: new Map(),
+      audioProgress: undefined,
     };
   }, [words, wordMap, showSingleMatches, restartKey, wave]);
 
