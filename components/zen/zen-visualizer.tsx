@@ -64,6 +64,15 @@ function drawMark(ctx: CanvasRenderingContext2D, shape: string, cx: number, cy: 
       ctx.stroke();
       break;
     }
+    case 'binary': {
+      // A monospace 1 or 0 per cell, sized by intensity. Glyph is stable
+      // per position (hashed on centre) so cells don't flicker between digits.
+      const fs = len * 1.25;
+      if (fs < 4) return;
+      ctx.font = `${fs}px ui-monospace, "SFMono-Regular", Menlo, monospace`;
+      ctx.fillText(hash2(cx, cy) > 0.5 ? '1' : '0', cx, cy);
+      break;
+    }
     default: // dot
       ctx.beginPath();
       ctx.arc(cx, cy, half * 1.1, 0, Math.PI * 2);
@@ -209,6 +218,8 @@ export function ZenVisualizer({
       ctx.fillStyle = cfg.color;
       ctx.strokeStyle = cfg.color;
       ctx.lineCap = 'round';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.globalAlpha = 1;
 
       for (let r = 0; r < rows; r++) {

@@ -27,7 +27,7 @@ export const DEFAULT_ZEN_CONFIG: ZenConfig = {
 };
 
 export const MODE_OPTIONS = ['field', 'radial', 'ripple', 'plasma', 'spectrum', 'waveform', 'image'];
-export const SHAPE_OPTIONS = ['dot', 'square', 'plus', 'cross', 'minus', 'mix'];
+export const SHAPE_OPTIONS = ['dot', 'square', 'plus', 'cross', 'minus', 'binary', 'mix'];
 
 const KEY = 'zen-config';
 
