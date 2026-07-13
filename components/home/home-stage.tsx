@@ -1,12 +1,22 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { CenterStage } from './center-stage';
+import { useAudio } from '@/lib/audio-context';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 const INSTAGRAM = 'https://www.instagram.com/joyingntravelling/';
 
 export function HomeStage() {
   const linkCls = 'opacity-90';
+  const { setPlayerVisible } = useAudio();
+
+  // The homepage swaps the global music pill for a cassette that opens the Lounge.
+  useEffect(() => {
+    setPlayerVisible(false);
+    return () => setPlayerVisible(true);
+  }, [setPlayerVisible]);
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black text-white">
@@ -39,6 +49,20 @@ export function HomeStage() {
         <span className="inline-block mx-3 w-1 h-1 rounded-full bg-current align-middle" />
         K&oslash;benhavn, Danmark
       </p>
+
+      {/* Cassette — bottom-right; opens the Lounge (replaces the music pill here) */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link
+            href="/zen"
+            aria-label="Enter the Lounge"
+            className="fixed bottom-6 right-6 z-50 block transition-transform hover:scale-105"
+          >
+            <img src="/cassette.svg" alt="" className="w-20 md:w-24 h-auto" />
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="left">Lounge</TooltipContent>
+      </Tooltip>
 
       <CenterStage hoverTarget={null} />
     </div>

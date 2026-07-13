@@ -135,6 +135,17 @@
   }
 }
 
+/* Green highlight when selecting any text across the site. Kept UNLAYERED so
+   it outranks Tailwind's @layer rules (base/utilities) and applies everywhere. */
+::selection {
+  background-color: #2ca152 !important;
+  color: #ffffff !important;
+}
+::-moz-selection {
+  background-color: #2ca152 !important;
+  color: #ffffff !important;
+}
+
 @keyframes bounce-subtle {
   0%, 100% { transform: translate(-50%, 0); }
   50% { transform: translate(-50%, -3px); }

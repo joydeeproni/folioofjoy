@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { X, Settings } from 'lucide-react';
+import { X, Settings, Play } from 'lucide-react';
 import { getTracks, type Track } from '@/lib/music';
 import { useAudio } from '@/lib/audio-context';
 import { ZenVisualizer } from './zen-visualizer';
@@ -15,9 +15,6 @@ const RADIO = [
   { name: 'Laut.fm Lo-Fi', url: 'https://lofi.stream.laut.fm/lofi' },
   { name: 'Klassik Beats', url: 'https://stream.klassikradio.de/beats-national/mp3-192/' },
 ];
-
-const BTN =
-  'px-4 py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-sans transition-colors text-left';
 
 export function ZenStage() {
   const { setPlayerVisible } = useAudio();
@@ -108,42 +105,6 @@ export function ZenStage() {
     playElement(URL.createObjectURL(file), `File · ${file.name}`);
   }, [playElement]);
 
-  const useStream = useCallback((stream: MediaStream, label: string) => {
-    const ctx = ensureCtx();
-    disconnectCurrent();
-    streamRef.current = stream;
-    const node = ctx.createMediaStreamSource(stream);
-    node.connect(analyserRef.current!);
-    connectedRef.current = node;
-    setAlbumUrl(null);
-    setSourceLabel(label);
-    setShowPicker(false);
-    setError(null);
-  }, [ensureCtx, disconnectCurrent]);
-
-  const useMic = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      useStream(stream, 'Microphone');
-    } catch { setError('Microphone permission was denied.'); }
-  }, [useStream]);
-
-  const useSystem = useCallback(async () => {
-    try {
-      const md = navigator.mediaDevices as MediaDevices & {
-        getDisplayMedia: (c: { video: boolean; audio: boolean }) => Promise<MediaStream>;
-      };
-      const stream = await md.getDisplayMedia({ video: true, audio: true });
-      if (!stream.getAudioTracks().length) {
-        stream.getTracks().forEach((t) => t.stop());
-        setError('No system audio shared — pick a tab/window and tick "Share tab audio".');
-        return;
-      }
-      stream.getVideoTracks().forEach((t) => t.stop());
-      useStream(stream, 'System audio');
-    } catch { setError('System-audio capture was cancelled or is unsupported here.'); }
-  }, [useStream]);
-
   useEffect(() => () => {
     disconnectCurrent();
     void audioCtxRef.current?.close();
@@ -169,21 +130,24 @@ export function ZenStage() {
 
   const patchConfig = (patch: Partial<ZenConfig>) => setConfig((c) => ({ ...c, ...patch }));
   const chromeShown = controlsVisible || showControls;
+  // On the landing screen the plasma is a subtle dark-grey wash; once a source
+  // is playing the saved/vivid config takes over.
+  const vizConfig = showPicker ? { ...config, mode: 'plasma', color: '#222222' } : config;
 
   return (
     <main className="fixed inset-0 bg-black overflow-hidden">
-      <ZenVisualizer getAnalyser={getAnalyser} imageUrl={albumUrl} config={config} />
+      <ZenVisualizer getAnalyser={getAnalyser} imageUrl={albumUrl} config={vizConfig} />
       <audio ref={audioElRef} crossOrigin="anonymous" />
 
-      {/* Exit — auto-hiding */}
-      <div className={`fixed top-6 left-6 z-20 transition-opacity duration-500 ${chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      {/* Exit — auto-hiding (only while a source is playing; the picker has its own header) */}
+      <div className={`fixed top-6 left-6 z-20 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <Link href="/" aria-label="Back home" className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
           <X className="w-5 h-5" />
         </Link>
       </div>
 
       {/* Top-right chrome: source label, change, settings — auto-hiding */}
-      <div className={`fixed top-6 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed top-6 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         {sourceLabel && !showPicker && (
           <>
             <span className="text-xs font-mono uppercase tracking-widest text-white/60">{sourceLabel}</span>
@@ -208,30 +172,53 @@ export function ZenStage() {
         </div>
       )}
 
-      {/* Source picker — no blur; the slow plasma shows through behind it */}
+      {/* Source picker — "Lounge" landing: caption, three big options, lawn illustration */}
       {showPicker && (
-        <div
-          className="fixed inset-0 z-10 flex items-center justify-center"
-          onClick={() => { if (sourceLabel) setShowPicker(false); }}
-        >
-          <div className="w-full max-w-md px-8" onClick={(e) => e.stopPropagation()}>
-            <p className="font-pixel text-4xl mb-8 text-center text-white">zen</p>
-            <div className="grid grid-cols-2 gap-3">
-              <button onClick={playSongs} className={BTN}>Our songs</button>
-              <label className={`${BTN} cursor-pointer`}>
-                Upload file
-                <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
-              </label>
-              <button onClick={useMic} className={BTN}>Microphone</button>
-              <button onClick={useSystem} className={BTN}>System audio</button>
+        <div className="fixed inset-0 z-10 flex flex-col overflow-hidden">
+          {/* Top nav */}
+          <header className="relative z-10 flex items-center justify-between px-8 py-6 text-sm font-sans text-white">
+            <Link href="/" className="opacity-90 hover:opacity-100 transition-opacity">Back</Link>
+            <span className="absolute left-1/2 -translate-x-1/2 opacity-90">Lounge</span>
+            <span aria-hidden className="w-10" />
+          </header>
+
+          <div className="relative flex-1">
+            {/* Lawn illustration — pinned bottom-centre, behind the menu */}
+            <img
+              src="/zen/me-and-my-boys.svg"
+              alt="Me and my boys hanging out in the lawn with a record player"
+              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[min(1000px,82vw)] max-w-none"
+            />
+
+            {/* Caption + menu */}
+            <div className="relative z-10 mx-auto w-full max-w-[980px] px-6 pt-[5vh]">
+              <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-white/50 mb-16">
+                me and my boys are hanging out in the lawn, waiting for you to play something
+              </p>
+
+              <nav className="divide-y" style={{ borderColor: 'rgba(237,234,224,0.15)' }}>
+                {/* Let me play something — upload your own audio */}
+                <label className="group relative flex w-full items-center justify-center py-8 cursor-pointer">
+                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Let me play something</span>
+                  <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
+                </label>
+
+                {/* Show me your playlist — the curated songs */}
+                <button onClick={playSongs} className="group relative flex w-full items-center justify-center py-8">
+                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Show me your playlist</span>
+                </button>
+
+                {/* Just play some lo-fi radio */}
+                <button onClick={() => { setAlbumUrl(null); playElement(RADIO[0].url, `Radio · ${RADIO[0].name}`); }} className="group relative flex w-full items-center justify-center py-8">
+                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Just play some lo-fi radio</span>
+                </button>
+              </nav>
+
+              {error && <p className="text-red-400 text-sm mt-6 text-center">{error}</p>}
             </div>
-            <p className="text-xs font-mono uppercase tracking-widest text-white/40 mt-6 mb-2">Radio</p>
-            <div className="grid grid-cols-2 gap-3">
-              {RADIO.map((r) => (
-                <button key={r.url} onClick={() => { setAlbumUrl(null); playElement(r.url, `Radio · ${r.name}`); }} className={BTN}>{r.name}</button>
-              ))}
-            </div>
-            {error && <p className="text-red-400 text-sm mt-4 text-center">{error}</p>}
           </div>
         </div>
       )}

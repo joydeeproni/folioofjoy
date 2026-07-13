@@ -1,6 +1,5 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { BackLink } from '@/components/back-link';
 import { WRITINGS, getWriting } from '@/lib/writings';
 
 const BG = '#0B0B0B';
@@ -18,13 +17,7 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="relative min-h-screen w-full px-6 md:px-16 py-10" style={{ backgroundColor: BG, color: FG }}>
-      <Link
-        href="/"
-        aria-label="Back home"
-        className="fixed top-6 left-6 z-50 flex items-center justify-center w-11 h-11 rounded-full bg-white/90 text-black hover:bg-white transition-colors"
-      >
-        <ArrowLeft className="w-5 h-5" />
-      </Link>
+      <BackLink />
 
       <div className="max-w-5xl mx-auto pt-24">
         {/* Big display title + pixel number */}

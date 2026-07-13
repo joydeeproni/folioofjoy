@@ -1,21 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { BackLink } from '@/components/back-link';
 
 const GREEN = '#1F6E3B';
 
 export default function About() {
   return (
     <main className="relative min-h-screen w-full px-8 md:px-16 py-10" style={{ backgroundColor: GREEN, color: '#F4FBF4' }}>
-      {/* Circle back-home button */}
-      <Link
-        href="/"
-        aria-label="Back home"
-        className="fixed top-6 left-6 z-50 flex items-center justify-center w-11 h-11 rounded-full bg-white/90 text-black hover:bg-white transition-colors"
-      >
-        <ArrowLeft className="w-5 h-5" />
-      </Link>
+      <BackLink />
 
       <div className="max-w-3xl mx-auto pt-24">
         <h1 className="font-pixel text-6xl md:text-8xl mb-12">about</h1>
