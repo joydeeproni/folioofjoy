@@ -12,8 +12,27 @@ export interface WritingPost {
 
 export const WRITINGS: WritingPost[] = [
   {
-    slug: 'weight-of-a-button',
+    slug: 'the-invisible-interface',
     number: '01',
+    title: 'The Invisible Interface',
+    postedOn: 'July 13th, 2026',
+    titled: 'On CLIs, agents, and the vanishing UI',
+    subhead: 'The best interface disappears',
+    references: [
+      { label: 'Agents as the new users', href: '#' },
+      { label: 'When the UI gets out of the way', href: '#' },
+    ],
+    body: [
+      'Use of CLI amongst non-developers and non-designers intrigues me. The other day one of our users asked us if we had MCP for a SaaS tool we spent months designing and optimizing the "UX" for. And the intended user wants an AI agent to go and use that tool for them!',
+      'I think about this a lot lately, this sudden shift of mindset and change of user behavior and way we interact with our computers.',
+      "Isn't that the point of human computer interaction design though, the interface should be almost invisible, so that people just go, do their job and get out of there ASAP, unless the business of the product relies on constant engagement or it's a game.",
+      'What will be the meaning of UI design 10 years from now, if everyone decides to use CLI or a chat interface or even voice to accomplish their job?',
+      "And maybe that's what UI design would be all about.",
+    ],
+  },
+  {
+    slug: 'weight-of-a-button',
+    number: '02',
     title: 'The Weight of a Button',
     postedOn: 'December 14th, 2025',
     titled: 'On why a button should feel expensive',
@@ -31,7 +50,7 @@ export const WRITINGS: WritingPost[] = [
   },
   {
     slug: 'the-cms-cycle',
-    number: '02',
+    number: '03',
     title: 'The CMS Cycle',
     postedOn: 'November 2nd, 2025',
     titled: 'A short field guide to shipping content',
@@ -48,7 +67,7 @@ export const WRITINGS: WritingPost[] = [
   },
   {
     slug: 'notes-for-the-lazy',
-    number: '03',
+    number: '04',
     title: 'Notes for the Lazy',
     postedOn: 'October 9th, 2025',
     titled: 'In praise of doing less, better',

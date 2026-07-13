@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { X, Settings, Play } from 'lucide-react';
+import { X, Play } from 'lucide-react';
 import { getTracks, type Track } from '@/lib/music';
 import { useAudio } from '@/lib/audio-context';
 import { ZenVisualizer } from './zen-visualizer';
-import { ZenControls } from './zen-controls';
+import { ZenDock } from './zen-dock';
 import { DEFAULT_ZEN_CONFIG, loadZenConfig, saveZenConfig, type ZenConfig } from './zen-config';
 
 const RADIO = [
@@ -20,11 +20,12 @@ export function ZenStage() {
   const { setPlayerVisible } = useAudio();
   const [sourceLabel, setSourceLabel] = useState<string | null>(null);
   const [showPicker, setShowPicker] = useState(true);
-  const [showControls, setShowControls] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [albumUrl, setAlbumUrl] = useState<string | null>(null);
   const [config, setConfig] = useState<ZenConfig>(DEFAULT_ZEN_CONFIG);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -46,6 +47,30 @@ export function ZenStage() {
   }, [setPlayerVisible]);
 
   useEffect(() => { tracksRef.current = getTracks(); }, []);
+
+  // Keep the transport UI in sync with the underlying <audio> element.
+  useEffect(() => {
+    const el = audioElRef.current;
+    if (!el) return;
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    el.addEventListener('play', onPlay);
+    el.addEventListener('pause', onPause);
+    return () => { el.removeEventListener('play', onPlay); el.removeEventListener('pause', onPause); };
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    const el = audioElRef.current;
+    if (!el) return;
+    if (el.paused) el.play().catch(() => {}); else el.pause();
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    const el = audioElRef.current;
+    if (!el) return;
+    el.muted = !el.muted;
+    setIsMuted(el.muted);
+  }, []);
 
   const ensureCtx = useCallback(() => {
     if (!audioCtxRef.current) {
@@ -129,7 +154,7 @@ export function ZenStage() {
   }, []);
 
   const patchConfig = (patch: Partial<ZenConfig>) => setConfig((c) => ({ ...c, ...patch }));
-  const chromeShown = controlsVisible || showControls;
+  const chromeShown = controlsVisible;
   // On the landing screen the plasma is a subtle dark-grey wash; once a source
   // is playing the saved/vivid config takes over.
   const vizConfig = showPicker ? { ...config, mode: 'plasma', color: '#222222' } : config;
@@ -140,36 +165,28 @@ export function ZenStage() {
       <audio ref={audioElRef} crossOrigin="anonymous" />
 
       {/* Exit — auto-hiding (only while a source is playing; the picker has its own header) */}
-      <div className={`fixed top-6 left-6 z-20 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed top-6 left-6 z-40 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <Link href="/" aria-label="Back home" className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
           <X className="w-5 h-5" />
         </Link>
       </div>
 
-      {/* Top-right chrome: source label, change, settings — auto-hiding */}
-      <div className={`fixed top-6 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        {sourceLabel && !showPicker && (
-          <>
-            <span className="text-xs font-mono uppercase tracking-widest text-white/60">{sourceLabel}</span>
-            <button onClick={() => setShowPicker(true)} className="text-xs font-mono uppercase tracking-widest text-white/60 hover:text-white underline underline-offset-4">change</button>
-          </>
-        )}
-        <button onClick={() => setShowControls((v) => !v)} aria-label="Visualizer settings" className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
-          <Settings className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Controls panel */}
-      {showControls && (
-        <div className="fixed top-20 right-6 z-30">
-          <ZenControls
-            config={config}
-            onChange={patchConfig}
-            onSave={() => saveZenConfig(config)}
-            onReset={() => { setConfig(DEFAULT_ZEN_CONFIG); saveZenConfig(DEFAULT_ZEN_CONFIG); }}
-            onClose={() => setShowControls(false)}
-          />
-        </div>
+      {/* Bottom dock — transport + visualizer controls (only while a source is active) */}
+      {!showPicker && (
+        <ZenDock
+          sourceLabel={sourceLabel}
+          isPlaying={isPlaying}
+          isMuted={isMuted}
+          hasAudio={sourceLabel !== null}
+          onTogglePlay={togglePlay}
+          onToggleMute={toggleMute}
+          onChange={() => setShowPicker(true)}
+          config={config}
+          onChangeConfig={patchConfig}
+          onSave={() => saveZenConfig(config)}
+          onReset={() => { setConfig(DEFAULT_ZEN_CONFIG); saveZenConfig(DEFAULT_ZEN_CONFIG); }}
+          visible={chromeShown}
+        />
       )}
 
       {/* Source picker — "Lounge" landing: caption, three big options, lawn illustration */}
@@ -182,38 +199,38 @@ export function ZenStage() {
             <span aria-hidden className="w-10" />
           </header>
 
-          <div className="relative flex-1">
-            {/* Lawn illustration — pinned bottom-centre, behind the menu */}
+          <div className="relative flex-1 flex items-center justify-center">
+            {/* Lawn illustration — pinned bottom-centre; big and edge-cropped on mobile */}
             <img
               src="/zen/me-and-my-boys.svg"
               alt="Me and my boys hanging out in the lawn with a record player"
-              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[min(1000px,82vw)] max-w-none"
+              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[165vw] md:w-[min(1000px,80vw)] max-w-none"
             />
 
-            {/* Caption + menu */}
-            <div className="relative z-10 mx-auto w-full max-w-[980px] px-6 pt-[5vh]">
-              <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-white/50 mb-16">
+            {/* Caption + menu — centred in the page, writings-style container */}
+            <div className="relative z-10 w-full max-w-4xl px-6">
+              <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-white/50 mb-5">
                 me and my boys are hanging out in the lawn, waiting for you to play something
               </p>
 
               <nav className="divide-y" style={{ borderColor: 'rgba(237,234,224,0.15)' }}>
-                {/* Let me play something — upload your own audio */}
+                {/* My Playlist — the curated songs */}
+                <button onClick={playSongs} className="group relative flex w-full items-center justify-center py-8">
+                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">My Playlist</span>
+                </button>
+
+                {/* Pick Your Own — share / upload your own audio */}
                 <label className="group relative flex w-full items-center justify-center py-8 cursor-pointer">
                   <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Let me play something</span>
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Pick Your Own</span>
                   <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
                 </label>
 
-                {/* Show me your playlist — the curated songs */}
-                <button onClick={playSongs} className="group relative flex w-full items-center justify-center py-8">
-                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Show me your playlist</span>
-                </button>
-
-                {/* Just play some lo-fi radio */}
+                {/* Lo-Fi World Radio */}
                 <button onClick={() => { setAlbumUrl(null); playElement(RADIO[0].url, `Radio · ${RADIO[0].name}`); }} className="group relative flex w-full items-center justify-center py-8">
                   <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Just play some lo-fi radio</span>
+                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Lo-Fi World Radio</span>
                 </button>
               </nav>
 

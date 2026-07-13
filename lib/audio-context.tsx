@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { getTracks, type Track } from '@/lib/music';
 import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
-import { FloatingPill } from '@/components/floating-pill';
+import { CassetteButton } from '@/components/cassette-button';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 interface AudioContextValue {
@@ -266,13 +266,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 }
 
 export function AudioUI() {
-  const {
-    currentTrack, tracks, loading, error,
-    isPlaying, currentTime, isMuted,
-    playTrack, togglePlayPause, playNext, playPrevious, toggleMute,
-    triggerRestart, dimmed, setDimmed,
-    theme, playerVisible,
-  } = useAudio();
+  const { playerVisible } = useAudio();
 
   // Avoid SSR mismatch — render nothing on the server
   const [mounted, setMounted] = useState(false);
@@ -282,27 +276,7 @@ export function AudioUI() {
   return (
     <>
       {playerVisible && <ThemeToggle />}
-      {playerVisible && (
-        <FloatingPill
-          currentTrack={currentTrack}
-          tracks={tracks}
-          loading={loading}
-          error={error}
-          isPlaying={isPlaying}
-          currentTime={currentTime}
-          onPlayTrack={playTrack}
-          onTogglePlayPause={togglePlayPause}
-          onPlayNext={playNext}
-          onPlayPrevious={playPrevious}
-          isMuted={isMuted}
-          onToggleMute={toggleMute}
-          onRestart={triggerRestart}
-          dimmed={dimmed}
-          onToggleDimmed={() => setDimmed(!dimmed)}
-          toolbarColor={theme.toolbar}
-          accentColor={theme.accent}
-        />
-      )}
+      {playerVisible && <CassetteButton />}
     </>
   );
 }
