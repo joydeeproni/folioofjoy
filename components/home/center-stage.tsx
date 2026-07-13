@@ -24,7 +24,7 @@ const CATEGORIES: { key: Cat; full: string }[] = [
 const QUOTE = 'i awoke and saw that life was service. i acted and behold, service was joy.';
 const GREEN = '#2CA152';
 const YELLOW = '#F2E30C';
-const STACK_MS = 650; // gap between each preview dropping onto the pile
+const STACK_MS = 3000; // gap between each preview dropping onto the pile
 
 function useIsMobile() {
   const [mobile, setMobile] = useState(false);
