@@ -48,11 +48,11 @@ export function CenterStage({
 
   // Live controls for the hero quote (dialkit panel, dev only).
   const q = useDialKit('Homepage Quote', {
-    sizeVw: [6.5, 2, 16, 0.05],
-    maxWidth: [800, 300, 1800, 10],
-    lineHeight: [0.9, 0.6, 2, 0.01],
+    sizeVw: [13.4, 2, 16, 0.05],
+    maxWidth: [16, 8, 40, 0.5], // characters per line (ch) — locks line breaks across widths
+    lineHeight: [1.06, 0.6, 2, 0.01],
     letterSpacing: [-0.025, -0.08, 0.4, 0.005],
-    wordSpacing: [0.03, -0.2, 1.5, 0.01],
+    wordSpacing: [-0.2, -0.2, 1.5, 0.01],
     color: GREEN,
   }) as unknown as {
     sizeVw: number;
@@ -118,8 +118,10 @@ export function CenterStage({
           className="font-pixel"
           style={{
             color: q.color,
-            fontSize: isMobile ? '10.5vw' : `${q.sizeVw}vw`,
-            maxWidth: isMobile ? '90vw' : `${q.maxWidth}px`,
+            // Fluid size, bounded so phones and ultrawides don't hit extremes.
+            fontSize: `clamp(2.2rem, ${q.sizeVw}vw, 9rem)`,
+            // Width in ch tracks the font, so line breaks land identically at any width.
+            maxWidth: `min(90vw, ${q.maxWidth}ch)`,
             lineHeight: q.lineHeight,
             letterSpacing: `${q.letterSpacing}em`,
             wordSpacing: `${q.wordSpacing}em`,
