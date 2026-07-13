@@ -2,24 +2,13 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { useDialKit } from 'dialkit';
-import { WORK_ITEMS, type WorkCategory } from '@/components/work-preview';
+import { WORK_ITEMS, isVideo } from '@/components/work-preview';
 import { WRITINGS } from '@/lib/writings';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
 import { DitherReveal } from './dither-reveal';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
-
-// Category filters shown under the hero. Clicking one stacks that category's
-// project previews on top of the hero; RND = everything.
-type Cat = WorkCategory | 'RND';
-const CATEGORIES: { key: Cat; full: string }[] = [
-  { key: 'SVC', full: 'Service — products built to help others (dashboards, apps)' },
-  { key: 'JOY', full: 'Joy — pure fun, experiments, random stuff' },
-  { key: 'BIZ', full: 'Business — ecommerce, landing pages, money work' },
-  { key: 'DTY', full: 'Duty — design systems, busywork, organization' },
-  { key: 'RND', full: 'Random — everything' },
-];
 
 const QUOTE = 'i awoke and saw that life was service. i acted and behold, service was joy.';
 const GREEN = '#2CA152';
@@ -63,7 +52,7 @@ export function CenterStage({
     color: string;
   };
 
-  const [activeCat, setActiveCat] = useState<Cat | null>(null);
+  const [previewing, setPreviewing] = useState(false);
   const [count, setCount] = useState(0); // number of piled previews (0 = none)
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
@@ -76,33 +65,21 @@ export function CenterStage({
     scrambleReveal(quoteRef.current, QUOTE, 1.6, 0.2);
   }, []);
 
-  const items = useMemo(() => {
-    if (!activeCat) return [];
-    if (activeCat === 'RND') return WORK_ITEMS;
-    return WORK_ITEMS.filter((w) => w.category === activeCat);
-  }, [activeCat]);
+  const items = useMemo(() => (previewing ? WORK_ITEMS : []), [previewing]);
 
-  // On category select, drop its previews onto the pile one at a time.
+  // "Preview Work" drops every project onto the pile one at a time, then loops.
   useEffect(() => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-    if (!activeCat || items.length === 0) { setCount(0); return; }
+    if (!previewing || items.length === 0) { setCount(0); return; }
     setCount(1);
     timerRef.current = setInterval(() => {
-      setCount((c) => {
-        if (c >= items.length) {
-          if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-          return c;
-        }
-        return c + 1;
-      });
+      setCount((c) => (c >= items.length ? 1 : c + 1));
     }, STACK_MS);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [activeCat, items.length]);
+  }, [previewing, items.length]);
 
-  // A nav hover clears any active category (the preview takes over the page).
-  useEffect(() => { if (hoverTarget) setActiveCat(null); }, [hoverTarget]);
-
-  const toggle = (c: Cat) => setActiveCat((prev) => (prev === c ? null : c));
+  // A nav hover stops the preview (the hovered preview takes over the page).
+  useEffect(() => { if (hoverTarget) setPreviewing(false); }, [hoverTarget]);
 
   const showStack = !hoverTarget && count > 0 && items.length > 0;
   const activeItem = showStack ? items[Math.min(count, items.length) - 1] : null;
@@ -155,15 +132,24 @@ export function CenterStage({
                   zIndex: i,
                 }}
               >
-                <img
-                  src={item.src}
-                  alt={item.caption}
-                  className="animate-work-drop shadow-2xl"
-                  style={{
-                    maxWidth: isMobile ? '90vw' : '78vw',
-                    maxHeight: isMobile ? '72vh' : '68vh',
-                  }}
-                />
+                {isVideo(item.src) ? (
+                  <video
+                    src={item.src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="animate-work-drop shadow-2xl"
+                    style={{ maxWidth: isMobile ? '90vw' : '78vw', maxHeight: isMobile ? '72vh' : '68vh' }}
+                  />
+                ) : (
+                  <img
+                    src={item.src}
+                    alt={item.caption}
+                    className="animate-work-drop shadow-2xl"
+                    style={{ maxWidth: isMobile ? '90vw' : '78vw', maxHeight: isMobile ? '72vh' : '68vh' }}
+                  />
+                )}
               </div>
             );
           })}
@@ -174,7 +160,7 @@ export function CenterStage({
       {activeItem && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center w-full px-6 pointer-events-none">
           <p
-            key={`${activeCat}-${count}`}
+            key={`preview-${count}`}
             className="text-base md:text-lg font-sans text-center leading-relaxed max-w-xl text-white animate-caption-fade"
             style={{ textWrap: 'balance' } as React.CSSProperties}
           >
@@ -183,24 +169,20 @@ export function CenterStage({
         </div>
       )}
 
-      {/* Category abbreviations — click to stack that category (homepage only) */}
+      {/* Preview Work — runs the project slide-stack on loop (homepage only) */}
       <div
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-5 font-mono text-xs uppercase tracking-[0.2em]"
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 font-mono text-xs uppercase tracking-[0.2em]"
         hidden={hoverTarget !== null}
       >
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.key}
-            onClick={() => toggle(c.key)}
-            title={c.full}
-            className="transition-colors hover:!opacity-100"
-            style={{ color: activeCat === c.key ? GREEN : 'rgba(255,255,255,0.5)' }}
-            onMouseEnter={(e) => { if (activeCat !== c.key) e.currentTarget.style.color = GREEN; }}
-            onMouseLeave={(e) => { if (activeCat !== c.key) e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
-          >
-            {c.key}
-          </button>
-        ))}
+        <button
+          onClick={() => setPreviewing((p) => !p)}
+          className="transition-colors hover:!opacity-100"
+          style={{ color: previewing ? GREEN : 'rgba(255,255,255,0.5)' }}
+          onMouseEnter={(e) => { if (!previewing) e.currentTarget.style.color = GREEN; }}
+          onMouseLeave={(e) => { if (!previewing) e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+        >
+          Preview Work
+        </button>
       </div>
 
       {/* ABOUT preview — yellow pixel "about" + 6502 + seesaw */}

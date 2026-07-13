@@ -49,7 +49,26 @@ export const WORK_ITEMS: WorkItem[] = [
   { src: '/work/battalion-messages.png', category: 'SVC', caption: 'Lender-broker message centre — threaded by property, because that matters more than timestamps.' },
   { src: '/work/urbyn-development.png', category: 'SVC', caption: 'Zoning overlay — shows what is getting built nearby before the construction noise does.' },
   { src: '/work/data-dashboard-docs.png', category: 'DTY', caption: 'Onboarding cards for a datamarts tool — naming conventions and dimensions, illustrated so dry content lands.' },
+  { src: '/work/kcs-dashboard-loader.mp4', category: 'SVC', caption: 'Dashboard loader animation — a looping motion study for a KCS analytics dashboard.' },
+  { src: '/work/cassi-what-today.png', category: 'SVC', caption: 'AI home concierge — "What do you want today?" with maintenance, providers, and a talk-to-Cassi prompt.' },
+  { src: '/work/cassi-maintenance.png', category: 'SVC', caption: 'Home maintenance screens — seasonal calendar, asset detail, and a welcome-home dashboard.' },
+  { src: '/work/cassi-onboarding.png', category: 'SVC', caption: 'Onboarding for the home app — a gradient welcome flow that introduces Cassi before asking for anything.' },
+  { src: '/work/cassi-os-deck.png', category: 'BIZ', caption: 'Pitch deck for a native-AI home operations platform — one system replacing fifteen disconnected tools.' },
+  { src: '/work/design-system-figma.png', category: 'DTY', caption: 'The design system in Figma — chat interface states, components, and the annotations engineering actually read.' },
+  { src: '/work/borrower-credit.png', category: 'BIZ', caption: 'Lending dashboard — borrower details and a credit-score gauge that reads at a glance.' },
+  { src: '/work/loan-docs-mobile.png', category: 'BIZ', caption: 'Mobile document collection for a loan — upload progress and lender checklists, minus the paperwork dread.' },
+  { src: '/work/rfm-segments.png', category: 'SVC', caption: 'RFM segmentation — pick Champions or Loyal Customers and watch the audience estimate update live.' },
+  { src: '/work/contact-lists.png', category: 'DTY', caption: 'Contact list manager — upload states, tags, and counts for millions of records without the clutter.' },
+  { src: '/work/newsletter-setup.png', category: 'SVC', caption: 'Newsletter setup flow — a calm "here\'s what we\'re working on" that keeps onboarding unhurried.' },
+  { src: '/work/newsletter-checklist.png', category: 'SVC', caption: 'Setup checklist — "you\'re all set up" with a satisfying green all-clear.' },
+  { src: '/work/email-illustrations-set.png', category: 'BIZ', caption: 'Illustration set for an email platform — one visual language across every empty state.' },
+  { src: '/work/game-build-pipeline.png', category: 'JOY', caption: 'Build pipeline for a Unity game — every step green before the store build ships.' },
+  { src: '/work/pixel-nyc-01.png', category: 'JOY', caption: 'Pixel-art New York — a brownstone street framing One World Trade, just for the joy of it.' },
+  { src: '/work/pixel-nyc-02.png', category: 'JOY', caption: 'Pixel-art New York — yellow cabs and fire escapes under a big summer sky.' },
 ];
+
+// Some work items are short video loops rather than stills.
+export const isVideo = (src: string) => src.endsWith('.mp4');
 
 const PREVIEW_IMAGES = WORK_ITEMS.slice(0, 4);
 
@@ -211,12 +230,21 @@ export function WorkLink() {
                     }}
                     onMouseLeave={() => { if (zoomedIdx === idx) setZoomedIdx(null); }}
                   >
-                    <img src={item.src} alt={item.caption}
-                      className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
-                      style={{
-                        transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
-                        transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
-                      }} />
+                    {isVideo(item.src) ? (
+                      <video src={item.src} autoPlay loop muted playsInline
+                        className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
+                        style={{
+                          transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
+                          transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                        }} />
+                    ) : (
+                      <img src={item.src} alt={item.caption}
+                        className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
+                        style={{
+                          transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
+                          transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                        }} />
+                    )}
                   </div>
                 );
               })}

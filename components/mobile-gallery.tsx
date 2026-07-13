@@ -49,12 +49,23 @@ function GalleryContent({ items, onClose }: { items: GalleryItem[]; onClose: () 
             {col.map((item) => (
               <div key={item.idx}>
                 <div className="rounded-xl overflow-hidden border border-white/10">
-                  <img
-                    src={item.src}
-                    alt={item.caption}
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                  />
+                  {item.src.endsWith('.mp4') ? (
+                    <video
+                      src={item.src}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-auto object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={item.src}
+                      alt={item.caption}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
                 {item.url && (
                   <a

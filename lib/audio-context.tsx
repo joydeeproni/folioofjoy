@@ -12,7 +12,6 @@ import {
 import { getTracks, type Track } from '@/lib/music';
 import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
 import { CassetteButton } from '@/components/cassette-button';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 interface AudioContextValue {
   tracks: Track[];
@@ -130,7 +129,10 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   // the accessible high-contrast theme is toggled on.
   useEffect(() => {
     if (accessibleMode) { setTheme(accessibleTheme()); return; }
-    const idx = tracks.findIndex((t) => t.id === currentTrack?.id);
+    // Stay on the dark default until a track is actually playing — otherwise
+    // the site (and the mobile browser chrome) picks up track 0's purple.
+    if (!currentTrack) { setTheme(DEFAULT_THEME); return; }
+    const idx = tracks.findIndex((t) => t.id === currentTrack.id);
     setTheme(themeForTrack(idx < 0 ? 0 : idx));
   }, [currentTrack, tracks, accessibleMode]);
 
@@ -275,7 +277,6 @@ export function AudioUI() {
 
   return (
     <>
-      {playerVisible && <ThemeToggle />}
       {playerVisible && <CassetteButton />}
     </>
   );
