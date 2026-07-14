@@ -134,7 +134,7 @@ export function SongAnalyzer() {
         <div className="hidden md:block fixed top-6 right-6 z-50 group">
           <button
             onClick={() => { if (exploreMode) exitExplore(); else enterExplore(); }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:bg-white/10 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
             style={{ color: theme.foreground }}
           >
             {exploreMode ? (<><X className="w-4 h-4" /><span className="text-sm font-sans">Back</span></>) : (<><Music className="w-3.5 h-3.5" /><span className="text-sm font-sans">Lounge Mode</span></>)}

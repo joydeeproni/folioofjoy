@@ -71,7 +71,7 @@ export function LoungeMode() {
 
       <button
         onClick={closeLounge}
-        className="fixed top-6 right-6 z-[95] flex items-center gap-2 px-4 py-2 rounded-full text-white"
+        className="fixed top-6 right-6 z-[95] flex items-center gap-2 px-4 py-2 rounded-full text-white transition-colors duration-200 hover:bg-white/10"
         aria-label="Close Lounge Mode"
       >
         <X className="w-4 h-4" /><span className="text-sm font-sans">Back</span>

@@ -194,20 +194,13 @@ export function ZenStage() {
         <div className="fixed inset-0 z-10 flex flex-col overflow-hidden">
           {/* Top nav */}
           <header className="relative z-10 flex items-center justify-between px-8 py-6 text-sm font-sans text-white">
-            <Link href="/" className="opacity-90 hover:opacity-100 transition-opacity">Back</Link>
+            <Link href="/" className="underline decoration-transparent underline-offset-4 transition-colors duration-200 hover:text-[#2CA152] hover:decoration-[#2CA152]">Back</Link>
             <span className="absolute left-1/2 -translate-x-1/2 opacity-90">Lounge</span>
             <span aria-hidden className="w-10" />
           </header>
 
-          <div className="relative flex-1 flex items-center justify-center">
-            {/* Lawn illustration — pinned bottom-centre; big and edge-cropped on mobile */}
-            <img
-              src="/zen/me-and-my-boys.svg"
-              alt="Me and my boys hanging out in the lawn with a record player"
-              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[165vw] md:w-[min(1000px,80vw)] max-w-none"
-            />
-
-            {/* Caption + menu — centred in the page, writings-style container */}
+          <div className="relative flex-1 flex flex-col items-center justify-start md:justify-center overflow-hidden pt-[5vh] md:pt-0">
+            {/* Caption + menu — top on mobile so the options clear the artwork; centred on desktop. */}
             <div className="relative z-10 w-full max-w-4xl px-6">
               <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-white/50 mb-5">
                 me and my boys are hanging out in the lawn, waiting for you to play something
@@ -236,6 +229,16 @@ export function ZenStage() {
 
               {error && <p className="text-red-400 text-sm mt-6 text-center">{error}</p>}
             </div>
+
+            {/* Lawn illustration — pinned to the bottom. On mobile it sits IN FRONT
+                of the menu (z-20) and is sized so it rises just far enough to mask
+                the bottom of the last option a touch; on desktop it's behind the
+                centred menu (z-0). Big + edge-cropped on mobile. */}
+            <img
+              src="/zen/me-and-my-boys.svg"
+              alt="Me and my boys hanging out in the lawn with a record player"
+              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 max-w-none w-[175vw] md:w-[min(1000px,80vw)] z-20 md:z-0"
+            />
           </div>
         </div>
       )}

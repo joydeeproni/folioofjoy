@@ -131,10 +131,12 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     if (accessibleMode) { setTheme(accessibleTheme()); return; }
     // Stay on the dark default until a track is actually playing — otherwise
     // the site (and the mobile browser chrome) picks up track 0's purple.
-    if (!currentTrack) { setTheme(DEFAULT_THEME); return; }
+    // Keyed off isPlaying, not currentTrack: track 0 is auto-selected on mount
+    // for the player UI, so guarding on currentTrack alone never held the default.
+    if (!isPlaying || !currentTrack) { setTheme(DEFAULT_THEME); return; }
     const idx = tracks.findIndex((t) => t.id === currentTrack.id);
     setTheme(themeForTrack(idx < 0 ? 0 : idx));
-  }, [currentTrack, tracks, accessibleMode]);
+  }, [currentTrack, tracks, accessibleMode, isPlaying]);
 
   // Publish theme tokens as CSS variables so any element can reference them,
   // and sync the mobile browser-chrome color (status bar / address bar) so it
