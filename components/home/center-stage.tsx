@@ -1,30 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDialKit } from 'dialkit';
-import { WORK_ITEMS, isVideo } from '@/components/work-preview';
+import { WORK_ITEMS } from '@/components/work-preview';
 import { WRITINGS } from '@/lib/writings';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
 import { DitherReveal } from './dither-reveal';
+import { WorkMarquee } from './work-marquee';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
 
 const QUOTE = 'i awoke and saw that life was service. i acted and behold, service was joy.';
 const GREEN = '#2CA152';
 const YELLOW = '#F2E30C';
-const STACK_MS = 3000; // gap between each preview dropping onto the pile
-
-function useIsMobile() {
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-  return mobile;
-}
 
 export function CenterStage({
   hoverTarget,
@@ -33,8 +22,6 @@ export function CenterStage({
   hoverTarget: HoverTarget;
   hoverOrigin?: { x: number; y: number } | null;
 }) {
-  const isMobile = useIsMobile();
-
   // Live controls for the hero quote (dialkit panel, dev only).
   const q = useDialKit('Homepage Quote', {
     sizeVw: [13.4, 2, 16, 0.05],
@@ -53,10 +40,8 @@ export function CenterStage({
   };
 
   const [previewing, setPreviewing] = useState(false);
-  const [count, setCount] = useState(0); // number of piled previews (0 = none)
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Scramble the quote once on first mount.
   useEffect(() => {
@@ -65,30 +50,16 @@ export function CenterStage({
     scrambleReveal(quoteRef.current, QUOTE, 1.6, 0.2);
   }, []);
 
-  const items = useMemo(() => (previewing ? WORK_ITEMS : []), [previewing]);
-
-  // "Preview Work" drops every project onto the pile one at a time, then loops.
-  useEffect(() => {
-    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-    if (!previewing || items.length === 0) { setCount(0); return; }
-    setCount(1);
-    timerRef.current = setInterval(() => {
-      setCount((c) => (c >= items.length ? 1 : c + 1));
-    }, STACK_MS);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [previewing, items.length]);
-
   // A nav hover stops the preview (the hovered preview takes over the page).
   useEffect(() => { if (hoverTarget) setPreviewing(false); }, [hoverTarget]);
 
-  const showStack = !hoverTarget && count > 0 && items.length > 0;
-  const activeItem = showStack ? items[Math.min(count, items.length) - 1] : null;
+  const showMarquee = !hoverTarget && previewing;
 
   return (
     <div className="absolute inset-0">
       {/* HERO — green pixel quote behind the teetering seesaw. Stays visible
           while the selected previews drop and stack on top. */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null}>
+      <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null || previewing}>
         <p
           ref={quoteRef}
           suppressHydrationWarning
@@ -113,73 +84,17 @@ export function CenterStage({
         <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto" />
       </div>
 
-      {/* WORK STACK — category previews drop and stack on top of the hero */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center px-6 pb-28 pointer-events-none" hidden={!showStack}>
-        <div className="relative">
-          {items.map((item, i) => {
-            const visible = i < count;
-            const xOff = ((i * 37) % 40) - 20;
-            const yOff = ((i * 53) % 30) - 15;
-            return (
-              <div
-                key={item.src}
-                className="absolute"
-                style={{
-                  display: visible ? 'block' : 'none',
-                  left: `calc(50% + ${xOff}px)`,
-                  top: `calc(50% + ${yOff}px)`,
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: i,
-                }}
-              >
-                {isVideo(item.src) ? (
-                  <video
-                    src={item.src}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="animate-work-drop shadow-2xl"
-                    style={{ maxWidth: isMobile ? '90vw' : '78vw', maxHeight: isMobile ? '72vh' : '68vh' }}
-                  />
-                ) : (
-                  <img
-                    src={item.src}
-                    alt={item.caption}
-                    className="animate-work-drop shadow-2xl"
-                    style={{ maxWidth: isMobile ? '90vw' : '78vw', maxHeight: isMobile ? '72vh' : '68vh' }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Feature caption — the top preview's description */}
-      {activeItem && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center w-full px-6 pointer-events-none">
-          <p
-            key={`preview-${count}`}
-            className="text-base md:text-lg font-sans text-center leading-relaxed max-w-xl text-white animate-caption-fade"
-            style={{ textWrap: 'balance' } as React.CSSProperties}
-          >
-            {activeItem.caption}
-          </p>
-        </div>
-      )}
+      {/* WORK MARQUEE — draggable filmstrip, drifts right→left, captions the centred item */}
+      {showMarquee && <WorkMarquee />}
 
       {/* Preview Work — runs the project slide-stack on loop (homepage only) */}
       <div
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 font-mono text-xs uppercase tracking-[0.2em]"
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 text-sm font-sans"
         hidden={hoverTarget !== null}
       >
         <button
           onClick={() => setPreviewing((p) => !p)}
-          className="transition-colors hover:!opacity-100"
-          style={{ color: previewing ? GREEN : 'rgba(255,255,255,0.5)' }}
-          onMouseEnter={(e) => { if (!previewing) e.currentTarget.style.color = GREEN; }}
-          onMouseLeave={(e) => { if (!previewing) e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+          className={`transition-colors ${previewing ? 'text-[#2CA152]' : 'text-white/90 hover:text-[#2CA152]'}`}
         >
           Preview Work
         </button>

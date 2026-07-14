@@ -6,7 +6,7 @@ import { CenterStage } from './center-stage';
 const INSTAGRAM = 'https://www.instagram.com/joyingntravelling/';
 
 export function HomeStage() {
-  const linkCls = 'opacity-90';
+  const linkCls = 'text-white/90 hover:text-[#2CA152] transition-colors';
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black text-white">
