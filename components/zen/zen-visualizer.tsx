@@ -120,17 +120,24 @@ export function ZenVisualizer({
     if (!ctx) return;
 
     let w = 0, h = 0;
+    // Size the drawing buffer to the canvas's own box, which is pinned to the
+    // dynamic viewport (100dvh). A ResizeObserver + visualViewport listener keep
+    // it tracking the mobile address bar showing/hiding, so the field never gets
+    // cropped behind the browser chrome.
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
-      w = window.innerWidth; h = window.innerHeight;
+      const rect = canvas.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      if (w === 0 || h === 0) return;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
     window.addEventListener('resize', resize);
+    window.visualViewport?.addEventListener('resize', resize);
 
     let freq = new Uint8Array(0);
     let wave = new Uint8Array(0);
@@ -283,10 +290,12 @@ export function ZenVisualizer({
 
     rafRef.current = requestAnimationFrame(draw);
     return () => {
+      ro.disconnect();
       window.removeEventListener('resize', resize);
+      window.visualViewport?.removeEventListener('resize', resize);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [getAnalyser]);
 
-  return <canvas ref={canvasRef} aria-hidden className="fixed inset-0" />;
+  return <canvas ref={canvasRef} aria-hidden className="fixed inset-x-0 top-0 h-[100dvh]" />;
 }
