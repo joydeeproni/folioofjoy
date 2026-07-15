@@ -41,7 +41,23 @@ export const work = defineType({
                 ],
               },
             }),
-            defineField({name: 'url', title: 'Link (optional)', type: 'url'}),
+            defineField({
+              name: 'links',
+              title: 'Links',
+              description: 'Case study, live site, Behance, etc. Shown as chips in the detail view.',
+              type: 'array',
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'link',
+                  fields: [
+                    defineField({name: 'label', title: 'Label', type: 'string', validation: (rule) => rule.required()}),
+                    defineField({name: 'url', title: 'URL', type: 'url', validation: (rule) => rule.required()}),
+                  ],
+                  preview: {select: {title: 'label', subtitle: 'url'}},
+                }),
+              ],
+            }),
           ],
           preview: {select: {title: 'caption', subtitle: 'category', media: 'image'}},
         }),
