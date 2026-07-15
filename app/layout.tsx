@@ -5,6 +5,8 @@ import { DialRoot } from 'dialkit'
 import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
+import { ContentProvider } from '@/components/content-provider'
+import { getWork, getWritingsNav } from '@/lib/sanity/queries'
 import 'dialkit/styles.css'
 import './globals.css'
 
@@ -37,16 +39,19 @@ export const viewport: Viewport = {
   themeColor: '#12171d',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const [work, writings] = await Promise.all([getWork(), getWritingsNav()])
   return (
     <html lang="en">
       <body className="font-sans antialiased min-h-screen">
         <Providers>
-          {children}
+          <ContentProvider work={work} writings={writings}>
+            {children}
+          </ContentProvider>
           <AudioUI />
           <DitherTransition />
         </Providers>

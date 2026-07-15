@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useDialKit } from 'dialkit';
-import { WORK_ITEMS } from '@/components/work-preview';
-import { WRITINGS } from '@/lib/writings';
+import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
 import { DitherReveal } from './dither-reveal';
@@ -22,6 +21,9 @@ export function CenterStage({
   hoverTarget: HoverTarget;
   hoverOrigin?: { x: number; y: number } | null;
 }) {
+  const WORK_ITEMS = useWork();
+  const WRITINGS = useWritings();
+
   // Live controls for the hero quote (dialkit panel, dev only).
   const q = useDialKit('Homepage Quote', {
     sizeVw: [13.4, 2, 16, 0.05],

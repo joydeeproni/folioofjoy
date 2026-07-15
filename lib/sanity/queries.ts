@@ -1,5 +1,12 @@
 import type { PortableTextBlock } from '@portabletext/react';
+import type { SanityImageSource } from '@sanity/image-url';
 import { sanityClient } from './client';
+import { urlFor } from './image';
+
+// Revalidate cached fetches every minute; a webhook can make this instant later.
+const CACHE = { next: { revalidate: 60 } } as const;
+
+// ---- About + Inspiration ----
 
 export interface AboutDoc {
   lede?: string;
@@ -21,9 +28,107 @@ const ABOUT_QUERY = `*[_type == "about"][0]{lede, subLede, intro, quote, quoteAt
 const INSPIRATION_QUERY = `*[_type == "inspiration"][0].items[]{category, name, note, url}`;
 
 export function getAbout() {
-  return sanityClient.fetch<AboutDoc | null>(ABOUT_QUERY);
+  return sanityClient.fetch<AboutDoc | null>(ABOUT_QUERY, {}, CACHE);
 }
 
 export function getInspiration() {
-  return sanityClient.fetch<InspirationItem[] | null>(INSPIRATION_QUERY);
+  return sanityClient.fetch<InspirationItem[] | null>(INSPIRATION_QUERY, {}, CACHE);
+}
+
+// ---- Work ----
+
+export type WorkCategory = 'SVC' | 'JOY' | 'BIZ' | 'DTY';
+
+export interface WorkLinkItem {
+  label: string;
+  url: string;
+}
+
+export interface WorkItem {
+  src: string; // resolved CDN url (image or video)
+  caption: string;
+  category: WorkCategory;
+  links: WorkLinkItem[];
+}
+
+interface RawWorkItem {
+  caption?: string;
+  category?: WorkCategory;
+  links?: WorkLinkItem[];
+  image?: SanityImageSource;
+  videoUrl?: string;
+}
+
+const WORK_QUERY = `*[_type == "work"][0].items[]{caption, category, links, image, "videoUrl": video.asset->url}`;
+
+export async function getWork(): Promise<WorkItem[]> {
+  const items = (await sanityClient.fetch<RawWorkItem[] | null>(WORK_QUERY, {}, CACHE)) ?? [];
+  return items.map((it) => ({
+    src: it.videoUrl
+      ? it.videoUrl
+      : it.image
+        ? urlFor(it.image).width(1600).auto('format').quality(80).url()
+        : '',
+    caption: it.caption ?? '',
+    category: it.category ?? 'SVC',
+    links: it.links ?? [],
+  }));
+}
+
+// ---- Writings ----
+
+export interface WritingNav {
+  slug: string;
+  title: string;
+}
+
+export interface WritingListItem extends WritingNav {
+  number: string;
+  postedOn: string;
+}
+
+export interface Writing extends WritingListItem {
+  titled: string;
+  subhead: string;
+  references: { label: string; href: string }[];
+  body: string[];
+  heroImage?: string;
+}
+
+const WRITINGS_NAV_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, title}`;
+const WRITINGS_LIST_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, number, title, postedOn}`;
+const WRITING_SLUGS_QUERY = `*[_type == "writing" && defined(slug.current)].slug.current`;
+const WRITING_QUERY = `*[_type == "writing" && slug.current == $slug][0]{
+  "slug": slug.current, number, title, postedOn, titled, subhead, references,
+  body, "heroImage": heroImage.asset->url
+}`;
+
+export function getWritingsNav() {
+  return sanityClient.fetch<WritingNav[]>(WRITINGS_NAV_QUERY, {}, CACHE);
+}
+
+export function getWritingsList() {
+  return sanityClient.fetch<WritingListItem[]>(WRITINGS_LIST_QUERY, {}, CACHE);
+}
+
+export function getWritingSlugs() {
+  return sanityClient.fetch<string[]>(WRITING_SLUGS_QUERY);
+}
+
+interface RawWriting extends Omit<Writing, 'body'> {
+  body?: PortableTextBlock[];
+}
+
+export async function getWriting(slug: string): Promise<Writing | null> {
+  const doc = await sanityClient.fetch<RawWriting | null>(WRITING_QUERY, { slug }, CACHE);
+  if (!doc) return null;
+  return {
+    ...doc,
+    references: doc.references ?? [],
+    // Flatten Portable Text blocks to plain paragraphs (writings body is prose).
+    body: (doc.body ?? []).map((block) => {
+      const children = (block as { children?: { text?: string }[] }).children ?? [];
+      return children.map((c) => c.text ?? '').join('');
+    }),
+  };
 }

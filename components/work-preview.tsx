@@ -4,73 +4,13 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { MobileGallery } from './mobile-gallery';
+import { useWork } from './content-provider';
 
 // SVC = service for others, JOY = fun/experiments, BIZ = money work, DTY = duty/busywork.
-export type WorkCategory = 'SVC' | 'JOY' | 'BIZ' | 'DTY';
-
-export interface WorkItem {
-  src: string;
-  caption: string;
-  category: WorkCategory;
-}
-
-export const WORK_ITEMS: WorkItem[] = [
-  { src: '/work/project-01.png', category: 'SVC', caption: 'AI home-management app — made the welcome screen feel like arriving home, not signing up for one.' },
-  { src: '/work/project-02.png', category: 'BIZ', caption: 'Mobile loan application — turned six screens of underwriting into something you would actually finish on the bus.' },
-  { src: '/work/project-03.png', category: 'SVC', caption: 'Home maintenance on mobile — a fix-it list that reads like a to-do, not a contract.' },
-  { src: '/work/project-04.png', category: 'DTY', caption: 'The Figma file engineering lived in — every spec they never had to ask twice about.' },
-  { src: '/work/carbondash-01.png', category: 'BIZ', caption: 'Pitched the visual identity and shipped the marketing site in three weeks flat.' },
-  { src: '/work/netflix-01.png', category: 'DTY', caption: 'Internal tool for content ops — made the upload queue something people stopped complaining about.' },
-  { src: '/work/verizon-red.png', category: 'SVC', caption: 'Retail inventory scanner that warehouse staff actually wanted to use instead of the clipboard.' },
-  { src: '/work/urbyn-banner.png', category: 'SVC', caption: 'Property analytics platform — a lot of data on a map without making anyone squint.' },
-  { src: '/work/dribbble-08.jpg', category: 'SVC', caption: 'Scatter plots that tell you what a neighborhood is worth before the realtor does.' },
-  { src: '/work/widgets.png', category: 'DTY', caption: 'Address search that autocompletes faster than you can second-guess your zip code.' },
-  { src: '/work/dribbble-04.jpg', category: 'DTY', caption: 'Schema management for game events — backend config that feels like a product, not a spreadsheet.' },
-  { src: '/work/dribbble-10.jpg', category: 'SVC', caption: 'Neighborhood stats dashboard — donut charts that actually earned their keep.' },
-  { src: '/work/dribbble-01.jpg', category: 'DTY', caption: 'Release changelog — what broke and what got better, at a glance.' },
-  { src: '/work/dribbble-06.jpg', category: 'DTY', caption: 'Feature flag cards — dark and light mode, because designers have opinions about both.' },
-  { src: '/work/tactile-create-01.png', category: 'JOY', caption: 'Tactile Create home page — illustrated shortcut cards so starting a GDD or storyboard feels like picking from a shelf.' },
-  { src: '/work/tactile-create-02.png', category: 'JOY', caption: 'Same page, light mode — everything untitled on purpose because scrappy docs come first, names come later.' },
-  { src: '/work/verizon-red-02.png', category: 'SVC', caption: 'Verizon stock management app — scan, pick a rack off the store map, log it, back on the floor.' },
-  { src: '/work/urbyn-banner-02.png', category: 'SVC', caption: 'Full property search — listings left, map right, filters that narrow things down instead of adding noise.' },
-  { src: '/work/urbyn-value-drivers.png', category: 'SVC', caption: 'Value drivers — what pushes a property price up and what drags it down, no guessing required.' },
-  { src: '/work/urbyn-historical.png', category: 'SVC', caption: 'Historical value prediction — current price, last year, next year, and a chart that outpaces the Zestimate.' },
-  { src: '/work/email-illustration.png', category: 'BIZ', caption: 'Marketing illustration for an email platform — clean enough to sit on a hero without stealing focus.' },
-  { src: '/work/module-selector.png', category: 'SVC', caption: 'Module picker for a Danish manufacturing app — color-coded progress, zero ambiguity.' },
-  { src: '/work/property-widgets.png', category: 'SVC', caption: 'Real estate analytics widgets — three chart types, one visual language, no infighting.' },
-  { src: '/work/hotel-cards.jpg', category: 'SVC', caption: 'Hotel concierge widgets — room status and food ordering that feel native to the stay.' },
-  { src: '/work/carbon-dashboard.jpg', category: 'SVC', caption: 'Carbon emissions dashboard — spend, footprint per head, and charts that make the CFO read the ESG report.' },
-  { src: '/work/carbondash-brand.png', category: 'BIZ', caption: 'Branding for an Australian carbon accounting firm — the green grid that shipped everywhere.' },
-  { src: '/work/carbondash-logos.png', category: 'BIZ', caption: 'CarbonDash logo system — five weights, one mark, the exploration that made the final pick obvious.' },
-  { src: '/work/carbondash-marketing.png', category: 'BIZ', caption: 'Framer site for the same carbon firm — dark theme, full scroll from hero to integrations footer.' },
-  { src: '/work/battalion-map.png', category: 'SVC', caption: 'Property intelligence platform — the map view that made brokers close their spreadsheets.' },
-  { src: '/work/battalion-hero.png', category: 'BIZ', caption: 'Proptech hero — isometric buildings, a search bar, enough personality to not look like every other SaaS.' },
-  { src: '/work/platform-illustration.png', category: 'JOY', caption: 'Platform illustration — abstract enough for a landing page, specific enough to hint at the product.' },
-  { src: '/work/battalion-messages.png', category: 'SVC', caption: 'Lender-broker message centre — threaded by property, because that matters more than timestamps.' },
-  { src: '/work/urbyn-development.png', category: 'SVC', caption: 'Zoning overlay — shows what is getting built nearby before the construction noise does.' },
-  { src: '/work/data-dashboard-docs.png', category: 'DTY', caption: 'Onboarding cards for a datamarts tool — naming conventions and dimensions, illustrated so dry content lands.' },
-  { src: '/work/kcs-dashboard-loader.mp4', category: 'SVC', caption: 'Dashboard loader animation — a looping motion study for a KCS analytics dashboard.' },
-  { src: '/work/cassi-what-today.png', category: 'SVC', caption: 'AI home concierge — "What do you want today?" with maintenance, providers, and a talk-to-Cassi prompt.' },
-  { src: '/work/cassi-maintenance.png', category: 'SVC', caption: 'Home maintenance screens — seasonal calendar, asset detail, and a welcome-home dashboard.' },
-  { src: '/work/cassi-onboarding.png', category: 'SVC', caption: 'Onboarding for the home app — a gradient welcome flow that introduces Cassi before asking for anything.' },
-  { src: '/work/cassi-os-deck.png', category: 'BIZ', caption: 'Pitch deck for a native-AI home operations platform — one system replacing fifteen disconnected tools.' },
-  { src: '/work/design-system-figma.png', category: 'DTY', caption: 'The design system in Figma — chat interface states, components, and the annotations engineering actually read.' },
-  { src: '/work/borrower-credit.png', category: 'BIZ', caption: 'Lending dashboard — borrower details and a credit-score gauge that reads at a glance.' },
-  { src: '/work/loan-docs-mobile.png', category: 'BIZ', caption: 'Mobile document collection for a loan — upload progress and lender checklists, minus the paperwork dread.' },
-  { src: '/work/rfm-segments.png', category: 'SVC', caption: 'RFM segmentation — pick Champions or Loyal Customers and watch the audience estimate update live.' },
-  { src: '/work/contact-lists.png', category: 'DTY', caption: 'Contact list manager — upload states, tags, and counts for millions of records without the clutter.' },
-  { src: '/work/newsletter-setup.png', category: 'SVC', caption: 'Newsletter setup flow — a calm "here\'s what we\'re working on" that keeps onboarding unhurried.' },
-  { src: '/work/newsletter-checklist.png', category: 'SVC', caption: 'Setup checklist — "you\'re all set up" with a satisfying green all-clear.' },
-  { src: '/work/email-illustrations-set.png', category: 'BIZ', caption: 'Illustration set for an email platform — one visual language across every empty state.' },
-  { src: '/work/game-build-pipeline.png', category: 'JOY', caption: 'Build pipeline for a Unity game — every step green before the store build ships.' },
-  { src: '/work/pixel-nyc-01.png', category: 'JOY', caption: 'Pixel-art New York — a brownstone street framing One World Trade, just for the joy of it.' },
-  { src: '/work/pixel-nyc-02.png', category: 'JOY', caption: 'Pixel-art New York — yellow cabs and fire escapes under a big summer sky.' },
-];
+export type { WorkCategory, WorkItem } from '@/lib/sanity/queries';
 
 // Some work items are short video loops rather than stills.
 export const isVideo = (src: string) => src.endsWith('.mp4');
-
-const PREVIEW_IMAGES = WORK_ITEMS.slice(0, 4);
 
 function useIsMobile() {
   const [mobile, setMobile] = useState(false);
@@ -84,6 +24,8 @@ function useIsMobile() {
 }
 
 export function WorkLink() {
+  const WORK_ITEMS = useWork();
+  const PREVIEW_IMAGES = WORK_ITEMS.slice(0, 4);
   const isMobile = useIsMobile();
   const [showPreview, setShowPreview] = useState(false);
   const [particles, setParticles] = useState<Array<{ id: number; angle: number; speed: number; size: number }>>([]);
@@ -99,8 +41,8 @@ export function WorkLink() {
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
   const [zoomOrigin, setZoomOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
 
-  const next = useCallback(() => { setCurrentIndex((i) => (i + 1) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, []);
-  const prev = useCallback(() => { setCurrentIndex((i) => (i - 1 + WORK_ITEMS.length) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, []);
+  const next = useCallback(() => { setCurrentIndex((i) => (i + 1) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, [WORK_ITEMS.length]);
+  const prev = useCallback(() => { setCurrentIndex((i) => (i - 1 + WORK_ITEMS.length) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, [WORK_ITEMS.length]);
 
   const openCarousel = useCallback(() => {
     setCurrentIndex(0); setCarouselMounted(true);
@@ -127,6 +69,8 @@ export function WorkLink() {
     if (isMobile) setMobileOpen(true);
     else openCarousel();
   };
+
+  const activeLinks = WORK_ITEMS[currentIndex]?.links ?? [];
 
   return (
     <>
@@ -251,8 +195,25 @@ export function WorkLink() {
             </div>
 
             <p key={captionKey} className="text-base font-sans text-white/70 text-center max-w-lg animate-caption-fade">
-              {WORK_ITEMS[currentIndex].caption}
+              {WORK_ITEMS[currentIndex]?.caption}
             </p>
+
+            {activeLinks.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {activeLinks.map((l) => (
+                  <a
+                    key={l.url}
+                    href={l.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs font-sans text-white/60 hover:text-white border border-white/20 hover:border-white/40 rounded-full px-3 py-1 transition-colors"
+                  >
+                    {l.label} &rarr;
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       ), document.body)}

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useAudio } from '@/lib/audio-context';
-import { WORK_ITEMS } from '@/components/work-preview';
+import { useWork } from '@/components/content-provider';
 
 // Images pile up one every SLIDE_MS, each held long enough to read its
 // description. The dots count the seconds the top image has been up.
@@ -14,6 +14,7 @@ const MAX_DOTS = Math.max(1, Math.round(SLIDE_MS / 1000));
 
 export default function Work() {
   const { theme } = useAudio();
+  const WORK_ITEMS = useWork();
   const [visibleCount, setVisibleCount] = useState(0);
   const [dots, setDots] = useState(1);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -35,7 +36,7 @@ export default function Work() {
       }
     };
     timerRef.current = setTimeout(tick, SLIDE_MS);
-  }, []);
+  }, [WORK_ITEMS.length]);
 
   // Brief pause on the opening quote, then start the pile-up.
   useEffect(() => {

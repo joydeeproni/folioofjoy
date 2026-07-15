@@ -1,18 +1,21 @@
 import { notFound } from 'next/navigation';
 import { BackLink } from '@/components/back-link';
-import { WRITINGS, getWriting } from '@/lib/writings';
+import { getWriting, getWritingSlugs } from '@/lib/sanity/queries';
+
+export const revalidate = 60;
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
 const RULE = 'rgba(237,234,224,0.15)';
 
-export function generateStaticParams() {
-  return WRITINGS.map((w) => ({ slug: w.slug }));
+export async function generateStaticParams() {
+  const slugs = await getWritingSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function WritingPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getWriting(slug);
+  const post = await getWriting(slug);
   if (!post) notFound();
 
   return (

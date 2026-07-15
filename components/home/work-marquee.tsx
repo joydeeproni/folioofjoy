@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { WORK_ITEMS, isVideo } from '@/components/work-preview';
+import { isVideo } from '@/components/work-preview';
+import { useWork } from '@/components/content-provider';
 
 const SPEED = 0.5; // px per frame — slow right→left drift
 
 // Auto-scrolling filmstrip of every project. Drifts right→left, can be dragged
 // to pan, and surfaces the caption of whichever item sits nearest screen centre.
 export function WorkMarquee() {
+  const WORK_ITEMS = useWork();
   const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const offsetRef = useRef(0);

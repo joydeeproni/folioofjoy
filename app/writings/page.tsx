@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { BackLink } from '@/components/back-link';
-import { WRITINGS } from '@/lib/writings';
+import { getWritingsList } from '@/lib/sanity/queries';
+
+export const revalidate = 60;
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
 
-export default function Writings() {
+export default async function Writings() {
+  const WRITINGS = await getWritingsList();
   return (
     <main className="relative min-h-screen w-full px-8 md:px-16 py-10" style={{ backgroundColor: BG, color: FG }}>
       <BackLink />
