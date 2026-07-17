@@ -6,12 +6,18 @@ import {
   AttemptsContrast,
   ClosingProgression,
 } from './dfll-diagrams'
+import { DfllToc } from './dfll-toc'
+import { slugify } from '@/lib/writings/slug'
 
 const FG = '#EDEAE0'
 const RULE = 'rgba(237,234,224,0.15)'
 
-function H2({ children }: { children: ReactNode }) {
-  return <h2 className="font-sans font-medium text-2xl md:text-3xl tracking-tight mt-16 mb-5">{children}</h2>
+function H2({ children }: { children: string }) {
+  return (
+    <h2 id={slugify(children)} className="font-sans font-medium text-2xl md:text-3xl tracking-tight mt-16 mb-5 scroll-mt-24">
+      {children}
+    </h2>
+  )
 }
 
 function P({ children, lead }: { children: ReactNode; lead?: boolean }) {
@@ -48,12 +54,9 @@ function Pull({ children }: { children: ReactNode }) {
 
 function Figure({ children, caption }: { children: ReactNode; caption: string }) {
   return (
-    <figure role="group" aria-label={caption} className="my-12 md:my-14">
-      <div className="rounded-lg px-4 py-8 md:px-8"
-        style={{ border: '1px solid rgba(237,234,224,0.10)', background: 'rgba(237,234,224,0.02)' }}>
-        {children}
-      </div>
-      <figcaption className="mt-3 text-center font-mono uppercase tracking-widest text-[11px]"
+    <figure role="group" aria-label={caption} className="my-10 md:my-12">
+      <div className="overflow-x-auto">{children}</div>
+      <figcaption className="mt-3 font-mono uppercase tracking-widest text-[11px]"
         style={{ color: 'rgba(237,234,224,0.4)' }}>
         {caption}
       </figcaption>
@@ -64,6 +67,8 @@ function Figure({ children, caption }: { children: ReactNode; caption: string })
 export function DesigningForLowLiteracy() {
   return (
     <div className="max-w-[760px] mx-auto pt-24 pb-4">
+      <DfllToc />
+
       {/* Header */}
       <div className="flex items-start gap-4">
         <span className="font-pixel text-base mt-3" style={{ opacity: 0.5 }}>02</span>
@@ -218,7 +223,7 @@ export function DesigningForLowLiteracy() {
 
       <H2>Our approach</H2>
       <P>We had two big problems to solve.</P>
-      <h3 className="font-sans font-medium text-xl mt-8 mb-3" style={{ color: FG }}>1. Trust</h3>
+      <h3 id={slugify('1. Trust')} className="font-sans font-medium text-xl mt-8 mb-3 scroll-mt-24" style={{ color: FG }}>1. Trust</h3>
       <P>
         Before users would put financial information into the app, they had to believe the app was safe, useful,
         and not some new way for the universe to scam them.
@@ -232,7 +237,7 @@ export function DesigningForLowLiteracy() {
         Trust for this audience does not come from a polished screen saying “100% secure.” It comes from a person
         they know saying, “I used this. It is okay.” Very advanced technology. Human beings.
       </P>
-      <h3 className="font-sans font-medium text-xl mt-8 mb-3" style={{ color: FG }}>2. Habit</h3>
+      <h3 id={slugify('2. Habit')} className="font-sans font-medium text-xl mt-8 mb-3 scroll-mt-24" style={{ color: FG }}>2. Habit</h3>
       <P>Once trust started forming, the next problem was habit.</P>
       <P>Could we make transaction entry feel natural enough that people would actually do it?</P>
       <P>
