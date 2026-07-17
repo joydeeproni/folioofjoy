@@ -13,7 +13,7 @@ export function CassetteButton() {
         <Link
           href="/zen"
           aria-label="Enter the Lounge"
-          className="fixed bottom-6 right-6 z-50 block transition-transform hover:scale-105"
+          className="fixed bottom-[calc(1.5rem+var(--sab))] right-[calc(1.5rem+var(--sar))] z-50 block transition-transform hover:scale-105"
         >
           <img src="/cassette.svg" alt="" className="w-20 md:w-24 h-auto" />
         </Link>

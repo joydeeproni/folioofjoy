@@ -67,7 +67,7 @@ export function HeroOverlay({ accentColor, toolbarColor, foregroundRgb = '255, 2
   return (
     <div className="fixed inset-0 z-10 pointer-events-none flex flex-col">
       {/* Logo */}
-      <div className="flex justify-center pt-8">
+      <div className="flex justify-center pt-[calc(2rem+var(--sat))]">
         <div
           className="w-14 h-14 rounded-full flex items-center justify-center transition-colors duration-1000 ease-in-out"
           style={{ backgroundColor: toolbarColor || 'rgba(15, 15, 18, 0.9)' }}
@@ -111,7 +111,7 @@ export function HeroOverlay({ accentColor, toolbarColor, foregroundRgb = '255, 2
       </div>
 
       {/* Bottom Text — hidden on mobile (shown below fold instead) */}
-      <div className="hidden md:flex justify-center px-8 pb-4 pointer-events-auto">
+      <div className="hidden md:flex justify-center px-8 pb-[calc(1rem+var(--sab))] pointer-events-auto">
         <div className="flex gap-12 max-w-4xl">
           <p className="flex-1 text-base font-sans leading-relaxed" style={{ textWrap: 'balance', color: `rgba(${foregroundRgb}, 0.7)` } as React.CSSProperties}>
             A dry, observant, tool-pilled in a practical way, and just self-aware enough to admit he&apos;s become the sort of product designer who can tell you exactly why your app feels slightly off, why your onboarding leaks users, why your AI feature is mostly a nervous mood board and might just look like a GPT wrapper.

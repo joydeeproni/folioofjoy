@@ -19,7 +19,7 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
   if (!post) notFound();
 
   return (
-    <main className="relative min-h-screen w-full px-6 md:px-16 py-10" style={{ backgroundColor: BG, color: FG }}>
+    <main className="relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-[calc(2.5rem+var(--sab))]" style={{ backgroundColor: BG, color: FG }}>
       <BackLink href="/writings" />
 
       <div className="max-w-5xl mx-auto pt-24">

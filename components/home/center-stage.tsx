@@ -91,7 +91,7 @@ export function CenterStage({
 
       {/* Preview Work — runs the project slide-stack on loop (homepage only) */}
       <div
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 text-sm font-sans"
+        className="fixed bottom-[calc(2rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 text-sm font-sans"
         hidden={hoverTarget !== null}
       >
         <button

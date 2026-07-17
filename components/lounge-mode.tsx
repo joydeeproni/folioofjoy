@@ -63,7 +63,7 @@ export function LoungeMode() {
       <PatternGuide active restartKey={restartKey} />
 
       {hoveredWord && (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[95] px-4 py-2" style={{ color: theme.foreground }}>
+        <div className="fixed top-[calc(1.5rem+var(--sat))] left-1/2 -translate-x-1/2 z-[95] px-4 py-2" style={{ color: theme.foreground }}>
           <span className="font-mono font-semibold">{hoveredWord}</span>
           <span className="text-sm ml-2 opacity-50">{wordMap.get(hoveredWord)?.length || 0} matches</span>
         </div>
@@ -71,7 +71,7 @@ export function LoungeMode() {
 
       <button
         onClick={closeLounge}
-        className="fixed top-6 right-6 z-[95] flex items-center gap-2 px-4 py-2 rounded-full text-white transition-colors duration-200 hover:bg-white/10"
+        className="fixed top-[calc(1.5rem+var(--sat))] right-[calc(1.5rem+var(--sar))] z-[95] flex items-center gap-2 px-4 py-2 rounded-full text-white transition-colors duration-200 hover:bg-white/10"
         aria-label="Close Lounge Mode"
       >
         <X className="w-4 h-4" /><span className="text-sm font-sans">Back</span>

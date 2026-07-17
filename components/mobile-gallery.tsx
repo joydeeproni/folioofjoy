@@ -31,7 +31,7 @@ function GalleryContent({ items, onClose }: { items: GalleryItem[]; onClose: () 
       style={{ position: 'fixed', inset: 0, zIndex: 9999, background: '#000', overflowY: 'auto', overscrollBehavior: 'contain' }}
     >
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-black/80 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 flex items-center justify-between px-5 pt-[calc(1rem+var(--sat))] pb-4 bg-black/80 backdrop-blur-sm">
         <span className="text-xs font-mono text-white/40 uppercase tracking-widest">
           {items.length} projects
         </span>

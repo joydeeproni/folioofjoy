@@ -259,7 +259,7 @@ export function ExploreToolbar({
 
       {/* Mobile: collapsible button + panel */}
       {active && (
-        <div className="md:hidden fixed bottom-16 right-4 z-50">
+        <div className="md:hidden fixed bottom-[calc(4rem+var(--sab))] right-[calc(1rem+var(--sar))] z-50">
           {/* Expanded panel */}
           <div
             className={`absolute bottom-full right-0 mb-2 w-60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-4 shadow-2xl flex flex-col gap-4 max-h-[70vh] overflow-y-auto transition-all duration-500 ease-out ${

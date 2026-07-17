@@ -57,11 +57,11 @@ export default function Work() {
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden transition-colors duration-1000 ease-in-out"
+      className="relative min-h-dvh overflow-hidden transition-colors duration-1000 ease-in-out"
       style={{ backgroundColor: theme.background }}
     >
       {/* Navigation */}
-      <nav className="fixed top-7 left-8 z-50 hidden md:flex items-center gap-5" style={{ color: theme.link }}>
+      <nav className="fixed top-[calc(1.75rem+var(--sat))] left-[calc(2rem+var(--sal))] z-50 hidden md:flex items-center gap-5" style={{ color: theme.link }}>
         <Link
           href="/"
           className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"
@@ -74,7 +74,7 @@ export default function Work() {
       </nav>
 
       {/* Mobile navigation */}
-      <nav className="md:hidden fixed top-5 left-5 z-50 flex items-center gap-4" style={{ color: theme.link }}>
+      <nav className="md:hidden fixed top-[calc(1.25rem+var(--sat))] left-[calc(1.25rem+var(--sal))] z-50 flex items-center gap-4" style={{ color: theme.link }}>
         <Link
           href="/"
           className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity"
@@ -90,7 +90,7 @@ export default function Work() {
       />
 
       {/* Quote text */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-8 md:px-16 lg:px-24">
+      <div className="relative z-10 min-h-dvh flex items-center justify-center px-8 md:px-16 lg:px-24">
         <p className="font-heading font-light text-3xl md:text-7xl lg:text-8xl tracking-wide lowercase text-justify max-w-[900px]" style={{ lineHeight: '1.15', color: theme.foreground }}>
           i awoke and saw that life was service. i acted and behold, service was joy.
         </p>
@@ -126,7 +126,7 @@ export default function Work() {
 
       {/* Active description — only the top image's caption, bottom centre */}
       {activeItem && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 w-full px-6 pointer-events-none">
+        <div className="fixed bottom-[calc(2.5rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3 w-full px-6 pointer-events-none">
           <div className="flex items-center gap-1.5" style={{ height: 5 }}>
             {Array.from({ length: MAX_DOTS }).map((_, i) => (
               <span

@@ -85,10 +85,10 @@ export function SongAnalyzer() {
   if (gateOpen) return null;
 
   return (
-    <div className={`relative w-full transition-colors duration-1000 ease-in-out${exploreMode ? ' h-screen overflow-hidden' : ''}`} style={{ backgroundColor: theme.background }}>
+    <div className={`relative w-full transition-colors duration-1000 ease-in-out${exploreMode ? ' h-dvh overflow-hidden' : ''}`} style={{ backgroundColor: theme.background }}>
 
       {/* ===== FIRST FOLD — full screen ===== */}
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-dvh w-full overflow-hidden">
         {/* Matrix */}
         {words.length > 0 && (
           <MatrixVisualization
@@ -107,7 +107,7 @@ export function SongAnalyzer() {
         </div>
 
         {/* Desktop: Social links — top left */}
-        <div className={`hidden md:flex fixed top-7 left-8 z-50 items-center gap-5 transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ color: theme.link }}>
+        <div className={`hidden md:flex fixed top-[calc(1.75rem+var(--sat))] left-[calc(2rem+var(--sal))] z-50 items-center gap-5 transition-opacity duration-500 ${exploreMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ color: theme.link }}>
           <Link href="/work" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Work</Link>
           <a href="https://www.instagram.com/joyingntravelling/" target="_blank" rel="noopener noreferrer" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Photography</a>
           <a href="https://www.threads.com/@joydeep.roni" target="_blank" rel="noopener noreferrer" className="text-sm font-sans opacity-70 hover:opacity-100 transition-opacity">Threads</a>
@@ -121,7 +121,7 @@ export function SongAnalyzer() {
 
         {/* Hovered word tooltip */}
         {hoveredWord && (
-          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-40 px-4 py-2" style={{ color: theme.foreground }}>
+          <div className="fixed top-[calc(1.5rem+var(--sat))] left-1/2 -translate-x-1/2 z-40 px-4 py-2" style={{ color: theme.foreground }}>
             <span className="font-mono font-semibold">{hoveredWord}</span>
             <span className="text-sm ml-2 opacity-50">{wordMap.get(hoveredWord)?.length || 0} matches</span>
           </div>
@@ -131,7 +131,7 @@ export function SongAnalyzer() {
         <PatternGuide active={exploreMode} restartKey={restartKey} />
 
         {/* Desktop: "Lounge Mode" — top right */}
-        <div className="hidden md:block fixed top-6 right-6 z-50 group">
+        <div className="hidden md:block fixed top-[calc(1.5rem+var(--sat))] right-[calc(1.5rem+var(--sar))] z-50 group">
           <button
             onClick={() => { if (exploreMode) exitExplore(); else enterExplore(); }}
             className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:bg-white/10 ${exploreMode ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
@@ -149,7 +149,7 @@ export function SongAnalyzer() {
 
         {/* Mobile: Back button in explore mode */}
         {exploreMode && (
-          <button onClick={exitExplore} className="fixed top-6 right-6 z-50 md:hidden text-white text-xs font-mono uppercase tracking-widest">
+          <button onClick={exitExplore} className="fixed top-[calc(1.5rem+var(--sat))] right-[calc(1.5rem+var(--sar))] z-50 md:hidden text-white text-xs font-mono uppercase tracking-widest">
             BACK
           </button>
         )}

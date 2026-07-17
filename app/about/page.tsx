@@ -39,7 +39,7 @@ export default async function About() {
 
   return (
     <main
-      className="relative min-h-screen w-full px-6 md:px-16 py-10"
+      className="relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-[calc(2.5rem+var(--sab))]"
       style={{ backgroundColor: BG, color: FG }}
     >
       <BackLink />

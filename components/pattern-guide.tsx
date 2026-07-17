@@ -72,7 +72,7 @@ export function PatternGuide({ active, restartKey }: PatternGuideProps) {
 
       {/* Mobile: bottom, all visible immediately */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 max-h-[45vh] overflow-y-auto pointer-events-none">
-        <div className="px-6 pb-20 pt-4 flex flex-col gap-3">
+        <div className="px-6 pb-[calc(5rem+var(--sab))] pt-4 flex flex-col gap-3">
           {GUIDE_STEPS.map((step, i) => (
             <div key={i}>
               <p className="text-sm font-sans text-white/60 leading-relaxed">{step.text}</p>

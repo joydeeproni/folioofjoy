@@ -9,9 +9,9 @@ export function HomeStage() {
   const linkCls = 'text-white/90 hover:text-[#2CA152] transition-colors';
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black text-white">
+    <div className="relative h-dvh w-full overflow-hidden bg-black text-white">
       {/* Nav — plain links; no hover preview */}
-      <nav className="fixed top-6 left-0 right-0 z-50 flex items-center justify-between px-8 text-sm font-sans">
+      <nav className="fixed top-[calc(1.5rem+var(--sat))] left-0 right-0 z-50 flex items-center justify-between pl-[calc(2rem+var(--sal))] pr-[calc(2rem+var(--sar))] text-sm font-sans">
         <a
           href={INSTAGRAM}
           target="_blank"

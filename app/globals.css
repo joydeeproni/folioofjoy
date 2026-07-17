@@ -118,6 +118,17 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* Safe-area insets exposed as short vars so edge-pinned UI can layer the
+   notch / Dynamic Island / home-indicator offsets on top of its own gap, e.g.
+   `top-[calc(1.5rem+var(--sat))]`. The 0px fallback means zero visual change on
+   desktop and non-notched screens. Requires viewport-fit=cover (see layout.tsx). */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -128,10 +139,24 @@
   html,
   body {
     background-color: var(--theme-bg);
+    /* App-like feel: no rubber-band overscroll, no grey tap-flash. */
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply text-foreground;
     transition: background-color 1000ms ease-in-out;
+  }
+  /* Kill the 300ms tap delay / double-tap-to-zoom on interactive elements
+     without disabling pinch-zoom (accessibility). */
+  a,
+  button,
+  [role='button'],
+  input,
+  label,
+  select,
+  textarea {
+    touch-action: manipulation;
   }
 }
 

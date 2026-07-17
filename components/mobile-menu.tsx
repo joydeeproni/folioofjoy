@@ -16,7 +16,7 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
       {/* Menu button — top left, mobile only */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-6 left-6 z-50 md:hidden text-white/50 hover:text-white text-xs font-mono uppercase tracking-widest transition-colors"
+        className="fixed top-[calc(1.5rem+var(--sat))] left-[calc(1.5rem+var(--sal))] z-50 md:hidden text-white/50 hover:text-white text-xs font-mono uppercase tracking-widest transition-colors"
       >
         MENU
       </button>
@@ -29,7 +29,7 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
         >
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-6 right-6 text-white/50 hover:text-white text-xs font-mono uppercase tracking-widest transition-colors"
+            className="absolute top-[calc(1.5rem+var(--sat))] right-[calc(1.5rem+var(--sar))] text-white/50 hover:text-white text-xs font-mono uppercase tracking-widest transition-colors"
           >
             CLOSE
           </button>

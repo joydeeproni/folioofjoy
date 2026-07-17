@@ -30,13 +30,29 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  manifest: '/manifest.webmanifest',
+  // Launch full-screen with no browser chrome when added to the iOS Home Screen.
+  // `black-translucent` makes the status bar transparent so the page runs truly
+  // edge-to-edge; the safe-area insets (see globals.css) keep content clear of it.
+  // `capable` emits the modern `mobile-web-app-capable` (Next normalizes the
+  // legacy `apple-mobile-web-app-capable` into it); combined with the manifest's
+  // `display: standalone` this covers iOS 16.4+ and Android.
+  appleWebApp: {
+    capable: true,
+    title: 'Folio of Joy',
+    statusBarStyle: 'black-translucent',
+  },
 }
 
 // Default to the themed dark background (not pure black) so the mobile browser
 // chrome blends with the page on first paint; updated live per-track by the
-// audio context.
+// audio context. `viewport-fit: cover` lets content extend into the notch /
+// home-indicator regions — the prerequisite for the safe-area insets.
 export const viewport: Viewport = {
   themeColor: '#12171d',
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 }
 
 export default async function RootLayout({
@@ -47,7 +63,7 @@ export default async function RootLayout({
   const [work, writings] = await Promise.all([getWork(), getWritingsNav()])
   return (
     <html lang="en">
-      <body className="font-sans antialiased min-h-screen">
+      <body className="font-sans antialiased min-h-dvh">
         <Providers>
           <ContentProvider work={work} writings={writings}>
             {children}

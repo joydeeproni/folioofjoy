@@ -106,7 +106,7 @@ export function FloatingPill({
   const toolbarBg = toolbarColor || 'rgba(15, 15, 18, 0.9)';
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-[calc(1.5rem+var(--sab))] right-[calc(1.5rem+var(--sar))] z-50">
       {/* Now Playing toast */}
       <div
         className={`absolute bottom-full right-0 mb-2 whitespace-nowrap px-4 py-2 rounded-full backdrop-blur-xl border border-white/10 transition-all duration-500 ease-out ${
