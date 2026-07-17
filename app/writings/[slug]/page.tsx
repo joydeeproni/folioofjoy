@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { BackLink } from '@/components/back-link';
 import { getWriting, getWritingSlugs } from '@/lib/sanity/queries';
+import { LOCAL_WRITINGS } from '@/lib/writings/local';
+import { LOCAL_ARTICLES } from '@/components/writings/local-articles';
 
 export const revalidate = 60;
 
@@ -8,18 +10,33 @@ const BG = '#0B0B0B';
 const FG = '#EDEAE0';
 const RULE = 'rgba(237,234,224,0.15)';
 
+const SHELL = 'relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-[calc(2.5rem+var(--sab))]';
+
 export async function generateStaticParams() {
   const slugs = await getWritingSlugs();
-  return slugs.map((slug) => ({ slug }));
+  const all = [...new Set([...slugs, ...LOCAL_WRITINGS.map((w) => w.slug)])];
+  return all.map((slug) => ({ slug }));
 }
 
 export default async function WritingPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  // Bespoke, code-rendered articles (rich prose + diagrams) render their own body.
+  const LocalArticle = LOCAL_ARTICLES[slug];
+  if (LocalArticle) {
+    return (
+      <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
+        <BackLink href="/writings" />
+        <LocalArticle />
+      </main>
+    );
+  }
+
   const post = await getWriting(slug);
   if (!post) notFound();
 
   return (
-    <main className="relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-[calc(2.5rem+var(--sab))]" style={{ backgroundColor: BG, color: FG }}>
+    <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
       <BackLink href="/writings" />
 
       <div className="max-w-5xl mx-auto pt-24">

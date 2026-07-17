@@ -2,6 +2,7 @@ import type { PortableTextBlock } from '@portabletext/react';
 import type { SanityImageSource } from '@sanity/image-url';
 import { sanityClient } from './client';
 import { urlFor } from './image';
+import { LOCAL_WRITINGS, mergeLocalWritings } from '@/lib/writings/local';
 
 // Revalidate cached fetches every minute; a webhook can make this instant later.
 const CACHE = { next: { revalidate: 60 } } as const;
@@ -99,7 +100,7 @@ export interface Writing extends WritingListItem {
   heroImage?: string;
 }
 
-const WRITINGS_NAV_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, title}`;
+const WRITINGS_NAV_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, title, number}`;
 const WRITINGS_LIST_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, number, title, postedOn, type}`;
 const WRITING_SLUGS_QUERY = `*[_type == "writing" && defined(slug.current)].slug.current`;
 const WRITING_QUERY = `*[_type == "writing" && slug.current == $slug][0]{
@@ -107,12 +108,17 @@ const WRITING_QUERY = `*[_type == "writing" && slug.current == $slug][0]{
   body, "heroImage": heroImage.asset->url
 }`;
 
-export function getWritingsNav() {
-  return sanityClient.fetch<WritingNav[]>(WRITINGS_NAV_QUERY, {}, CACHE);
+// Both the list and nav merge in bespoke, code-rendered writings (see
+// lib/writings/local.ts), re-sorted by number so they interleave with Sanity docs.
+export async function getWritingsNav(): Promise<WritingNav[]> {
+  const sanity = await sanityClient.fetch<(WritingNav & { number?: string })[]>(WRITINGS_NAV_QUERY, {}, CACHE);
+  const local = LOCAL_WRITINGS.map(({ slug, title, number }) => ({ slug, title, number }));
+  return mergeLocalWritings(sanity, local).map(({ slug, title }) => ({ slug, title }));
 }
 
-export function getWritingsList() {
-  return sanityClient.fetch<WritingListItem[]>(WRITINGS_LIST_QUERY, {}, CACHE);
+export async function getWritingsList(): Promise<WritingListItem[]> {
+  const sanity = await sanityClient.fetch<WritingListItem[]>(WRITINGS_LIST_QUERY, {}, CACHE);
+  return mergeLocalWritings(sanity, LOCAL_WRITINGS);
 }
 
 export function getWritingSlugs() {
