@@ -44,12 +44,12 @@ export const metadata: Metadata = {
   },
 }
 
-// Default to the themed dark background (not pure black) so the mobile browser
-// chrome blends with the page on first paint; updated live per-track by the
-// audio context. `viewport-fit: cover` lets content extend into the notch /
-// home-indicator regions — the prerequisite for the safe-area insets.
+// Pure black so the mobile browser chrome blends with the black homepage on
+// first paint; updated live per-track by the audio context. `viewport-fit:
+// cover` lets content extend into the notch / home-indicator regions — the
+// prerequisite for the safe-area insets.
 export const viewport: Viewport = {
-  themeColor: '#12171d',
+  themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',

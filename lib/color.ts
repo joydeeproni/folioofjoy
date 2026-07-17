@@ -106,11 +106,14 @@ function generateShades(hue: number, sat: number): string[] {
 }
 
 const DEFAULT_THEME: ThemeColors = {
-  background: 'hsl(210, 30%, 10%)',
+  // Pure black so the mobile browser chrome (theme-color follows this) blends
+  // seamlessly with the black homepage instead of showing an off-black seam.
+  // Switches to a per-track colour once audio plays.
+  background: '#000000',
   accent: 'hsl(170, 70%, 50%)',
   link: 'hsl(170, 70%, 50%)',
   toolbar: 'rgba(20, 20, 22, 0.9)',
-  backgroundRgb: 'rgb(18, 23, 29)',
+  backgroundRgb: 'rgb(0, 0, 0)',
   foreground: '#FFFFFF',
   foregroundRgb: '255, 255, 255',
   onAccent: '#000000',
