@@ -25,8 +25,8 @@ export default async function Writings() {
                 <span className="font-sans text-4xl md:text-6xl tracking-tight transition-opacity group-hover:opacity-70">
                   {post.title}
                 </span>
-                <span className="ml-auto font-mono uppercase tracking-widest text-[11px] self-center" style={{ opacity: 0.4 }}>
-                  {post.postedOn}
+                <span className="ml-auto font-mono uppercase tracking-widest text-sm self-baseline" style={{ opacity: 0.4 }}>
+                  {post.type || post.postedOn}
                 </span>
               </Link>
             </li>

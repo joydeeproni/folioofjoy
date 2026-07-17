@@ -77,6 +77,9 @@ export async function getWork(): Promise<WorkItem[]> {
 
 // ---- Writings ----
 
+// The kind of writing, shown as a category label in place of the date.
+export type WritingType = 'Thoughts' | 'Research' | 'Experiments' | 'Case Study';
+
 export interface WritingNav {
   slug: string;
   title: string;
@@ -85,6 +88,7 @@ export interface WritingNav {
 export interface WritingListItem extends WritingNav {
   number: string;
   postedOn: string;
+  type?: WritingType;
 }
 
 export interface Writing extends WritingListItem {
@@ -96,10 +100,10 @@ export interface Writing extends WritingListItem {
 }
 
 const WRITINGS_NAV_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, title}`;
-const WRITINGS_LIST_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, number, title, postedOn}`;
+const WRITINGS_LIST_QUERY = `*[_type == "writing"] | order(number asc){"slug": slug.current, number, title, postedOn, type}`;
 const WRITING_SLUGS_QUERY = `*[_type == "writing" && defined(slug.current)].slug.current`;
 const WRITING_QUERY = `*[_type == "writing" && slug.current == $slug][0]{
-  "slug": slug.current, number, title, postedOn, titled, subhead, references,
+  "slug": slug.current, number, title, postedOn, type, titled, subhead, references,
   body, "heroImage": heroImage.asset->url
 }`;
 

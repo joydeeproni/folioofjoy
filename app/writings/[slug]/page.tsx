@@ -20,7 +20,7 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="relative min-h-screen w-full px-6 md:px-16 py-10" style={{ backgroundColor: BG, color: FG }}>
-      <BackLink />
+      <BackLink href="/writings" />
 
       <div className="max-w-5xl mx-auto pt-24">
         {/* Big display title + pixel number */}
@@ -44,8 +44,10 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
               <p className="font-sans mt-2">{post.titled}</p>
             </div>
             <div>
-              <p className="font-mono uppercase tracking-widest text-[11px]" style={{ opacity: 0.5 }}>Posted on</p>
-              <p className="font-sans mt-2">{post.postedOn}</p>
+              <p className="font-mono uppercase tracking-widest text-[11px]" style={{ opacity: 0.5 }}>
+                {post.type ? 'Type' : 'Posted on'}
+              </p>
+              <p className="font-sans mt-2">{post.type || post.postedOn}</p>
             </div>
           </aside>
 
