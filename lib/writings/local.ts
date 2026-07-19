@@ -12,6 +12,13 @@ export const LOCAL_WRITINGS: WritingListItem[] = [
     type: 'Case Study',
     postedOn: '',
   },
+  {
+    slug: 'better-social-proof',
+    number: '03',
+    title: 'Better Social Proof',
+    type: 'Research',
+    postedOn: 'March 9th, 2021',
+  },
 ]
 
 export const LOCAL_SLUGS: ReadonlySet<string> = new Set(LOCAL_WRITINGS.map((w) => w.slug))
