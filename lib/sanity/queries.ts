@@ -3,6 +3,7 @@ import type { SanityImageSource } from '@sanity/image-url';
 import { sanityClient } from './client';
 import { urlFor } from './image';
 import { LOCAL_WRITINGS, mergeLocalWritings } from '@/lib/writings/local';
+import { LOCAL_WORK } from '@/lib/work/local';
 
 // Revalidate cached fetches every minute; a webhook can make this instant later.
 const CACHE = { next: { revalidate: 60 } } as const;
@@ -50,6 +51,7 @@ export interface WorkItem {
   caption: string;
   category: WorkCategory;
   links: WorkLinkItem[];
+  frame?: 'phone'; // render inside a flat iPhone body (portrait mobile screens)
 }
 
 interface RawWorkItem {
@@ -64,7 +66,7 @@ const WORK_QUERY = `*[_type == "work"][0].items[]{caption, category, links, imag
 
 export async function getWork(): Promise<WorkItem[]> {
   const items = (await sanityClient.fetch<RawWorkItem[] | null>(WORK_QUERY, {}, CACHE)) ?? [];
-  return items.map((it) => ({
+  const sanityWork = items.map((it) => ({
     src: it.videoUrl
       ? it.videoUrl
       : it.image
@@ -74,6 +76,8 @@ export async function getWork(): Promise<WorkItem[]> {
     category: it.category ?? 'SVC',
     links: it.links ?? [],
   }));
+  // Local (Blob-hosted) items lead the list so they surface in the Work Preview.
+  return [...LOCAL_WORK, ...sanityWork];
 }
 
 // ---- Writings ----

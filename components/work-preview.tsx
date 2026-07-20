@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X } from 'lucide-react';
 import { MobileGallery } from './mobile-gallery';
+import { WorkCarousel } from './work/work-carousel';
 import { useWork } from './content-provider';
 
 // SVC = service for others, JOY = fun/experiments, BIZ = money work, DTY = duty/busywork.
@@ -30,22 +31,14 @@ export function WorkLink() {
   const [showPreview, setShowPreview] = useState(false);
   const [particles, setParticles] = useState<Array<{ id: number; angle: number; speed: number; size: number }>>([]);
 
-  // Mobile gallery state
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Desktop carousel state
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Desktop carousel open/close (the carousel's own physics live in WorkCarousel).
   const [carouselMounted, setCarouselMounted] = useState(false);
   const [carouselVisible, setCarouselVisible] = useState(false);
-  const [captionKey, setCaptionKey] = useState(0);
-  const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
-  const [zoomOrigin, setZoomOrigin] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
-
-  const next = useCallback(() => { setCurrentIndex((i) => (i + 1) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, [WORK_ITEMS.length]);
-  const prev = useCallback(() => { setCurrentIndex((i) => (i - 1 + WORK_ITEMS.length) % WORK_ITEMS.length); setCaptionKey((k) => k + 1); }, [WORK_ITEMS.length]);
 
   const openCarousel = useCallback(() => {
-    setCurrentIndex(0); setCarouselMounted(true);
+    setCarouselMounted(true);
     requestAnimationFrame(() => { requestAnimationFrame(() => setCarouselVisible(true)); });
   }, []);
 
@@ -56,21 +49,15 @@ export function WorkLink() {
 
   useEffect(() => {
     if (!carouselMounted) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeCarousel();
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft') prev();
-    };
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeCarousel(); };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [carouselMounted, next, prev, closeCarousel]);
+  }, [carouselMounted, closeCarousel]);
 
   const handleClick = () => {
     if (isMobile) setMobileOpen(true);
     else openCarousel();
   };
-
-  const activeLinks = WORK_ITEMS[currentIndex]?.links ?? [];
 
   return (
     <>
@@ -119,101 +106,17 @@ export function WorkLink() {
       {/* Mobile: masonry gallery */}
       <MobileGallery items={WORK_ITEMS} open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      {/* Desktop: carousel */}
+      {/* Desktop: free-scrolling carousel */}
       {carouselMounted && typeof document !== 'undefined' && createPortal((
         <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-400 ease-out ${carouselVisible ? 'opacity-100' : 'opacity-0'}`} onClick={closeCarousel}>
           <div className={`absolute inset-0 bg-black backdrop-blur-xl transition-all duration-400 ${carouselVisible ? 'opacity-100' : 'opacity-0'}`} />
 
-          <button onClick={closeCarousel} className={`absolute top-6 left-6 z-10 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`} style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}>
+          <button onClick={closeCarousel} className={`absolute top-6 left-6 z-20 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`} style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}>
             <X className="w-5 h-5 text-white" />
           </button>
 
-          <button onClick={(e) => { e.stopPropagation(); prev(); }} className={`absolute left-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
-            <ChevronLeft className="w-5 h-5 text-white" />
-          </button>
-          <button onClick={(e) => { e.stopPropagation(); next(); }} className={`absolute right-6 z-10 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 ${carouselVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`} style={{ transitionDelay: carouselVisible ? '150ms' : '0ms' }}>
-            <ChevronRight className="w-5 h-5 text-white" />
-          </button>
-
-          <div className="relative z-10 flex flex-col items-center gap-6 max-w-5xl w-full px-20" onClick={(e) => e.stopPropagation()}>
-            <div className="relative w-full flex items-center justify-center" style={{ height: '65vh' }}>
-              {WORK_ITEMS.map((item, idx) => {
-                let offset = idx - currentIndex;
-                if (offset > WORK_ITEMS.length / 2) offset -= WORK_ITEMS.length;
-                if (offset < -WORK_ITEMS.length / 2) offset += WORK_ITEMS.length;
-                const isCenter = offset === 0;
-                const isVisible = offset >= -1 && offset <= 1;
-
-                return (
-                  <div key={idx} className="absolute cursor-pointer overflow-hidden rounded-2xl"
-                    style={{
-                      transform: carouselVisible ? `translateX(${offset * 70}%) scale(${isCenter ? 1 : 0.8})` : `translateX(${offset * 30}%) scale(0.7)`,
-                      zIndex: isCenter ? (zoomedIdx === idx ? 20 : 10) : isVisible ? 5 : 1,
-                      opacity: carouselVisible ? (isCenter ? 1 : isVisible ? 0.4 : 0) : 0,
-                      filter: isCenter ? 'none' : 'blur(2px)',
-                      transition: 'all 700ms cubic-bezier(0.16, 1, 0.3, 1)',
-                      pointerEvents: isVisible ? 'auto' : 'none',
-                    }}
-                    onClick={(e) => { e.stopPropagation(); if (offset === -1) prev(); else if (offset === 1) next(); else setZoomedIdx(zoomedIdx === idx ? null : idx); }}
-                    onMouseEnter={(e) => {
-                      if (!isCenter) return;
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      setZoomOrigin({
-                        x: ((e.clientX - rect.left) / rect.width) * 100,
-                        y: ((e.clientY - rect.top) / rect.height) * 100,
-                      });
-                      setZoomedIdx(idx);
-                    }}
-                    onMouseMove={(e) => {
-                      if (!isCenter || zoomedIdx !== idx) return;
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      setZoomOrigin({
-                        x: ((e.clientX - rect.left) / rect.width) * 100,
-                        y: ((e.clientY - rect.top) / rect.height) * 100,
-                      });
-                    }}
-                    onMouseLeave={() => { if (zoomedIdx === idx) setZoomedIdx(null); }}
-                  >
-                    {isVideo(item.src) ? (
-                      <video src={item.src} autoPlay loop muted playsInline
-                        className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
-                        style={{
-                          transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
-                          transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
-                        }} />
-                    ) : (
-                      <img src={item.src} alt={item.caption}
-                        className="shadow-2xl border border-white/10 object-contain max-h-[60vh] max-w-full transition-transform duration-500 ease-out"
-                        style={{
-                          transform: zoomedIdx === idx ? 'scale(1.8)' : 'scale(1)',
-                          transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
-                        }} />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <p key={captionKey} className="text-base font-sans text-white/70 text-center max-w-lg animate-caption-fade">
-              {WORK_ITEMS[currentIndex]?.caption}
-            </p>
-
-            {activeLinks.length > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {activeLinks.map((l) => (
-                  <a
-                    key={l.url}
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-xs font-sans text-white/60 hover:text-white border border-white/20 hover:border-white/40 rounded-full px-3 py-1 transition-colors"
-                  >
-                    {l.label} &rarr;
-                  </a>
-                ))}
-              </div>
-            )}
+          <div className={`relative z-10 w-full transition-all duration-500 ${carouselVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <WorkCarousel items={WORK_ITEMS} />
           </div>
         </div>
       ), document.body)}
