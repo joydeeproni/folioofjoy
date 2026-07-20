@@ -51,7 +51,6 @@ export interface WorkItem {
   caption: string;
   category: WorkCategory;
   links: WorkLinkItem[];
-  frame?: 'phone'; // render inside a flat iPhone body (portrait mobile screens)
 }
 
 interface RawWorkItem {

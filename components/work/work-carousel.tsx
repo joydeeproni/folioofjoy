@@ -3,14 +3,11 @@
 import { useEffect, useRef } from 'react'
 import { useDialKit } from 'dialkit'
 import type { WorkItem } from '@/lib/sanity/queries'
-import { PhoneFrame } from './phone-frame'
 
 const isVideo = (s: string) => s.endsWith('.mp4')
 
-function Media({ item, framed }: { item: WorkItem; framed: boolean }) {
-  const cls = framed
-    ? 'h-full w-full object-cover pointer-events-none select-none'
-    : 'h-full w-auto max-w-none object-contain rounded-xl border border-white/10 shadow-2xl pointer-events-none select-none'
+function Media({ item }: { item: WorkItem }) {
+  const cls = 'h-full w-auto max-w-none object-contain rounded-xl border border-white/10 shadow-2xl pointer-events-none select-none'
   return isVideo(item.src) ? (
     <video src={item.src} autoPlay loop muted playsInline draggable={false} className={cls} />
   ) : (
@@ -27,9 +24,7 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
     wheelSpeed: [0.9, 0.1, 4, 0.05],
     dragSpeed: [1.15, 0.3, 3, 0.05],
     friction: [0.93, 0.8, 0.99, 0.005],
-    maxBlur: [16, 0, 40, 1],
-    blurAt: [55, 10, 160, 1],
-  }) as unknown as { wheelSpeed: number; dragSpeed: number; friction: number; maxBlur: number; blurAt: number }
+  }) as unknown as { wheelSpeed: number; dragSpeed: number; friction: number }
   const dialRef = useRef(dial)
   dialRef.current = dial
 
@@ -71,7 +66,7 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
   // Physics loop.
   useEffect(() => {
     const tick = () => {
-      const { friction, maxBlur, blurAt } = dialRef.current
+      const { friction } = dialRef.current
       if (!dragging.current) {
         pos.current += vel.current
         vel.current *= friction
@@ -87,9 +82,6 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
       const tr = trackRef.current
       if (tr) {
         tr.style.transform = `translate3d(${-pos.current}px,0,0)`
-        const speed = dragging.current ? Math.abs(dragVel.current) : Math.abs(vel.current)
-        const blur = Math.min(maxBlur, (speed / blurAt) * maxBlur)
-        tr.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : 'none'
       }
       raf.current = requestAnimationFrame(tick)
     }
@@ -152,13 +144,7 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
           {items.map((item, i) => (
             <figure key={i} className="flex h-full shrink-0 flex-col items-center justify-center gap-3">
               <div className="h-[58vh]">
-                {item.frame === 'phone' ? (
-                  <PhoneFrame>
-                    <Media item={item} framed />
-                  </PhoneFrame>
-                ) : (
-                  <Media item={item} framed={false} />
-                )}
+                <Media item={item} />
               </div>
               <figcaption className="max-w-[26ch] truncate text-center font-sans text-xs text-white/50">
                 {item.caption}

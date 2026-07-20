@@ -7,12 +7,12 @@ const BLOB = 'https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work'
 // to the Sanity-fed Work list so they lead the Work Preview.
 export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/canvas-stickynote.mp4`, caption: 'Draggable sticky-note canvas', category: 'SVC', links: [] },
-  { src: `${BLOB}/property-listing-02.png`, caption: 'Cassi — property listing', category: 'SVC', links: [], frame: 'phone' },
-  { src: `${BLOB}/mortgage-upload-01.png`, caption: 'Cassi — mortgage assistant', category: 'SVC', links: [], frame: 'phone' },
-  { src: `${BLOB}/home-dashboard-03.png`, caption: 'Cassi — home dashboard', category: 'SVC', links: [], frame: 'phone' },
-  { src: `${BLOB}/fact-card-01.png`, caption: 'Cassi — did-you-know card', category: 'SVC', links: [], frame: 'phone' },
-  { src: `${BLOB}/game-result-01.png`, caption: 'Mini Parkering', category: 'JOY', links: [], frame: 'phone' },
-  { src: `${BLOB}/game-over-01.png`, caption: 'Mini Parkering — game over', category: 'JOY', links: [], frame: 'phone' },
+  { src: `${BLOB}/property-listing-02.png`, caption: 'Cassi — property listing', category: 'SVC', links: [] },
+  { src: `${BLOB}/mortgage-upload-01.png`, caption: 'Cassi — mortgage assistant', category: 'SVC', links: [] },
+  { src: `${BLOB}/home-dashboard-03.png`, caption: 'Cassi — home dashboard', category: 'SVC', links: [] },
+  { src: `${BLOB}/fact-card-01.png`, caption: 'Cassi — did-you-know card', category: 'SVC', links: [] },
+  { src: `${BLOB}/game-result-01.png`, caption: 'Mini Parkering', category: 'JOY', links: [] },
+  { src: `${BLOB}/game-over-01.png`, caption: 'Mini Parkering — game over', category: 'JOY', links: [] },
   { src: `${BLOB}/property-dashboard-01.png`, caption: 'Cassi — property dashboard', category: 'SVC', links: [] },
   { src: `${BLOB}/media-player-01.png`, caption: 'Media player redesign', category: 'JOY', links: [] },
   { src: `${BLOB}/maintenance-plan-01.png`, caption: 'Cassi — maintenance plan', category: 'SVC', links: [] },

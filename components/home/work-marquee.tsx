@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useDialKit } from 'dialkit';
 import { isVideo } from '@/components/work-preview';
 import { useWork } from '@/components/content-provider';
-import { PhoneFrame } from '@/components/work/phone-frame';
 
 // Auto-scrolling filmstrip of every project. Drifts right→left, and can be
 // flung (drag with momentum) or scrolled (vertical wheel → horizontal travel):
@@ -18,9 +17,7 @@ export function WorkMarquee() {
     wheelSpeed: [0.8, 0.1, 4, 0.05],
     dragSpeed: [1.1, 0.3, 3, 0.05],
     friction: [0.94, 0.8, 0.99, 0.005],
-    maxBlur: [16, 0, 40, 1],
-    blurAt: [55, 10, 160, 1],
-  }) as unknown as { driftSpeed: number; wheelSpeed: number; dragSpeed: number; friction: number; maxBlur: number; blurAt: number };
+  }) as unknown as { driftSpeed: number; wheelSpeed: number; dragSpeed: number; friction: number };
   const dialRef = useRef(dial);
   dialRef.current = dial;
 
@@ -49,7 +46,7 @@ export function WorkMarquee() {
 
     let frame = 0;
     const step = () => {
-      const { driftSpeed, friction, maxBlur, blurAt } = dialRef.current;
+      const { driftSpeed, friction } = dialRef.current;
       if (!draggingRef.current) {
         offsetRef.current += velRef.current - driftSpeed;
         velRef.current *= friction;
@@ -59,10 +56,6 @@ export function WorkMarquee() {
       if (offsetRef.current <= -half) offsetRef.current += half;
       if (offsetRef.current > 0) offsetRef.current -= half;
       track.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
-
-      const speed = draggingRef.current ? Math.abs(dragVelRef.current) : Math.abs(velRef.current);
-      const blur = Math.min(maxBlur, (speed / blurAt) * maxBlur);
-      track.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : 'none';
 
       if (++frame % 6 === 0) {
         const centerX = window.innerWidth / 2;
@@ -132,15 +125,7 @@ export function WorkMarquee() {
         <div ref={trackRef} className="flex items-center gap-6 will-change-transform" style={{ width: 'max-content' }}>
           {items.map((item, i) => (
             <div key={i} ref={(el) => { itemRefs.current[i] = el; }} className="shrink-0 h-[44vh] md:h-[60vh]">
-              {item.frame === 'phone' ? (
-                <PhoneFrame>
-                  {isVideo(item.src) ? (
-                    <video src={item.src} autoPlay loop muted playsInline className="h-full w-full object-cover pointer-events-none select-none" />
-                  ) : (
-                    <img src={item.src} alt="" draggable={false} className="h-full w-full object-cover pointer-events-none select-none" />
-                  )}
-                </PhoneFrame>
-              ) : isVideo(item.src) ? (
+              {isVideo(item.src) ? (
                 <video src={item.src} autoPlay loop muted playsInline
                   className="h-full w-auto rounded-lg shadow-2xl pointer-events-none select-none" />
               ) : (
