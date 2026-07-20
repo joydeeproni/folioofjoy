@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useDialKit } from 'dialkit'
+import { ArrowUpRight } from 'lucide-react'
 import type { WorkItem } from '@/lib/sanity/queries'
 
 const isVideo = (s: string) => s.endsWith('.mp4')
@@ -149,6 +150,23 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
               <figcaption className="max-w-[26ch] truncate text-center font-sans text-xs text-white/50">
                 {item.caption}
               </figcaption>
+              {item.links?.length > 0 && (
+                <div className="flex gap-2">
+                  {item.links.map((l) => (
+                    <a
+                      key={l.url}
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 text-sm font-sans text-white/80 transition-colors duration-200 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-md hover:bg-white/20 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none md:hover:bg-transparent md:underline md:decoration-transparent md:underline-offset-4 md:hover:text-[#2CA152] md:hover:decoration-[#2CA152]"
+                    >
+                      {l.label}
+                      <ArrowUpRight className="h-4 w-4" aria-hidden />
+                    </a>
+                  ))}
+                </div>
+              )}
             </figure>
           ))}
         </div>

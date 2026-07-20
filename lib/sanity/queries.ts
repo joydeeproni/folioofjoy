@@ -4,6 +4,7 @@ import { sanityClient } from './client';
 import { urlFor } from './image';
 import { LOCAL_WRITINGS, mergeLocalWritings } from '@/lib/writings/local';
 import { LOCAL_WORK } from '@/lib/work/local';
+import { orderWork } from '@/lib/work/order';
 
 // Revalidate cached fetches every minute; a webhook can make this instant later.
 const CACHE = { next: { revalidate: 60 } } as const;
@@ -75,8 +76,9 @@ export async function getWork(): Promise<WorkItem[]> {
     category: it.category ?? 'SVC',
     links: it.links ?? [],
   }));
-  // Local (Blob-hosted) items lead the list so they surface in the Work Preview.
-  return [...LOCAL_WORK, ...sanityWork];
+  // Links come from Sanity per item (managed in the Studio) and from local.ts
+  // for code-only items. Sort the whole preview into a rainbow, de-clustering.
+  return orderWork([...LOCAL_WORK, ...sanityWork]);
 }
 
 // ---- Writings ----

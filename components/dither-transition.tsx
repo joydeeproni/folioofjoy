@@ -35,13 +35,19 @@ export function DitherTransition() {
     prevGate.current = gateOpen;
   }, [gateOpen, play]);
 
-  // 3. Route change — reveal the new page.
+  // 3. Route change — reveal the new page, except when closing the work preview
+  //    (leaving /preview), where the dither reveal is unwanted.
   const firstPath = useRef(true);
+  const prevPath = useRef<string | null>(null);
   useEffect(() => {
     if (firstPath.current) {
       firstPath.current = false;
+      prevPath.current = pathname;
       return;
     }
+    const leavingPreview = prevPath.current === '/preview';
+    prevPath.current = pathname;
+    if (leavingPreview) return;
     play();
   }, [pathname, play]);
 

@@ -26,6 +26,20 @@
   font-display: swap;
 }
 @font-face {
+  font-family: 'Galeria';
+  src: url('/fonts/APK-Galeria-Regular-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galeria';
+  src: url('/fonts/APK-Galeria-Medium-Italic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
   font-family: 'Geist Pixel';
   src: url('/fonts/GeistPixel-Regular.ttf') format('truetype');
   font-weight: 400;

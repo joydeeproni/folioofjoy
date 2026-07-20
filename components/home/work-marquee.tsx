@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useDialKit } from 'dialkit';
+import { ArrowUpRight } from 'lucide-react';
 import { isVideo } from '@/components/work-preview';
 import { useWork } from '@/components/content-provider';
 
@@ -30,7 +31,9 @@ export function WorkMarquee() {
   const lastXRef = useRef(0);
   const dragVelRef = useRef(0);
   const rafRef = useRef<number | undefined>(undefined);
+  const outerRef = useRef<HTMLDivElement>(null);
   const [centeredIdx, setCenteredIdx] = useState(0);
+  const [fast, setFast] = useState(false); // flung fast → "whheeee!!" instead of the caption
 
   // Two copies so translating by one set-width wraps seamlessly.
   const items = [...WORK_ITEMS, ...WORK_ITEMS];
@@ -57,6 +60,10 @@ export function WorkMarquee() {
       if (offsetRef.current > 0) offsetRef.current -= half;
       track.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
 
+      // Flung fast? Swap the caption for a "whheeee!!" (hysteresis avoids flicker).
+      const spd = draggingRef.current ? Math.abs(dragVelRef.current) : Math.abs(velRef.current);
+      setFast((prev) => { const next = prev ? spd > 10 : spd > 32; return prev === next ? prev : next; });
+
       if (++frame % 6 === 0) {
         const centerX = window.innerWidth / 2;
         let best = 0, bestDist = Infinity;
@@ -79,8 +86,9 @@ export function WorkMarquee() {
   }, [WORK_ITEMS.length]);
 
   // Vertical wheel → horizontal velocity (scroll up = left, down = right).
+  // Attached to the whole marquee area so no wheel event leaks to page scroll.
   useEffect(() => {
-    const surface = trackRef.current?.parentElement;
+    const surface = outerRef.current;
     if (!surface) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -114,7 +122,7 @@ export function WorkMarquee() {
   };
 
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden">
+    <div ref={outerRef} className="absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden">
       <div
         className="w-full overflow-hidden cursor-grab active:cursor-grabbing touch-pan-y"
         onPointerDown={onPointerDown}
@@ -137,14 +145,32 @@ export function WorkMarquee() {
         </div>
       </div>
 
-      {/* Description of whichever project is centred */}
-      <p
-        key={centeredIdx}
-        className="mt-8 px-6 max-w-xl text-center text-base md:text-lg font-sans text-white/80 animate-caption-fade"
-        style={{ textWrap: 'balance' } as React.CSSProperties}
-      >
-        {WORK_ITEMS[centeredIdx]?.caption}
-      </p>
+      {/* Description + live link of whichever project is centred */}
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <p
+          key={fast ? 'whee' : centeredIdx}
+          className="px-6 max-w-xl text-center text-base md:text-lg font-sans text-white/80 animate-caption-fade"
+          style={{ textWrap: 'balance' } as React.CSSProperties}
+        >
+          {fast ? 'whheeee!!' : WORK_ITEMS[centeredIdx]?.caption}
+        </p>
+        {!fast && (WORK_ITEMS[centeredIdx]?.links?.length ?? 0) > 0 && (
+          <div className="flex items-center gap-2">
+            {WORK_ITEMS[centeredIdx]!.links.map((l) => (
+              <a
+                key={l.url}
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm font-sans text-white/80 transition-colors duration-200 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-md hover:bg-white/20 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none md:hover:bg-transparent md:underline md:decoration-transparent md:underline-offset-4 md:hover:text-[#2CA152] md:hover:decoration-[#2CA152]"
+              >
+                {l.label}
+                <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

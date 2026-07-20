@@ -6,7 +6,7 @@ import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
 import { DitherReveal } from './dither-reveal';
-import { WorkMarquee } from './work-marquee';
+import Link from 'next/link';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
 
@@ -41,7 +41,6 @@ export function CenterStage({
     color: string;
   };
 
-  const [previewing, setPreviewing] = useState(false);
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
 
@@ -52,16 +51,11 @@ export function CenterStage({
     scrambleReveal(quoteRef.current, QUOTE, 1.6, 0.2);
   }, []);
 
-  // A nav hover stops the preview (the hovered preview takes over the page).
-  useEffect(() => { if (hoverTarget) setPreviewing(false); }, [hoverTarget]);
-
-  const showMarquee = !hoverTarget && previewing;
-
   return (
     <div className="absolute inset-0">
       {/* HERO — green pixel quote behind the teetering seesaw. Stays visible
           while the selected previews drop and stack on top. */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null || previewing}>
+      <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null}>
         <p
           ref={quoteRef}
           suppressHydrationWarning
@@ -86,20 +80,14 @@ export function CenterStage({
         <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto" />
       </div>
 
-      {/* WORK MARQUEE — draggable filmstrip, drifts right→left, captions the centred item */}
-      {showMarquee && <WorkMarquee />}
-
-      {/* Preview Work — runs the project slide-stack on loop (homepage only) */}
+      {/* Preview Work — opens the full-screen work-preview reel */}
       <div
         className="fixed bottom-[calc(2rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 text-sm font-sans"
         hidden={hoverTarget !== null}
       >
-        <button
-          onClick={() => setPreviewing((p) => !p)}
-          className={`transition-colors ${previewing ? 'text-[#2CA152]' : 'text-white/90 hover:text-[#2CA152]'}`}
-        >
+        <Link href="/preview" className="text-white/90 hover:text-[#2CA152] transition-colors">
           Preview Work
-        </button>
+        </Link>
       </div>
 
       {/* ABOUT preview — yellow pixel "about" + 6502 + seesaw */}
