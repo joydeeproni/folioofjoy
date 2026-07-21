@@ -29,6 +29,17 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   'painting-home-alone.jpg': { hue: 220, type: 'other', hash: '77d6193fb428' },
   'notes-palette.png': { hue: 250, type: 'other', hash: 'ac4466827fa9' },
   'books-2024.png': { hue: 50, type: 'other', hash: 'dd1e5090b536' },
+  'tc-refine-interaction.mp4': { hue: 200, type: 'web', hash: '5f21cd04fffb' },
+  'cassi-maintenance-flow.mp4': { hue: 30, type: 'web', hash: '2504e7f47a4f' },
+  'notes-for-lazy-demo.mp4': { hue: 40, type: 'web', hash: '85743cd247a9' },
+  'cassi-onboarding-splash.mp4': { hue: 10, type: 'web', hash: '85c692dc1429' },
+  'unity-launcher-responsive.mp4': { hue: 250, type: 'web', hash: '0c3db169d5c9' },
+  'releases-dashboard-handoff.mp4': { hue: 140, type: 'web', hash: 'fee538811293' },
+  'cassi-error-reporting.mp4': { hue: 20, type: 'web', hash: '3f5848cb7c6c' },
+  'cassi-assistant-speaking.mp4': { hue: 180, type: 'web', hash: '44e363422ddd' },
+  'cassi-home-dashboard-concept.mp4': { hue: 30, type: 'web', hash: '426c1b471ed2' },
+  'cassi-bathroom-maintenance-video.mp4': { hue: 30, type: 'web', hash: 'c6c6d13ed846' },
+  'spice-label-maker.mp4': { hue: 10, type: 'web', hash: '904e0c5f551b' },
   'c23c525edf1f0b3540ea0949dbd5055e740e9051-619x512.png': { hue: 355, type: 'web', hash: 'b2d9150f1a23' },
   'e19ef81f4a903bcb852d059bd626507cff8a1f96-619x530.png': { hue: 25, type: 'other', hash: 'bb7f9fb66e9a' },
   '8d7b7a5f5fe367ef046a37a53704a2d248b37b9b-1600x1200.png': { hue: 165, type: 'web', hash: '8114aec53750' },
@@ -80,6 +91,10 @@ export function workKey(src: string): string {
   return path.substring(path.lastIndexOf('/') + 1)
 }
 
+// Items forced to the front of the ordered list, in this order — the carousel /
+// marquee opens on the first one. (Otherwise everything is hue-sorted below.)
+const PINNED_FIRST = ['1c1ccbb1a16f8994c36c90838a496c49d1cb8f99.mp4'] // KCS dashboard loader
+
 // Drop exact-duplicate images (same content hash), then rainbow sort (by hue;
 // neutrals/unknowns last), then a de-cluster pass that breaks runs of 3+ of the
 // same type by pulling up a nearby, hue-compatible (±45°) different-type item.
@@ -106,5 +121,11 @@ export function orderWork<T extends { src: string }>(items: T[]): T[] {
       }
     }
   }
-  return arr.map((w) => w.it)
+  const ordered = arr.map((w) => w.it)
+  // Pull pinned items to the front, preserving PINNED_FIRST order.
+  const pinned = ordered
+    .filter((it) => PINNED_FIRST.includes(workKey(it.src)))
+    .sort((a, b) => PINNED_FIRST.indexOf(workKey(a.src)) - PINNED_FIRST.indexOf(workKey(b.src)))
+  const rest = ordered.filter((it) => !PINNED_FIRST.includes(workKey(it.src)))
+  return [...pinned, ...rest]
 }

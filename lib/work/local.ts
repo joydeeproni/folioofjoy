@@ -29,6 +29,19 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/cassi-fundraising-deck.mp4`, caption: 'Cassi fundraising deck — the pitch that helped land their first VC round', category: 'BIZ', links: [] },
   { src: `${BLOB}/cassi-carousel.mp4`, caption: 'Cassi — animated home-condition cards, each property scored at a glance', category: 'SVC', links: CASSI },
 
+  // Motion walkthroughs (2026): re-encoded exports on Blob.
+  { src: `${BLOB}/tc-refine-interaction.mp4`, caption: 'Tactile Create — a border-beam on the refine-prompt field, back before everyone did it.', category: 'JOY', links: [] },
+  { src: `${BLOB}/cassi-maintenance-flow.mp4`, caption: 'Cassi — the maintenance flow, into a seasonal maintenance checklist.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/notes-for-lazy-demo.mp4`, caption: 'Notes for Lazy — jot something and download it as .txt; it stores nothing.', category: 'JOY', links: [{ label: 'View Live', url: 'https://notesforlazy.vercel.app' }] },
+  { src: `${BLOB}/cassi-onboarding-splash.mp4`, caption: 'Cassi — calm onboarding splash screens.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/unity-launcher-responsive.mp4`, caption: 'Unity launcher — responsive update; actions collapse into a kebab menu.', category: 'DTY', links: [] },
+  { src: `${BLOB}/releases-dashboard-handoff.mp4`, caption: 'Dev handoffs be like — the releases dashboard.', category: 'DTY', links: [] },
+  { src: `${BLOB}/cassi-error-reporting.mp4`, caption: 'Cassi — error reporting and fixing.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/cassi-assistant-speaking.mp4`, caption: 'Speaking to the Cassi assistant.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, caption: 'Cassi — home dashboard concept.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/cassi-bathroom-maintenance-video.mp4`, caption: 'Cassi — booking bathroom maintenance by just showing it on video.', category: 'SVC', links: CASSI },
+  { src: `${BLOB}/spice-label-maker.mp4`, caption: 'Minimalist spice-label maker.', category: 'JOY', links: [] },
+
   // Personal bits + palette-cleansers scattered through the preview. The paintings
   // aren't my work — winter paintings that calm me, credited to their artists.
   { src: `${BLOB}/painting-christmas-window.jpg`, caption: 'Christmas Window — Elena Sokolova. A winter palette-cleanser.', category: 'JOY', links: [] },
@@ -82,5 +95,5 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/961f6a54c82e76db8fce8dbcb4ec89648edd1095-2457x1509.png`, caption: "Setup checklist — \"you're all set up\" with a satisfying green all-clear.", category: 'SVC', links: [] },
   { src: `${BLOB}/2b92ccb1a684f606d4e32c4eac32e1592cde9c48-2457x1842.png`, caption: "Illustration set for an email platform — one visual language across every empty state.", category: 'BIZ', links: [] },
   { src: `${BLOB}/def2f904068bf508129457fa6b1f1bf152a06e98-1824x1365.png`, caption: "Build pipeline for a Unity game — every step green before the store build ships.", category: 'JOY', links: [] },
-  { src: `${BLOB}/13c06a52226574bf93030a47cecb1de00eec3c3a.mp4`, caption: "Modular digital speed gauge design system", category: 'JOY', links: [{ label: "Explore", url: "https://dashkit-omega.vercel.app/" }] },
+  { src: `${BLOB}/13c06a52226574bf93030a47cecb1de00eec3c3a.mp4`, caption: "Modular digital speed gauge design system", category: 'JOY', links: [{ label: "Explore", url: "https://garagekit.vercel.app/" }] },
 ]
