@@ -6,7 +6,7 @@ import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
 import { ContentProvider } from '@/components/content-provider'
-import { getWork, getWritingsNav } from '@/lib/sanity/queries'
+import { getWork, getWritingsNav } from '@/lib/content'
 import 'dialkit/styles.css'
 import './globals.css'
 
@@ -60,7 +60,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [work, writings] = await Promise.all([getWork(), getWritingsNav()])
+  const work = getWork()
+  const writings = getWritingsNav()
   return (
     <html lang="en">
       <body className="font-sans antialiased min-h-dvh">

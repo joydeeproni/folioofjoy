@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { useDialKit } from 'dialkit'
 import { ArrowUpRight } from 'lucide-react'
-import type { WorkItem } from '@/lib/sanity/queries'
+import type { WorkItem } from '@/lib/content/types'
 
 const isVideo = (s: string) => s.endsWith('.mp4')
 

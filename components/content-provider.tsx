@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, type ReactNode } from 'react';
-import type { WorkItem, WritingNav } from '@/lib/sanity/queries';
+import type { WorkItem, WritingNav } from '@/lib/content/types';
 
 // Holds the Sanity-sourced Work + Writings so the many client components
 // (marquee, carousel, photo pile, writings preview) can read them without

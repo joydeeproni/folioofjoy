@@ -8,7 +8,7 @@ import { WorkCarousel } from './work/work-carousel';
 import { useWork } from './content-provider';
 
 // SVC = service for others, JOY = fun/experiments, BIZ = money work, DTY = duty/busywork.
-export type { WorkCategory, WorkItem } from '@/lib/sanity/queries';
+export type { WorkCategory, WorkItem } from '@/lib/content/types';
 
 // Some work items are short video loops rather than stills.
 export const isVideo = (src: string) => src.endsWith('.mp4');
