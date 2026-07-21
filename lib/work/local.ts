@@ -26,6 +26,7 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/upload-progress-01.png`, caption: 'Cassi — uploading documents', category: 'SVC', links: CASSI },
   { src: `${BLOB}/claude-usage.png`, caption: 'My Claude usage', category: 'JOY', links: [] },
   { src: `${BLOB}/tactile-deck.mp4`, caption: 'Tactile — internal sprint deck', category: 'BIZ', links: [] },
+  { src: `${BLOB}/cassi-fundraising-deck.mp4`, caption: 'Cassi fundraising deck — the pitch that helped land their first VC round', category: 'BIZ', links: [] },
 
   // Migrated off Sanity (2026-07): these were the Studio-managed Work items,
   // re-hosted on Vercel Blob so all Work now lives in code. orderWork() rainbow-
