@@ -145,8 +145,10 @@ export function WorkMarquee() {
         </div>
       </div>
 
-      {/* Description + live link of whichever project is centred */}
-      <div className="mt-8 flex flex-col items-center gap-3">
+      {/* Description + live link of whichever project is centred. Fixed height so
+          swapping to the short "whheeee!!" (and dropping the link row) can't change
+          the column height and nudge the filmstrip. */}
+      <div className="mt-8 flex flex-col items-center gap-3 min-h-[8rem]">
         <p
           key={fast ? 'whee' : centeredIdx}
           className="px-6 max-w-xl text-center text-base md:text-lg font-sans text-white/80 animate-caption-fade"
