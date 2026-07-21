@@ -10,7 +10,21 @@ import Link from 'next/link';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
 
-const QUOTE = 'i awoke and saw that life was service. i acted and behold, service was joy.';
+// The hero quote, split so the three theme words become nav links: life + joy
+// open About, service opens Work. Joined, the segments equal the full quote —
+// kept as one source of truth so the scramble reveal animates the exact text.
+const QUOTE_SEGMENTS: { t: string; href?: string }[] = [
+  { t: 'i awoke and saw that ' },
+  { t: 'life', href: '/about' },
+  { t: ' was ' },
+  { t: 'service', href: '/work' },
+  { t: '. i acted and behold, ' },
+  { t: 'service', href: '/work' },
+  { t: ' was ' },
+  { t: 'joy', href: '/about' },
+  { t: '.' },
+];
+const QUOTE = QUOTE_SEGMENTS.map((s) => s.t).join('');
 const GREEN = '#2CA152';
 const YELLOW = '#F2E30C';
 
@@ -43,12 +57,16 @@ export function CenterStage({
 
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
+  const [revealed, setRevealed] = useState(false);
 
-  // Scramble the quote once on first mount.
+  // Scramble the quote once on first mount, then swap the flat text for the
+  // version whose theme words (life / service / joy) are white, clickable links.
   useEffect(() => {
     if (hasScrambled.current || !quoteRef.current) return;
     hasScrambled.current = true;
     scrambleReveal(quoteRef.current, QUOTE, 1.6, 0.2);
+    const t = setTimeout(() => setRevealed(true), 1900); // after the scramble settles (1.6s + 0.2s)
+    return () => clearTimeout(t);
   }, []);
 
   return (
@@ -75,9 +93,24 @@ export function CenterStage({
             fontFeatureSettings: "'salt' on",
           }}
         >
-          {QUOTE}
+          {revealed
+            ? QUOTE_SEGMENTS.map((s, i) =>
+                s.href ? (
+                  <Link
+                    key={i}
+                    href={s.href}
+                    className="text-white transition-colors hover:text-[#2CA152]"
+                  >
+                    {s.t}
+                  </Link>
+                ) : (
+                  <span key={i}>{s.t}</span>
+                ),
+              )
+            : QUOTE}
         </p>
-        <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto" />
+        {/* pointer-events-none so the quote's word-links underneath stay clickable */}
+        <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}
