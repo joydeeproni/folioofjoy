@@ -28,6 +28,14 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/tactile-deck.mp4`, caption: 'Tactile — internal sprint deck', category: 'BIZ', links: [] },
   { src: `${BLOB}/cassi-fundraising-deck.mp4`, caption: 'Cassi fundraising deck — the pitch that helped land their first VC round', category: 'BIZ', links: [] },
 
+  // Personal bits + palette-cleansers scattered through the preview. The paintings
+  // aren't my work — winter paintings that calm me, credited to their artists.
+  { src: `${BLOB}/painting-christmas-window.jpg`, caption: 'Christmas Window — Elena Sokolova. A winter palette-cleanser.', category: 'JOY', links: [] },
+  { src: `${BLOB}/painting-pomegranate.jpg`, caption: 'Pomegranate — Wendy Keller. A winter painting that calms me.', category: 'JOY', links: [] },
+  { src: `${BLOB}/painting-home-alone.jpg`, caption: 'Home Alone, in oil — Mr. Meville. Winter comfort.', category: 'JOY', links: [] },
+  { src: `${BLOB}/notes-palette.png`, caption: 'The colour palette I picked for Notes for Lazy, my notes app.', category: 'JOY', links: [{ label: 'View Live', url: 'https://notesforlazy.vercel.app' }] },
+  { src: `${BLOB}/books-2024.png`, caption: 'Books I read in 2024.', category: 'JOY', links: [] },
+
   // Migrated off Sanity (2026-07): these were the Studio-managed Work items,
   // re-hosted on Vercel Blob so all Work now lives in code. orderWork() rainbow-
   // sorts and de-dupes the whole list, so array order here doesn't matter.
