@@ -20,6 +20,7 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   'onboarding-flow-01.png': { hue: 25, type: 'web', hash: 'f3a1234e6956' },
   'upload-progress-01.png': { hue: 215, type: 'web', hash: '7a826e9bbbe8' },
   'claude-usage.png': { hue: 215, type: 'other', hash: '5084c1b57260' },
+  'tactile-deck.mp4': { hue: 345, type: 'other', hash: 'e4d67f85b6a5' },
   'c23c525edf1f0b3540ea0949dbd5055e740e9051-619x512.png': { hue: 355, type: 'web', hash: 'b2d9150f1a23' },
   'e19ef81f4a903bcb852d059bd626507cff8a1f96-619x530.png': { hue: 25, type: 'other', hash: 'bb7f9fb66e9a' },
   '8d7b7a5f5fe367ef046a37a53704a2d248b37b9b-1600x1200.png': { hue: 165, type: 'web', hash: '8114aec53750' },

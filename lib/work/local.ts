@@ -25,4 +25,5 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/onboarding-flow-01.png`, caption: 'Cassi — onboarding flow', category: 'SVC', links: CASSI },
   { src: `${BLOB}/upload-progress-01.png`, caption: 'Cassi — uploading documents', category: 'SVC', links: CASSI },
   { src: `${BLOB}/claude-usage.png`, caption: 'My Claude usage', category: 'JOY', links: [] },
+  { src: `${BLOB}/tactile-deck.mp4`, caption: 'Tactile — internal sprint deck', category: 'BIZ', links: [] },
 ]
