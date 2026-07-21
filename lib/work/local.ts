@@ -27,6 +27,7 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/claude-usage.png`, caption: 'My Claude usage', category: 'JOY', links: [] },
   { src: `${BLOB}/tactile-deck.mp4`, caption: 'Tactile — internal sprint deck', category: 'BIZ', links: [] },
   { src: `${BLOB}/cassi-fundraising-deck.mp4`, caption: 'Cassi fundraising deck — the pitch that helped land their first VC round', category: 'BIZ', links: [] },
+  { src: `${BLOB}/cassi-animo-carousel.mp4`, caption: 'Cassi — animated home-condition cards, each property scored at a glance', category: 'SVC', links: CASSI },
 
   // Personal bits + palette-cleansers scattered through the preview. The paintings
   // aren't my work — winter paintings that calm me, credited to their artists.
