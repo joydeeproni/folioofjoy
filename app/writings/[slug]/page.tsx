@@ -1,10 +1,7 @@
 import { notFound } from 'next/navigation';
 import { BackLink } from '@/components/back-link';
-import { getWriting, getWritingSlugs } from '@/lib/sanity/queries';
-import { LOCAL_WRITINGS } from '@/lib/writings/local';
+import { getWriting, getWritingSlugs } from '@/lib/content';
 import { LOCAL_ARTICLES } from '@/components/writings/local-articles';
-
-export const revalidate = 60;
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
@@ -12,10 +9,8 @@ const RULE = 'rgba(237,234,224,0.15)';
 
 const SHELL = 'relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-[calc(2.5rem+var(--sab))]';
 
-export async function generateStaticParams() {
-  const slugs = await getWritingSlugs();
-  const all = [...new Set([...slugs, ...LOCAL_WRITINGS.map((w) => w.slug)])];
-  return all.map((slug) => ({ slug }));
+export function generateStaticParams() {
+  return getWritingSlugs().map((slug) => ({ slug }));
 }
 
 export default async function WritingPost({ params }: { params: Promise<{ slug: string }> }) {
@@ -32,7 +27,7 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
     );
   }
 
-  const post = await getWriting(slug);
+  const post = getWriting(slug);
   if (!post) notFound();
 
   return (

@@ -1,10 +1,7 @@
 import { BackLink } from '@/components/back-link';
 import { Reveal } from '@/components/reveal';
-import { Prose } from '@/components/prose';
-import { getAbout, getInspiration, type InspirationItem } from '@/lib/sanity/queries';
-
-// Rebuild at most once a minute; a Sanity webhook can revalidate instantly later.
-export const revalidate = 60;
+import { RichText } from '@/components/rich-text';
+import { getAbout, getInspiration, type InspirationItem } from '@/lib/content';
 
 // Dark, to match the rest of the site (mirrors the Writings page palette).
 const BG = '#0B0B0B';
@@ -29,9 +26,9 @@ function Name({ name, url }: InspirationItem) {
   );
 }
 
-export default async function About() {
-  const [about, items] = await Promise.all([getAbout(), getInspiration()]);
-  const inspiration = items ?? [];
+export default function About() {
+  const about = getAbout();
+  const inspiration = getInspiration();
   const groups = CATEGORY_ORDER.map((category) => ({
     category,
     items: inspiration.filter((i) => i.category === category),
@@ -61,7 +58,7 @@ export default async function About() {
 
         {/* Essay — before the quote */}
         <div className="mt-14 mx-auto max-w-2xl space-y-6 font-sans text-lg md:text-xl leading-relaxed text-pretty">
-          <Prose value={about?.intro} />
+          <RichText paras={about.intro} />
         </div>
 
         {/* Tagore quote */}
@@ -85,7 +82,7 @@ export default async function About() {
 
         {/* Essay — after the quote */}
         <div className="mx-auto max-w-2xl space-y-6 font-sans text-lg md:text-xl leading-relaxed text-pretty">
-          <Prose value={about?.outro} />
+          <RichText paras={about.outro} />
         </div>
 
         {/* Inspiration table */}
