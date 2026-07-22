@@ -91,9 +91,31 @@ export function workKey(src: string): string {
   return path.substring(path.lastIndexOf('/') + 1)
 }
 
-// Items forced to the front of the ordered list, in this order — the carousel /
-// marquee opens on the first one. (Otherwise everything is hue-sorted below.)
-const PINNED_FIRST = ['1c1ccbb1a16f8994c36c90838a496c49d1cb8f99.mp4'] // KCS dashboard loader
+// The Cassi work, grouped and pinned to the front of the reel in this order, so
+// the Preview Work carousel opens on the "Welcome home, James" onboarding and
+// keeps every Cassi screen together. Everything else is hue-sorted below.
+const PINNED_FIRST = [
+  '574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png', // Onboarding — "Welcome home, James"
+  'cassi-onboarding-splash.mp4',
+  'ftue-onboarding-04.png',
+  'onboarding-flow-01.png',
+  '2bc3d726b69b603e16a87ff0e20d5316d5407e9d-1929x1653.png', // AI home concierge — "What do you want today?"
+  'cassi-home-dashboard-concept.mp4',
+  'cassi-carousel.mp4',
+  'cassi-assistant-speaking.mp4',
+  'cassi-maintenance-flow.mp4',
+  '4d2027a7bf3523823a884fb859da762c5041bcb0-1929x939.png', // home maintenance screens
+  'cassi-bathroom-maintenance-video.mp4',
+  'cassi-error-reporting.mp4',
+  'fact-card-01.png',
+  'upload-progress-01.png',
+  'mortgage-upload-01.png',
+  'property-listing-02.png',
+  'property-dashboard-01.png',
+  'ebcbe3e8d21b64ecc3e4a3aec005fe0f32cfe1e2-1929x1444.png', // Cassi design system in Figma
+  '415d743552571723b4eb276fd05417a8acc089c1-1929x1444.png', // Cassi pitch deck
+  'cassi-fundraising-deck.mp4',
+]
 
 // Drop exact-duplicate images (same content hash), then rainbow sort (by hue;
 // neutrals/unknowns last), then a de-cluster pass that breaks runs of 3+ of the
