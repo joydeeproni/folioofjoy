@@ -60,7 +60,7 @@ export function MobileMenu({ onExplore, toolbarColor }: MobileMenuProps) {
               LinkedIn
             </a>
             <Link
-              href="/work"
+              href="/preview"
               className="text-2xl font-sans text-white/70 hover:text-white transition-colors"
             >
               Work
