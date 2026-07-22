@@ -59,6 +59,26 @@ export function CenterStage({
   const hasScrambled = useRef(false);
   const [revealed, setRevealed] = useState(false);
 
+  // Tilt the seesaw toward whichever side of the illustration the cursor is on
+  // (the hovered end dips down, like real weight); null = resume the idle rock.
+  const seesawRef = useRef<HTMLImageElement | null>(null);
+  const [tilt, setTilt] = useState<number | null>(null);
+  const MAX_TILT = 10;
+
+  const onHeroMove = (e: React.MouseEvent) => {
+    const el = seesawRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const inside =
+      e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) {
+      setTilt(null);
+      return;
+    }
+    const frac = (e.clientX - (r.left + r.width / 2)) / (r.width / 2); // -1 (left) .. 1 (right)
+    setTilt(Math.max(-MAX_TILT, Math.min(MAX_TILT, frac * MAX_TILT)));
+  };
+
   // Scramble the quote once on first mount, then swap the flat text for the
   // version whose theme words (life / service / joy) are white, clickable links.
   useEffect(() => {
@@ -73,7 +93,12 @@ export function CenterStage({
     <div className="absolute inset-0">
       {/* HERO — green pixel quote behind the teetering seesaw. Stays visible
           while the selected previews drop and stack on top. */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center px-6" hidden={hoverTarget !== null}>
+      <div
+        className="absolute inset-0 z-0 flex items-center justify-center px-6"
+        hidden={hoverTarget !== null}
+        onMouseMove={onHeroMove}
+        onMouseLeave={() => setTilt(null)}
+      >
         <p
           ref={quoteRef}
           suppressHydrationWarning
@@ -109,8 +134,9 @@ export function CenterStage({
               )
             : QUOTE}
         </p>
-        {/* pointer-events-none so the quote's word-links underneath stay clickable */}
-        <Seesaw className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
+        {/* pointer-events-none so the quote's word-links underneath stay clickable;
+            the tilt is driven by onHeroMove reading the cursor's side of this image */}
+        <Seesaw ref={seesawRef} tilt={tilt} className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}
