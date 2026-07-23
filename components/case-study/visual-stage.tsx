@@ -11,14 +11,13 @@ import type { Visual } from './types';
 // and video of any aspect ratio settle inside it without reflow. Image/video
 // visuals get an expand affordance that opens them larger in a lightbox.
 
-function VisualContent({ visual, contained = true }: { visual: Visual; contained?: boolean }) {
-  const fitCls = contained ? 'object-contain' : '';
+function VisualContent({ visual }: { visual: Visual }) {
   if (visual.kind === 'image') {
     return (
       <img
         src={visual.src}
         alt={visual.alt}
-        className={`h-full w-full ${visual.fit === 'cover' && contained ? 'object-cover' : fitCls}`}
+        className={`h-full w-full ${visual.fit === 'cover' ? 'object-cover' : 'object-contain'}`}
         draggable={false}
       />
     );
@@ -29,7 +28,7 @@ function VisualContent({ visual, contained = true }: { visual: Visual; contained
         src={visual.src}
         poster={visual.poster}
         aria-label={visual.alt}
-        className={`h-full w-full ${fitCls}`}
+        className="h-full w-full object-contain"
         autoPlay
         muted
         loop
@@ -93,15 +92,33 @@ function Lightbox({ visual, onClose }: { visual: Visual; onClose: () => void }) 
         Close
       </button>
       <motion.div
-        className="max-h-full max-w-full"
+        className="flex max-h-full max-w-full items-center justify-center"
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
         animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
         transition={{ duration: reduce ? 0.12 : 0.3, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="max-h-[85dvh] w-auto overflow-hidden rounded-xl border border-white/10">
-          <VisualContent visual={visual} contained={false} />
-        </div>
+        {visual.kind === 'image' ? (
+          <img
+            src={visual.src}
+            alt={visual.alt}
+            draggable={false}
+            className="max-h-[86dvh] max-w-[92vw] rounded-xl border border-white/10 object-contain"
+          />
+        ) : visual.kind === 'video' ? (
+          <video
+            src={visual.src}
+            poster={visual.poster}
+            aria-label={visual.alt}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="max-h-[86dvh] max-w-[92vw] rounded-xl border border-white/10 object-contain"
+          />
+        ) : (
+          <div className="max-h-[86dvh] max-w-[92vw]">{visual.render()}</div>
+        )}
       </motion.div>
     </motion.div>,
     document.body,

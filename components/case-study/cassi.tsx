@@ -27,6 +27,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'video', src: `${BLOB}/cassi-onboarding-splash.mp4`, alt: 'Cassi onboarding splash screens' },
+    caption: 'Onboarding — first run',
   },
   {
     id: 'brief',
@@ -48,6 +49,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'image', src: `${BLOB}/onboarding-flow-01.png`, alt: "Cassi's onboarding flow mapped end to end" },
+    caption: 'Onboarding flow, mapped',
   },
   {
     id: 'philosophy',
@@ -71,6 +73,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'video', src: `${BLOB}/cassi-home-dashboard-concept.mp4`, alt: 'Cassi home dashboard concept' },
+    caption: 'Home dashboard concept',
   },
   {
     id: 'maintenance',
@@ -92,6 +95,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'video', src: `${BLOB}/cassi-maintenance-flow.mp4`, alt: 'Cassi maintenance flow with a seasonal checklist' },
+    caption: 'Maintenance flow',
   },
   {
     id: 'states',
@@ -109,6 +113,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'image', src: `${BLOB}/upload-progress-01.png`, alt: 'The document-upload flow across its in-between states' },
+    caption: 'Document upload — the in-between states',
   },
   {
     id: 'profile',
@@ -123,6 +128,7 @@ const SECTIONS: CaseStudySection[] = [
       </P>
     ),
     visual: { kind: 'image', src: `${BLOB}/property-listing-02.png`, alt: "A home's full profile from just an address" },
+    caption: 'Property profile',
   },
   {
     id: 'facts',
@@ -137,6 +143,7 @@ const SECTIONS: CaseStudySection[] = [
       </P>
     ),
     visual: { kind: 'image', src: `${BLOB}/fact-card-01.png`, alt: 'Did-you-know cards surfacing a home fact' },
+    caption: 'Did-you-know cards',
   },
   {
     id: 'voice',
@@ -151,6 +158,7 @@ const SECTIONS: CaseStudySection[] = [
       </P>
     ),
     visual: { kind: 'video', src: `${BLOB}/cassi-assistant-speaking.mp4`, alt: 'Talking to Cassi out loud and hearing it answer' },
+    caption: 'Talking to Cassi',
   },
   {
     id: 'outcome',
@@ -159,10 +167,26 @@ const SECTIONS: CaseStudySection[] = [
     heading: 'A prototype that moved real money',
     body: (
       <>
+        <div className="mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+            $3M
+          </span>
+          <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
+            seed
+          </span>
+          <span className="text-3xl md:text-4xl" style={{ color: '#2CA152' }} aria-hidden>
+            &rarr;
+          </span>
+          <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+            $10M
+          </span>
+          <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
+            Series A
+          </span>
+        </div>
         <P>
-          The prototype did its job: it raised a $3M seed. From there the founder scaled to a
-          $10M Series A. I&rsquo;ll take &ldquo;a design that directly moved real money&rdquo; over a dribbble
-          shot any day.
+          The prototype did its job, and then it kept doing it. I&rsquo;ll take &ldquo;a design that directly
+          moved real money&rdquo; over a dribbble shot any day.
         </P>
         <P>
           Six months, one designer, one engineer, and a bar that said: make it feel like it
@@ -171,6 +195,7 @@ const SECTIONS: CaseStudySection[] = [
       </>
     ),
     visual: { kind: 'video', src: `${BLOB}/cassi-fundraising-deck.mp4`, alt: 'The Cassi fundraising deck' },
+    caption: 'Fundraising deck',
   },
 ];
 
@@ -187,8 +212,8 @@ export function Cassi() {
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Cassi
           </h1>
-          <p className="mt-6 max-w-[32ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
-            An AI assistant for homeowners — omnipresent, unobtrusive, and real enough to raise on.
+          <p className="mt-6 max-w-[34ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
+            An AI assistant for homeowners that&rsquo;s omnipresent, unobtrusive, and real enough to raise on.
           </p>
           <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
             Freelance · iOS + Web · 6 months · Solo designer

@@ -73,12 +73,17 @@ export function CaseStudyLayout({
         }`}
       >
         <div
-          className="flex h-[3.25rem] items-center justify-center border-b border-white/10 px-16 backdrop-blur-md"
+          className="flex h-[3.25rem] items-center justify-center gap-2 border-b border-white/10 px-16 backdrop-blur-md"
           style={{ backgroundColor: 'rgba(11,11,11,0.85)' }}
         >
           <span className="font-sans font-medium text-sm tracking-tight" style={{ color: FG }}>
             {title}
           </span>
+          {activeSection.act && (
+            <span className="font-mono uppercase tracking-widest text-[10px]" style={{ color: 'rgba(237,234,224,0.45)' }}>
+              · {activeSection.act}
+            </span>
+          )}
         </div>
       </div>
     )}
@@ -88,8 +93,19 @@ export function CaseStudyLayout({
         className="sticky top-0 z-20 -mx-6 h-[42dvh] px-6 md:z-auto md:mx-0 md:h-dvh md:px-0 md:col-start-2 md:row-start-1"
         style={{ backgroundColor: BG }}
       >
-        <div className="flex h-full w-full items-center py-4 md:py-16">
-          <VisualStage visual={activeSection.visual} activeKey={activeSection.id} />
+        <div className="flex h-full w-full flex-col justify-center py-4 md:py-16">
+          <div className="min-h-0 flex-1">
+            <VisualStage visual={activeSection.visual} activeKey={activeSection.id} />
+          </div>
+          {activeSection.caption && (
+            <p
+              key={activeSection.id}
+              className="mt-3 hidden shrink-0 text-center font-mono uppercase tracking-widest text-[11px] md:block"
+              style={{ color: 'rgba(237,234,224,0.4)' }}
+            >
+              {activeSection.caption}
+            </p>
+          )}
         </div>
       </div>
 
@@ -99,10 +115,13 @@ export function CaseStudyLayout({
         {sections.map((section, i) => (
           <section
             key={section.id}
+            id={section.id}
             ref={(el) => {
               sectionRefs.current[i] = el;
             }}
-            className="border-t border-white/10 py-12 first:border-t-0 md:min-h-[72vh] md:py-16"
+            className={`flex scroll-mt-24 flex-col border-t border-white/10 py-12 first:border-t-0 md:min-h-[86vh] md:py-16 ${
+              i === 0 ? 'md:justify-start' : 'md:justify-center'
+            }`}
           >
             {section.act && (
               <p className="mb-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>

@@ -24,4 +24,6 @@ export type CaseStudySection = {
   heading?: string;
   body: ReactNode;
   visual: Visual;
+  /** Short label shown under the stage, tying the visual to this beat. */
+  caption?: string;
 };
