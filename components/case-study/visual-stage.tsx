@@ -1,28 +1,49 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Expand, X } from 'lucide-react';
 import type { Visual } from './types';
 
-// Renders a single Visual, crossfading whenever `activeKey` changes. The stage
-// is a fixed box; each visual is absolutely positioned and object-fit so images
-// and video of any aspect ratio settle inside it without reflow. Image/video
-// visuals get an expand affordance that opens them larger in a lightbox.
+// The right-hand preview. A single frame (dark surface, rounded, no stroke)
+// sizes itself to the active visual's aspect ratio and ANIMATES that size as you
+// scroll from one section to the next — so a tall phone morphs into a wide web
+// view rather than hard-cutting. The media crossfades inside the frame.
+// Interactive `component` visuals skip the frame (they size themselves).
 
-function VisualContent({ visual }: { visual: Visual }) {
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+function altOf(visual: Visual): string {
+  if (visual.kind === 'image') return visual.alt;
+  if (visual.kind === 'video') return visual.alt ?? '';
+  return '';
+}
+
+// Contain-fit a box of aspect `ar` inside cw × ch.
+function fit(cw: number, ch: number, ar: number | null) {
+  if (!cw || !ch || !ar) return null;
+  let w = cw;
+  let h = cw / ar;
+  if (h > ch) {
+    h = ch;
+    w = ch * ar;
+  }
+  return { w, h };
+}
+
+function Media({ visual, onAr }: { visual: Visual; onAr: (src: string, ar: number) => void }) {
   if (visual.kind === 'image') {
     return (
       <img
         src={visual.src}
         alt={visual.alt}
-        className={
-          visual.fit === 'cover'
-            ? 'h-full w-full rounded-xl bg-white/[0.04] object-cover'
-            : 'max-h-full max-w-full rounded-xl bg-white/[0.04] p-4 object-contain md:p-6'
-        }
         draggable={false}
+        onLoad={(e) => {
+          const el = e.currentTarget;
+          if (el.naturalHeight) onAr(visual.src, el.naturalWidth / el.naturalHeight);
+        }}
+        className="h-full w-full object-contain"
       />
     );
   }
@@ -32,31 +53,25 @@ function VisualContent({ visual }: { visual: Visual }) {
         src={visual.src}
         poster={visual.poster}
         aria-label={visual.alt}
-        className="max-h-full max-w-full rounded-xl bg-white/[0.04] p-4 object-contain md:p-6"
         autoPlay
         muted
         loop
         playsInline
+        onLoadedMetadata={(e) => {
+          const el = e.currentTarget;
+          if (el.videoHeight) onAr(visual.src, el.videoWidth / el.videoHeight);
+        }}
+        className="h-full w-full object-contain"
       />
     );
   }
-  // kind === 'component' — render the node. Annotation overlay is intentionally
-  // not drawn in this pass (reserved for the Lounge-panel showcase).
-  return <div className="flex h-full w-full items-center justify-center">{visual.render()}</div>;
-}
-
-function altOf(visual: Visual): string {
-  if (visual.kind === 'image') return visual.alt;
-  if (visual.kind === 'video') return visual.alt ?? '';
-  return '';
+  return null;
 }
 
 function Lightbox({ visual, onClose }: { visual: Visual; onClose: () => void }) {
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    // Capture phase + stopImmediatePropagation so Escape closes the lightbox
-    // and does NOT also fire BackLink's window-level Escape → navigate handler.
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopImmediatePropagation();
@@ -99,16 +114,11 @@ function Lightbox({ visual, onClose }: { visual: Visual; onClose: () => void }) 
         className="flex max-h-full max-w-full items-center justify-center"
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
         animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-        transition={{ duration: reduce ? 0.12 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduce ? 0.12 : 0.3, ease: EASE }}
         onClick={(e) => e.stopPropagation()}
       >
         {visual.kind === 'image' ? (
-          <img
-            src={visual.src}
-            alt={visual.alt}
-            draggable={false}
-            className="max-h-[86dvh] max-w-[92vw] rounded-xl border border-white/10 object-contain"
-          />
+          <img src={visual.src} alt={visual.alt} draggable={false} className="max-h-[86dvh] max-w-[92vw] rounded-xl object-contain" />
         ) : visual.kind === 'video' ? (
           <video
             src={visual.src}
@@ -118,7 +128,7 @@ function Lightbox({ visual, onClose }: { visual: Visual; onClose: () => void }) 
             muted
             loop
             playsInline
-            className="max-h-[86dvh] max-w-[92vw] rounded-xl border border-white/10 object-contain"
+            className="max-h-[86dvh] max-w-[92vw] rounded-xl object-contain"
           />
         ) : (
           <div className="max-h-[86dvh] max-w-[92vw]">{visual.render()}</div>
@@ -131,46 +141,97 @@ function Lightbox({ visual, onClose }: { visual: Visual; onClose: () => void }) 
 
 export function VisualStage({ visual, activeKey }: { visual: Visual; activeKey: string }) {
   const reduce = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [box, setBox] = useState({ cw: 0, ch: 0 });
+  const arCache = useRef<Map<string, number>>(new Map());
+  const [ar, setAr] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const canExpand = visual.kind === 'image' || visual.kind === 'video';
 
-  // Close the lightbox if the active section (and thus the visual) changes.
+  const isComponent = visual.kind === 'component';
+  const src = isComponent ? null : visual.src;
+  const canExpand = !isComponent;
+
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const measure = () => setBox({ cw: el.clientWidth, ch: el.clientHeight });
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // On section change: adopt the cached aspect if we know it; otherwise keep the
+  // current frame size until the new media reports its ratio (avoids a flash).
   useEffect(() => {
     setExpanded(false);
-  }, [activeKey]);
+    if (!src) {
+      setAr(null);
+      return;
+    }
+    const cached = arCache.current.get(src);
+    if (cached) setAr(cached);
+  }, [activeKey, src]);
+
+  const onAr = (s: string, a: number) => {
+    arCache.current.set(s, a);
+    if (s === src) setAr(a);
+  };
+
+  const sized = fit(box.cw, box.ch, ar);
+  const frameW = sized ? sized.w : box.cw || '100%';
+  const frameH = sized ? sized.h : box.ch || '100%';
 
   return (
-    <div className="group relative flex h-full w-full items-center justify-center">
-      {/* No frame/border: each visual sizes to its own aspect (max-h/max-w),
-          so a portrait phone stays tall and a wide web view spreads wide.
-          initial={false} — the first visual is already on screen when the page
-          reveals; only subsequent scroll-driven swaps should crossfade. */}
-      <AnimatePresence mode="sync" initial={false}>
+    <div ref={rootRef} className="group relative flex h-full w-full items-center justify-center">
+      {isComponent ? (
+        <AnimatePresence mode="sync" initial={false}>
+          <motion.div
+            key={activeKey}
+            className="absolute inset-0 flex items-center justify-center"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduce ? 0.15 : 0.5, ease: EASE }}
+          >
+            {visual.render()}
+          </motion.div>
+        </AnimatePresence>
+      ) : (
         <motion.div
-          key={activeKey}
-          className="absolute inset-0 flex items-center justify-center"
-          initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-          animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0.15 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={false}
+          animate={{ width: frameW, height: frameH }}
+          transition={{ duration: reduce ? 0 : 0.5, ease: EASE }}
+          className="relative overflow-hidden rounded-xl bg-white/[0.04] p-4 md:p-6"
         >
-          <VisualContent visual={visual} />
-        </motion.div>
-      </AnimatePresence>
+          <div className="relative h-full w-full">
+            <AnimatePresence mode="sync" initial={false}>
+              <motion.div
+                key={activeKey}
+                className="absolute inset-0 flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduce ? 0.15 : 0.4, ease: EASE }}
+              >
+                <Media visual={visual} onAr={onAr} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {canExpand && (
-        <button
-          onClick={() => setExpanded(true)}
-          aria-label="Expand image"
-          className="absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full border border-white/15 bg-black/40 p-2 text-white/80 backdrop-blur-md transition-all duration-200 hover:bg-black/60 hover:text-white focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100"
-        >
-          <Expand className="h-4 w-4" aria-hidden />
-        </button>
+          <button
+            onClick={() => setExpanded(true)}
+            aria-label="Expand image"
+            className="absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full border border-white/15 bg-black/40 p-2 text-white/80 backdrop-blur-md transition-all duration-200 hover:bg-black/60 hover:text-white focus-visible:opacity-100 md:opacity-0 md:group-hover:opacity-100"
+          >
+            <Expand className="h-4 w-4" aria-hidden />
+          </button>
+        </motion.div>
       )}
 
-      <AnimatePresence>
-        {expanded && <Lightbox visual={visual} onClose={() => setExpanded(false)} />}
-      </AnimatePresence>
+      {canExpand && (
+        <AnimatePresence>{expanded && <Lightbox visual={visual} onClose={() => setExpanded(false)} />}</AnimatePresence>
+      )}
     </div>
   );
 }
