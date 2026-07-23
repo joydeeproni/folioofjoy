@@ -7,7 +7,7 @@ const FG = '#EDEAE0';
 
 // Full-bleed dark shell for scroll-driven case studies. Distinct from the padded
 // writings shell — the two-column stage layout manages its own width.
-const SHELL = 'relative min-h-dvh w-full px-6 md:px-16 pb-[calc(2.5rem+var(--sab))]';
+const SHELL = 'relative min-h-dvh w-full px-6 md:px-12 pb-[calc(2.5rem+var(--sab))]';
 
 export function generateStaticParams() {
   return getCaseStudySlugs().map((slug) => ({ slug }));

@@ -89,13 +89,13 @@ export function CaseStudyLayout({
 
     {/* Right-rail section index — the same component the writings articles use. */}
     <ArticleToc sections={tocSections} />
-    <div className="mx-auto w-full max-w-6xl md:grid md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
+    <div className="w-full md:grid md:grid-cols-[minmax(0,34rem)_1fr] md:gap-10 lg:gap-14">
       {/* Visual stage — first in the DOM so it pins to the top on mobile. */}
       <div
         className="sticky top-0 z-20 -mx-6 h-[42dvh] px-6 md:z-auto md:mx-0 md:h-dvh md:px-0 md:col-start-2 md:row-start-1"
         style={{ backgroundColor: BG }}
       >
-        <div className="flex h-full w-full flex-col justify-center py-4 md:py-16">
+        <div className="flex h-full w-full flex-col justify-center py-4 md:py-8">
           <div className="min-h-0 flex-1">
             <VisualStage visual={activeSection.visual} activeKey={activeSection.id} />
           </div>
@@ -137,7 +137,7 @@ export function CaseStudyLayout({
         ))}
       </div>
     </div>
-    {footer && <div className="mx-auto w-full max-w-6xl">{footer}</div>}
+    {footer && <div className="w-full max-w-[34rem]">{footer}</div>}
     </>
   );
 }
