@@ -90,11 +90,9 @@ export function CaseStudyLayout({
     {/* Right-rail section index — the same component the writings articles use. */}
     <ArticleToc sections={tocSections} />
     <div className="mx-auto w-full max-w-6xl md:grid md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
-      {/* Visual stage — first in the DOM so it pins to the top on mobile. On wide
-          screens it breaks out of the centered grid to the right edge (small
-          margin) for more preview real estate, while the article column stays put. */}
+      {/* Visual stage — first in the DOM so it pins to the top on mobile. */}
       <div
-        className="sticky top-0 z-20 -mx-6 h-[42dvh] px-6 md:z-auto md:mx-0 md:h-dvh md:px-0 md:col-start-2 md:row-start-1 xl:w-[calc(50vw-60px)] xl:max-w-none xl:justify-self-start"
+        className="sticky top-0 z-20 -mx-6 h-[42dvh] px-6 md:z-auto md:mx-0 md:h-dvh md:px-0 md:col-start-2 md:row-start-1"
         style={{ backgroundColor: BG }}
       >
         <div className="flex h-full w-full flex-col justify-center py-4 md:py-16">

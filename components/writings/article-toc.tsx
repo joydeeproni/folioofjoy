@@ -70,7 +70,7 @@ export function ArticleToc({ sections }: { sections: TocSection[] }) {
       <div
         onMouseEnter={enter}
         onMouseLeave={leave}
-        className="hidden lg:flex fixed left-5 top-1/2 -translate-y-1/2 z-40 flex-col items-start gap-2.5 py-3 pr-10"
+        className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-2.5 py-3 pl-10"
         style={{ opacity: visible && !hovered ? 1 : 0, transition: 'opacity 400ms ease' }}
       >
         {sections.map((s) => {
@@ -93,7 +93,7 @@ export function ArticleToc({ sections }: { sections: TocSection[] }) {
       <nav
         onMouseEnter={enter}
         onMouseLeave={leave}
-        className="hidden lg:flex fixed left-5 top-1/2 -translate-y-1/2 z-40 flex-col gap-0.5 max-w-[240px] rounded-lg px-4 py-3"
+        className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-40 flex-col gap-0.5 max-w-[240px] rounded-lg px-4 py-3"
         style={{
           opacity: hovered ? 1 : 0,
           pointerEvents: hovered ? 'auto' : 'none',
