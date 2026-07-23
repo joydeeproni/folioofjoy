@@ -2,7 +2,9 @@ import type { ComponentType } from 'react';
 import { Cassi } from './cassi';
 import { Knobs } from './knobs';
 import { Canvas } from './canvas';
-import { Insider, MeraBills, FolioOfJoy, Pitzsa, Deterge, Verizon } from './stubs';
+import { Insider, MeraBills, FolioOfJoy, Pitzsa } from './stubs';
+import { Deterge } from './deterge';
+import { Verizon } from './verizon';
 
 // Slug → case study. Bespoke, code-rendered case studies (like the writings
 // LOCAL_ARTICLES map) rather than Sanity content. Add new studies here.

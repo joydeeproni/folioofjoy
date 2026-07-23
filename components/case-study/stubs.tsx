@@ -108,23 +108,3 @@ export const Pitzsa = makeStub({
   ],
 });
 
-export const Deterge = makeStub({
-  title: 'Deterge',
-  tag: 'Mobile · University venture',
-  premise: 'A laundry app — and the business we tried to run during university.',
-  sections: [
-    { act: 'The idea', heading: 'Laundry, on demand', note: 'What we set out to build and run. — content coming.' },
-    { act: 'The app', heading: 'Booking a wash', note: 'The core flow. — content coming.' },
-    { act: 'What we learned', heading: 'Running it for real', note: 'Lessons from trying to run the business. — content coming.' },
-  ],
-});
-
-export const Verizon = makeStub({
-  title: 'Verizon',
-  tag: 'Mobile · Retail ops · Porting from Medium',
-  premise: 'A retail / warehouse stock-management scanner app. Full write-up porting from Medium.',
-  sections: [
-    { act: 'The task', heading: 'Scan, pick, log', note: 'Stock management on the warehouse floor. — content coming.' },
-    { act: 'The flow', heading: 'Rack picking', note: 'The scanning flow, step by step. — content coming.' },
-  ],
-});
