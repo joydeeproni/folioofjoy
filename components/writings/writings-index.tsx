@@ -14,7 +14,7 @@ type CaseItem = { title: string; category: string; slug?: string };
 const CASES: CaseItem[] = [
   { title: 'Cassi Home', category: 'Mobile', slug: 'cassi' },
   { title: 'Knobs, Sliders & Dials', category: 'Components', slug: 'knobs' },
-  { title: 'Create Canvas', category: 'Web' },
+  { title: 'Create Canvas', category: 'Web', slug: 'canvas' },
   { title: 'Insider', category: 'Web' },
   { title: 'MeraBills', category: 'Mobile' },
   { title: 'Folio of Joy', category: 'Web' },
