@@ -22,7 +22,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
-      <BackLink href="/preview" />
+      <BackLink href="/writings" />
       <Component />
     </main>
   );

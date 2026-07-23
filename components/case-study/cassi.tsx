@@ -168,7 +168,7 @@ const SECTIONS: CaseStudySection[] = [
     body: (
       <>
         <div className="mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+          <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
             $3M
           </span>
           <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
@@ -177,7 +177,7 @@ const SECTIONS: CaseStudySection[] = [
           <span className="text-3xl md:text-4xl" style={{ color: '#2CA152' }} aria-hidden>
             &rarr;
           </span>
-          <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+          <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
             $10M
           </span>
           <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
@@ -206,8 +206,8 @@ export function Cassi() {
       title="Cassi"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-mono uppercase tracking-widest text-[11px]" style={{ color: '#2CA152' }}>
-            Case Study
+          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em]" style={{ color: '#2CA152' }}>
+            Case study
           </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Cassi

@@ -149,8 +149,8 @@ export function Knobs() {
       title="Controls"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-mono uppercase tracking-widest text-[11px]" style={{ color: ACCENT }}>
-            Case Study
+          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em]" style={{ color: ACCENT }}>
+            Case study
           </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Toggles, switches, knobs

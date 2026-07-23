@@ -92,7 +92,7 @@ const SECTIONS: CaseStudySection[] = [
       <>
         <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-3">
           <span>
-            <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
               500–1k
             </span>
             <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
@@ -100,7 +100,7 @@ const SECTIONS: CaseStudySection[] = [
             </span>
           </span>
           <span>
-            <span className="font-sans font-medium text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
+            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
               &lt;6
             </span>
             <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
@@ -132,8 +132,8 @@ export function Canvas() {
       title="Canvas"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-mono uppercase tracking-widest text-[11px]" style={{ color: ACCENT }}>
-            Case Study
+          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em]" style={{ color: ACCENT }}>
+            Case study
           </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Create Canvas
