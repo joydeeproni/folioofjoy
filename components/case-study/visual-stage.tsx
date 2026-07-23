@@ -17,7 +17,11 @@ function VisualContent({ visual }: { visual: Visual }) {
       <img
         src={visual.src}
         alt={visual.alt}
-        className={`h-full w-full ${visual.fit === 'cover' ? 'object-cover' : 'object-contain'}`}
+        className={
+          visual.fit === 'cover'
+            ? 'h-full w-full object-cover'
+            : 'max-h-full max-w-full object-contain'
+        }
         draggable={false}
       />
     );
@@ -28,7 +32,7 @@ function VisualContent({ visual }: { visual: Visual }) {
         src={visual.src}
         poster={visual.poster}
         aria-label={visual.alt}
-        className="h-full w-full object-contain"
+        className="max-h-full max-w-full object-contain"
         autoPlay
         muted
         loop
@@ -136,13 +140,15 @@ export function VisualStage({ visual, activeKey }: { visual: Visual; activeKey: 
   }, [activeKey]);
 
   return (
-    <div className="group relative h-full w-full overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-      {/* initial={false} — the first visual is already on screen when the page
+    <div className="group relative flex h-full w-full items-center justify-center">
+      {/* No frame/border: each visual sizes to its own aspect (max-h/max-w),
+          so a portrait phone stays tall and a wide web view spreads wide.
+          initial={false} — the first visual is already on screen when the page
           reveals; only subsequent scroll-driven swaps should crossfade. */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
           key={activeKey}
-          className="absolute inset-0"
+          className="absolute inset-0 flex items-center justify-center"
           initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
           animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
