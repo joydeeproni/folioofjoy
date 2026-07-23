@@ -17,7 +17,7 @@ export function Eyebrow({ children }: { children: ReactNode }) {
 
 export function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="font-sans font-medium text-2xl md:text-3xl tracking-tight mb-4" style={{ color: FG }}>
+    <h2 className="font-sans font-medium text-2xl md:text-3xl tracking-tight mb-4 text-balance" style={{ color: FG }}>
       {children}
     </h2>
   );
@@ -26,7 +26,7 @@ export function H2({ children }: { children: ReactNode }) {
 export function P({ children, lead }: { children: ReactNode; lead?: boolean }) {
   return (
     <p
-      className={`font-sans text-[17px] md:text-lg leading-relaxed mb-5 ${
+      className={`font-sans text-[17px] md:text-lg leading-relaxed mb-5 text-pretty ${
         lead
           ? 'first-letter:font-pixel first-letter:text-5xl first-letter:mr-2 first-letter:float-left first-letter:leading-none'
           : ''

@@ -15,16 +15,23 @@ import type { CaseStudySection } from './types';
 // section drives the swap.
 
 const BG = '#0B0B0B';
+const FG = '#EDEAE0';
 
 export function CaseStudyLayout({
   sections,
   header,
+  footer,
+  title,
 }: {
   sections: CaseStudySection[];
   header?: ReactNode;
+  footer?: ReactNode;
+  title?: string;
 }) {
   const sectionRefs = useRef<Array<HTMLElement | null>>([]);
+  const headerRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     let frame = 0;
@@ -34,6 +41,9 @@ export function CaseStudyLayout({
         .map((el, index) => (el ? { index, top: el.getBoundingClientRect().top } : null))
         .filter((v): v is { index: number; top: number } => v !== null);
       setActive(pickActiveSection(tops, window.innerHeight));
+      // Collapse the header into the top bar once it has scrolled up near it.
+      const headerEl = headerRef.current;
+      if (headerEl) setCollapsed(headerEl.getBoundingClientRect().bottom <= 56);
     };
     const onScroll = () => {
       if (frame) return;
@@ -52,6 +62,26 @@ export function CaseStudyLayout({
   const activeSection = sections[active] ?? sections[0];
 
   return (
+    <>
+    {/* Collapsed header → compact fixed top bar (desktop). Sits under the
+        BackLink (z-50), aligned to its row; mobile keeps the pinned stage band. */}
+    {title && (
+      <div
+        aria-hidden={!collapsed}
+        className={`fixed inset-x-0 top-0 z-40 hidden md:block transition-[opacity,transform] duration-300 ease-out motion-reduce:transform-none ${
+          collapsed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+        }`}
+      >
+        <div
+          className="flex h-[3.25rem] items-center justify-center border-b border-white/10 px-16 backdrop-blur-md"
+          style={{ backgroundColor: 'rgba(11,11,11,0.85)' }}
+        >
+          <span className="font-sans font-medium text-sm tracking-tight" style={{ color: FG }}>
+            {title}
+          </span>
+        </div>
+      </div>
+    )}
     <div className="mx-auto w-full max-w-6xl md:grid md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
       {/* Visual stage — first in the DOM so it pins to the top on mobile. */}
       <div
@@ -65,7 +95,7 @@ export function CaseStudyLayout({
 
       {/* Prose column. */}
       <div className="md:col-start-1 md:row-start-1">
-        {header}
+        <div ref={headerRef}>{header}</div>
         {sections.map((section, i) => (
           <section
             key={section.id}
@@ -86,5 +116,7 @@ export function CaseStudyLayout({
         ))}
       </div>
     </div>
+    {footer && <div className="mx-auto w-full max-w-6xl">{footer}</div>}
+    </>
   );
 }

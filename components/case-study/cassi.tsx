@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import type { CaseStudySection } from './types';
@@ -176,6 +178,7 @@ export function Cassi() {
   return (
     <CaseStudyLayout
       sections={SECTIONS}
+      title="Cassi"
       header={
         <header className="pt-24 pb-4 md:pt-16">
           <p className="mb-4 font-mono uppercase tracking-widest text-[11px]" style={{ color: '#2CA152' }}>
@@ -184,13 +187,27 @@ export function Cassi() {
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Cassi
           </h1>
-          <p className="mt-6 font-sans text-xl md:text-2xl leading-snug" style={{ color: '#EDEAE0' }}>
+          <p className="mt-6 max-w-[32ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
             An AI assistant for homeowners — omnipresent, unobtrusive, and real enough to raise on.
           </p>
           <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
             Freelance · iOS + Web · 6 months · Solo designer
           </p>
         </header>
+      }
+      footer={
+        <footer className="border-t border-white/10 py-16 md:py-24">
+          <p className="font-sans text-2xl md:text-3xl tracking-tight text-balance" style={{ color: '#EDEAE0' }}>
+            That&rsquo;s Cassi — a prototype that had to feel real, and did.
+          </p>
+          <Link
+            href="/preview"
+            className="mt-8 inline-flex items-center gap-2 font-sans text-sm text-white/70 transition-colors duration-200 hover:text-[#2CA152]"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+            Back to all work
+          </Link>
+        </footer>
       }
     />
   );
