@@ -10,20 +10,21 @@ const RULE = 'rgba(237,234,224,0.15)';
 // Case study index. `slug` is set once a study is live at /work/<slug>; the rest
 // render as (non-clickable) placeholders until built. Order + labels are the
 // canonical Cases list.
-type CaseItem = { title: string; category: string; slug?: string };
+type CaseItem = { title: string; category: string; year: number; slug?: string };
 const CASES: CaseItem[] = [
-  { title: 'Cassi Home', category: 'Mobile', slug: 'cassi' },
-  { title: 'Knobs, Sliders & Dials', category: 'Components', slug: 'knobs' },
-  { title: 'Create Canvas', category: 'Web', slug: 'canvas' },
-  { title: 'Insider', category: 'Web', slug: 'insider' },
-  { title: 'MeraBills', category: 'Mobile', slug: 'merabills' },
-  { title: 'Folio of Joy', category: 'Web', slug: 'folio-of-joy' },
-  { title: 'Pitzsa', category: 'Web', slug: 'pitzsa' },
-  { title: 'Deterge', category: 'Mobile', slug: 'deterge' },
-  { title: 'Verizon', category: 'Mobile', slug: 'verizon' },
+  { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi' },
+  { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs' },
+  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
+  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider' },
+  { title: 'MeraBills', category: 'Mobile', year: 2019, slug: 'merabills' },
+  { title: 'Folio of Joy', category: 'Web', year: 2026, slug: 'folio-of-joy' },
+  { title: 'Pitzsa', category: 'Web', year: 2024, slug: 'pitzsa' },
+  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge' },
+  { title: 'Verizon', category: 'Mobile', year: 2018, slug: 'verizon' },
 ];
 
-const twoDigit = (i: number) => String(i + 1).padStart(2, '0');
+// Newest first; ties keep their listed order (stable sort).
+const SORTED_CASES = [...CASES].sort((a, b) => b.year - a.year);
 
 function Row({ n, title, meta, href }: { n: string; title: string; meta: string; href?: string }) {
   const body = (
@@ -86,9 +87,9 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
         </ul>
       ) : (
         <ul className="divide-y" style={{ borderColor: RULE }}>
-          {CASES.map((c, i) => (
+          {SORTED_CASES.map((c) => (
             <li key={c.title}>
-              <Row n={twoDigit(i)} title={c.title} meta={c.category} href={c.slug ? `/work/${c.slug}` : undefined} />
+              <Row n={String(c.year)} title={c.title} meta={c.category} href={c.slug ? `/work/${c.slug}` : undefined} />
             </li>
           ))}
         </ul>
