@@ -15,12 +15,12 @@ const CASES: CaseItem[] = [
   { title: 'Cassi Home', category: 'Mobile', slug: 'cassi' },
   { title: 'Knobs, Sliders & Dials', category: 'Components', slug: 'knobs' },
   { title: 'Create Canvas', category: 'Web', slug: 'canvas' },
-  { title: 'Insider', category: 'Web' },
-  { title: 'MeraBills', category: 'Mobile' },
-  { title: 'Folio of Joy', category: 'Web' },
-  { title: 'Pitzsa', category: 'Web' },
-  { title: 'Deterge', category: 'Mobile' },
-  { title: 'Verizon', category: 'Mobile' },
+  { title: 'Insider', category: 'Web', slug: 'insider' },
+  { title: 'MeraBills', category: 'Mobile', slug: 'merabills' },
+  { title: 'Folio of Joy', category: 'Web', slug: 'folio-of-joy' },
+  { title: 'Pitzsa', category: 'Web', slug: 'pitzsa' },
+  { title: 'Deterge', category: 'Mobile', slug: 'deterge' },
+  { title: 'Verizon', category: 'Mobile', slug: 'verizon' },
 ];
 
 const twoDigit = (i: number) => String(i + 1).padStart(2, '0');
