@@ -360,7 +360,7 @@ export function ZenDock({
       {/* ── Config panel — full-height right slide-in ── */}
       <div
         className={`fixed top-0 right-0 z-30 h-full w-[380px] max-w-[92vw] flex flex-col transition-transform duration-500 ${open ? 'translate-x-0' : 'translate-x-full'}`}
-        style={{ background: 'rgba(9,9,11,0.96)', borderLeft: '1px solid rgba(237,233,221,0.14)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+        style={{ background: 'rgba(9,9,11,0.96)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
        <div className="flex-1 overflow-y-auto">
         {/* Header + meters */}
@@ -402,8 +402,8 @@ export function ZenDock({
                   );
                 })}
               </div>
-              {/* Mode list — keeps its outer divider */}
-              <div className="flex flex-col items-stretch pr-[8px] border-r border-solid" style={{ borderColor: c3 }}>
+              {/* Mode list */}
+              <div className="flex flex-col items-stretch">
                 {MODE_OPTIONS.map((m) => {
                   const on = m === config.mode;
                   return (
