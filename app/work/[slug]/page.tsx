@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { BackLink } from '@/components/back-link';
 import { getCaseStudy, getCaseStudySlugs } from '@/components/case-study/registry';
+import { CaseNav } from '@/components/case-study/case-nav';
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
@@ -24,6 +25,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
       <BackLink href="/writings" />
       <Component />
+      <CaseNav slug={slug} />
     </main>
   );
 }

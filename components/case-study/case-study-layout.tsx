@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { pickActiveSection } from './active-section';
 import { VisualStage } from './visual-stage';
-import { Eyebrow, H2 } from './prose';
+import { H2 } from './prose';
 import { ArticleToc, type TocSection } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
 import type { CaseStudySection } from './types';
@@ -39,6 +39,11 @@ export function CaseStudyLayout({
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
+
+  // Coming back from a case study should return to the Cases tab in /writings.
+  useEffect(() => {
+    sessionStorage.setItem('writings-tab', 'cases');
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -125,12 +130,6 @@ export function CaseStudyLayout({
               i === 0 ? 'md:justify-start' : 'md:justify-center'
             }`}
           >
-            {section.act && (
-              <p className="mb-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-                {section.act}
-              </p>
-            )}
-            {section.eyebrow && <Eyebrow>{section.eyebrow}</Eyebrow>}
             {section.heading && <H2>{section.heading}</H2>}
             <div>{section.body}</div>
           </section>

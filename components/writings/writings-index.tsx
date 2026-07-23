@@ -1,29 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { WritingListItem } from '@/lib/content/types';
+import { SORTED_CASES } from '@/components/case-study/cases';
 
 const FG = '#EDEAE0';
 const RULE = 'rgba(237,234,224,0.15)';
-
-// Case study index. `slug` is set once a study is live at /work/<slug>; the rest
-// render as (non-clickable) placeholders until built. Order + labels are the
-// canonical Cases list.
-type CaseItem = { title: string; category: string; year: number; slug?: string };
-const CASES: CaseItem[] = [
-  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
-  { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi' },
-  { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs' },
-  { title: 'Pitzsa', category: 'Web', year: 2024, slug: 'pitzsa' },
-  { title: 'Tactile Core', category: 'Strategy', year: 2022, slug: 'tactile-core' },
-  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider' },
-  { title: 'Verizon', category: 'Mobile', year: 2018, slug: 'verizon' },
-  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge' },
-];
-
-// Newest first; ties keep their listed order (stable sort) so Create Canvas leads.
-const SORTED_CASES = [...CASES].sort((a, b) => b.year - a.year);
 
 // Folio of Joy lives in Thoughts (a personal, reflective piece), not Cases.
 const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Personal', href: '/work/folio-of-joy' };
@@ -71,6 +54,29 @@ function Tab({ label, active, onClick }: { label: string; active: boolean; onCli
 
 export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
   const [tab, setTab] = useState<'thoughts' | 'cases'>('thoughts');
+
+  // Restore the tab + scroll from a prior visit (e.g. coming back from a case
+  // study), so returning lands where you left off — on the Cases tab if that's
+  // where you were.
+  useEffect(() => {
+    const savedTab = sessionStorage.getItem('writings-tab');
+    if (savedTab === 'cases' || savedTab === 'thoughts') setTab(savedTab);
+    const savedScroll = sessionStorage.getItem('writings-scroll');
+    if (savedScroll) {
+      const y = parseInt(savedScroll, 10);
+      if (!Number.isNaN(y)) requestAnimationFrame(() => window.scrollTo(0, y));
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('writings-tab', tab);
+  }, [tab]);
+
+  useEffect(() => {
+    const onScroll = () => sessionStorage.setItem('writings-scroll', String(window.scrollY));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto pt-28">
