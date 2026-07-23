@@ -19,7 +19,7 @@ export const ABOUT: AboutDoc = {
     ["I also take photos that make me feel calm and mellow — 35mm street photography with my XT1 (iykyk). You can see them ", { text: "here", href: "https://www.instagram.com/joyingntravelling/" }, "."],
     "I’m also a HUGE typography nerd, and I want to learn how to make my own fonts — something I’m slowly learning to do.",
     "The world is full of optimizations, and people trying to optimize everything: money, careers, goals, dreams, numbers out of it all. I think we’ve forgotten to have fun with what we do or what we create. That’s what I aspire to do — create something fun that provides joy, not because I need to objectively hit some number.",
-    "I’ve been a designer for almost a decade. It’s usually hard for me to focus on one thing — not because I have a short attention span, but because I have too many interests. I don’t go to restaurants with badly designed menus, I’m obsessed with metro maps and public signage, I love typography, and I’m probably one of the few designers who doesn’t use an iPhone.",
+    "I’ve been a designer for almost a decade. It’s usually hard for me to focus on one thing — not because I have a short attention span, but because I have too many interests. I don’t go to restaurants with badly designed menus, I’m obsessed with metro maps and public signage.",
     "These are the things and people who inspire me to create, every day.",
   ],
 };

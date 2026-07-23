@@ -12,7 +12,6 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   'fact-card-01.png': { hue: -1, type: 'mobile', hash: 'ca35aa326a7c' },
   'game-result-01.png': { hue: 215, type: 'mobile', hash: '00bd20372baa' },
   'game-over-01.png': { hue: 165, type: 'mobile', hash: '8ecc788cb06f' },
-  'property-dashboard-01.png': { hue: 195, type: 'other', hash: '5667b0a75538' },
   'media-player-01.png': { hue: 25, type: 'web', hash: 'bf48dc433a2c' },
   'maintenance-plan-01.png': { hue: 195, type: 'mobile', hash: '21ac44aef196' },
   'home-value-cards-01.png': { hue: 75, type: 'web', hash: 'c2ae204d09bf' },
@@ -74,7 +73,6 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   '2bc3d726b69b603e16a87ff0e20d5316d5407e9d-1929x1653.png': { hue: 25, type: 'other', hash: '024a16da1d93' },
   '4d2027a7bf3523823a884fb859da762c5041bcb0-1929x939.png': { hue: 55, type: 'web', hash: '21b8b699a7eb' },
   '574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png': { hue: 355, type: 'web', hash: '38c0cd9c9275' },
-  '415d743552571723b4eb276fd05417a8acc089c1-1929x1444.png': { hue: 55, type: 'web', hash: 'e34e037e8130' },
   'ebcbe3e8d21b64ecc3e4a3aec005fe0f32cfe1e2-1929x1444.png': { hue: 45, type: 'web', hash: '308af2c46302' },
   'f835ab854689260af49cdc29fb9d34aa1a2a274e-1824x1822.png': { hue: 265, type: 'other', hash: '5efbd0c680e4' },
   '11af0c9cd13f04e65feca8149963374fa4c16470-1824x2719.png': { hue: 265, type: 'other', hash: '043c0456d928' },
@@ -111,9 +109,7 @@ const PINNED_FIRST = [
   'upload-progress-01.png',
   'mortgage-upload-01.png',
   'property-listing-02.png',
-  'property-dashboard-01.png',
   'ebcbe3e8d21b64ecc3e4a3aec005fe0f32cfe1e2-1929x1444.png', // Cassi design system in Figma
-  '415d743552571723b4eb276fd05417a8acc089c1-1929x1444.png', // Cassi pitch deck
   'cassi-fundraising-deck.mp4',
 ]
 
