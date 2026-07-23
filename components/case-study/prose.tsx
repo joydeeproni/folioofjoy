@@ -9,7 +9,7 @@ const ACCENT = '#2CA152';
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="font-sans font-medium text-sm mb-3 tracking-[-0.02em]" style={{ color: ACCENT }}>
+    <p className="font-sans font-medium text-sm mb-3 tracking-[-0.02em] lowercase" style={{ color: ACCENT }}>
       {children}
     </p>
   );
