@@ -28,7 +28,7 @@ const SECTIONS: CaseStudySection[] = [
         </P>
       </>
     ),
-    visual: { kind: 'image', src: `${IMG}/scanner-home.png`, alt: 'The Scanner app home screen — store/rack banner with Scan, Upload and History' },
+    visual: { kind: 'image', src: `${IMG}/scanner-home.gif`, alt: 'The Scanner app home screen — store/rack banner with Scan, Upload and History' },
     caption: 'Scanner — home',
   },
   {
