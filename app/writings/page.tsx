@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { BackLink } from '@/components/back-link';
 import { getWritingsList } from '@/lib/content';
+import { WritingsIndex } from '@/components/writings/writings-index';
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
@@ -10,27 +10,7 @@ export default function Writings() {
   return (
     <main className="relative min-h-screen w-full px-8 md:px-16 py-10" style={{ backgroundColor: BG, color: FG }}>
       <BackLink />
-
-      <div className="max-w-4xl mx-auto pt-28">
-        <p className="font-mono uppercase tracking-[0.25em] text-xs mb-16" style={{ color: FG, opacity: 0.5 }}>
-          Writings
-        </p>
-        <ul className="divide-y" style={{ borderColor: 'rgba(237,234,224,0.15)' }}>
-          {WRITINGS.map((post) => (
-            <li key={post.slug}>
-              <Link href={`/writings/${post.slug}`} className="group flex items-baseline gap-6 py-8">
-                <span className="font-pixel text-sm" style={{ color: FG, opacity: 0.5 }}>{post.number}</span>
-                <span className="font-sans text-4xl md:text-6xl tracking-tight transition-opacity group-hover:opacity-70">
-                  {post.title}
-                </span>
-                <span className="ml-auto font-mono uppercase tracking-widest text-sm self-baseline" style={{ opacity: 0.4 }}>
-                  {post.type || post.postedOn}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <WritingsIndex writings={WRITINGS} />
     </main>
   );
 }

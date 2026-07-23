@@ -9,6 +9,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
+import { usePathname } from 'next/navigation';
 import { getTracks, type Track } from '@/lib/music';
 import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
 import { CassetteButton } from '@/components/cassette-button';
@@ -271,11 +272,15 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
 export function AudioUI() {
   const { playerVisible } = useAudio();
+  const pathname = usePathname();
 
   // Avoid SSR mismatch — render nothing on the server
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
+
+  // The cassette lives only on the home page; other routes stay clean.
+  if (pathname !== '/') return null;
 
   return (
     <>
