@@ -19,8 +19,8 @@ function VisualContent({ visual }: { visual: Visual }) {
         alt={visual.alt}
         className={
           visual.fit === 'cover'
-            ? 'h-full w-full rounded-xl bg-white/[0.02] object-cover'
-            : 'max-h-full max-w-full rounded-xl bg-white/[0.02] object-contain'
+            ? 'h-full w-full rounded-xl bg-white/[0.04] object-cover'
+            : 'max-h-full max-w-full rounded-xl bg-white/[0.04] p-4 object-contain md:p-6'
         }
         draggable={false}
       />
@@ -32,7 +32,7 @@ function VisualContent({ visual }: { visual: Visual }) {
         src={visual.src}
         poster={visual.poster}
         aria-label={visual.alt}
-        className="max-h-full max-w-full rounded-xl bg-white/[0.02] object-contain"
+        className="max-h-full max-w-full rounded-xl bg-white/[0.04] p-4 object-contain md:p-6"
         autoPlay
         muted
         loop
