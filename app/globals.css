@@ -237,3 +237,22 @@
 .animate-work-drop {
   animation: work-drop 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* Zen player card — bass/treble level meter bob while audio plays (JS pauses
+   via animationPlayState when stopped; real analyser wiring can replace this). */
+@keyframes meter-level {
+  0%   { height: 3px; }
+  20%  { height: 12px; }
+  40%  { height: 6px; }
+  60%  { height: 15px; }
+  80%  { height: 8px; }
+  100% { height: 3px; }
+}
+.animate-meter { animation: meter-level 1.3s ease-in-out infinite; will-change: height; }
+
+/* Zen knob hover — the accent ring draws around the full circle. */
+@keyframes knob-fill {
+  from { stroke-dashoffset: var(--circ); }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-knob-fill { animation: knob-fill 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }

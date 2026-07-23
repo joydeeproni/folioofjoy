@@ -1,3 +1,5 @@
+export type PaletteName = 'subdued' | 'lit' | 'mono';
+
 export interface ZenConfig {
   mode: string;
   cellSize: number;
@@ -8,8 +10,9 @@ export interface ZenConfig {
   smoothing: number;
   feather: number;
   scale: number;
-  color: string;
-  background: string;
+  palette: PaletteName;
+  color: string;      // derived from the palette's c1 — the visualizer mark colour
+  background: string; // always black under the current palettes
 }
 
 export const DEFAULT_ZEN_CONFIG: ZenConfig = {
@@ -22,25 +25,25 @@ export const DEFAULT_ZEN_CONFIG: ZenConfig = {
   smoothing: 0.82,
   feather: 0.15,
   scale: 0.025,
-  color: '#FFFFFF',
+  palette: 'subdued',
+  color: '#2CA152',   // SUBDUED c1
   background: '#000000',
 };
 
 export const MODE_OPTIONS = ['field', 'radial', 'ripple', 'plasma', 'spectrum', 'waveform', 'image'];
 export const SHAPE_OPTIONS = ['dot', 'square', 'plus', 'cross', 'minus', 'binary', 'mix'];
 
-// Named palettes — picking one sets BOTH the mark colour and the background,
-// so each is a complete, coordinated look.
-export const PALETTES: { name: string; color: string; background: string }[] = [
-  { name: 'Grass', color: '#2CA152', background: '#0A1A10' },
-  { name: 'Ember', color: '#F2653C', background: '#160B08' },
-  { name: 'Gold', color: '#F2E30C', background: '#14120A' },
-  { name: 'Sky', color: '#4FA3E3', background: '#0A1420' },
-  { name: 'Plasma', color: '#8B5CF6', background: '#161022' },
-  { name: 'Rose', color: '#F472B6', background: '#1A0E15' },
-  { name: 'Ocean', color: '#14B8A6', background: '#07171A' },
-  { name: 'Snow', color: '#FFFFFF', background: '#000000' },
+// Three palettes. Each is a set of three accent roles (c1/c2/c3) plus black &
+// white as needed; every UI accent is derived from these. Default is LIT.
+export interface Palette { name: PaletteName; label: string; c1: string; c2: string; c3: string; }
+export const PALETTES: Palette[] = [
+  { name: 'subdued', label: 'SUBDUED', c1: '#2CA152', c2: '#DD3430', c3: '#705292' },
+  { name: 'lit', label: 'LIT', c1: '#5300FF', c2: '#FF3D00', c3: '#D8F31F' },
+  { name: 'mono', label: 'MONO', c1: '#FFFFFF', c2: '#A4A4A4', c3: '#4F4F4F' },
 ];
+
+export const paletteOf = (name: PaletteName): Palette =>
+  PALETTES.find((p) => p.name === name) ?? PALETTES[0];
 
 const KEY = 'zen-config';
 
