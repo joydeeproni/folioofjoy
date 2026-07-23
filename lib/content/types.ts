@@ -18,6 +18,7 @@ export interface WorkItem {
   caption: string;
   category: WorkCategory;
   links: WorkLinkItem[];
+  caseStudy?: string; // slug of a /work/[slug] case study this card links into
 }
 
 // ---- About + Inspiration ----

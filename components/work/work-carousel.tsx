@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { useDialKit } from 'dialkit'
 import { ArrowUpRight } from 'lucide-react'
 import type { WorkItem } from '@/lib/content/types'
@@ -150,6 +151,16 @@ export function WorkCarousel({ items }: { items: WorkItem[] }) {
               <figcaption className="max-w-[26ch] truncate text-center font-sans text-xs text-white/50">
                 {item.caption}
               </figcaption>
+              {item.caseStudy && (
+                <Link
+                  href={`/work/${item.caseStudy}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1 rounded-full border border-[#2CA152]/40 bg-[#2CA152]/10 px-3.5 py-1.5 text-sm font-sans text-[#2CA152] backdrop-blur-md transition-colors duration-200 hover:bg-[#2CA152]/20"
+                >
+                  Read the case study
+                  <ArrowUpRight className="h-4 w-4" aria-hidden />
+                </Link>
+              )}
               {item.links?.length > 0 && (
                 <div className="flex gap-2">
                   {item.links.map((l) => (

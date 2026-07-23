@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ExternalLink } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, ExternalLink } from 'lucide-react';
 
 interface GalleryItem {
   src: string;
@@ -10,6 +11,7 @@ interface GalleryItem {
   title?: string;
   url?: string;
   links?: { label: string; url: string }[];
+  caseStudy?: string;
 }
 
 interface MobileGalleryProps {
@@ -68,6 +70,16 @@ function GalleryContent({ items, onClose }: { items: GalleryItem[]; onClose: () 
                     />
                   )}
                 </div>
+                {item.caseStudy && (
+                  <div className="px-1 pt-1.5">
+                    <Link
+                      href={`/work/${item.caseStudy}`}
+                      className="inline-flex items-center gap-1 rounded-full border border-[#2CA152]/40 bg-[#2CA152]/10 px-2.5 py-1 text-[11px] font-sans text-[#2CA152] transition-colors hover:bg-[#2CA152]/20"
+                    >
+                      Read the case study <ArrowUpRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                )}
                 {item.links && item.links.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5 px-1 pt-1.5">
                     {item.links.map((l) => (

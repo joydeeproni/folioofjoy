@@ -82,7 +82,7 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/1c1ccbb1a16f8994c36c90838a496c49d1cb8f99.mp4`, caption: "Dashboard loader animation — a looping motion study for a KCS analytics dashboard.", category: 'SVC', links: [] },
   { src: `${BLOB}/2bc3d726b69b603e16a87ff0e20d5316d5407e9d-1929x1653.png`, caption: "AI home concierge — \"What do you want today?\" with maintenance, providers, and a talk-to-Cassi prompt.", category: 'SVC', links: [] },
   { src: `${BLOB}/4d2027a7bf3523823a884fb859da762c5041bcb0-1929x939.png`, caption: "Home maintenance screens — seasonal calendar, asset detail, and a welcome-home dashboard.", category: 'SVC', links: [] },
-  { src: `${BLOB}/574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png`, caption: "Onboarding for the home app — a gradient welcome flow that introduces Cassi before asking for anything.", category: 'SVC', links: [] },
+  { src: `${BLOB}/574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png`, caption: "Onboarding for the home app — a gradient welcome flow that introduces Cassi before asking for anything.", category: 'SVC', links: [], caseStudy: 'cassi' },
   { src: `${BLOB}/ebcbe3e8d21b64ecc3e4a3aec005fe0f32cfe1e2-1929x1444.png`, caption: "The design system in Figma — chat interface states, components, and the annotations engineering actually read.", category: 'DTY', links: [] },
   { src: `${BLOB}/f835ab854689260af49cdc29fb9d34aa1a2a274e-1824x1822.png`, caption: "Lending dashboard — borrower details and a credit-score gauge that reads at a glance.", category: 'BIZ', links: [] },
   { src: `${BLOB}/11af0c9cd13f04e65feca8149963374fa4c16470-1824x2719.png`, caption: "Mobile document collection for a loan — upload progress and lender checklists, minus the paperwork dread.", category: 'BIZ', links: [] },
