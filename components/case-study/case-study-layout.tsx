@@ -4,7 +4,14 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { pickActiveSection } from './active-section';
 import { VisualStage } from './visual-stage';
 import { Eyebrow, H2 } from './prose';
+import { ArticleToc, type TocSection } from '@/components/writings/article-toc';
+import { slugify } from '@/lib/writings/slug';
 import type { CaseStudySection } from './types';
+
+// The right-rail index (shared with the writings articles) finds sections by
+// slugify(label), so the label a section shows in the rail and its DOM id are
+// derived from the same string.
+const navLabel = (s: CaseStudySection) => s.heading ?? s.eyebrow ?? s.act ?? s.id;
 
 // The reusable scroll-driven case study frame.
 //
@@ -60,6 +67,7 @@ export function CaseStudyLayout({
   }, [sections.length]);
 
   const activeSection = sections[active] ?? sections[0];
+  const tocSections: TocSection[] = sections.map((s) => ({ label: navLabel(s), level: 1 }));
 
   return (
     <>
@@ -79,29 +87,8 @@ export function CaseStudyLayout({
       </div>
     )}
 
-    {/* Right-side progress rail (desktop) — one tick per section, active is the
-        green one; click to jump. Replaces the act label that used to sit in the bar. */}
-    <nav
-      aria-label="Sections"
-      className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-2.5 md:flex"
-    >
-      {sections.map((s, i) => (
-        <button
-          key={s.id}
-          onClick={() => document.getElementById(s.id)?.scrollIntoView({ block: 'center', behavior: 'smooth' })}
-          aria-label={`Go to ${s.heading ?? s.act ?? s.id}`}
-          aria-current={i === active ? 'true' : undefined}
-          className="group flex h-3 items-center justify-end"
-        >
-          <span
-            className={`h-px rounded-full transition-all duration-300 ${
-              i === active ? 'w-7' : 'w-3.5 bg-white/25 group-hover:w-5 group-hover:bg-white/50'
-            }`}
-            style={i === active ? { backgroundColor: '#2CA152' } : undefined}
-          />
-        </button>
-      ))}
-    </nav>
+    {/* Right-rail section index — the same component the writings articles use. */}
+    <ArticleToc sections={tocSections} />
     <div className="mx-auto w-full max-w-6xl md:grid md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
       {/* Visual stage — first in the DOM so it pins to the top on mobile. */}
       <div
@@ -130,11 +117,11 @@ export function CaseStudyLayout({
         {sections.map((section, i) => (
           <section
             key={section.id}
-            id={section.id}
+            id={slugify(navLabel(section))}
             ref={(el) => {
               sectionRefs.current[i] = el;
             }}
-            className={`flex scroll-mt-24 flex-col border-t border-white/10 py-12 first:border-t-0 md:min-h-[86vh] md:py-16 ${
+            className={`flex scroll-mt-24 flex-col py-12 md:min-h-[86vh] md:py-16 ${
               i === 0 ? 'md:justify-start' : 'md:justify-center'
             }`}
           >

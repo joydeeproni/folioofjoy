@@ -221,7 +221,7 @@ export function Cassi() {
         </header>
       }
       footer={
-        <footer className="border-t border-white/10 py-16 md:py-24">
+        <footer className="py-16 md:py-24">
           <p className="font-sans text-2xl md:text-3xl tracking-tight text-balance" style={{ color: '#EDEAE0' }}>
             That&rsquo;s Cassi — a prototype that had to feel real, and did.
           </p>
