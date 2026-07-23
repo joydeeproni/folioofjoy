@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 import { Cassi } from './cassi';
 import { Knobs } from './knobs';
 import { Canvas } from './canvas';
-import { Insider, MeraBills, FolioOfJoy, Pitzsa } from './stubs';
+import { Insider, TactileCore, FolioOfJoy, Pitzsa } from './stubs';
 import { Deterge } from './deterge';
 import { Verizon } from './verizon';
 
@@ -16,7 +16,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   knobs: { title: 'Toggles, switches, knobs', Component: Knobs },
   canvas: { title: 'Create Canvas', Component: Canvas },
   insider: { title: 'Insider', Component: Insider },
-  merabills: { title: 'MeraBills', Component: MeraBills },
+  'tactile-core': { title: 'Tactile Core', Component: TactileCore },
   'folio-of-joy': { title: 'Folio of Joy', Component: FolioOfJoy },
   pitzsa: { title: 'Pitzsa', Component: Pitzsa },
   deterge: { title: 'Deterge', Component: Deterge },

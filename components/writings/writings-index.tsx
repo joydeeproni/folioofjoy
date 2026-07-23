@@ -12,19 +12,21 @@ const RULE = 'rgba(237,234,224,0.15)';
 // canonical Cases list.
 type CaseItem = { title: string; category: string; year: number; slug?: string };
 const CASES: CaseItem[] = [
+  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
   { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi' },
   { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs' },
-  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
-  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider' },
-  { title: 'MeraBills', category: 'Mobile', year: 2019, slug: 'merabills' },
-  { title: 'Folio of Joy', category: 'Web', year: 2026, slug: 'folio-of-joy' },
   { title: 'Pitzsa', category: 'Web', year: 2024, slug: 'pitzsa' },
-  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge' },
+  { title: 'Tactile Core', category: 'Strategy', year: 2022, slug: 'tactile-core' },
+  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider' },
   { title: 'Verizon', category: 'Mobile', year: 2018, slug: 'verizon' },
+  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge' },
 ];
 
-// Newest first; ties keep their listed order (stable sort).
+// Newest first; ties keep their listed order (stable sort) so Create Canvas leads.
 const SORTED_CASES = [...CASES].sort((a, b) => b.year - a.year);
+
+// Folio of Joy lives in Thoughts (a personal, reflective piece), not Cases.
+const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Personal', href: '/work/folio-of-joy' };
 
 function Row({ n, title, meta, href }: { n: string; title: string; meta: string; href?: string }) {
   const body = (
@@ -79,6 +81,9 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
 
       {tab === 'thoughts' ? (
         <ul className="divide-y" style={{ borderColor: RULE }}>
+          <li key="folio-of-joy">
+            <Row n={FOLIO_THOUGHT.number} title={FOLIO_THOUGHT.title} meta={FOLIO_THOUGHT.meta} href={FOLIO_THOUGHT.href} />
+          </li>
           {writings.map((post) => (
             <li key={post.slug}>
               <Row n={post.number} title={post.title} meta={post.type || post.postedOn} href={`/writings/${post.slug}`} />

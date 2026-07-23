@@ -10,7 +10,6 @@ import type { CaseStudySection } from './types';
 // exists and the structure is visible. Fill the prose and swap the visuals as
 // content lands, or replace the whole entry with a bespoke component.
 
-const ACCENT = '#2CA152';
 const MUTED = 'rgba(237,234,224,0.4)';
 
 function StubVisual() {
@@ -44,9 +43,6 @@ function makeStub(cfg: StubConfig) {
         title={cfg.title}
         header={
           <header className="pt-24 pb-4 md:pt-16">
-            <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em] lowercase" style={{ color: ACCENT }}>
-              Case study · in progress
-            </p>
             <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
               {cfg.title}
             </h1>
@@ -75,15 +71,16 @@ export const Insider = makeStub({
   ],
 });
 
-export const MeraBills = makeStub({
-  title: 'MeraBills',
-  tag: 'MeraBills · Mobile · Behavioural design',
-  premise: 'A bookkeeping app for low-literacy, low-trust micro-businesses in India — where the calculator metaphor failed and UPI won.',
+export const TactileCore = makeStub({
+  title: 'Tactile Core',
+  tag: 'Tactile Games · Strategy · LiveOps & monetization',
+  premise: 'LiveOps and game events for Tactile’s match/puzzle games — engaging players without feeling pay-to-win. The events my team and I designed generated over $10M.',
   sections: [
-    { act: 'Problem', heading: 'Businesses without proof', note: 'Millions of real businesses whose records live in notebooks, memory, and WhatsApp. — adapt from the low-literacy essay.' },
-    { act: 'Process', heading: 'The metaphor that failed', note: 'A calculator that suddenly developed career ambitions, and why it didn’t land. — content coming.' },
-    { act: 'Process', heading: 'What worked: UPI', note: 'Meeting people where their tech literacy already was. — content coming.' },
-    { act: 'Outcome', heading: 'Reach', note: '2,000+ users, ~1,000–1,500 active; evolving into a small-business OS. — content coming.' },
+    { act: 'Context', heading: 'Monetize without breaking trust', note: 'The core tension: events that engage players without feeling play-to-win or intrusive. — content coming.' },
+    { act: 'Process', heading: 'Fail-state offers', note: 'Upsells at the moment of purchase intent — “Out of Time (+60s)”, “Out of Space” — with tiered pricing. Paywall and friction-reduction design. — content coming.' },
+    { act: 'Process', heading: 'The booster economy', note: 'Reward loops like the Shopping Gift progression that keep players moving without pushing. — content coming.' },
+    { act: 'Process', heading: 'Benchmark → gap → offer', note: 'Systematic teardowns against Royal Match, Match Factory, Triple Match and more, turned into proposed offers. — content coming.' },
+    { act: 'Outcome', heading: '$10M+ generated', note: 'Over $10M of monetization business from events my team and I designed; led two designers. — metrics to add.' },
   ],
 });
 

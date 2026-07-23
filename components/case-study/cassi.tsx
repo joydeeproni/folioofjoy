@@ -1,7 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
+import { MetricsPanel } from './controls/metrics-panel';
 import type { CaseStudySection } from './types';
 
 // Media lives on the same Vercel Blob store the rest of the site uses.
@@ -10,7 +13,6 @@ const BLOB = 'https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work';
 const SECTIONS: CaseStudySection[] = [
   {
     id: 'intro',
-    eyebrow: 'The short version',
     body: (
       <>
         <P lead>
@@ -167,23 +169,6 @@ const SECTIONS: CaseStudySection[] = [
     heading: 'A prototype that moved real money',
     body: (
       <>
-        <div className="mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
-            $3M
-          </span>
-          <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
-            seed
-          </span>
-          <span className="text-3xl md:text-4xl" style={{ color: '#2CA152' }} aria-hidden>
-            &rarr;
-          </span>
-          <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
-            $10M
-          </span>
-          <span className="font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
-            Series A
-          </span>
-        </div>
         <P>
           The prototype did its job, and then it kept doing it. I&rsquo;ll take &ldquo;a design that directly
           moved real money&rdquo; over a dribbble shot any day.
@@ -194,8 +179,13 @@ const SECTIONS: CaseStudySection[] = [
         </P>
       </>
     ),
-    visual: { kind: 'video', src: `${BLOB}/cassi-fundraising-deck.mp4`, alt: 'The Cassi fundraising deck' },
-    caption: 'Fundraising deck',
+    visual: {
+      kind: 'component',
+      render: () => (
+        <MetricsPanel progression stats={[{ value: '$3M', label: 'seed' }, { value: '$10M', label: 'Series A' }]} />
+      ),
+    },
+    caption: 'A prototype that moved real money',
   },
 ];
 
@@ -206,9 +196,6 @@ export function Cassi() {
       title="Cassi"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em] lowercase" style={{ color: '#2CA152' }}>
-            Case study
-          </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Cassi
           </h1>

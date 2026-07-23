@@ -3,15 +3,14 @@
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import { MiniCanvas } from './controls/mini-canvas';
+import { MetricsPanel } from './controls/metrics-panel';
 import type { CaseStudySection } from './types';
 
 const BLOB = 'https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work';
-const ACCENT = '#2CA152';
 
 const SECTIONS: CaseStudySection[] = [
   {
     id: 'intro',
-    eyebrow: 'The short version',
     body: (
       <>
         <P lead>
@@ -90,24 +89,6 @@ const SECTIONS: CaseStudySection[] = [
     heading: 'The engineers shipped my prototype',
     body: (
       <>
-        <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-3">
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
-              500–1k
-            </span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
-              users
-            </span>
-          </span>
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: '#EDEAE0' }}>
-              &lt;6
-            </span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.5)' }}>
-              months · 2 people
-            </span>
-          </span>
-        </div>
         <P>
           The prototype wasn&rsquo;t thrown away — the engineers reused much of the code, re-optimised
           the hot paths, and shipped the real Canvas on top of it. Adoption landed at 500–1,000
@@ -120,8 +101,13 @@ const SECTIONS: CaseStudySection[] = [
         </P>
       </>
     ),
-    visual: { kind: 'video', src: `${BLOB}/canvas-stickynote.mp4`, alt: 'The sticky-note canvas in motion' },
-    caption: 'Sticky-note canvas',
+    visual: {
+      kind: 'component',
+      render: () => (
+        <MetricsPanel stats={[{ value: '500–1k', label: 'users' }, { value: '<6', label: 'months · 2 people' }]} />
+      ),
+    },
+    caption: 'The engineers shipped my prototype',
   },
 ];
 
@@ -132,9 +118,6 @@ export function Canvas() {
       title="Canvas"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em] lowercase" style={{ color: ACCENT }}>
-            Case study
-          </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: '#EDEAE0' }}>
             Create Canvas
           </h1>

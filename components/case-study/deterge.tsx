@@ -2,6 +2,7 @@
 
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull } from './prose';
+import { MetricsPanel } from './controls/metrics-panel';
 import type { CaseStudySection } from './types';
 
 // Screens (drop the pasted files into public/work/deterge/ with these names).
@@ -9,12 +10,10 @@ const IMG = '/work/deterge';
 
 const FG = '#EDEAE0';
 const MUTED = 'rgba(237,234,224,0.5)';
-const ACCENT = '#2CA152';
 
 const SECTIONS: CaseStudySection[] = [
   {
     id: 'intro',
-    eyebrow: 'The short version',
     body: (
       <>
         <P lead>
@@ -118,20 +117,6 @@ const SECTIONS: CaseStudySection[] = [
     heading: 'It actually worked',
     body: (
       <>
-        <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-3">
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: FG }}>80+</span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: MUTED }}>weekly active</span>
-          </span>
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: FG }}>&#8377;30k</span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: MUTED }}>invested</span>
-          </span>
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: FG }}>6</span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: MUTED }}>months</span>
-          </span>
-        </div>
         <P>
           We aggregated the local dhobiwaale, then landed a deal with a major provider contracted to
           Indian Railways — suddenly a student app had real infrastructure and manpower behind it.
@@ -143,8 +128,15 @@ const SECTIONS: CaseStudySection[] = [
         </P>
       </>
     ),
-    visual: { kind: 'image', src: `${IMG}/pickup-confirmed.png`, alt: 'Deterge — pickup confirmed with the scheduled window' },
-    caption: 'Pickup confirmed',
+    visual: {
+      kind: 'component',
+      render: () => (
+        <MetricsPanel
+          stats={[{ value: '80+', label: 'weekly active' }, { value: '₹30k', label: 'invested' }, { value: '6', label: 'months' }]}
+        />
+      ),
+    },
+    caption: 'It actually worked',
   },
 ];
 
@@ -166,9 +158,6 @@ export function Deterge() {
       }
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em] lowercase" style={{ color: ACCENT }}>
-            Case study
-          </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: FG }}>
             Deterge
           </h1>

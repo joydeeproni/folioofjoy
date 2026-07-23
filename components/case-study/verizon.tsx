@@ -2,6 +2,7 @@
 
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
+import { MetricsPanel } from './controls/metrics-panel';
 import type { CaseStudySection } from './types';
 
 // Process images (drop the pasted files into public/work/verizon/ with these names).
@@ -9,12 +10,10 @@ const IMG = '/work/verizon';
 
 const FG = '#EDEAE0';
 const MUTED = 'rgba(237,234,224,0.5)';
-const ACCENT = '#2CA152';
 
 const SECTIONS: CaseStudySection[] = [
   {
     id: 'intro',
-    eyebrow: 'The short version',
     body: (
       <>
         <P lead>
@@ -121,22 +120,17 @@ const SECTIONS: CaseStudySection[] = [
     eyebrow: 'The payoff',
     heading: '500 hours back',
     body: (
-      <>
-        <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-3">
-          <span>
-            <span className="font-mono font-thin text-5xl md:text-6xl tracking-tight tabular-nums" style={{ color: FG }}>500+</span>
-            <span className="ml-2 font-mono uppercase tracking-widest text-[11px]" style={{ color: MUTED }}>hours of scanning saved</span>
-          </span>
-        </div>
-        <P>
-          The result: automated stock scanning from a phone camera — auto-detect the barcode, fetch
-          the data, update the system — replacing the manual asset-tracking grind. Group-scanning a
-          rack instead of every box cut an estimated 500-plus hours of scanning.
-        </P>
-      </>
+      <P>
+        The result: automated stock scanning from a phone camera — auto-detect the barcode, fetch
+        the data, update the system — replacing the manual asset-tracking grind. Group-scanning a
+        rack instead of every box cut an estimated 500-plus hours of scanning.
+      </P>
     ),
-    visual: { kind: 'image', src: `${IMG}/history-update.png`, alt: 'History: stored scan video with product counts, reviewed then pushed to stock' },
-    caption: 'Review & update stock',
+    visual: {
+      kind: 'component',
+      render: () => <MetricsPanel stats={[{ value: '500+', label: 'hours of scanning saved' }]} />,
+    },
+    caption: '500 hours back',
   },
 ];
 
@@ -147,9 +141,6 @@ export function Verizon() {
       title="Verizon"
       header={
         <header className="pt-24 pb-4 md:pt-16">
-          <p className="mb-4 font-sans font-medium text-sm tracking-[-0.02em] lowercase" style={{ color: ACCENT }}>
-            Case study
-          </p>
           <h1 className="font-sans font-medium text-5xl md:text-7xl leading-[0.95] tracking-tight" style={{ color: FG }}>
             Verizon
           </h1>
