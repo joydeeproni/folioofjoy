@@ -29,13 +29,18 @@ export function ZenStage() {
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const analyserLRef = useRef<AnalyserNode | null>(null);
+  const analyserRRef = useRef<AnalyserNode | null>(null);
+  const splitterRef = useRef<ChannelSplitterNode | null>(null);
   const audioElRef = useRef<HTMLAudioElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const elNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const connectedRef = useRef<AudioNode | null>(null);
   const tracksRef = useRef<Track[]>([]);
 
   const getAnalyser = useCallback(() => analyserRef.current, []);
+  const getStereo = useCallback(() => ({ left: analyserLRef.current, right: analyserRRef.current }), []);
 
   // Load any saved visualizer config after mount (SSR-safe).
   useEffect(() => { setConfig(loadZenConfig()); }, []);
@@ -80,8 +85,18 @@ export function ZenStage() {
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 1024;
       analyser.smoothingTimeConstant = 0.82;
+      // Per-channel monitors: split the stereo signal so the L/R gauges read
+      // the actual left and right levels independently.
+      const splitter = ctx.createChannelSplitter(2);
+      const aL = ctx.createAnalyser(); aL.fftSize = 512; aL.smoothingTimeConstant = 0.75;
+      const aR = ctx.createAnalyser(); aR.fftSize = 512; aR.smoothingTimeConstant = 0.75;
+      splitter.connect(aL, 0);
+      splitter.connect(aR, 1);
       audioCtxRef.current = ctx;
       analyserRef.current = analyser;
+      splitterRef.current = splitter;
+      analyserLRef.current = aL;
+      analyserRRef.current = aR;
     }
     if (audioCtxRef.current.state === 'suspended') void audioCtxRef.current.resume();
     return audioCtxRef.current;
@@ -103,6 +118,7 @@ export function ZenStage() {
     if (!elNodeRef.current) {
       elNodeRef.current = ctx.createMediaElementSource(el);
       elNodeRef.current.connect(ctx.destination);
+      elNodeRef.current.connect(splitterRef.current!);
     }
     elNodeRef.current.connect(analyserRef.current!);
     connectedRef.current = elNodeRef.current;
@@ -129,6 +145,13 @@ export function ZenStage() {
     setAlbumUrl(null);
     playElement(URL.createObjectURL(file), `File · ${file.name}`);
   }, [playElement]);
+
+  // Source dropdown in the dock: switch source without returning to the picker.
+  const selectSource = useCallback((kind: 'playlist' | 'file' | 'radio') => {
+    if (kind === 'playlist') playSongs();
+    else if (kind === 'radio') { setAlbumUrl(null); playElement(RADIO[0].url, `Radio · ${RADIO[0].name}`); }
+    else fileInputRef.current?.click();
+  }, [playSongs, playElement]);
 
   useEffect(() => () => {
     disconnectCurrent();
@@ -163,6 +186,7 @@ export function ZenStage() {
     <main className="fixed inset-0 bg-black overflow-hidden">
       <ZenVisualizer getAnalyser={getAnalyser} imageUrl={albumUrl} config={vizConfig} />
       <audio ref={audioElRef} crossOrigin="anonymous" />
+      <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
 
       {/* Exit — auto-hiding (only while a source is playing; the picker has its own header) */}
       <div className={`fixed top-6 left-6 z-40 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -186,6 +210,9 @@ export function ZenStage() {
           onSave={() => saveZenConfig(config)}
           onReset={() => { setConfig(DEFAULT_ZEN_CONFIG); saveZenConfig(DEFAULT_ZEN_CONFIG); }}
           visible={chromeShown}
+          getAnalyser={getAnalyser}
+          getStereo={getStereo}
+          onSelectSource={selectSource}
         />
       )}
 
