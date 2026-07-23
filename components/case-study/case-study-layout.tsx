@@ -63,30 +63,45 @@ export function CaseStudyLayout({
 
   return (
     <>
-    {/* Collapsed header → compact fixed top bar (desktop). Sits under the
-        BackLink (z-50), aligned to its row; mobile keeps the pinned stage band. */}
+    {/* Collapsed header → the title floats at the top, baseline-aligned with the
+        BackLink (z-50), no divider — a soft gradient keeps it legible over content. */}
     {title && (
       <div
         aria-hidden={!collapsed}
-        className={`fixed inset-x-0 top-0 z-40 hidden md:block transition-[opacity,transform] duration-300 ease-out motion-reduce:transform-none ${
-          collapsed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
+        className={`fixed inset-x-0 top-0 z-40 hidden justify-center px-16 pt-[calc(1.5rem+var(--sat))] pb-8 transition-opacity duration-300 ease-out md:flex ${
+          collapsed ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
+        style={{ background: 'linear-gradient(to bottom, rgba(11,11,11,0.92), rgba(11,11,11,0))' }}
       >
-        <div
-          className="flex h-[3.25rem] items-center justify-center gap-2 border-b border-white/10 px-16 backdrop-blur-md"
-          style={{ backgroundColor: 'rgba(11,11,11,0.85)' }}
-        >
-          <span className="font-sans font-medium text-sm tracking-tight" style={{ color: FG }}>
-            {title}
-          </span>
-          {activeSection.act && (
-            <span className="font-mono uppercase tracking-widest text-[10px]" style={{ color: 'rgba(237,234,224,0.45)' }}>
-              · {activeSection.act}
-            </span>
-          )}
-        </div>
+        <span className="font-sans font-medium text-sm" style={{ color: FG }}>
+          {title}
+        </span>
       </div>
     )}
+
+    {/* Right-side progress rail (desktop) — one tick per section, active is the
+        green one; click to jump. Replaces the act label that used to sit in the bar. */}
+    <nav
+      aria-label="Sections"
+      className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-2.5 md:flex"
+    >
+      {sections.map((s, i) => (
+        <button
+          key={s.id}
+          onClick={() => document.getElementById(s.id)?.scrollIntoView({ block: 'center', behavior: 'smooth' })}
+          aria-label={`Go to ${s.heading ?? s.act ?? s.id}`}
+          aria-current={i === active ? 'true' : undefined}
+          className="group flex h-3 items-center justify-end"
+        >
+          <span
+            className={`h-px rounded-full transition-all duration-300 ${
+              i === active ? 'w-7' : 'w-3.5 bg-white/25 group-hover:w-5 group-hover:bg-white/50'
+            }`}
+            style={i === active ? { backgroundColor: '#2CA152' } : undefined}
+          />
+        </button>
+      ))}
+    </nav>
     <div className="mx-auto w-full max-w-6xl md:grid md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-16">
       {/* Visual stage — first in the DOM so it pins to the top on mobile. */}
       <div
