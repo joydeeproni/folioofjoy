@@ -10,9 +10,39 @@ import { getWork, getWritingsNav } from '@/lib/content'
 import 'dialkit/styles.css'
 import './globals.css'
 
+// The Tagore quote doubles as the social-card description; the search-engine
+// meta description is the plainer intro. Absolute OG/Twitter image URLs are
+// resolved against metadataBase.
+const TITLE = 'Folio of Joy – Portfolio of Joy Sengupta'
+const QUOTE =
+  'I slept and dreamt that life was joy. I awoke and saw that life was service. I acted and behold, service was joy.'
+
 export const metadata: Metadata = {
-  title: 'Folio of Joy — Product Designer',
-  description: 'I\'m a product designer who started in computer science, then did the obvious late-2010s thing and developed opinions about interfaces, user psychology, and whether a button should feel expensive. I like polish, intentionality, and tools that actually move the craft forward instead of becoming another shrine we all pretend to worship.',
+  metadataBase: new URL('https://www.joydeeproni.com'),
+  title: TITLE,
+  description:
+    "I'm Joy, product designer based in Copenhagen. with knack for fiddling with tools to create something fun & joyful. Currently I am designing creative tools for Tactile Games.",
+  openGraph: {
+    title: TITLE,
+    description: QUOTE,
+    url: '/',
+    siteName: 'Folio of Joy',
+    type: 'website',
+    images: [
+      {
+        url: '/preview.png',
+        width: 2336,
+        height: 1226,
+        alt: 'Folio of Joy — two friends on a pixel-art swing set',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: QUOTE,
+    images: ['/preview.png'],
+  },
   icons: {
     icon: [
       {
