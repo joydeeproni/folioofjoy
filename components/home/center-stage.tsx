@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useDialKit } from 'dialkit';
 import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
 import { Seesaw } from './seesaw';
@@ -38,21 +37,14 @@ export function CenterStage({
   const WORK_ITEMS = useWork();
   const WRITINGS = useWritings();
 
-  // Live controls for the hero quote (dialkit panel, dev only).
-  const q = useDialKit('Homepage Quote', {
-    sizeVw: [13.4, 2, 16, 0.05],
-    maxWidth: [16, 8, 40, 0.5], // characters per line (ch) — locks line breaks across widths
-    lineHeight: [1.06, 0.6, 2, 0.01],
-    letterSpacing: [-0.025, -0.08, 0.4, 0.005],
-    wordSpacing: [-0.2, -0.2, 1.5, 0.01],
+  // Hero quote typography — tuned live via the old dialkit panel, now baked in.
+  const q = {
+    sizeVw: 13.4,
+    maxWidth: 16, // characters per line (ch) — locks line breaks across widths
+    lineHeight: 1.06,
+    letterSpacing: -0.025,
+    wordSpacing: -0.2,
     color: GREEN,
-  }) as unknown as {
-    sizeVw: number;
-    maxWidth: number;
-    lineHeight: number;
-    letterSpacing: number;
-    wordSpacing: number;
-    color: string;
   };
 
   const quoteRef = useRef<HTMLParagraphElement | null>(null);

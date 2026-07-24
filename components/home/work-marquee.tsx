@@ -1,26 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useDialKit } from 'dialkit';
-import { ArrowUpRight } from 'lucide-react';
+import { CircleButton, circleTexts } from '@/components/circle-button';
 import { isVideo } from '@/components/work-preview';
 import { useWork } from '@/components/content-provider';
+
+// Marquee physics — tuned live via the old dialkit panel, now baked in.
+const PHYSICS = { driftSpeed: 0.5, wheelSpeed: 0.8, dragSpeed: 1.1, friction: 0.94 };
 
 // Auto-scrolling filmstrip of every project. Drifts right→left, and can be
 // flung (drag with momentum) or scrolled (vertical wheel → horizontal travel):
 // fling fast and it flies with motion blur, then eases back to the drift.
-// Physics are live-tunable via the dialkit panel (dev only).
 export function WorkMarquee() {
   const WORK_ITEMS = useWork();
-
-  const dial = useDialKit('Work Preview', {
-    driftSpeed: [0.5, 0, 3, 0.05],
-    wheelSpeed: [0.8, 0.1, 4, 0.05],
-    dragSpeed: [1.1, 0.3, 3, 0.05],
-    friction: [0.94, 0.8, 0.99, 0.005],
-  }) as unknown as { driftSpeed: number; wheelSpeed: number; dragSpeed: number; friction: number };
-  const dialRef = useRef(dial);
-  dialRef.current = dial;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -49,7 +41,7 @@ export function WorkMarquee() {
 
     let frame = 0;
     const step = () => {
-      const { driftSpeed, friction } = dialRef.current;
+      const { driftSpeed, friction } = PHYSICS;
       if (!draggingRef.current) {
         offsetRef.current += velRef.current - driftSpeed;
         velRef.current *= friction;
@@ -93,7 +85,7 @@ export function WorkMarquee() {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      velRef.current += d * dialRef.current.wheelSpeed * 0.3;
+      velRef.current += d * PHYSICS.wheelSpeed * 0.3;
       velRef.current = Math.max(-130, Math.min(130, velRef.current));
     };
     surface.addEventListener('wheel', onWheel, { passive: false });
@@ -109,7 +101,7 @@ export function WorkMarquee() {
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!draggingRef.current) return;
-    const dx = (e.clientX - lastXRef.current) * dialRef.current.dragSpeed;
+    const dx = (e.clientX - lastXRef.current) * PHYSICS.dragSpeed;
     offsetRef.current += dx;
     dragVelRef.current = dx;
     lastXRef.current = e.clientX;
@@ -148,7 +140,7 @@ export function WorkMarquee() {
       {/* Description + live link of whichever project is centred. Fixed height so
           swapping to the short "whheeee!!" (and dropping the link row) can't change
           the column height and nudge the filmstrip. */}
-      <div className="mt-8 flex flex-col items-center gap-3 min-h-[8rem]">
+      <div className="mt-8 flex flex-col items-center gap-3 min-h-[10rem]">
         <p
           key={fast ? 'whee' : centeredIdx}
           className="px-6 max-w-xl text-center text-base md:text-lg font-sans text-white/80 animate-caption-fade"
@@ -157,18 +149,9 @@ export function WorkMarquee() {
           {fast ? 'whheeee!!' : WORK_ITEMS[centeredIdx]?.caption}
         </p>
         {!fast && (WORK_ITEMS[centeredIdx]?.links?.length ?? 0) > 0 && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {WORK_ITEMS[centeredIdx]!.links.map((l) => (
-              <a
-                key={l.url}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm font-sans text-white/80 transition-colors duration-200 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-md hover:bg-white/20 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none md:hover:bg-transparent md:underline md:decoration-transparent md:underline-offset-4 md:hover:text-[#2CA152] md:hover:decoration-[#2CA152]"
-              >
-                {l.label}
-                <ArrowUpRight className="h-4 w-4" aria-hidden />
-              </a>
+              <CircleButton key={l.url} external {...circleTexts(l.label)} href={l.url} />
             ))}
           </div>
         )}
