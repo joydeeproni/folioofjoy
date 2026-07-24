@@ -118,6 +118,11 @@ export function WorkLink() {
           <div className={`relative z-10 w-full transition-all duration-500 ${carouselVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             <WorkCarousel items={WORK_ITEMS} />
           </div>
+
+          {/* Pinned to the bottom of the screen, independent of the carousel. */}
+          <p className={`pointer-events-none select-none absolute inset-x-0 bottom-[calc(1.5rem+var(--sab))] z-10 px-6 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-white/30 transition-opacity duration-500 ${carouselVisible ? 'opacity-100' : 'opacity-0'}`}>
+            Snippets of my shipped work, WIP frames, prototypes, both messy &amp; polished. Scroll to go through
+          </p>
         </div>
       ), document.body)}
     </>
