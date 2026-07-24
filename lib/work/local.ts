@@ -19,7 +19,6 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/game-result-01.png`, caption: "Mini Parkering — a game about issuing as many parking tickets as humanly possible.", category: 'JOY', links: [] },
   { src: `${BLOB}/game-over-01.png`, caption: "Mini Parkering — game over: the lot's overloaded, but you made $230 doing it.", category: 'JOY', links: [] },
   { src: `${BLOB}/media-player-01.png`, caption: "Media player redesign — the before and after, down to the volume slider.", category: 'JOY', links: [] },
-  { src: `${BLOB}/ftue-onboarding-04.png`, caption: "Cassi — a first run that opens with your home's value and the risks that eat into it.", category: 'SVC', links: CASSI },
   { src: `${BLOB}/onboarding-flow-01.png`, caption: "Cassi — the onboarding flow mapped out, from 'home intelligence' score to your first insurance upload.", category: 'SVC', links: CASSI },
   { src: `${BLOB}/upload-progress-01.png`, caption: "Cassi — the uploading-documents flow in five frames, because the in-between states matter.", category: 'SVC', links: CASSI },
   { src: `${BLOB}/claude-usage.png`, caption: "My Claude usage as a terminal stat card — 86.7M tokens, roughly 243 copies of Crime and Punishment.", category: 'JOY', links: [] },
@@ -39,6 +38,13 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, caption: "Cassi — a home dashboard concept: everything about the house in one calm view.", category: 'SVC', links: CASSI },
   { src: `${BLOB}/cassi-bathroom-maintenance-video.mp4`, caption: "Cassi — booking bathroom maintenance by just walking it through on video.", category: 'SVC', links: CASSI },
   { src: `${BLOB}/spice-label-maker.mp4`, caption: "A minimalist spice-label maker, because the pantry deserves good type too.", category: 'JOY', links: [] },
+
+  // Tactile tooling + client work (2025–26 exports).
+  { src: `${BLOB}/tactile-build-server-toggle.gif`, caption: "Tactile Build Server — a toggle that exposes options progressively rather than cluttering the page.", category: 'DTY', links: [] },
+  { src: `${BLOB}/tactile-core-tools.mp4`, caption: "A preview of Tactile Core Tools — the tools I designed that run game-dev operations behind the scenes.", category: 'DTY', links: [] },
+  { src: `${BLOB}/rug-brand-landing.mp4`, caption: "Editorial-style landing page for a designer rug brand from India.", category: 'BIZ', links: [] },
+  { src: `${BLOB}/tactile-releases-dashboard.png`, caption: "Managing app releases in the Tactile Releases Dashboard — builds organized across production, staged rollouts, managed publishing.", category: 'DTY', links: [] },
+  { src: `${BLOB}/game-canvas-panel.png`, caption: "All-in-one panel to manage your game, liveops, events and build configurations.", category: 'DTY', links: [] },
 
   // Personal bits + palette-cleansers scattered through the preview. The paintings
   // aren't my work — winter paintings that calm me, credited to their artists.

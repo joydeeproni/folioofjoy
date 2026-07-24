@@ -95,7 +95,6 @@ export function workKey(src: string): string {
 const PINNED_FIRST = [
   '574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png', // Onboarding — "Welcome home, James"
   'cassi-onboarding-splash.mp4',
-  'ftue-onboarding-04.png',
   'onboarding-flow-01.png',
   '2bc3d726b69b603e16a87ff0e20d5316d5407e9d-1929x1653.png', // AI home concierge — "What do you want today?"
   'cassi-home-dashboard-concept.mp4',
