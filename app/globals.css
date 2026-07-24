@@ -243,14 +243,31 @@
   }
 }
 
-@keyframes seesaw-teeter {
-  0%, 100% { transform: rotate(-1deg); }
-  50%      { transform: rotate(1deg); }
+/* Swing-set hero art. The pendulum (ropes + seat + rider) hangs from the beam
+   midway between the two rope anchors; the pusher pivots at their feet, leaning
+   in counter-phase so they read as pushing. Origins are in viewBox units. */
+@keyframes swing-pendulum {
+  0%, 100% { transform: rotate(2.4deg); }
+  50%      { transform: rotate(-2.4deg); }
 }
-.animate-seesaw {
-  animation: seesaw-teeter 2.5s ease-in-out infinite;
-  transform-origin: 50% 62%;
+@keyframes swing-pusher-lean {
+  0%, 100% { transform: rotate(-0.8deg); }
+  50%      { transform: rotate(0.8deg); }
+}
+.swing-pendulum {
+  transform-origin: 295px 98px;
+  transform-box: view-box;
   will-change: transform;
+}
+.swing-pusher {
+  transform-origin: 372px 356px;
+  transform-box: view-box;
+}
+.animate-swing .swing-pendulum {
+  animation: swing-pendulum 3.2s ease-in-out infinite;
+}
+.animate-swing .swing-pusher {
+  animation: swing-pusher-lean 3.2s ease-in-out infinite;
 }
 
 @keyframes work-drop {

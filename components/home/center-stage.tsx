@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
-import { Seesaw } from './seesaw';
+import { SwingSet } from './swing-set';
 import { DitherReveal } from './dither-reveal';
 import Link from 'next/link';
 
@@ -51,14 +51,14 @@ export function CenterStage({
   const hasScrambled = useRef(false);
   const [revealed, setRevealed] = useState(false);
 
-  // Tilt the seesaw toward whichever side of the illustration the cursor is on
-  // (the hovered end dips down, like real weight); null = resume the idle rock.
-  const seesawRef = useRef<HTMLImageElement | null>(null);
+  // Kick the swing toward whichever side of the illustration the cursor is on
+  // (like giving it a push); null = resume the idle pendulum animation.
+  const swingRef = useRef<SVGSVGElement | null>(null);
   const [tilt, setTilt] = useState<number | null>(null);
-  const MAX_TILT = 10;
+  const MAX_TILT = 6;
 
   const onHeroMove = (e: React.MouseEvent) => {
-    const el = seesawRef.current;
+    const el = swingRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
     const inside =
@@ -83,7 +83,7 @@ export function CenterStage({
 
   return (
     <div className="absolute inset-0">
-      {/* HERO — green pixel quote behind the teetering seesaw. Stays visible
+      {/* HERO — green pixel quote behind the swinging swing set. Stays visible
           while the selected previews drop and stack on top. */}
       <div
         className="absolute inset-0 z-0 flex items-center justify-center px-6"
@@ -127,8 +127,8 @@ export function CenterStage({
             : QUOTE}
         </p>
         {/* pointer-events-none so the quote's word-links underneath stay clickable;
-            the tilt is driven by onHeroMove reading the cursor's side of this image */}
-        <Seesaw ref={seesawRef} tilt={tilt} className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
+            the tilt is driven by onHeroMove reading the cursor's side of this art */}
+        <SwingSet ref={swingRef} tilt={tilt} className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}
@@ -141,7 +141,7 @@ export function CenterStage({
         </Link>
       </div>
 
-      {/* ABOUT preview — yellow pixel "about" + 6502 + seesaw */}
+      {/* ABOUT preview — yellow pixel "about" + 6502 + swing set */}
       <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none" hidden={hoverTarget !== 'about'}>
         <span className="font-pixel font-light leading-none select-none text-[15vw] md:text-[11vw]" style={{ color: YELLOW }}>
           about
@@ -149,7 +149,7 @@ export function CenterStage({
         <span className="absolute top-[20%] left-1/2 -translate-x-1/2 font-pixel font-light text-white text-[8vw] md:text-[4.5vw]">
           6502
         </span>
-        <Seesaw className="absolute w-[46vw] max-w-[560px] h-auto" />
+        <SwingSet className="absolute w-[46vw] max-w-[560px] h-auto" />
       </div>
 
       {/* PHOTOGRAPHY preview — yellow "snap!" behind a photo pile */}
