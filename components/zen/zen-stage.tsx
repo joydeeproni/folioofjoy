@@ -1,13 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { X, Play } from 'lucide-react';
+import { BackLink } from '@/components/back-link';
+import { CircleButton } from '@/components/circle-button';
 import { getTracks, type Track } from '@/lib/music';
 import { useAudio } from '@/lib/audio-context';
 import { ZenVisualizer } from './zen-visualizer';
 import { ZenDock } from './zen-dock';
 import { DEFAULT_ZEN_CONFIG, loadZenConfig, saveZenConfig, type ZenConfig } from './zen-config';
+
+// Writings-index palette — the picker mirrors that page's typography and rows.
+const PICKER_FG = '#EDEAE0';
+const PICKER_RULE = 'rgba(237,234,224,0.15)';
 
 const RADIO = [
   { name: 'bigFM Lo-Fi Focus', url: 'https://stream.bigfm.de/exlofifocus/mp3-192/' },
@@ -188,11 +192,10 @@ export function ZenStage() {
       <audio ref={audioElRef} crossOrigin="anonymous" />
       <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
 
-      {/* Exit — auto-hiding (only while a source is playing; the picker has its own header) */}
-      <div className={`fixed top-6 left-6 z-40 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <Link href="/" aria-label="Back home" className="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur">
-          <X className="w-5 h-5" />
-        </Link>
+      {/* Exit — the sitewide BACK disc, auto-hiding with the rest of the chrome
+          (only while a source is playing; the picker mounts its own BackLink) */}
+      <div className={`fixed top-[calc(1.25rem+var(--sat))] left-[calc(1.25rem+var(--sal))] z-40 transition-opacity duration-500 ${!showPicker && chromeShown ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <CircleButton label="BACK" arcText="BACK TO HOME" href="/" />
       </div>
 
       {/* Bottom dock — transport + visualizer controls (only while a source is active) */}
@@ -216,57 +219,53 @@ export function ZenStage() {
         />
       )}
 
-      {/* Source picker — "Lounge" landing: caption, three big options, lawn illustration */}
+      {/* Source picker — "Lounge" landing, styled like the writings index:
+          small mono label up top, numbered font-sans rows staggering in. */}
       {showPicker && (
-        <div className="fixed inset-0 z-10 flex flex-col overflow-hidden">
-          {/* Top nav */}
-          <header className="relative z-10 flex items-center justify-between px-8 py-6 text-sm font-sans text-white">
-            <Link href="/" className="underline decoration-transparent underline-offset-4 transition-colors duration-200 hover:text-[#2CA152] hover:decoration-[#2CA152]">Back</Link>
-            <span className="absolute left-1/2 -translate-x-1/2 opacity-90">Lounge</span>
-            <span aria-hidden className="w-10" />
-          </header>
+        <div className="fixed inset-0 z-10 overflow-y-auto px-8 md:px-16 py-10" style={{ color: PICKER_FG }}>
+          <BackLink />
+          <span className="fixed top-[calc(1.5rem+var(--sat))] left-1/2 -translate-x-1/2 z-10 text-sm font-sans opacity-90">Lounge</span>
 
-          <div className="relative flex-1 flex flex-col items-center justify-start md:justify-center overflow-hidden pt-[5vh] md:pt-0">
-            {/* Caption + menu — top on mobile so the options clear the artwork; centred on desktop. */}
-            <div className="relative z-10 w-full max-w-4xl px-6">
-              <p className="text-center font-mono text-xs uppercase tracking-[0.25em] text-white/50 mb-5">
-                me and my boys are hanging out in the lawn, waiting for you to play something
-              </p>
+          <div className="relative z-10 mx-auto w-full max-w-4xl pt-28">
+            <p className="mb-16 font-mono uppercase tracking-[0.25em] text-xs">play something</p>
 
-              <nav className="divide-y" style={{ borderColor: 'rgba(237,234,224,0.15)' }}>
-                {/* My Playlist — the curated songs */}
-                <button onClick={playSongs} className="group relative flex w-full items-center justify-center py-8">
-                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">My Playlist</span>
+            <ul className="divide-y" style={{ borderColor: PICKER_RULE }}>
+              {/* My Playlist — the curated songs */}
+              <li className="animate-row-in" style={{ animationDelay: '0ms' }}>
+                <button onClick={playSongs} className="group flex w-full items-baseline gap-6 py-8 text-left">
+                  <span className="shrink-0 font-pixel text-sm" style={{ opacity: 0.5 }}>01</span>
+                  <span className="font-sans text-4xl md:text-6xl tracking-tight transition-opacity group-hover:opacity-70">My Playlist</span>
                 </button>
+              </li>
 
-                {/* Pick Your Own — share / upload your own audio */}
-                <label className="group relative flex w-full items-center justify-center py-8 cursor-pointer">
-                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Pick Your Own</span>
+              {/* Pick Your Own — share / upload your own audio */}
+              <li className="animate-row-in" style={{ animationDelay: '45ms' }}>
+                <label className="group flex w-full items-baseline gap-6 py-8 cursor-pointer">
+                  <span className="shrink-0 font-pixel text-sm" style={{ opacity: 0.5 }}>02</span>
+                  <span className="font-sans text-4xl md:text-6xl tracking-tight transition-opacity group-hover:opacity-70">Pick Your Own</span>
                   <input type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) playFile(f); }} />
                 </label>
+              </li>
 
-                {/* Lo-Fi World Radio */}
-                <button onClick={() => { setAlbumUrl(null); playElement(RADIO[0].url, `Radio · ${RADIO[0].name}`); }} className="group relative flex w-full items-center justify-center py-8">
-                  <Play className="absolute left-1 w-7 h-7 fill-current text-[#2CA152] opacity-0 transition-opacity group-hover:opacity-100" />
-                  <span className="font-pixel text-4xl md:text-6xl text-white transition-colors group-hover:text-[#2CA152]">Lo-Fi World Radio</span>
+              {/* Lo-Fi World Radio */}
+              <li className="animate-row-in" style={{ animationDelay: '90ms' }}>
+                <button onClick={() => { setAlbumUrl(null); playElement(RADIO[0].url, `Radio · ${RADIO[0].name}`); }} className="group flex w-full items-baseline gap-6 py-8 text-left">
+                  <span className="shrink-0 font-pixel text-sm" style={{ opacity: 0.5 }}>03</span>
+                  <span className="font-sans text-4xl md:text-6xl tracking-tight transition-opacity group-hover:opacity-70">Lo-Fi World Radio</span>
                 </button>
-              </nav>
+              </li>
+            </ul>
 
-              {error && <p className="text-red-400 text-sm mt-6 text-center">{error}</p>}
-            </div>
-
-            {/* Lawn illustration — pinned to the bottom. On mobile it sits IN FRONT
-                of the menu (z-20) and is sized so it rises just far enough to mask
-                the bottom of the last option a touch; on desktop it's behind the
-                centred menu (z-0). Big + edge-cropped on mobile. */}
-            <img
-              src="/zen/me-and-my-boys.svg"
-              alt="Me and my boys hanging out in the lawn with a record player"
-              className="pointer-events-none select-none absolute bottom-0 left-1/2 -translate-x-1/2 max-w-none w-[175vw] md:w-[min(1000px,80vw)] z-20 md:z-0"
-            />
+            {error && <p className="text-red-400 text-sm mt-6">{error}</p>}
           </div>
+
+          {/* Lawn illustration — pinned to the viewport bottom. On mobile it sits
+              IN FRONT of the menu (z-20); on desktop behind it (z-0). */}
+          <img
+            src="/zen/me-and-my-boys.svg"
+            alt="Me and my boys hanging out in the lawn with a record player"
+            className="pointer-events-none select-none fixed bottom-0 left-1/2 -translate-x-1/2 max-w-none w-[175vw] md:w-[min(1000px,80vw)] z-20 md:z-0"
+          />
         </div>
       )}
     </main>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { X } from 'lucide-react';
+import { CircleButton } from './circle-button';
 import { MatrixVisualization, type ExploreSettings } from './matrix-visualization';
 import { PatternGuide } from './pattern-guide';
 import { ExploreToolbar } from './explore-toolbar';
@@ -69,13 +69,16 @@ export function LoungeMode() {
         </div>
       )}
 
-      <button
-        onClick={closeLounge}
-        className="fixed top-[calc(1.5rem+var(--sat))] right-[calc(1.5rem+var(--sar))] z-[95] flex items-center gap-2 px-4 py-2 rounded-full text-white transition-colors duration-200 hover:bg-white/10"
-        aria-label="Close Lounge Mode"
-      >
-        <X className="w-4 h-4" /><span className="text-sm font-sans">Back</span>
-      </button>
+      {/* Close — the sitewide disc button; it's an overlay (no route change),
+          so the link is inert and the click just closes the lounge. */}
+      <div className="fixed top-[calc(1.25rem+var(--sat))] right-[calc(1.25rem+var(--sar))] z-[95]">
+        <CircleButton
+          label="CLOSE"
+          arcText="CLOSE LOUNGE"
+          href="#"
+          onClick={(e) => { e.preventDefault(); closeLounge(); }}
+        />
+      </div>
 
       <ExploreToolbar
         active settings={settings} onChange={setSettings}
