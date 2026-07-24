@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { CircleButton } from '@/components/circle-button';
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import { MetricsPanel } from './controls/metrics-panel';
@@ -212,13 +211,7 @@ export function Cassi() {
           <p className="font-sans text-2xl md:text-3xl tracking-tight text-balance" style={{ color: '#EDEAE0' }}>
             That&rsquo;s Cassi — a prototype that had to feel real, and did.
           </p>
-          <Link
-            href="/preview"
-            className="mt-8 inline-flex items-center gap-2 font-sans text-sm text-white/70 transition-colors duration-200 hover:text-[#2CA152]"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden />
-            Back to all work
-          </Link>
+          <CircleButton label="BACK" arcText="BACK TO ALL WORK" href="/preview" className="mt-8" />
         </footer>
       }
     />

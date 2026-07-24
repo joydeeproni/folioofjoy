@@ -1,13 +1,19 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
+import { CircleButton } from '@/components/circle-button';
 
-// Shared "Back" nav. Mobile: a frosted pill (with chevron). Desktop: a quiet
-// text link (green underline on hover). Pressing Escape also navigates back —
-// every page with a BackLink can be closed from the keyboard.
+// Full text spun around the disc on hover, per destination.
+const ARC_BY_DEST: Record<string, string> = {
+  '/': 'BACK TO HOME',
+  '/writings': 'BACK TO WRITINGS',
+  '/preview': 'BACK TO WORK',
+};
+
+// Shared "Back" nav — the circular BACK disc, fixed top-left. Pressing Escape
+// also navigates back, so every page with a BackLink can be closed from the
+// keyboard.
 export function BackLink({ href = '/' }: { href?: string }) {
   const router = useRouter();
 
@@ -22,13 +28,11 @@ export function BackLink({ href = '/' }: { href?: string }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [href, router]);
 
+  // Sized and placed like the Next.js dev-tools indicator: a small disc tucked
+  // into the corner, growing out of it while hovered/pressed.
   return (
-    <Link
-      href={href}
-      className="fixed top-[calc(1.5rem+var(--sat))] left-[calc(1.5rem+var(--sal))] z-50 transition-colors duration-200 inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-sm font-sans backdrop-blur-md hover:bg-white/20 md:rounded-none md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none md:hover:bg-transparent md:underline md:decoration-transparent md:underline-offset-4 md:hover:text-[#2CA152] md:hover:decoration-[#2CA152]"
-    >
-      <ChevronLeft className="w-4 h-4 md:hidden" aria-hidden />
-      Back
-    </Link>
+    <div className="fixed top-[calc(1.25rem+var(--sat))] left-[calc(1.25rem+var(--sal))] z-50">
+      <CircleButton label="BACK" arcText={ARC_BY_DEST[href] ?? 'GO BACK'} href={href} />
+    </div>
   );
 }

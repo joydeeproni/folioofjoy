@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import Link from 'next/link';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
+import { CircleButton, circleTexts } from '@/components/circle-button';
 
 interface GalleryItem {
   src: string;
@@ -71,27 +71,14 @@ function GalleryContent({ items, onClose }: { items: GalleryItem[]; onClose: () 
                   )}
                 </div>
                 {item.caseStudy && (
-                  <div className="px-1 pt-1.5">
-                    <Link
-                      href={`/work/${item.caseStudy}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-[#2CA152]/40 bg-[#2CA152]/10 px-2.5 py-1 text-[11px] font-sans text-[#2CA152] transition-colors hover:bg-[#2CA152]/20"
-                    >
-                      Read the case study <ArrowUpRight className="w-3 h-3" />
-                    </Link>
+                  <div className="px-1 pt-2">
+                    <CircleButton label="READ" arcText="READ CASE STUDY" href={`/work/${item.caseStudy}`} />
                   </div>
                 )}
                 {item.links && item.links.length > 0 ? (
-                  <div className="flex flex-wrap gap-1.5 px-1 pt-1.5">
+                  <div className="flex flex-wrap gap-2 px-1 pt-2">
                     {item.links.map((l) => (
-                      <a
-                        key={l.url}
-                        href={l.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-[11px] font-sans text-white/40 hover:text-white/80 border border-white/15 hover:border-white/30 rounded-full px-2.5 py-1 transition-colors"
-                      >
-                        {l.label} <ExternalLink className="w-3 h-3" />
-                      </a>
+                      <CircleButton key={l.url} external {...circleTexts(l.label)} href={l.url} />
                     ))}
                   </div>
                 ) : item.url ? (
