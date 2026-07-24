@@ -59,6 +59,7 @@ export interface WritingListItem extends WritingNav {
   number: string;
   postedOn: string;
   type?: WritingType;
+  season?: string; // e.g. 'Spring 2026' — shown as the row meta in the writings index
 }
 
 export interface Writing extends WritingListItem {

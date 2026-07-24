@@ -209,6 +209,23 @@
   animation: caption-fade 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Writings index rows stagger in when switching tabs (delay set per row inline). */
+@keyframes row-in {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-row-in {
+  opacity: 0;
+  animation: row-in 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @keyframes particle-burst {
   0% {
     opacity: 0.8;

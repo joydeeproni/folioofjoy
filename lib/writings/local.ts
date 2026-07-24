@@ -12,6 +12,7 @@ export const LOCAL_WRITINGS: WritingListItem[] = [
     number: '01',
     title: 'The Invisible Interface',
     postedOn: 'July 13th, 2026',
+    season: 'Spring 2026',
   },
   {
     slug: 'designing-for-low-literacy',
@@ -19,6 +20,7 @@ export const LOCAL_WRITINGS: WritingListItem[] = [
     title: 'Designing For Low Literacy',
     type: 'Case Study',
     postedOn: '',
+    season: 'Winter 2019',
   },
   {
     slug: 'better-social-proof',
@@ -26,6 +28,7 @@ export const LOCAL_WRITINGS: WritingListItem[] = [
     title: 'Better Social Proof',
     type: 'Research',
     postedOn: 'March 9th, 2021',
+    season: 'Winter 2020',
   },
 ]
 
