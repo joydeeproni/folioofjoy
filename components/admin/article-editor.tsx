@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { marked } from 'marked';
-import TurndownService from 'turndown';
 import type { EditableArticle } from '@/lib/content/editable';
+import { exec, td, InlineToolbar } from './inline-editing';
 
 // Inline WYSIWYG article editor. The page renders exactly like the real writings
 // article; the text is edited in place (contentEditable). Rich body ↔ markdown is
@@ -12,8 +12,6 @@ import type { EditableArticle } from '@/lib/content/editable';
 // the production renderer (react-markdown) is untouched.
 
 const RULE = 'rgba(237,234,224,0.15)';
-
-const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', emDelimiter: '*', codeBlockStyle: 'fenced' });
 
 // Prose styles for the editable body — mirror components/content/markdown.tsx so
 // the editing surface looks identical to production.
@@ -33,23 +31,6 @@ const BODY_CSS = `
 .editable:hover { background: rgba(255,255,255,0.03); }
 .editable:empty::before { content: attr(data-ph); opacity: 0.35; }
 `;
-
-function exec(cmd: string, value?: string) {
-  document.execCommand(cmd, false, value);
-}
-
-function ToolBtn({ label, onClick, title }: { label: string; onClick: () => void; title: string }) {
-  return (
-    <button
-      title={title}
-      // preventDefault keeps the body selection alive while the button is pressed
-      onMouseDown={(e) => { e.preventDefault(); onClick(); }}
-      className="rounded px-2 py-1 font-sans text-sm text-[#EDEAE0]/80 hover:bg-white/10"
-    >
-      {label}
-    </button>
-  );
-}
 
 export function ArticleEditor({ initial }: { initial: EditableArticle }) {
   const [heroImage, setHeroImage] = useState(initial.heroImage ?? '');
@@ -98,23 +79,10 @@ export function ArticleEditor({ initial }: { initial: EditableArticle }) {
     <main className="relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-24 bg-[#0B0B0B] text-[#EDEAE0] font-sans">
       <style dangerouslySetInnerHTML={{ __html: BODY_CSS }} />
 
-      {/* Editing chrome — fixed top bar */}
-      <div className="sticky top-0 z-30 -mx-6 md:-mx-16 mb-6 flex items-center gap-1 border-b border-white/10 bg-[#0B0B0B]/90 px-6 md:px-16 py-2 backdrop-blur">
-        <a href="/admin" className="mr-2 font-mono text-[11px] uppercase tracking-widest opacity-50 hover:opacity-100">← index</a>
-        <span className="mx-2 h-4 w-px bg-white/15" />
-        <ToolBtn label="B" title="Bold (⌘B)" onClick={() => exec('bold')} />
-        <ToolBtn label="i" title="Italic (⌘I)" onClick={() => exec('italic')} />
-        <ToolBtn label="H" title="Heading" onClick={() => exec('formatBlock', 'h2')} />
-        <ToolBtn label="•" title="Bulleted list" onClick={() => exec('insertUnorderedList')} />
-        <ToolBtn label="1." title="Numbered list" onClick={() => exec('insertOrderedList')} />
-        <ToolBtn label="❝" title="Quote" onClick={() => exec('formatBlock', 'blockquote')} />
-        <ToolBtn label="link" title="Add link" onClick={() => { const u = prompt('URL'); if (u) exec('createLink', u); }} />
-        <ToolBtn label="⌫fmt" title="Clear formatting" onClick={() => exec('removeFormat')} />
-        <div className="ml-auto flex items-center gap-3">
-          {status && <span className="font-mono text-[11px] opacity-70">{status}</span>}
-          <button onClick={save} className="rounded-full bg-[#2CA152] px-4 py-1.5 font-sans text-sm text-black">Save</button>
-        </div>
-      </div>
+      <InlineToolbar>
+        {status && <span className="font-mono text-[11px] opacity-70">{status}</span>}
+        <button onClick={save} className="rounded-full bg-[#2CA152] px-4 py-1.5 font-sans text-sm text-black">Save</button>
+      </InlineToolbar>
 
       {/* The real article layout — everything below is edited in place */}
       <div className="max-w-5xl mx-auto pt-8">
