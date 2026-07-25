@@ -64,3 +64,12 @@ export async function readArticleOverlay(slug: string): Promise<EditableArticle 
     return null;
   }
 }
+
+export async function readCaseStudyOverlay(slug: string): Promise<EditableCaseStudy | null> {
+  try {
+    const raw = await fs.readFile(path.join(CONTENT_DIR, 'work', `${slug}.json`), 'utf8');
+    return editableCaseStudySchema.parse(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
