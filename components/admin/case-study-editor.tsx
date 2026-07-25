@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { marked } from 'marked';
 import { CaseStudyLayout } from '@/components/case-study/case-study-layout';
-import { Bento } from '@/components/case-study/controls/bento';
-import { renderCoded } from '@/components/case-study/coded-blocks';
-import { exec, td, InlineToolbar } from './inline-editing';
-import type { CaseStudySection, Visual } from '@/components/case-study/types';
+import { toVisual } from '@/components/case-study/to-visual';
+import { CODED_REFS } from '@/components/case-study/coded-blocks';
+import { td, InlineToolbar } from './inline-editing';
+import type { CaseStudySection } from '@/components/case-study/types';
 import type { EditableCaseStudy, EditableVisual } from '@/lib/content/editable';
 
 const CS_BODY_CSS = `
@@ -23,19 +23,14 @@ const CS_BODY_CSS = `
 .cs-edit:hover { background: rgba(255,255,255,0.03); }
 `;
 
-function toVisual(v: EditableVisual): Visual {
-  switch (v.kind) {
-    case 'image': return { kind: 'image', src: v.src, alt: v.alt, fit: v.fit };
-    case 'video': return { kind: 'video', src: v.src, poster: v.poster, alt: v.alt };
-    case 'zoom': return { kind: 'zoom', src: v.src, alt: v.alt, focus: v.focus, annotations: v.annotations };
-    case 'bento': return { kind: 'component', render: () => <Bento columns={v.columns} images={v.images} /> };
-    case 'coded': return { kind: 'component', render: () => renderCoded(v.ref) };
-  }
-}
+const inputCls = 'bg-transparent border border-white/15 rounded px-2 py-1 text-xs text-[#EDEAE0]';
 
 type Patch = { eyebrow?: string; heading?: string; bodyHtml?: string };
+type SectionVisual = { visual: EditableVisual; caption?: string };
 
-function SectionBody({ id, eyebrow, heading, body, onPatch }:
+// Editable text for one section. Memoised so visual-panel edits (which re-render
+// the parent) never reset the contentEditable text or move the cursor.
+const SectionBody = memo(function SectionBody({ id, eyebrow, heading, body, onPatch }:
   { id: string; eyebrow?: string; heading?: string; body: string; onPatch: (id: string, p: Patch) => void }) {
   const bodyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -47,7 +42,7 @@ function SectionBody({ id, eyebrow, heading, body, onPatch }:
   return (
     <div>
       {eyebrow !== undefined && (
-        <p contentEditable suppressContentEditableWarning data-id={id}
+        <p contentEditable suppressContentEditableWarning
           onInput={(e) => onPatch(id, { eyebrow: e.currentTarget.textContent ?? '' })}
           className="cs-edit font-sans font-medium text-sm mb-3 tracking-[-0.02em] lowercase" style={{ color: '#2CA152' }}>{eyebrow}</p>
       )}
@@ -60,10 +55,105 @@ function SectionBody({ id, eyebrow, heading, body, onPatch }:
         onInput={(e) => onPatch(id, { bodyHtml: e.currentTarget.innerHTML })} />
     </div>
   );
+});
+
+// Per-section visual control: pick the type, update the image, tweak crop /
+// annotations / ascii / coded, and set the caption. Writes back to parent state
+// so the sticky stage reflects the change live.
+function VisualEditor({ value, onChange, slug }: { value: SectionVisual; onChange: (v: SectionVisual) => void; slug: string }) {
+  const v = value.visual;
+  const setVisual = (visual: EditableVisual) => onChange({ ...value, visual });
+  const hasSrc = v.kind === 'image' || v.kind === 'video' || v.kind === 'zoom';
+  const src = hasSrc ? v.src : '';
+  const alt = v.kind === 'image' || v.kind === 'zoom' ? v.alt : v.kind === 'video' ? (v.alt ?? '') : '';
+  const uiType = v.kind === 'zoom' ? (v.annotations ? 'annotation' : 'crop') : v.kind === 'video' ? 'image' : v.kind;
+
+  async function upload(file: File) {
+    const fd = new FormData(); fd.append('file', file); fd.append('slug', slug);
+    const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+    if (res.ok) {
+      const { path } = await res.json();
+      if (v.kind === 'image' || v.kind === 'video' || v.kind === 'zoom') setVisual({ ...v, src: path });
+    }
+  }
+
+  function changeType(t: string) {
+    if (t === 'image') setVisual({ kind: 'image', src, alt });
+    else if (t === 'crop') setVisual({ kind: 'zoom', src, alt, focus: v.kind === 'zoom' && v.focus ? v.focus : { x: 0.5, y: 0.5, scale: 1.5 } });
+    else if (t === 'annotation') setVisual({ kind: 'zoom', src, alt, focus: v.kind === 'zoom' ? v.focus : undefined, annotations: v.kind === 'zoom' && v.annotations ? v.annotations : [] });
+    else if (t === 'ascii') setVisual({ kind: 'ascii', art: v.kind === 'ascii' ? v.art : '  edit this ascii art' });
+    else if (t === 'coded') setVisual({ kind: 'coded', ref: v.kind === 'coded' ? v.ref : (CODED_REFS[0] ?? '') });
+  }
+
+  const focus = v.kind === 'zoom' ? (v.focus ?? { x: 0.5, y: 0.5, scale: 1 }) : { x: 0.5, y: 0.5, scale: 1 };
+
+  return (
+    <div className="mt-6 rounded-lg border border-white/10 bg-white/[0.03] p-3 space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50">Visual</span>
+        <select value={uiType} onChange={(e) => changeType(e.target.value)} className={inputCls}>
+          <option value="image">Image</option>
+          <option value="crop">Crop (zoom)</option>
+          <option value="annotation">Annotated</option>
+          <option value="ascii">ASCII</option>
+          <option value="coded">Coded</option>
+        </select>
+      </div>
+
+      {hasSrc && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <label className="cursor-pointer rounded bg-white/10 px-3 py-1 text-xs hover:bg-white/20">
+            Update image
+            <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+          </label>
+          <span className="font-mono text-[10px] opacity-40">{src ? src.split('/').pop() : 'no file'}</span>
+        </div>
+      )}
+
+      {v.kind === 'zoom' && uiType === 'crop' && (
+        <div className="flex items-center gap-2 text-xs">
+          {(['x', 'y', 'scale'] as const).map((k) => (
+            <label key={k} className="flex items-center gap-1">{k}
+              <input type="number" step="0.05" value={focus[k]}
+                onChange={(e) => setVisual({ ...v, focus: { ...focus, [k]: parseFloat(e.target.value) || 0 } })} className={`${inputCls} w-16`} />
+            </label>
+          ))}
+        </div>
+      )}
+
+      {v.kind === 'zoom' && uiType === 'annotation' && (
+        <div className="space-y-1">
+          {(v.annotations ?? []).map((a, i) => (
+            <div key={a.id} className="flex items-center gap-1 text-xs">
+              <input value={a.label} placeholder="label" onChange={(e) => setVisual({ ...v, annotations: (v.annotations ?? []).map((x, j) => j === i ? { ...x, label: e.target.value } : x) })} className={`${inputCls} flex-1`} />
+              <input type="number" step="0.05" value={a.x} onChange={(e) => setVisual({ ...v, annotations: (v.annotations ?? []).map((x, j) => j === i ? { ...x, x: parseFloat(e.target.value) || 0 } : x) })} className={`${inputCls} w-14`} />
+              <input type="number" step="0.05" value={a.y} onChange={(e) => setVisual({ ...v, annotations: (v.annotations ?? []).map((x, j) => j === i ? { ...x, y: parseFloat(e.target.value) || 0 } : x) })} className={`${inputCls} w-14`} />
+              <button onClick={() => setVisual({ ...v, annotations: (v.annotations ?? []).filter((_, j) => j !== i) })} className="px-1 opacity-60 hover:opacity-100">✕</button>
+            </div>
+          ))}
+          <button onClick={() => setVisual({ ...v, annotations: [...(v.annotations ?? []), { id: `a${Date.now()}`, x: 0.5, y: 0.5, label: 'new' }] })} className="rounded bg-white/10 px-2 py-1 text-xs hover:bg-white/20">+ annotation</button>
+        </div>
+      )}
+
+      {v.kind === 'ascii' && (
+        <textarea value={v.art} onChange={(e) => setVisual({ kind: 'ascii', art: e.target.value })} className="w-full h-32 font-mono text-xs bg-black/30 border border-white/10 rounded p-2 text-[#EDEAE0]" />
+      )}
+
+      {v.kind === 'coded' && (
+        <select value={v.ref} onChange={(e) => setVisual({ kind: 'coded', ref: e.target.value })} className={inputCls}>
+          {CODED_REFS.length === 0 && <option value="">(none registered)</option>}
+          {CODED_REFS.map((r) => <option key={r} value={r}>{r}</option>)}
+        </select>
+      )}
+
+      <input value={value.caption ?? ''} placeholder="Caption" onChange={(e) => onChange({ ...value, caption: e.target.value })} className={`${inputCls} w-full`} />
+    </div>
+  );
 }
 
 export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
   const [status, setStatus] = useState('');
+  const [visuals, setVisuals] = useState<SectionVisual[]>(() => initial.sections.map((s) => ({ visual: s.visual, caption: s.caption })));
   const patches = useRef<Record<string, Patch>>({});
   const titleRef = useRef<HTMLHeadingElement>(null);
   const ledeRef = useRef<HTMLParagraphElement>(null);
@@ -75,15 +165,20 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
     for (const r of [titleRef, ledeRef, metaRef, footHeadRef, footNoteRef]) if (r.current) r.current.contentEditable = 'true';
   }, []);
 
-  const onPatch = (id: string, p: Patch) => { patches.current[id] = { ...patches.current[id], ...p }; };
+  const onPatch = useCallback((id: string, p: Patch) => { patches.current[id] = { ...patches.current[id], ...p }; }, []);
+  const updateVisual = (i: number, nv: SectionVisual) => setVisuals((vs) => vs.map((x, j) => (j === i ? nv : x)));
 
-  const sections: CaseStudySection[] = initial.sections.map((s) => ({
+  const sections: CaseStudySection[] = initial.sections.map((s, i) => ({
     id: s.id,
     act: s.act,
-    caption: s.caption,
-    // heading omitted so the layout doesn't render it — SectionBody owns the left column
-    body: <SectionBody id={s.id} eyebrow={s.eyebrow} heading={s.heading} body={s.body} onPatch={onPatch} />,
-    visual: toVisual(s.visual),
+    caption: visuals[i].caption,
+    body: (
+      <>
+        <SectionBody id={s.id} eyebrow={s.eyebrow} heading={s.heading} body={s.body} onPatch={onPatch} />
+        <VisualEditor value={visuals[i]} onChange={(nv) => updateVisual(i, nv)} slug={initial.slug} />
+      </>
+    ),
+    visual: toVisual(visuals[i].visual),
   }));
 
   async function save() {
@@ -92,13 +187,15 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
     const doc: EditableCaseStudy = {
       ...initial,
       header: { title: t(titleRef) || initial.header.title, lede: t(ledeRef), meta: t(metaRef) },
-      sections: initial.sections.map((s) => {
+      sections: initial.sections.map((s, i) => {
         const p = patches.current[s.id] ?? {};
         return {
           ...s,
           eyebrow: p.eyebrow ?? s.eyebrow,
           heading: p.heading ?? s.heading,
+          caption: visuals[i].caption,
           body: p.bodyHtml != null ? td.turndown(p.bodyHtml) : s.body,
+          visual: visuals[i].visual,
         };
       }),
       footer: initial.footer ? { headline: t(footHeadRef), note: t(footNoteRef) } : undefined,

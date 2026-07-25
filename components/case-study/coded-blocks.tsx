@@ -12,6 +12,9 @@ export const CODED_BLOCKS: Record<string, () => ReactNode> = {
   ),
 };
 
+// The ids available to pick from in the admin visual editor's "Coded" dropdown.
+export const CODED_REFS = Object.keys(CODED_BLOCKS);
+
 export function renderCoded(ref: string): ReactNode {
   const block = CODED_BLOCKS[ref];
   if (block) return block();

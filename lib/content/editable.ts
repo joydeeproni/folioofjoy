@@ -17,6 +17,7 @@ export const editableVisualSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('zoom'), src: z.string(), alt: z.string(), focus: focusSchema.optional(), annotations: z.array(annotationSchema).optional() }),
   z.object({ kind: z.literal('bento'), columns: z.union([z.literal(2), z.literal(3)]).optional(), images: z.array(z.object({ file: z.string(), alt: z.string().optional() })) }),
   z.object({ kind: z.literal('coded'), ref: z.string() }),
+  z.object({ kind: z.literal('ascii'), art: z.string() }),
 ]);
 export type EditableVisual = z.infer<typeof editableVisualSchema>;
 
