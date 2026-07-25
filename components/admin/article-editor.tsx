@@ -1,68 +1,176 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { marked } from 'marked';
+import TurndownService from 'turndown';
 import type { EditableArticle } from '@/lib/content/editable';
-import { ArticleMarkdown } from '@/components/content/markdown';
+
+// Inline WYSIWYG article editor. The page renders exactly like the real writings
+// article; the text is edited in place (contentEditable). Rich body ↔ markdown is
+// round-tripped with marked (md→html for the editable surface) and turndown
+// (html→md on save), so `content/writings/<slug>.json` stays clean markdown and
+// the production renderer (react-markdown) is untouched.
 
 const RULE = 'rgba(237,234,224,0.15)';
-const field = 'w-full bg-white/[0.04] border border-white/10 rounded px-3 py-2 font-sans text-[#EDEAE0] outline-none focus:border-[#2CA152]/60';
+
+const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-', emDelimiter: '*', codeBlockStyle: 'fenced' });
+
+// Prose styles for the editable body — mirror components/content/markdown.tsx so
+// the editing surface looks identical to production.
+const BODY_CSS = `
+.ce-body:focus, .editable:focus { outline: none; }
+.ce-body p { font-size: 1.125rem; line-height: 1.7; margin-bottom: 1.5rem; }
+.ce-body h2 { font-size: 1.875rem; font-weight: 500; letter-spacing: -0.02em; margin: 2.5rem 0 1.5rem; }
+.ce-body h3 { font-size: 1.5rem; font-weight: 500; margin: 2rem 0 1rem; }
+.ce-body ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.ce-body ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.ce-body li { margin-bottom: 0.5rem; }
+.ce-body a { text-decoration: underline; text-underline-offset: 4px; }
+.ce-body strong { font-weight: 600; }
+.ce-body em { font-style: italic; }
+.ce-body blockquote { margin: 2rem 0; padding-left: 1.25rem; border-left: 2px solid #2CA152; font-size: 1.5rem; line-height: 1.3; letter-spacing: -0.01em; }
+.editable { border-radius: 4px; transition: background 0.15s; }
+.editable:hover { background: rgba(255,255,255,0.03); }
+.editable:empty::before { content: attr(data-ph); opacity: 0.35; }
+`;
+
+function exec(cmd: string, value?: string) {
+  document.execCommand(cmd, false, value);
+}
+
+function ToolBtn({ label, onClick, title }: { label: string; onClick: () => void; title: string }) {
+  return (
+    <button
+      title={title}
+      // preventDefault keeps the body selection alive while the button is pressed
+      onMouseDown={(e) => { e.preventDefault(); onClick(); }}
+      className="rounded px-2 py-1 font-sans text-sm text-[#EDEAE0]/80 hover:bg-white/10"
+    >
+      {label}
+    </button>
+  );
+}
 
 export function ArticleEditor({ initial }: { initial: EditableArticle }) {
-  const [doc, setDoc] = useState<EditableArticle>(initial);
+  const [heroImage, setHeroImage] = useState(initial.heroImage ?? '');
   const [status, setStatus] = useState('');
 
-  function set<K extends keyof EditableArticle>(k: K, v: EditableArticle[K]) {
-    setDoc((d) => ({ ...d, [k]: v }));
-  }
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subheadRef = useRef<HTMLHeadingElement>(null);
+  const titledRef = useRef<HTMLParagraphElement>(null);
+  const postedRef = useRef<HTMLParagraphElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  // Turn on contentEditable via the DOM (React 19 doesn't reliably SSR the bare
+  // attribute) and initialise the rich body once, client-side, to avoid mismatch.
+  useEffect(() => {
+    for (const r of [titleRef, subheadRef, titledRef, postedRef, bodyRef]) {
+      if (r.current) r.current.contentEditable = 'true';
+    }
+    if (bodyRef.current) bodyRef.current.innerHTML = marked.parse(initial.body ?? '', { async: false }) as string;
+  }, [initial.body]);
 
   async function save() {
     setStatus('Saving…');
-    const res = await fetch(`/api/admin/content/writings/${doc.slug}`, {
+    const doc: EditableArticle = {
+      ...initial,
+      heroImage,
+      title: titleRef.current?.textContent?.trim() || initial.title,
+      subhead: subheadRef.current?.textContent?.trim() ?? '',
+      titled: titledRef.current?.textContent?.trim() ?? '',
+      postedOn: postedRef.current?.textContent?.trim() ?? '',
+      body: td.turndown(bodyRef.current?.innerHTML ?? ''),
+    };
+    const res = await fetch(`/api/admin/content/writings/${initial.slug}`, {
       method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(doc),
     });
-    setStatus(res.ok ? 'Saved ✓ (commit + deploy to publish)' : `Error: ${res.status}`);
+    setStatus(res.ok ? 'Saved ✓ — commit + deploy to publish' : `Error ${res.status}`);
   }
 
   async function uploadHero(file: File) {
     const fd = new FormData();
-    fd.append('file', file); fd.append('slug', doc.slug);
+    fd.append('file', file); fd.append('slug', initial.slug);
     const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
-    if (res.ok) set('heroImage', (await res.json()).path);
+    if (res.ok) setHeroImage((await res.json()).path);
   }
 
   return (
-    <div className="min-h-dvh bg-[#0B0B0B] text-[#EDEAE0] grid md:grid-cols-2">
-      {/* EDIT */}
-      <div className="p-6 md:p-10 space-y-4 border-r border-white/10 overflow-y-auto">
-        <div className="flex items-center justify-between">
-          <a href="/admin" className="font-mono text-[11px] uppercase tracking-widest opacity-50 hover:opacity-100">← index</a>
+    <main className="relative min-h-dvh w-full px-6 md:px-16 pt-10 pb-24 bg-[#0B0B0B] text-[#EDEAE0] font-sans">
+      <style dangerouslySetInnerHTML={{ __html: BODY_CSS }} />
+
+      {/* Editing chrome — fixed top bar */}
+      <div className="sticky top-0 z-30 -mx-6 md:-mx-16 mb-6 flex items-center gap-1 border-b border-white/10 bg-[#0B0B0B]/90 px-6 md:px-16 py-2 backdrop-blur">
+        <a href="/admin" className="mr-2 font-mono text-[11px] uppercase tracking-widest opacity-50 hover:opacity-100">← index</a>
+        <span className="mx-2 h-4 w-px bg-white/15" />
+        <ToolBtn label="B" title="Bold (⌘B)" onClick={() => exec('bold')} />
+        <ToolBtn label="i" title="Italic (⌘I)" onClick={() => exec('italic')} />
+        <ToolBtn label="H" title="Heading" onClick={() => exec('formatBlock', 'h2')} />
+        <ToolBtn label="•" title="Bulleted list" onClick={() => exec('insertUnorderedList')} />
+        <ToolBtn label="1." title="Numbered list" onClick={() => exec('insertOrderedList')} />
+        <ToolBtn label="❝" title="Quote" onClick={() => exec('formatBlock', 'blockquote')} />
+        <ToolBtn label="link" title="Add link" onClick={() => { const u = prompt('URL'); if (u) exec('createLink', u); }} />
+        <ToolBtn label="⌫fmt" title="Clear formatting" onClick={() => exec('removeFormat')} />
+        <div className="ml-auto flex items-center gap-3">
+          {status && <span className="font-mono text-[11px] opacity-70">{status}</span>}
           <button onClick={save} className="rounded-full bg-[#2CA152] px-4 py-1.5 font-sans text-sm text-black">Save</button>
         </div>
-        {status && <p className="font-mono text-[11px] opacity-70">{status}</p>}
-
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Title</span>
-          <input className={field} value={doc.title} onChange={(e) => set('title', e.target.value)} /></label>
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Subhead</span>
-          <input className={field} value={doc.subhead ?? ''} onChange={(e) => set('subhead', e.target.value)} /></label>
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Titled</span>
-          <input className={field} value={doc.titled ?? ''} onChange={(e) => set('titled', e.target.value)} /></label>
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Posted on</span>
-          <input className={field} value={doc.postedOn ?? ''} onChange={(e) => set('postedOn', e.target.value)} /></label>
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Hero image</span>
-          <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadHero(e.target.files[0])} className="block mt-1 text-sm" /></label>
-        <label className="block"><span className="font-mono text-[11px] uppercase tracking-widest opacity-50">Body (markdown)</span>
-          <textarea className={`${field} min-h-[40vh] font-mono text-sm`} value={doc.body} onChange={(e) => set('body', e.target.value)} /></label>
       </div>
 
-      {/* PREVIEW — the real article prose styles */}
-      <div className="p-6 md:p-10 overflow-y-auto">
-        <p className="font-mono text-[11px] uppercase tracking-widest opacity-40 mb-6">Live preview</p>
-        <h1 className="font-sans font-medium text-5xl leading-[0.95] tracking-tight mb-6">{doc.title}</h1>
-        {doc.heroImage && <img src={doc.heroImage} alt="" className="w-full mb-8 rounded-lg" />}
-        <hr className="my-8 border-0 border-t" style={{ borderColor: RULE }} />
-        {doc.subhead && <h2 className="font-sans font-medium text-3xl mb-6 tracking-tight">{doc.subhead}</h2>}
-        <article className="max-w-[66ch]"><ArticleMarkdown source={doc.body} /></article>
+      {/* The real article layout — everything below is edited in place */}
+      <div className="max-w-5xl mx-auto pt-8">
+        <div className="flex items-start gap-4">
+          {initial.number && <span className="font-pixel text-base mt-3" style={{ opacity: 0.5 }}>{initial.number}</span>}
+          <h1
+            ref={titleRef} contentEditable suppressContentEditableWarning data-ph="Title"
+            className="editable font-sans font-medium text-6xl md:text-8xl leading-[0.95] tracking-tight"
+          >{initial.title}</h1>
+        </div>
+
+        {/* Hero */}
+        <div className="mt-12">
+          {heroImage
+            ? <img src={heroImage} alt="" className="w-full rounded-lg" />
+            : <div className="rounded-lg border border-dashed border-white/15 py-10 text-center font-mono text-[11px] uppercase tracking-widest opacity-40">no hero image</div>}
+          <label className="mt-2 inline-block cursor-pointer font-mono text-[11px] uppercase tracking-widest opacity-50 hover:opacity-100">
+            {heroImage ? 'replace image' : 'add image'}
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadHero(e.target.files[0])} />
+          </label>
+        </div>
+
+        <hr className="my-12 border-0 border-t" style={{ borderColor: RULE }} />
+
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2.4fr_1fr] gap-10 md:gap-12">
+          {/* Left — meta (editable) */}
+          <aside className="space-y-8">
+            <div>
+              <p className="font-mono uppercase tracking-widest text-[11px]" style={{ opacity: 0.5 }}>Titled</p>
+              <p ref={titledRef} contentEditable suppressContentEditableWarning data-ph="—" className="editable font-sans mt-2">{initial.titled}</p>
+            </div>
+            <div>
+              <p className="font-mono uppercase tracking-widest text-[11px]" style={{ opacity: 0.5 }}>{initial.type ? 'Type' : 'Posted on'}</p>
+              <p ref={postedRef} contentEditable suppressContentEditableWarning data-ph="—" className="editable font-sans mt-2">{initial.type || initial.postedOn}</p>
+            </div>
+          </aside>
+
+          {/* Center — subhead + body (editable) */}
+          <div>
+            <h2 ref={subheadRef} contentEditable suppressContentEditableWarning data-ph="Subhead" className="editable font-sans font-medium text-3xl mb-6 tracking-tight">{initial.subhead}</h2>
+            <div ref={bodyRef} contentEditable suppressContentEditableWarning className="ce-body max-w-[66ch]" />
+          </div>
+
+          {/* Right — references (read-only in this pass) */}
+          <aside>
+            <p className="font-mono uppercase tracking-widest text-[11px] mb-4" style={{ opacity: 0.5 }}>Reference</p>
+            <ul className="space-y-3">
+              {initial.references.map((ref) => (
+                <li key={ref.label}>
+                  <a href={ref.href} className="font-sans underline underline-offset-4 decoration-1 hover:opacity-70 transition-opacity" style={{ textDecorationColor: RULE }}>{ref.label}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
