@@ -7,7 +7,7 @@ import { toVisual } from '@/components/case-study/to-visual';
 import { CODED_REFS } from '@/components/case-study/coded-blocks';
 import { td, InlineToolbar } from './inline-editing';
 import type { CaseStudySection } from '@/components/case-study/types';
-import type { EditableCaseStudy, EditableVisual } from '@/lib/content/editable';
+import type { EditableCaseStudy, EditableSection, EditableVisual } from '@/lib/content/editable';
 
 const CS_BODY_CSS = `
 .cs-body:focus, .cs-edit:focus { outline: none; }
@@ -151,9 +151,18 @@ function VisualEditor({ value, onChange, slug }: { value: SectionVisual; onChang
   );
 }
 
+const ctrlBtn = 'rounded border border-white/15 px-2 py-0.5 text-xs text-[#EDEAE0]/70 hover:bg-white/10 disabled:opacity-25';
+
+function newSection(): EditableSection {
+  return { id: `sec-${Date.now()}`, eyebrow: '', heading: 'New section', body: 'Write here.', caption: '', visual: { kind: 'ascii', art: '  new visual' } };
+}
+
 export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
   const [status, setStatus] = useState('');
-  const [visuals, setVisuals] = useState<SectionVisual[]>(() => initial.sections.map((s) => ({ visual: s.visual, caption: s.caption })));
+  // Whole sections live in state so they can be added / removed / reordered. Text
+  // edits still flow through the patches ref (keyed by id) — reordering keeps the
+  // contentEditable content because React moves the keyed DOM node.
+  const [secs, setSecs] = useState<EditableSection[]>(() => initial.sections);
   const patches = useRef<Record<string, Patch>>({});
   const titleRef = useRef<HTMLHeadingElement>(null);
   const ledeRef = useRef<HTMLParagraphElement>(null);
@@ -166,19 +175,32 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
   }, []);
 
   const onPatch = useCallback((id: string, p: Patch) => { patches.current[id] = { ...patches.current[id], ...p }; }, []);
-  const updateVisual = (i: number, nv: SectionVisual) => setVisuals((vs) => vs.map((x, j) => (j === i ? nv : x)));
+  const setVisualAt = (i: number, nv: SectionVisual) => setSecs((xs) => xs.map((x, j) => (j === i ? { ...x, visual: nv.visual, caption: nv.caption } : x)));
+  const move = (i: number, d: -1 | 1) => setSecs((xs) => {
+    const j = i + d; if (j < 0 || j >= xs.length) return xs;
+    const c = [...xs]; [c[i], c[j]] = [c[j], c[i]]; return c;
+  });
+  const del = (i: number) => setSecs((xs) => xs.filter((_, j) => j !== i));
+  const addBelow = (i: number) => setSecs((xs) => [...xs.slice(0, i + 1), newSection(), ...xs.slice(i + 1)]);
 
-  const sections: CaseStudySection[] = initial.sections.map((s, i) => ({
+  const sections: CaseStudySection[] = secs.map((s, i) => ({
     id: s.id,
     act: s.act,
-    caption: visuals[i].caption,
+    caption: s.caption,
     body: (
       <>
+        <div className="mb-3 flex items-center gap-1">
+          <button className={ctrlBtn} onClick={() => move(i, -1)} disabled={i === 0} title="Move up">↑</button>
+          <button className={ctrlBtn} onClick={() => move(i, 1)} disabled={i === secs.length - 1} title="Move down">↓</button>
+          <button className={ctrlBtn} onClick={() => del(i)} title="Delete section">✕</button>
+          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest opacity-40">section {i + 1} / {secs.length}</span>
+        </div>
         <SectionBody id={s.id} eyebrow={s.eyebrow} heading={s.heading} body={s.body} onPatch={onPatch} />
-        <VisualEditor value={visuals[i]} onChange={(nv) => updateVisual(i, nv)} slug={initial.slug} />
+        <VisualEditor value={{ visual: s.visual, caption: s.caption }} onChange={(nv) => setVisualAt(i, nv)} slug={initial.slug} />
+        <button className="mt-4 rounded-full border border-white/15 px-3 py-1 text-xs text-[#EDEAE0]/70 hover:bg-white/10" onClick={() => addBelow(i)}>+ add section below</button>
       </>
     ),
-    visual: toVisual(visuals[i].visual),
+    visual: toVisual(s.visual),
   }));
 
   async function save() {
@@ -187,15 +209,13 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
     const doc: EditableCaseStudy = {
       ...initial,
       header: { title: t(titleRef) || initial.header.title, lede: t(ledeRef), meta: t(metaRef) },
-      sections: initial.sections.map((s, i) => {
+      sections: secs.map((s) => {
         const p = patches.current[s.id] ?? {};
         return {
           ...s,
           eyebrow: p.eyebrow ?? s.eyebrow,
           heading: p.heading ?? s.heading,
-          caption: visuals[i].caption,
           body: p.bodyHtml != null ? td.turndown(p.bodyHtml) : s.body,
-          visual: visuals[i].visual,
         };
       }),
       footer: initial.footer ? { headline: t(footHeadRef), note: t(footNoteRef) } : undefined,
