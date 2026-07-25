@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { BackLink } from '@/components/back-link';
 import { getCaseStudy, getCaseStudySlugs } from '@/components/case-study/registry';
 import { CaseNav } from '@/components/case-study/case-nav';
+import { readCaseStudyOverlay } from '@/lib/content/editable';
+import { CaseStudyRenderer } from '@/components/case-study/renderer';
 
 const BG = '#0B0B0B';
 const FG = '#EDEAE0';
@@ -16,6 +18,18 @@ export function generateStaticParams() {
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+
+  const overlay = await readCaseStudyOverlay(slug);
+  if (overlay) {
+    return (
+      <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
+        <BackLink href="/writings" />
+        <CaseStudyRenderer data={overlay} />
+        <CaseNav slug={slug} />
+      </main>
+    );
+  }
+
   const study = getCaseStudy(slug);
   if (!study) notFound();
 
