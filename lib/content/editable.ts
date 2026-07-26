@@ -57,9 +57,14 @@ export type EditableArticle = z.infer<typeof editableArticleSchema>;
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 
+// Strip anything that isn't a slug char so an attacker-influenced route param
+// can't escape the content dir on the (production) read path — mirrors the
+// write API's sanitization.
+const safeSlug = (slug: string) => slug.replace(/[^a-z0-9-]/gi, '');
+
 export async function readArticleOverlay(slug: string): Promise<EditableArticle | null> {
   try {
-    const raw = await fs.readFile(path.join(CONTENT_DIR, 'writings', `${slug}.json`), 'utf8');
+    const raw = await fs.readFile(path.join(CONTENT_DIR, 'writings', `${safeSlug(slug)}.json`), 'utf8');
     return editableArticleSchema.parse(JSON.parse(raw));
   } catch {
     return null;
@@ -68,7 +73,7 @@ export async function readArticleOverlay(slug: string): Promise<EditableArticle 
 
 export async function readCaseStudyOverlay(slug: string): Promise<EditableCaseStudy | null> {
   try {
-    const raw = await fs.readFile(path.join(CONTENT_DIR, 'work', `${slug}.json`), 'utf8');
+    const raw = await fs.readFile(path.join(CONTENT_DIR, 'work', `${safeSlug(slug)}.json`), 'utf8');
     return editableCaseStudySchema.parse(JSON.parse(raw));
   } catch {
     return null;

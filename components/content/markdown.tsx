@@ -35,10 +35,12 @@ export function ArticleMarkdown({ source }: { source: string }) {
 const CS_FG = '#EDEAE0';
 
 // Markdown mapped to the case-study prose look (components/case-study/prose.tsx).
-// The first paragraph gets the pixel drop-cap, matching <P lead>.
-export function CaseStudyMarkdown({ source }: { source: string }) {
+// `lead` gives the opening paragraph the pixel drop-cap, matching <P lead>. Only
+// the first section should pass it — otherwise every section gets a drop-cap.
+const LEAD_DROPCAP = '[&>p:first-of-type]:first-letter:font-pixel [&>p:first-of-type]:first-letter:text-5xl [&>p:first-of-type]:first-letter:mr-2 [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:leading-none';
+export function CaseStudyMarkdown({ source, lead }: { source: string; lead?: boolean }) {
   return (
-    <div className="[&>p:first-of-type]:first-letter:font-pixel [&>p:first-of-type]:first-letter:text-5xl [&>p:first-of-type]:first-letter:mr-2 [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:leading-none" style={{ color: CS_FG }}>
+    <div className={lead ? LEAD_DROPCAP : undefined} style={{ color: CS_FG }}>
       <ReactMarkdown
         components={{
           p: ({ children }) => <p className="font-sans text-[17px] md:text-lg leading-relaxed mb-5 text-pretty">{children}</p>,

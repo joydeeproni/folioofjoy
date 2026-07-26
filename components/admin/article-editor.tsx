@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { marked } from 'marked';
 import type { EditableArticle } from '@/lib/content/editable';
-import { exec, td, InlineToolbar } from './inline-editing';
+import { td, InlineToolbar } from './inline-editing';
 
 // Inline WYSIWYG article editor. The page renders exactly like the real writings
 // article; the text is edited in place (contentEditable). Rich body ↔ markdown is

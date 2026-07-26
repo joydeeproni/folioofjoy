@@ -7,13 +7,13 @@ import type { CaseStudySection } from './types';
 import type { EditableCaseStudy } from '@/lib/content/editable';
 
 export function CaseStudyRenderer({ data }: { data: EditableCaseStudy }) {
-  const sections: CaseStudySection[] = data.sections.map((s) => ({
+  const sections: CaseStudySection[] = data.sections.map((s, i) => ({
     id: s.id,
     act: s.act,
     eyebrow: s.eyebrow,
     heading: s.heading,
     caption: s.caption,
-    body: <CaseStudyMarkdown source={s.body} />,
+    body: <CaseStudyMarkdown source={s.body} lead={i === 0} />,
     visual: toVisual(s.visual),
   }));
 

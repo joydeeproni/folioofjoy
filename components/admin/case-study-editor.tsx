@@ -25,6 +25,10 @@ const CS_BODY_CSS = `
 
 const inputCls = 'bg-transparent border border-white/15 rounded px-2 py-1 text-xs text-[#EDEAE0]';
 
+// Monotonic suffix so two adds in the same millisecond can't collide on id/key.
+let _uid = 0;
+const freshId = (prefix: string) => `${prefix}${Date.now()}-${_uid++}`;
+
 type Patch = { eyebrow?: string; heading?: string; bodyHtml?: string };
 type SectionVisual = { visual: EditableVisual; caption?: string };
 
@@ -33,8 +37,12 @@ type SectionVisual = { visual: EditableVisual; caption?: string };
 const SectionBody = memo(function SectionBody({ id, eyebrow, heading, body, onPatch }:
   { id: string; eyebrow?: string; heading?: string; body: string; onPatch: (id: string, p: Patch) => void }) {
   const bodyRef = useRef<HTMLDivElement>(null);
+  const inited = useRef(false);
   useEffect(() => {
-    if (bodyRef.current) {
+    // Initialise the rich body exactly ONCE. Guarding on a ref (not just the memo)
+    // means a future re-render can never re-run marked() and wipe unsaved edits.
+    if (bodyRef.current && !inited.current) {
+      inited.current = true;
       bodyRef.current.contentEditable = 'true';
       bodyRef.current.innerHTML = marked.parse(body ?? '', { async: false }) as string;
     }
@@ -131,7 +139,7 @@ function VisualEditor({ value, onChange, slug }: { value: SectionVisual; onChang
               <button onClick={() => setVisual({ ...v, annotations: (v.annotations ?? []).filter((_, j) => j !== i) })} className="px-1 opacity-60 hover:opacity-100">✕</button>
             </div>
           ))}
-          <button onClick={() => setVisual({ ...v, annotations: [...(v.annotations ?? []), { id: `a${Date.now()}`, x: 0.5, y: 0.5, label: 'new' }] })} className="rounded bg-white/10 px-2 py-1 text-xs hover:bg-white/20">+ annotation</button>
+          <button onClick={() => setVisual({ ...v, annotations: [...(v.annotations ?? []), { id: freshId('a'), x: 0.5, y: 0.5, label: 'new' }] })} className="rounded bg-white/10 px-2 py-1 text-xs hover:bg-white/20">+ annotation</button>
         </div>
       )}
 
@@ -154,7 +162,7 @@ function VisualEditor({ value, onChange, slug }: { value: SectionVisual; onChang
 const ctrlBtn = 'rounded border border-white/15 px-2 py-0.5 text-xs text-[#EDEAE0]/70 hover:bg-white/10 disabled:opacity-25';
 
 function newSection(): EditableSection {
-  return { id: `sec-${Date.now()}`, eyebrow: '', heading: 'New section', body: 'Write here.', caption: '', visual: { kind: 'ascii', art: '  new visual' } };
+  return { id: freshId('sec-'), eyebrow: '', heading: 'New section', body: 'Write here.', caption: '', visual: { kind: 'ascii', art: '  new visual' } };
 }
 
 export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
