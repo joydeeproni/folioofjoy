@@ -5,8 +5,10 @@ import { MetricsPanel } from './controls/metrics-panel';
 import { Knob } from './controls/knob';
 import { ProportionalSlider } from '@/components/ui/proportional-slider';
 import { MiniCanvas } from './controls/mini-canvas';
+import { ContactSheet } from './controls/contact-sheet';
 
 const KNOB_ACCENT = '#2CA152';
+const TC_MUTED = 'rgba(237,234,224,0.5)';
 
 // ── Live demos (own their own state; the stage renders them as interactive).
 // Copied verbatim from components/case-study/knobs.tsx during the migration to
@@ -53,6 +55,35 @@ function SliderDemo() {
   );
 }
 
+// Lightweight before/after mock — copied verbatim from components/case-study/
+// tactile-core.tsx during the migration to the editable JSON overlay (see
+// 'tactile-core:before-after' below). Stands in for the shadcn-style mock UIs.
+function TCBeforeAfter() {
+  return (
+    <div className="grid w-full max-w-[520px] grid-cols-2 gap-4 px-4">
+      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-widest" style={{ color: TC_MUTED }}>Before</p>
+        <div className="space-y-1.5">
+          <div className="h-2 w-3/4 rounded bg-white/20" />
+          <div className="h-2 w-full rounded bg-white/15" />
+          <div className="h-6 w-full rounded bg-blue-500/50" />
+          <div className="h-6 w-full rounded bg-red-500/40" />
+          <div className="h-2 w-1/2 rounded bg-white/15" />
+          <div className="h-6 w-2/3 rounded bg-yellow-500/40" />
+        </div>
+      </div>
+      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-widest" style={{ color: '#2CA152' }}>After</p>
+        <div className="space-y-2">
+          <div className="h-2 w-2/3 rounded" style={{ backgroundColor: 'rgba(237,234,224,0.5)' }} />
+          <div className="h-2 w-1/2 rounded" style={{ backgroundColor: 'rgba(237,234,224,0.25)' }} />
+          <div className="mt-3 h-7 w-28 rounded" style={{ backgroundColor: '#2CA152' }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Hand-coded visuals that can't be expressed as data, addressable by id from a
 // case study's JSON overlay ({ kind: 'coded', ref: '<id>' }). Add entries here as
 // coded studies are migrated.
@@ -73,6 +104,8 @@ export const CODED_BLOCKS: Record<string, () => ReactNode> = {
   'canvas:outcome': () => (
     <MetricsPanel stats={[{ value: '500–1k', label: 'users' }, { value: '<6', label: 'months · 2 people' }]} />
   ),
+  'tactile-core:before-after': () => <TCBeforeAfter />,
+  'tactile-core:wall': () => <ContactSheet />,
 };
 
 // The ids available to pick from in the admin visual editor's "Coded" dropdown.
