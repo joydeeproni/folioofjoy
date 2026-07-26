@@ -1,0 +1,44 @@
+{
+  "slug": "knobs",
+  "title": "Toggles, switches, knobs",
+  "header": {
+    "title": "Toggles, switches, knobs",
+    "lede": "A small obsession with physical controls, and how I put the tactility back into the ones I build.",
+    "meta": "Craft note · Interactive · Play with everything"
+  },
+  "sections": [
+    {
+      "id": "obsession",
+      "body": "I have a thing for physical controls. Knobs with a bit of weight. Faders with a detent you can feel through your thumb. The reassuring click of a switch that means the thing actually happened.\n\nSoftware throws almost all of that away and replaces it with a flat rectangle that changes color. So whenever I build a tool, I try to put a little of the tactility back — not skeuomorphism for its own sake, but the small feedback loops that make a control feel alive under your hand. Go ahead and grab the knob.",
+      "visual": { "kind": "coded", "ref": "knobs:obsession" },
+      "caption": "Drag the knob ↕"
+    },
+    {
+      "id": "knob",
+      "act": "Controls",
+      "eyebrow": "Anatomy of a knob",
+      "heading": "The rotary knob",
+      "body": "This is the one I keep coming back to. A few decisions make or break how it feels:\n\n- Drag vertically, relative to where you grabbed — not click-to-jump. 140px of travel is a full sweep, so it behaves like a real potentiometer, not a scrubber.\n- It snaps to the step, so you land on clean values instead of 0.4713.\n- The arc thickens the moment you grab it, and a ring draws itself around the dial on hover — tiny acknowledgements that you're in control.\n\n> Feedback is the whole game. A control that doesn't react to your touch feels broken, even when it works.",
+      "visual": { "kind": "coded", "ref": "knobs:knob" },
+      "caption": "Drag any knob ↕"
+    },
+    {
+      "id": "slider",
+      "act": "Controls",
+      "eyebrow": "Anatomy of a slider",
+      "heading": "The proportional slider",
+      "body": "Some values aren't a number on a line — they're a balance between two things that always sum to a whole. Coffee and milk. Work and life. So the slider is one bar split by a divider you drag; the two sides trade against each other.\n\nOn release the divider doesn't just stop — it springs back with a hair of overshoot, the way a real weighted control settles. And because not everyone drags, arrow keys nudge it too, with the ARIA roles a screen reader needs.",
+      "visual": { "kind": "coded", "ref": "knobs:slider" },
+      "caption": "Drag to rebalance"
+    },
+    {
+      "id": "identity",
+      "act": "Why it matters",
+      "eyebrow": "The takeaway",
+      "heading": "Controls are where craft is felt",
+      "body": "Nobody screenshots a knob. But they feel the difference the moment they touch one that was built with care versus one that wasn't. That's exactly why I sweat them — the parts people never talk about are the parts they trust.\n\nThese live across the tools I make; this set came out of the Zen music player on this very site. Same obsession, different surface.",
+      "visual": { "kind": "coded", "ref": "knobs:identity" },
+      "caption": "One more, for the road ↕"
+    }
+  ]
+}

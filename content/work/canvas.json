@@ -1,0 +1,44 @@
+{
+  "slug": "canvas",
+  "title": "Create Canvas",
+  "header": {
+    "title": "Create Canvas",
+    "lede": "Rebuilding an infinite whiteboard in production code, because you can't judge one from a static frame.",
+    "meta": "Tactile Games · Prototype → product · Interactive"
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "body": "Canvas is the infinite whiteboard at the heart of Tactile Create — our internal, AI-native suite that takes a game from a one-line idea through to a playable prototype. Think Miro, but wired into the way we actually make games.\n\nI spent about three months rebuilding the invisible micro-interactions that make a whiteboard feel like a whiteboard — in production code, with Claude Code, not in Figma. Because here's the thing about an infinite canvas: you cannot judge it from a static frame. It only exists once you can grab it.\n\n> You can't design a canvas in frames. The prototype was the design.",
+      "visual": { "kind": "video", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/canvas-stickynote.mp4", "alt": "A draggable sticky-note canvas" },
+      "caption": "Sticky-note canvas"
+    },
+    {
+      "id": "method",
+      "act": "Process",
+      "eyebrow": "Why prototype",
+      "heading": "Prototyping was the method",
+      "body": "Miro spent a decade perfecting behaviours you never consciously notice. To get anywhere near that, I couldn't mock it — I had to build it, watch people use it, and rebuild. I studied the whiteboarding market, then reconstructed the behaviours in real code so they could actually be felt and torn apart in critique.\n\nHere's a stand-in you can grab. It's a fraction of the real thing, but it makes the point: drag a note, and it's obvious in half a second whether the motion feels right. No screenshot tells you that.",
+      "visual": { "kind": "coded", "ref": "canvas:method" },
+      "caption": "Drag the notes"
+    },
+    {
+      "id": "states",
+      "act": "Craft",
+      "eyebrow": "The invisible part",
+      "heading": "Twenty states hiding in \"select\"",
+      "body": "\"Select an object\" sounds like one thing. It's about twenty. I decomposed hover and selection into discrete states and built each deliberately:\n\n- Stacked objects — which one do you mean when three overlap?\n- Shift vs. no-shift; add-to-selection vs. replace.\n- Drag-select from empty space vs. dragging an object.\n- Mouse vs. trackpad, which behave nothing alike.\n\nOut of the box, AI gets almost all of these wrong — it writes the happy path and stops. The same care went into arrow connectors that rescale as you type into them, and a pen tool tuned until it felt smooth instead of jittery.",
+      "visual": { "kind": "coded", "ref": "canvas:states" },
+      "caption": "Idle → hover → selected → dragging"
+    },
+    {
+      "id": "outcome",
+      "act": "Outcome",
+      "eyebrow": "What happened",
+      "heading": "The engineers shipped my prototype",
+      "body": "The prototype wasn't thrown away — the engineers reused much of the code, re-optimised the hot paths, and shipped the real Canvas on top of it. Adoption landed at 500–1,000 users, roughly 60% in-house and 40% external partner studios.\n\nCanvas and Create Art came together in under six months, me and one developer — about a year of build compressed into two quarters, because the prototype and the product were never really separate things.",
+      "visual": { "kind": "coded", "ref": "canvas:outcome" },
+      "caption": "The engineers shipped my prototype"
+    }
+  ]
+}
