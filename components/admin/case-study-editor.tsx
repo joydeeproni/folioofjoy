@@ -29,13 +29,13 @@ const inputCls = 'bg-transparent border border-white/15 rounded px-2 py-1 text-x
 let _uid = 0;
 const freshId = (prefix: string) => `${prefix}${Date.now()}-${_uid++}`;
 
-type Patch = { eyebrow?: string; heading?: string; bodyHtml?: string };
+type Patch = { heading?: string; bodyHtml?: string };
 type SectionVisual = { visual: EditableVisual; caption?: string };
 
 // Editable text for one section. Memoised so visual-panel edits (which re-render
 // the parent) never reset the contentEditable text or move the cursor.
-const SectionBody = memo(function SectionBody({ id, eyebrow, heading, body, onPatch }:
-  { id: string; eyebrow?: string; heading?: string; body: string; onPatch: (id: string, p: Patch) => void }) {
+const SectionBody = memo(function SectionBody({ id, heading, body, onPatch }:
+  { id: string; heading?: string; body: string; onPatch: (id: string, p: Patch) => void }) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const inited = useRef(false);
   useEffect(() => {
@@ -49,11 +49,6 @@ const SectionBody = memo(function SectionBody({ id, eyebrow, heading, body, onPa
   }, [body]);
   return (
     <div>
-      {eyebrow !== undefined && (
-        <p contentEditable suppressContentEditableWarning
-          onInput={(e) => onPatch(id, { eyebrow: e.currentTarget.textContent ?? '' })}
-          className="cs-edit font-sans font-medium text-sm mb-3 tracking-[-0.02em] lowercase" style={{ color: '#2CA152' }}>{eyebrow}</p>
-      )}
       {heading !== undefined && (
         <h2 contentEditable suppressContentEditableWarning
           onInput={(e) => onPatch(id, { heading: e.currentTarget.textContent ?? '' })}
@@ -203,7 +198,7 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
           <button className={ctrlBtn} onClick={() => del(i)} title="Delete section">✕</button>
           <span className="ml-2 font-mono text-[10px] uppercase tracking-widest opacity-40">section {i + 1} / {secs.length}</span>
         </div>
-        <SectionBody id={s.id} eyebrow={s.eyebrow} heading={s.heading} body={s.body} onPatch={onPatch} />
+        <SectionBody id={s.id} heading={s.heading} body={s.body} onPatch={onPatch} />
         <VisualEditor value={{ visual: s.visual, caption: s.caption }} onChange={(nv) => setVisualAt(i, nv)} slug={initial.slug} />
         <button className="mt-4 rounded-full border border-white/15 px-3 py-1 text-xs text-[#EDEAE0]/70 hover:bg-white/10" onClick={() => addBelow(i)}>+ add section below</button>
       </>
@@ -221,7 +216,6 @@ export function CaseStudyEditor({ initial }: { initial: EditableCaseStudy }) {
         const p = patches.current[s.id] ?? {};
         return {
           ...s,
-          eyebrow: p.eyebrow ?? s.eyebrow,
           heading: p.heading ?? s.heading,
           body: p.bodyHtml != null ? td.turndown(p.bodyHtml) : s.body,
         };
