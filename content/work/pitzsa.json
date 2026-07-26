@@ -1,0 +1,31 @@
+{
+  "slug": "pitzsa",
+  "title": "Pitzsa",
+  "header": {
+    "title": "Pitzsa",
+    "lede": "Case study premise to come — brief, role, and outcome to be added.",
+    "meta": "Web · Brief to come"
+  },
+  "sections": [
+    {
+      "id": "s0",
+      "heading": "Overview",
+      "body": "Add the premise, your role, and the outcome. — placeholder.",
+      "visual": {
+        "kind": "ascii",
+        "art": "        PITZSA\n       +--------+\n       |   ?    |\n       +--------+\n     brief to come"
+      },
+      "caption": "Flow sketch"
+    },
+    {
+      "id": "s1",
+      "heading": "The work",
+      "body": "Add the key screens and the decisions behind them. — placeholder.",
+      "visual": {
+        "kind": "ascii",
+        "art": "   [ screens ]   [ decisions ]\n         to be added"
+      },
+      "caption": "Flow sketch"
+    }
+  ]
+}

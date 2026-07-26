@@ -1,0 +1,41 @@
+{
+  "slug": "folio-of-joy",
+  "title": "Folio of Joy",
+  "header": {
+    "title": "Folio of Joy",
+    "lede": "Designing the portfolio you’re reading — the system, the type, and the small joys.",
+    "meta": "Personal · Web · This site"
+  },
+  "sections": [
+    {
+      "id": "s0",
+      "heading": "A folio, not a template",
+      "body": "What I wanted this site to feel like. — content coming.",
+      "visual": {
+        "kind": "ascii",
+        "art": "      x  template\n      +---------------+\n      |    a folio    |\n      +---------------+"
+      },
+      "caption": "Flow sketch"
+    },
+    {
+      "id": "s1",
+      "heading": "Type, colour, motion",
+      "body": "The editorial dark system, the pixel / mono / sans trio, the dither reveal. — content coming.",
+      "visual": {
+        "kind": "ascii",
+        "art": "  Galeria  .  Praktikal  .  Geist Pixel\n  ------ one green accent ------\n  dither reveal   :::::....."
+      },
+      "caption": "Flow sketch"
+    },
+    {
+      "id": "s2",
+      "heading": "The small joys",
+      "body": "The Zen player, the reel, the hand-built controls. — content coming.",
+      "visual": {
+        "kind": "ascii",
+        "art": "  Zen player  |  the reel  |  controls"
+      },
+      "caption": "Flow sketch"
+    }
+  ]
+}

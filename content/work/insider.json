@@ -1,0 +1,41 @@
+{
+  "slug": "insider",
+  "title": "Insider",
+  "header": {
+    "title": "Insider",
+    "lede": "Web personalizations that convert — and the research-backed Social Proof module behind them.",
+    "meta": "Insider · Web · Growth marketing"
+  },
+  "sections": [
+    {
+      "id": "s0",
+      "heading": "Personalization at scale",
+      "body": "How Insider combined past activity, real-time triggers, and predictive insight to tailor web experiences for global brands. — content coming.",
+      "visual": {
+        "kind": "ascii",
+        "art": "  past activity  --+\n  real-time      --+-->  [ PERSONALIZE ]  -->  convert\n  predictive     --+"
+      },
+      "caption": "Flow sketch"
+    },
+    {
+      "id": "s1",
+      "heading": "The Social Proof module",
+      "body": "Six research-backed persuasion patterns, from real-time stats to trust badges, grounded in Yelp / Nielsen / VWO data. — content coming.",
+      "visual": {
+        "kind": "ascii",
+        "art": "  THE SOCIAL PROOF MODULE\n  +----------------------------+\n  |  real-time stats           |\n  |  reviews                   |\n  |  social metrics            |\n  |  influencer halo           |\n  |  trust badges              |\n  |  milestones                |\n  +----------------------------+\n     Yelp  .  Nielsen  .  VWO"
+      },
+      "caption": "Flow sketch"
+    },
+    {
+      "id": "s2",
+      "heading": "What it moved",
+      "body": "Conversion impact and where it shipped. — metrics to add.",
+      "visual": {
+        "kind": "ascii",
+        "art": "  before  -->  [ + lift % ]  -->  after\n            ( metrics to add )"
+      },
+      "caption": "Flow sketch"
+    }
+  ]
+}
