@@ -1,0 +1,39 @@
+ab test/First time open - save resource empty state.png	=>	ab-test-first-time-open-save-resource-empty-state.png
+ab test/Test group card - v2-1.png	=>	ab-test-test-group-card-v2-1.png
+ab test/Tracks and Journeys.png	=>	ab-test-tracks-and-journeys.png
+ab test/Test group card - v2-2.png	=>	ab-test-test-group-card-v2-2.png
+ab test/Randomization seed card.png	=>	ab-test-randomization-seed-card.png
+ab test/Test group card - v2.png	=>	ab-test-test-group-card-v2.png
+ab test/Modal.png	=>	ab-test-modal.png
+create new game/Permissions - Adding users (II).png	=>	create-new-game-permissions-adding-users-ii.png
+create new game/Overview.png	=>	create-new-game-overview.png
+create new game/Sidebar navigation_ Default.png	=>	create-new-game-sidebar-navigation-default.png
+create new game/Overview tab.png	=>	create-new-game-overview-tab.png
+create new game/After Commercial Name is filled, Shortcode field is selected.png	=>	create-new-game-after-commercial-name-is-filled-shortcod.png
+sf/_Metadata highlights.png	=>	sf-metadata-highlights.png
+sf/Timeline view.png	=>	sf-timeline-view.png
+sf/Default.png	=>	sf-default.png
+segments/Segment Overlap.png	=>	segments-segment-overlap.png
+segments/When there are many segments.png	=>	segments-when-there-are-many-segments.png
+segments/Archive option in kebab menu.png	=>	segments-archive-option-in-kebab-menu.png
+segments/Details View.jpg	=>	segments-details-view.jpg
+segments/Last Run Result section.png	=>	segments-last-run-result-section.png
+segments/Kebab menu on tab level, to delete.png	=>	segments-kebab-menu-on-tab-level-to-delete.png
+segments/2. Below header (expanded).png	=>	segments-2-below-header-expanded.png
+segments/Last Run Result section-1.png	=>	segments-last-run-result-section-1.png
+segments/Dashboard Usage section.png	=>	segments-dashboard-usage-section.png
+segments/When there is only 2 segments.png	=>	segments-when-there-is-only-2-segments.png
+segments/Add button state.png	=>	segments-add-button-state.png
+segments/Dashboard Usage section-1.png	=>	segments-dashboard-usage-section-1.png
+segments/Default.png	=>	segments-default.png
+segments/Details/Frame 1150.png	=>	segments-details-frame-1150.png
+segments/Create Segment/Group.png	=>	segments-create-segment-group.png
+create new game/Template parts/Container.png	=>	create-new-game-template-parts-container.png
+create new game/Template parts/Fingerprint section.png	=>	create-new-game-template-parts-fingerprint-section.png
+create new game/Template parts/Container-1.png	=>	create-new-game-template-parts-container-1.png
+sf/↳ Creating/When form is filled.png	=>	sf-creating-when-form-is-filled.png
+sf/↳ Creating/Saved but not pushed changes.png	=>	sf-creating-saved-but-not-pushed-changes.png
+sf/↳ Creating/Modal.png	=>	sf-creating-modal.png
+sf/List view/Metadata highlights.png	=>	sf-list-view-metadata-highlights.png
+sf/List view/Metadata highlights-1.png	=>	sf-list-view-metadata-highlights-1.png
+sf/{  _overview__ {  _ConsecutiveOfferTemplate__ _ThreeOffers_,  _allAvailableFromStart__ false,  _analyticsId__ _DailyOffer_2PLUS1_2F_1_,  _notificationDisplayName__ __,  _levelRequired__ 15,  _priority__ 1  },  _template__ {  _noPrize__/images.tactilews.com/flower-garden/LG_ConsecutiveOffer_2plus1FreeGeneric_3_2023_V2.png_,  _buttonTextureURL__ _https_/images.tactilews.com/flower-garden/LG_OfferIcon_2plus1FreeGeneric_2023_V2.png_  },  _prize__ {  _finalPrizes__ []  }  },  _offers__ [  {  _availableFromStart__ true,  _automaticRewardLayout__ true,  _useClaimedOverlay__ true,  _reward__ [  {  _Type__ _Boost.png	=>	sf-overview-consecutiveoffertemplate-threeoffers-allavai.png

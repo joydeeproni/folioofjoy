@@ -2,7 +2,8 @@ import type { ComponentType } from 'react';
 import { Cassi } from './cassi';
 import { Knobs } from './knobs';
 import { Canvas } from './canvas';
-import { Insider, TactileCore, FolioOfJoy, Pitzsa } from './stubs';
+import { Insider, FolioOfJoy, Pitzsa } from './stubs';
+import { TactileCore } from './tactile-core';
 import { Deterge } from './deterge';
 import { Verizon } from './verizon';
 
