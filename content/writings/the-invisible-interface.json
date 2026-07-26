@@ -1,0 +1,13 @@
+{
+  "slug": "the-invisible-interface",
+  "title": "The Invisible Interface",
+  "titled": "On CLIs, agents, and the vanishing UI",
+  "subhead": "The best interface disappears",
+  "postedOn": "July 13th, 2026",
+  "number": "01",
+  "body": "Use of CLI amongst non-developers and non-designers intrigues me. The other day one of our users asked us if we had MCP for a SaaS tool we spent months designing and optimizing the \"UX\" for. And the intended user wants an AI agent to go and use that tool for them!\n\nI think about this a lot lately, this sudden shift of mindset and change of user behavior and way we interact with our computers.\n\nIsn't that the point of human computer interaction design though, the interface should be almost invisible, so that people just go, do their job and get out of there ASAP, unless the business of the product relies on constant engagement or it's a game.\n\nWhat will be the meaning of UI design 10 years from now, if everyone decides to use CLI or a chat interface or even voice to accomplish their job?\n\nAnd maybe that's what UI design would be all about.",
+  "references": [
+    { "label": "Agents as the new users", "href": "#" },
+    { "label": "When the UI gets out of the way", "href": "#" }
+  ]
+}
