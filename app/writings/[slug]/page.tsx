@@ -18,18 +18,7 @@ export function generateStaticParams() {
 export default async function WritingPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // Bespoke, code-rendered articles (rich prose + diagrams) render their own body.
-  const LocalArticle = LOCAL_ARTICLES[slug];
-  if (LocalArticle) {
-    return (
-      <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
-        <BackLink href="/writings" />
-        <LocalArticle />
-      </main>
-    );
-  }
-
-  // JSON overlay (edited via /admin) wins over the coded doc, if present.
+  // JSON overlay (edited via /admin) wins over everything, including coded articles.
   const overlay = await readArticleOverlay(slug);
   if (overlay) {
     return (
@@ -69,6 +58,17 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
             </aside>
           </div>
         </div>
+      </main>
+    );
+  }
+
+  // Bespoke, code-rendered articles (rich prose + diagrams) — only when no overlay exists.
+  const LocalArticle = LOCAL_ARTICLES[slug];
+  if (LocalArticle) {
+    return (
+      <main className={SHELL} style={{ backgroundColor: BG, color: FG }}>
+        <BackLink href="/writings" />
+        <LocalArticle />
       </main>
     );
   }
