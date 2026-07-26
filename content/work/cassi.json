@@ -1,0 +1,93 @@
+{
+  "slug": "cassi",
+  "title": "Cassi",
+  "header": {
+    "title": "Cassi",
+    "lede": "An AI assistant for homeowners that's omnipresent, unobtrusive, and real enough to raise on.",
+    "meta": "Freelance · iOS + Web · 6 months · Solo designer"
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "body": "Cassi is an AI assistant for homeowners. Not a chatbot bolted to a dashboard — an assistant that lives quietly across the whole product and actually does the thing, instead of telling you how to do the thing.\n\nFind a leak under the sink and Cassi figures out what it is, tells you how bad it is, and books a contractor it already knows you'd pick. A pre-revenue founder needed a prototype real enough to raise on. I was the solo designer, working with one engineer.\n\n> The prototype raised a $3M seed. The company went on to a $10M Series A.",
+      "visual": { "kind": "video", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/cassi-onboarding-splash.mp4", "alt": "Cassi onboarding splash screens" },
+      "caption": "Onboarding — first run"
+    },
+    {
+      "id": "brief",
+      "act": "Process",
+      "eyebrow": "The brief",
+      "heading": "It had to feel shipped, not sketched",
+      "body": "The founder wasn't raising on a deck of pretty frames. Investors were going to hold the thing. So \"realistic\" wasn't a nice-to-have — it was the entire point. The prototype had to behave like a product that already existed.\n\nThat set the bar for every decision: no lorem ipsum, no dead ends, no screen that only works if you tap it in exactly the right order. If a real homeowner would hit a state, we designed that state.",
+      "visual": { "kind": "image", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/onboarding-flow-01.png", "alt": "Cassi's onboarding flow mapped end to end" },
+      "caption": "Onboarding flow, mapped"
+    },
+    {
+      "id": "philosophy",
+      "act": "Process",
+      "eyebrow": "The idea",
+      "heading": "Invisible intelligence",
+      "body": "The whole product ran on one belief: the smartest thing an assistant can do is get out of the way. Omnipresent, but never in your face. It should feel less like software and more like a reliable person who happens to know your house better than you do.\n\n- Embedded everywhere, never in the way.\n- A memory that actually matters — it remembers your house, not just your last message.\n- Structured peace of mind: fewer decisions on your plate, not more notifications.",
+      "visual": { "kind": "video", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/cassi-home-dashboard-concept.mp4", "alt": "Cassi home dashboard concept" },
+      "caption": "Home dashboard concept"
+    },
+    {
+      "id": "maintenance",
+      "act": "Process",
+      "eyebrow": "The part I owned",
+      "heading": "The maintenance flow",
+      "body": "My piece of the MVP was maintenance — the least glamorous, most anxiety-shaped corner of owning a home. The goal was low cognitive load and high actionability: hand people the next right step before they had to go looking for it.\n\nMost of the work was in the edges. What happens mid-season? When a job's half-booked? When the thing you flagged last spring comes due again? The microcopy carried a lot of that weight — a maintenance app should sound like a calm neighbour, not a warranty card.",
+      "visual": { "kind": "video", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/cassi-maintenance-flow.mp4", "alt": "Cassi maintenance flow with a seasonal checklist" },
+      "caption": "Maintenance flow"
+    },
+    {
+      "id": "states",
+      "act": "Process",
+      "eyebrow": "The unglamorous bit",
+      "heading": "The states nobody screenshots",
+      "body": "Uploading documents is the kind of flow people skip in a portfolio. It's also exactly where a prototype feels fake if you rush it. So I drew the in-between: the parsing, the almost-done, the \"we got most of it, check this one field.\"\n\n> The in-between states are the product. Everything else is a screenshot.",
+      "visual": { "kind": "image", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/upload-progress-01.png", "alt": "The document-upload flow across its in-between states" },
+      "caption": "Document upload — the in-between states"
+    },
+    {
+      "id": "profile",
+      "act": "Product",
+      "eyebrow": "What we built",
+      "heading": "Your whole home, from an address",
+      "body": "Type in an address and Cassi hands back the full picture — value, flood-zone risk, the boring-but-load-bearing facts — before you've figured out what to ask. The address is the only thing we make you do. Everything after it is Cassi's job.",
+      "visual": { "kind": "image", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/property-listing-02.png", "alt": "A home's full profile from just an address" },
+      "caption": "Property profile"
+    },
+    {
+      "id": "facts",
+      "act": "Product",
+      "eyebrow": "What we built",
+      "heading": "Answers before the question",
+      "body": "Did-you-know cards surface a fact about your home right when it's useful — not buried in a settings page you'll never open. It's the invisible-intelligence idea made tangible: the assistant volunteering the thing you were about to need.",
+      "visual": { "kind": "image", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/fact-card-01.png", "alt": "Did-you-know cards surfacing a home fact" },
+      "caption": "Did-you-know cards"
+    },
+    {
+      "id": "voice",
+      "act": "Product",
+      "eyebrow": "What we built",
+      "heading": "Talking to your house",
+      "body": "Sometimes the fastest input is your voice. You can just talk to Cassi — describe the problem out loud, watch it listen, and get an answer back. It's the same assistant, minus the keyboard.",
+      "visual": { "kind": "video", "src": "https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work/cassi-assistant-speaking.mp4", "alt": "Talking to Cassi out loud and hearing it answer" },
+      "caption": "Talking to Cassi"
+    },
+    {
+      "id": "outcome",
+      "act": "Outcome",
+      "eyebrow": "What happened",
+      "heading": "A prototype that moved real money",
+      "body": "The prototype did its job, and then it kept doing it. I'll take \"a design that directly moved real money\" over a dribbble shot any day.\n\nSix months, one designer, one engineer, and a bar that said: make it feel like it already exists. It did.",
+      "visual": { "kind": "coded", "ref": "cassi:outcome" },
+      "caption": "A prototype that moved real money"
+    }
+  ],
+  "footer": {
+    "headline": "That's Cassi — a prototype that had to feel real, and did.",
+    "note": ""
+  }
+}

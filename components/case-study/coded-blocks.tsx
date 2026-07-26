@@ -10,6 +10,10 @@ export const CODED_BLOCKS: Record<string, () => ReactNode> = {
   'deterge:outcome-metrics': () => (
     <MetricsPanel stats={[{ value: '80+', label: 'weekly active' }, { value: '₹30k', label: 'invested' }, { value: '6', label: 'months' }]} />
   ),
+  'cassi:outcome': () => (
+    <MetricsPanel progression stats={[{ value: '$3M', label: 'seed' }, { value: '$10M', label: 'Series A' }]} />
+  ),
+  'verizon:result': () => <MetricsPanel stats={[{ value: '500+', label: 'hours of scanning saved' }]} />,
 };
 
 // The ids available to pick from in the admin visual editor's "Coded" dropdown.
