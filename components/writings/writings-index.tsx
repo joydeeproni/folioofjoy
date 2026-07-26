@@ -112,8 +112,10 @@ function Tab({ label, active, onClick }: { label: string; active: boolean; onCli
   return (
     <button
       onClick={onClick}
-      className="font-mono uppercase tracking-[0.25em] text-xs transition-opacity"
-      style={{ color: FG, opacity: active ? 1 : 0.4 }}
+      className={`cursor-pointer font-mono uppercase tracking-[0.25em] text-xs transition-opacity ${
+        active ? 'opacity-100' : 'opacity-40 hover:opacity-70'
+      }`}
+      style={{ color: FG }}
       aria-pressed={active}
     >
       {label}
