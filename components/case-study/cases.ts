@@ -3,6 +3,7 @@
 export type CaseMeta = { title: string; category: string; year: number; slug: string };
 
 export const CASES: CaseMeta[] = [
+  { title: 'Tactile Create', category: 'AI · Platform', year: 2026, slug: 'tactile-create' },
   { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
   { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi' },
   { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs' },

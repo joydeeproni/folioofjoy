@@ -6,6 +6,7 @@ import { Insider, FolioOfJoy, Pitzsa } from './stubs';
 import { TactileCore } from './tactile-core';
 import { Deterge } from './deterge';
 import { Verizon } from './verizon';
+import { TactileCreate } from './tactile-create';
 
 // Slug → case study. Bespoke, code-rendered case studies (like the writings
 // LOCAL_ARTICLES map) rather than Sanity content. Add new studies here.
@@ -13,6 +14,7 @@ import { Verizon } from './verizon';
 type CaseStudy = { title: string; Component: ComponentType };
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
+  'tactile-create': { title: 'Tactile Create', Component: TactileCreate },
   cassi: { title: 'Cassi', Component: Cassi },
   knobs: { title: 'Toggles, switches, knobs', Component: Knobs },
   canvas: { title: 'Create Canvas', Component: Canvas },

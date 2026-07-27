@@ -46,6 +46,18 @@
   font-display: swap;
 }
 @font-face {
+  font-family: 'Galeria';
+  src: url('/fonts/APK-Galeria-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galeria';
+  src: url('/fonts/APK-Galeria-Light.otf') format('opentype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
   font-family: 'Geist Pixel';
   src: url('/fonts/GeistPixel-Regular.ttf') format('truetype');
   font-weight: 400;
