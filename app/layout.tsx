@@ -6,6 +6,7 @@ import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
 import { ContentProvider } from '@/components/content-provider'
+import { AgentationDev } from '@/components/dev/agentation-dev'
 import { getWork, getWritingsNav } from '@/lib/content'
 import 'dialkit/styles.css'
 import './globals.css'
@@ -103,6 +104,7 @@ export default async function RootLayout({
           <DitherTransition />
         </Providers>
         {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}
+        {process.env.NODE_ENV !== 'production' && <AgentationDev />}
         {process.env.NODE_ENV === 'production' && <Analytics />}
         {process.env.NODE_ENV === 'production' && (
           <Script id="microsoft-clarity" strategy="afterInteractive">
