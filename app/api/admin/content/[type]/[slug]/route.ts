@@ -2,14 +2,13 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import { editableArticleSchema, editableCaseStudySchema } from '@/lib/content/editable';
+import { editableArticleSchema } from '@/lib/content/editable';
 
 export const runtime = 'nodejs';
 
 const DEV = process.env.NODE_ENV === 'development';
 const TYPES: Record<string, { dir: string; schema: import('zod').ZodTypeAny }> = {
   writings: { dir: 'writings', schema: editableArticleSchema },
-  work: { dir: 'work', schema: editableCaseStudySchema },
 };
 
 function fileFor(type: string, slug: string) {
