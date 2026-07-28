@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
-import { Plus, Minus, Expand } from 'lucide-react';
+import { Expand } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
@@ -11,6 +11,7 @@ import { MediaCard } from './shared/media-card';
 import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
 import { MarqueeWall } from './shared/marquee-wall';
+import { FaqAccordion } from './shared/faq-accordion';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -187,34 +188,6 @@ function FeatureCarousel({ onOpen }: { onOpen: (src: string) => void }) {
   );
 }
 
-// ── FAQ accordion ────────────────────────────────────────────────────────────
-function FaqAccordion() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id={id('FAQ')} className="scroll-mt-24 py-16 md:py-24">
-      <Reveal>
-        <h2 className="mb-8 font-sans font-medium text-2xl md:text-3xl tracking-tight" style={{ color: FG }}>The questions I get asked.</h2>
-      </Reveal>
-      <Reveal className="max-w-[70ch]">
-        {FAQ.map((item, i) => {
-          const isOpen = open === i;
-          return (
-            <div key={i} style={{ borderTop: `1px solid ${FAINT}` }}>
-              <button onClick={() => setOpen(isOpen ? null : i)} className="group flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-left" aria-expanded={isOpen}>
-                <span className="font-sans text-[17px] md:text-lg leading-relaxed transition-opacity group-hover:opacity-70" style={{ color: FG }}>{item.q}</span>
-                <span className="shrink-0 text-[rgba(237,234,224,0.55)] transition-colors group-hover:text-[#EDEAE0]">{isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}</span>
-              </button>
-              <motion.div initial={false} animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-                <p className="max-w-[68ch] pb-6 font-sans text-[17px] md:text-lg leading-relaxed" style={{ color: MUTED }}>{item.a}</p>
-              </motion.div>
-            </div>
-          );
-        })}
-      </Reveal>
-    </section>
-  );
-}
-
 export function TactileCreate() {
   const headerRef = useRef<HTMLElement | null>(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -298,7 +271,7 @@ export function TactileCreate() {
           className="-mt-[12vh] md:-mt-[18vh]"
         />
         <FeatureCarousel onOpen={setLightbox} />
-        <FaqAccordion />
+        <FaqAccordion id={id('FAQ')} heading="The questions I get asked." items={FAQ} />
       </div>
 
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
