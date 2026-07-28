@@ -5,15 +5,17 @@ import { useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import type { WritingListItem } from '@/lib/content/types';
 import { SORTED_CASES } from '@/components/case-study/cases';
+import { ConstructionSign } from '@/components/icons/construction-sign';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 const FG = '#EDEAE0';
 const RULE = 'rgba(237,234,224,0.15)';
 
 // Folio of Joy lives in Thoughts (a personal, reflective piece), not Cases.
-const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Spring 2026', href: '/work/folio-of-joy' };
+const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Spring 2026', href: '/work/folio-of-joy', wip: true };
 
 // Tools and resources I've made — some for sale, some free.
-const RESOURCES: { title: string; desc: string; href?: string }[] = [
+const RESOURCES: { title: string; desc: string; href?: string; wip?: boolean }[] = [
   {
     title: 'Lazy Notes',
     desc: 'Simple note-taking app for momentary jotting — and occasionally downloading a .txt of it.',
@@ -32,6 +34,7 @@ const RESOURCES: { title: string; desc: string; href?: string }[] = [
   {
     title: 'Control Panel OS',
     desc: 'Beautiful slides, knobs and inputs for your vibe coded SaaS app',
+    wip: true,
   },
   {
     title: 'Cyberpunk PPT Template',
@@ -54,6 +57,7 @@ function Row({
   desc,
   href,
   external,
+  wip,
 }: {
   n: string;
   title: string;
@@ -61,6 +65,7 @@ function Row({
   desc?: string;
   href?: string;
   external?: boolean;
+  wip?: boolean;
 }) {
   const body = (
     <>
@@ -82,9 +87,27 @@ function Row({
           </span>
         )}
       </span>
-      {meta && (
-        <span className="ml-auto shrink-0 self-baseline font-mono uppercase tracking-widest text-sm" style={{ opacity: 0.4 }}>
-          {meta}
+      {(meta || wip) && (
+        <span className="ml-auto flex shrink-0 items-baseline gap-4 self-baseline">
+          {meta && (
+            <span className="font-mono uppercase tracking-widest text-sm" style={{ opacity: 0.4 }}>
+              {meta}
+            </span>
+          )}
+          {/* Roadworks sign for unfinished write-ups, with the same tooltip
+              treatment as the Lounge cassette. */}
+          {wip && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-block leading-none">
+                  <ConstructionSign className="h-6 w-auto opacity-70 transition-opacity group-hover:opacity-100 md:h-8" />
+                </span>
+              </TooltipTrigger>
+              {/* Top, not left like the cassette — left would cover the date
+                  sitting next to the sign on some rows. */}
+              <TooltipContent side="top">Under construction</TooltipContent>
+            </Tooltip>
+          )}
         </span>
       )}
     </>
@@ -92,7 +115,7 @@ function Row({
   const cls = 'flex items-baseline gap-6 py-8';
   if (!href) {
     return (
-      <div className={`${cls} cursor-default`} aria-disabled>
+      <div className={`group ${cls} cursor-default`} aria-disabled>
         {body}
       </div>
     );
@@ -165,7 +188,7 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
         <ul key="resources" className="divide-y" style={{ borderColor: RULE }}>
           {RESOURCES.map((r, i) => (
             <li key={r.title} {...rowAnim(i)}>
-              <Row n={String(i + 1).padStart(2, '0')} title={r.title} desc={r.desc} href={r.href} external />
+              <Row n={String(i + 1).padStart(2, '0')} title={r.title} desc={r.desc} href={r.href} external wip={r.wip} />
             </li>
           ))}
         </ul>
@@ -175,7 +198,14 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
         <ul key="cases" className="divide-y" style={{ borderColor: RULE }}>
           {SORTED_CASES.map((c, i) => (
             <li key={c.title} {...rowAnim(i)}>
-              <Row n={String(c.year)} title={c.title} meta={c.category} href={c.slug ? `/work/${c.slug}` : undefined} />
+              <Row
+                n={String(c.year)}
+                title={c.title}
+                // The sign stands in for the category on unfinished cases.
+                meta={c.wip ? undefined : c.category}
+                href={c.slug ? `/work/${c.slug}` : undefined}
+                wip={c.wip}
+              />
             </li>
           ))}
         </ul>
@@ -184,7 +214,13 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
       {tab === 'thoughts' && (
         <ul key="thoughts" className="divide-y" style={{ borderColor: RULE }}>
           <li key="folio-of-joy" {...rowAnim(0)}>
-            <Row n={FOLIO_THOUGHT.number} title={FOLIO_THOUGHT.title} meta={FOLIO_THOUGHT.meta} href={FOLIO_THOUGHT.href} />
+            <Row
+              n={FOLIO_THOUGHT.number}
+              title={FOLIO_THOUGHT.title}
+              meta={FOLIO_THOUGHT.meta}
+              href={FOLIO_THOUGHT.href}
+              wip={FOLIO_THOUGHT.wip}
+            />
           </li>
           {writings.map((post, i) => (
             <li key={post.slug} {...rowAnim(i + 1)}>

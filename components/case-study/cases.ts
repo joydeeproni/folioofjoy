@@ -1,17 +1,19 @@
 // Canonical case-study list — the single source of truth for the Cases index
 // and for prev/next navigation. Order here is the display order (newest first).
-export type CaseMeta = { title: string; category: string; year: number; slug: string };
+// `wip` marks a case whose write-up isn't finished — the Cases index shows a
+// barricade on those rows. Drop the flag once a case is done.
+export type CaseMeta = { title: string; category: string; year: number; slug: string; wip?: boolean };
 
 export const CASES: CaseMeta[] = [
-  { title: 'Tactile Create', category: 'AI · Platform', year: 2026, slug: 'tactile-create' },
-  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas' },
-  { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi' },
-  { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs' },
-  { title: 'Pitzsa', category: 'Web', year: 2024, slug: 'pitzsa' },
-  { title: 'Tactile Core', category: 'Strategy', year: 2022, slug: 'tactile-core' },
-  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider' },
-  { title: 'Verizon', category: 'Mobile', year: 2018, slug: 'verizon' },
-  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge' },
+  { title: 'Tactile Create', category: 'Web', year: 2026, slug: 'tactile-create' },
+  { title: 'Create Canvas', category: 'Web', year: 2025, slug: 'canvas', wip: true },
+  { title: 'Cassi Home', category: 'Mobile', year: 2025, slug: 'cassi', wip: true },
+  { title: 'Knobs, Sliders & Dials', category: 'Components', year: 2025, slug: 'knobs', wip: true },
+  { title: 'Pitzsa', category: 'Web', year: 2024, slug: 'pitzsa', wip: true },
+  { title: 'Tactile Core', category: 'Strategy', year: 2022, slug: 'tactile-core', wip: true },
+  { title: 'Insider', category: 'Web', year: 2020, slug: 'insider', wip: true },
+  { title: 'Verizon', category: 'Mobile', year: 2018, slug: 'verizon', wip: true },
+  { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge', wip: true },
 ];
 
 // Newest first; ties keep listed order (stable sort).
