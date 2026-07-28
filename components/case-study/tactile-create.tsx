@@ -6,6 +6,8 @@ import { Plus, Minus, Expand } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
+import { FG, BG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
+import { MediaCard, ZoomableShot, type MediaItem } from './shared/media-card';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -13,11 +15,6 @@ import { slugify } from '@/lib/writings/slug';
 // `font-sans` + mono labels). Media + icons are PLACEHOLDER. Copy from Joy's
 // design; {/* ASK JOY */} marks lines to confirm/replace.
 
-const FG = '#EDEAE0';
-const BG = '#0B0B0B';
-const MUTED = 'rgba(237,234,224,0.55)';
-const FAINT = 'rgba(237,234,224,0.14)';
-const ACCENT = '#2CA152';
 const IMG = '/work/tactile-create';
 
 const TOC = ['Overview', 'Creative Suite', 'In motion', 'Up close', 'FAQ'];
@@ -87,14 +84,6 @@ const FAQ = [
   { q: 'How did you measure success of this project?', a: '{Answer coming from Joy.}' },
   { q: 'What were your learnings from this?', a: '{Answer coming from Joy.}' },
 ];
-
-// FULL_BLEED: span the whole viewport (cinematic scroll-video + the image marquee).
-const FULL_BLEED = 'w-screen ml-[calc(50%-50vw)]';
-// SHELF: a full-viewport-width scroll strip whose FIRST card is padded to line up
-// with the content column (heading) — so it "starts aligned with the text, then
-// scrolls edge to edge". SHELF_PAD is that left inset (matches the max-w-5xl column).
-const SHELF = 'w-screen ml-[calc(50%-50vw)] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
-const SHELF_PAD = 'pl-[max(1.5rem,calc(50vw-32rem))] pr-6 md:pl-[max(4rem,calc(50vw-32rem))]';
 
 // ── Big statement — fades in on scroll ───────────────────────────────────────
 // Each line brightens from 5% → 100% opacity as it scrolls up through the view.
@@ -175,7 +164,7 @@ function ScrollVideoCarousel() {
     return (
       <section id={id('In motion')} className="scroll-mt-24 py-16">
         <div className={`${SHELF} flex gap-4 ${SHELF_PAD}`}>
-          {VIDEOS.map((v, n) => <VideoCard key={n} className="w-[64vw] max-w-[720px] shrink-0" src={v} />)}
+          {VIDEOS.map((v, n) => <MediaCard key={n} src={`${IMG}/${v}`} aspect="aspect-[16/10]" className="w-[64vw] max-w-[720px] shrink-0" />)}
         </div>
       </section>
     );
@@ -186,11 +175,11 @@ function ScrollVideoCarousel() {
       <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
         <motion.div style={{ x, opacity: outOpacity }} className="flex items-center gap-4 pl-[calc(50vw-22vw)] pr-[40vw] will-change-transform">
           <motion.div style={{ scale }} className="relative z-10 origin-center shrink-0">
-            <VideoCard className="w-[44vw] max-w-[720px]" src={VIDEOS[0]} />
+            <MediaCard src={`${IMG}/${VIDEOS[0]}`} aspect="aspect-[16/10]" className="w-[44vw] max-w-[720px]" />
           </motion.div>
           {VIDEOS.slice(1).map((v, n) => (
             <motion.div key={n} style={{ opacity: fade }} className="shrink-0">
-              <VideoCard className="w-[44vw] max-w-[720px]" src={v} />
+              <MediaCard src={`${IMG}/${v}`} aspect="aspect-[16/10]" className="w-[44vw] max-w-[720px]" />
             </motion.div>
           ))}
         </motion.div>
@@ -199,45 +188,9 @@ function ScrollVideoCarousel() {
   );
 }
 
-// A bare autoplaying video — no green, no stroke, no play button.
-function VideoCard({ className = '', src }: { className?: string; src: string }) {
-  return (
-    <video
-      src={`${IMG}/${src}`}
-      autoPlay muted loop playsInline preload="metadata"
-      className={`aspect-[16/10] rounded-xl border border-white/10 object-cover shadow-2xl ${className}`}
-    />
-  );
-}
-
 // ── Two bigger image rows auto-scrolling in opposite directions ──────────────
 // Full-bleed edge-to-edge, sits right under the green carousel. Click opens the
 // image; hovering a row slows its scroll way down.
-function SmallShot({ shot, onOpen }: { shot: { file: string; caption: string }; onOpen: (src: string) => void }) {
-  const src = `${IMG}/${shot.file}`;
-  return (
-    <div className="group relative w-[70vw] max-w-[520px] shrink-0 sm:w-[40vw]">
-      <button
-        type="button"
-        onClick={() => onOpen(src)}
-        className="relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden rounded-xl border border-white/10 shadow-2xl"
-      >
-        <img src={src} alt="" loading="lazy" draggable={false} className="h-full w-full object-cover object-top" />
-        <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100" style={{ backgroundColor: 'rgba(11,11,11,0.28)' }}>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm" style={{ backgroundColor: 'rgba(11,11,11,0.55)', border: `1px solid rgba(237,234,224,0.35)` }}>
-            <Expand className="h-5 w-5" style={{ color: FG }} aria-hidden />
-          </span>
-        </span>
-      </button>
-      <span
-        className="pointer-events-none absolute inset-x-0 top-full mt-2 truncate text-center font-sans text-[13px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        style={{ color: MUTED }}
-      >
-        {shot.caption}
-      </span>
-    </div>
-  );
-}
 
 // Per-frame speed so hover can slow it smoothly (no jump). `reverse` flips direction.
 function Marquee({ shots, reverse = false, durationMs, onOpen }: { shots: { file: string; caption: string }[]; reverse?: boolean; durationMs: number; onOpen: (src: string) => void }) {
@@ -257,7 +210,15 @@ function Marquee({ shots, reverse = false, durationMs, onOpen }: { shots: { file
   return (
     <div className="overflow-hidden pb-7" onMouseEnter={() => (speed.current = 0.3)} onMouseLeave={() => (speed.current = 1)}>
       <motion.div className="flex w-max gap-4" style={reduce ? undefined : { x }}>
-        {loop.map((s, i) => <SmallShot key={i} shot={s} onOpen={onOpen} />)}
+        {loop.map((s, i) => (
+          <ZoomableShot
+            key={i}
+            item={{ src: `${IMG}/${s.file}`, caption: s.caption }}
+            aspect="aspect-[16/10]"
+            className="w-[70vw] max-w-[520px] sm:w-[40vw]"
+            onOpen={onOpen}
+          />
+        ))}
       </motion.div>
     </div>
   );
