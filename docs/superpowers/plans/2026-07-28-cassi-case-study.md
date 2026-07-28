@@ -18,6 +18,7 @@
 - **Palette (exact):** `FG #EDEAE0`, `BG #0B0B0B`, `MUTED rgba(237,234,224,0.55)`, `FAINT rgba(237,234,224,0.14)`, `ACCENT #2CA152`.
 - **Blob base (exact):** `https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work`
 - **All copy in this plan is placeholder.** Every placeholder run must carry a `// PLACEHOLDER COPY` comment so Joy can grep for it. Never lorem ipsum — plausible prose at the target length.
+- **Trim imports you orphan.** Every extraction task deletes code; anything its imports were the sole consumer of must go in the same commit. Nothing catches this for you — there is no linter and `tsconfig.json` sets no `noUnusedLocals`. Before committing, grep each symbol in the import lists of every file you edited and confirm it still has a use. Two tasks in a row have shipped dead imports to review.
 - Dev server: `preview_start` with `{name: "folioofjoy"}` (from `.claude/launch.json`, port 3000). Never run `next dev` via Bash.
 - **`navigate` needs `force: true` in this environment.** Without it the call reports success but silently does not move, and you will assert against the previous page. Always confirm arrival before asserting anything:
   `(() => JSON.stringify({ href: location.href, h1: document.querySelector('h1')?.textContent }))()`
@@ -846,8 +847,11 @@ Expected gone: `StatementLine`, `Statement`, `VideoCard`, `SmallShot`, `Marquee`
 - [ ] **Step 2: Confirm no orphaned imports or dead constants**
 
 Run: `npx tsc --noEmit 2>&1 | grep "error TS"` → expect only `lib/color.ts:207`.
-Run: `grep -nE "ACCENT|useMotionValue|useAnimationFrame|AnimatePresence|Plus|Minus" components/case-study/tactile-create.tsx`
-Expected: no matches. All of those moved to `shared/`. If any remain, the import list was not trimmed.
+Run: `grep -nE "ACCENT|MotionValue|MediaItem|useMotionValue|useAnimationFrame|AnimatePresence|Plus|Minus" components/case-study/tactile-create.tsx`
+Expected: no matches. All of those moved to `shared/`. If any remain, an import list was not trimmed.
+Then check every remaining import is still used:
+`for s in $(grep -oE "^import \{[^}]*\}" -A0 components/case-study/tactile-create.tsx | grep -oE "[A-Za-z_][A-Za-z0-9_]*" | sort -u); do [ "$(grep -cw "$s" components/case-study/tactile-create.tsx)" -le 1 ] && echo "UNUSED: $s"; done`
+Expected: no `UNUSED:` lines.
 
 - [ ] **Step 3: Production build**
 
