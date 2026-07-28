@@ -27,14 +27,22 @@ const STATEMENT = [
   'Cassi answers by doing the thing — quietly, and usually before you thought to ask.',
 ];
 
-// The five most phone-shaped assets. error-reporting and fact-card are natively
-// 9:19.5; the rest take a small crop.
+// Twelve local UI screenshots, native 900×2336 (0.3853) — kept at their own
+// ratio in PhoneRow so the app's bottom tab bar survives instead of getting
+// cropped off by a forced 9:19.5 card.
 const PHONES = [
-  { src: `${BLOB}/cassi-onboarding-splash.mp4`, alt: 'Cassi onboarding splash screens' },
-  { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, alt: 'Cassi home dashboard concept' },
-  { src: `${BLOB}/property-listing-02.png`, alt: "A home's full profile from just an address" },
-  { src: `${BLOB}/cassi-error-reporting.mp4`, alt: 'Reporting a problem and watching it get fixed' },
-  { src: `${BLOB}/fact-card-01.png`, alt: 'Did-you-know cards surfacing a home fact' },
+  { src: '/work/cassi/home.webp', alt: "Cassi's home dashboard" },
+  { src: '/work/cassi/all-properties.webp', alt: 'Every property in one list' },
+  { src: '/work/cassi/setup-home.webp', alt: 'Setting up a new home in Cassi' },
+  { src: '/work/cassi/calendar.webp', alt: "Cassi's maintenance calendar" },
+  { src: '/work/cassi/seasonal-plan.webp', alt: 'A seasonal home maintenance plan' },
+  { src: '/work/cassi/hvac-service.webp', alt: 'Scheduling HVAC service' },
+  { src: '/work/cassi/hvac-service-1.webp', alt: 'Confirming an HVAC service appointment' },
+  { src: '/work/cassi/dishwasher.webp', alt: 'Diagnosing a dishwasher issue' },
+  { src: '/work/cassi/where-is-circuit-breaker.webp', alt: 'Asking Cassi where the circuit breaker is' },
+  { src: '/work/cassi/vendor-coordination.webp', alt: 'Coordinating with a vendor on a repair' },
+  { src: '/work/cassi/handoff-overview.webp', alt: 'A handoff overview for a new homeowner' },
+  { src: '/work/cassi/your-home-handled.webp', alt: 'Your home, handled' },
 ];
 
 // All seven portrait-ish assets. Captions are the ones already written in
@@ -172,7 +180,7 @@ export function Cassi() {
           }
         />
 
-        <PhoneRow id={id('The app')} items={PHONES} />
+        <PhoneRow id={id('The app')} items={PHONES} aspect="aspect-[900/2336]" />
 
         {/* PLACEHOLDER COPY — heading ~6 words, paragraph ~30 words. */}
         <section id={id('In motion')} className="scroll-mt-24 pt-16 md:pt-24">
