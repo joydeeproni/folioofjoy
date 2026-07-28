@@ -127,7 +127,7 @@ No commit — this task produces reference material only.
 - Consumes: nothing
 - Produces:
   - `tokens.ts`: `FG`, `BG`, `MUTED`, `FAINT`, `ACCENT`, `FULL_BLEED`, `SHELF`, `SHELF_PAD` — all `string`
-  - `media-card.tsx`: `isVideo(src: string): boolean`; `type MediaItem = { src: string; caption?: string; alt?: string }`; `Media({ src, className?, alt? })`; `MediaCard({ src, aspect, className?, alt? })`; `ZoomableShot({ item, aspect, className?, onOpen })` where `onOpen: (src: string) => void`
+  - `media-card.tsx`: `isVideo(src: string): boolean`; `type MediaItem = { src: string; caption?: string; alt?: string }`; `Media({ src, className?, alt? })`; `MediaCard({ src, aspect, className?, alt?, objectPosition? })` — `objectPosition` defaults to `'object-center'`, which is what the `VideoCard` it replaces used; do **not** default it to `object-top`; `ZoomableShot({ item, aspect, className?, onOpen })` where `onOpen: (src: string) => void`
 
 - [ ] **Step 1: Create `tokens.ts`**
 
@@ -192,14 +192,18 @@ export function MediaCard({
   aspect,
   className = '',
   alt = '',
+  objectPosition = 'object-center',
 }: {
   src: string;
   aspect: string;
   className?: string;
   alt?: string;
+  /** Which edge survives the crop. Defaults to centre, matching the video cards
+   *  this replaced — pass `object-top` for UI screenshots, where the top matters. */
+  objectPosition?: string;
 }) {
   return (
-    <Media src={src} alt={alt} className={`${aspect} ${SHELL} object-cover object-top ${className}`} />
+    <Media src={src} alt={alt} className={`${aspect} ${SHELL} object-cover ${objectPosition} ${className}`} />
   );
 }
 
@@ -282,6 +286,19 @@ Reload `/work/tactile-create`. Re-run the Task 1 Step 2 assertion — `imgs`, `v
 Expected: `zoomButtons` ≥ 12, `hasExpandIcon` true.
 
 Re-run the Task 1 geometry fingerprint at 1440×900 and diff it against the ledger's recorded values. Any numeric deviation is a bug in this task.
+
+**Then check crop parity, which the fingerprint cannot see.** A changed `object-position`
+shifts what is visible *inside* an unchanged box, so box geometry proves nothing about it:
+
+```js
+(() => [...document.querySelectorAll('video[src*="/work/tactile-create/"], img[src*="/work/tactile-create/"]')]
+  .map(m => [m.getAttribute('src').split('/').pop(), getComputedStyle(m).objectPosition])
+)()
+```
+Every one of the six `*-preview-*.mp4` videos must report `50% 50%`. Any `50% 0%` among them
+means `object-top` leaked into `MediaCard`. Scroll through the "In motion" section and
+screenshot it — that section is where this task's regression risk actually lives, and it is
+easy to skip because it sits inside a 300vh sticky scroll.
 
 - [ ] **Step 6: Commit**
 
@@ -1053,6 +1070,7 @@ export function PhoneRow({ id, items }: { id?: string; items: MediaItem[] }) {
                 src={item.src}
                 alt={item.alt ?? ''}
                 aspect={PHONE}
+                objectPosition="object-top"
                 className="w-[38vw] max-w-[190px] shrink-0 md:w-[15vw] md:max-w-[170px]"
               />
             ))}
