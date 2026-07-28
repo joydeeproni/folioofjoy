@@ -8,6 +8,7 @@ import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
 import { PhoneRow } from './shared/phone-row';
 import { MarqueeWall } from './shared/marquee-wall';
+import { BentoGrid, type BentoTile } from './shared/bento-grid';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
 // link and case nav come from the page; collapsed title + right rail are here).
@@ -45,6 +46,49 @@ const CAROUSEL = [
   { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, caption: 'A home dashboard concept: everything about the house in one calm view.' },
   { src: `${BLOB}/mortgage-upload-01.png`, caption: 'A mortgage assistant that reads your terms and says, plainly, whether to refinance.' },
   { src: `${BLOB}/cassi-error-reporting.mp4`, caption: 'Reporting a problem and watching it get fixed, no ticket number required.' },
+];
+
+// The six non-portrait assets. All titles and blurbs are PLACEHOLDER COPY —
+// ~4-word titles, ~25-word blurbs.
+const BENTO: BentoTile[] = [
+  {
+    src: `${BLOB}/upload-progress-01.png`,
+    span: 'full',
+    aspect: 'aspect-[21/8]',
+    title: 'The states nobody screenshots',
+    blurb: 'Uploading a document in five frames: parsing, almost-there, and the one field we could not read. Skip these and the prototype feels fake.',
+  },
+  {
+    src: `${BLOB}/cassi-maintenance-flow.mp4`,
+    span: 'half',
+    title: 'A season ahead',
+    blurb: 'The maintenance flow hands over a seasonal checklist before the season turns, so the next right step is already waiting.',
+  },
+  {
+    src: `${BLOB}/cassi-assistant-speaking.mp4`,
+    span: 'half',
+    title: 'Talking to your house',
+    blurb: 'Sometimes the fastest input is your voice. Describe the problem out loud, watch it listen, get an answer back.',
+  },
+  {
+    src: `${BLOB}/onboarding-flow-01.png`,
+    span: 'full',
+    aspect: 'aspect-[16/9]',
+    title: 'Onboarding, mapped',
+    blurb: 'The whole first run drawn end to end, from the home-intelligence score through to the first insurance upload.',
+  },
+  {
+    src: `${BLOB}/cassi-carousel.mp4`,
+    span: 'half',
+    title: 'Scored at a glance',
+    blurb: 'Animated home-condition cards, each property scored so the comparison happens before anyone opens a spreadsheet.',
+  },
+  {
+    src: `${BLOB}/cassi-fundraising-deck.mp4`,
+    span: 'half',
+    title: 'The pitch itself',
+    blurb: 'The fundraising deck that carried the prototype into the room and helped land the first round of funding.',
+  },
 ];
 
 export function Cassi() {
@@ -138,6 +182,15 @@ export function Cassi() {
           durationsMs={[52000]}
           onOpen={setLightbox}
           className="mt-10"
+        />
+
+        <BentoGrid
+          id={id('Up close')}
+          heading="A few moments, up close."
+          /* PLACEHOLDER COPY */
+          blurb="The parts that do not fit on a phone screen: the flows, the pitch, and the states in between."
+          tiles={BENTO}
+          onOpen={setLightbox}
         />
       </div>
 
