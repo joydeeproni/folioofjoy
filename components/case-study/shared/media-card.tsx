@@ -35,14 +35,18 @@ export function MediaCard({
   aspect,
   className = '',
   alt = '',
+  objectPosition = 'object-center',
 }: {
   src: string;
   aspect: string;
   className?: string;
   alt?: string;
+  /** Which edge survives the crop. Defaults to centre, matching the video cards
+   *  this replaced — pass `object-top` for UI screenshots, where the top matters. */
+  objectPosition?: string;
 }) {
   return (
-    <Media src={src} alt={alt} className={`${aspect} ${SHELL} object-cover object-top ${className}`} />
+    <Media src={src} alt={alt} className={`${aspect} ${SHELL} object-cover ${objectPosition} ${className}`} />
   );
 }
 

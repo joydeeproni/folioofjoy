@@ -7,7 +7,7 @@ import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
 import { FG, BG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
-import { MediaCard, ZoomableShot, type MediaItem } from './shared/media-card';
+import { MediaCard, ZoomableShot } from './shared/media-card';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
