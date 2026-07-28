@@ -7,6 +7,7 @@ import { FG, FAINT, MUTED } from './shared/tokens';
 import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
 import { PhoneRow } from './shared/phone-row';
+import { MarqueeWall } from './shared/marquee-wall';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
 // link and case nav come from the page; collapsed title + right rail are here).
@@ -32,6 +33,18 @@ const PHONES = [
   { src: `${BLOB}/property-listing-02.png`, alt: "A home's full profile from just an address" },
   { src: `${BLOB}/cassi-error-reporting.mp4`, alt: 'Reporting a problem and watching it get fixed' },
   { src: `${BLOB}/fact-card-01.png`, alt: 'Did-you-know cards surfacing a home fact' },
+];
+
+// All seven portrait-ish assets. Captions are the ones already written in
+// lib/work/local.ts, trimmed of the leading "Cassi — ".
+const CAROUSEL = [
+  { src: `${BLOB}/cassi-onboarding-splash.mp4`, caption: 'Onboarding splash screens that feel like a deep breath, not a signup.' },
+  { src: `${BLOB}/property-listing-02.png`, caption: "A home's full profile from just an address: value, flood-zone risk, the works." },
+  { src: `${BLOB}/cassi-bathroom-maintenance-video.mp4`, caption: 'Booking bathroom maintenance by just walking it through on video.' },
+  { src: `${BLOB}/fact-card-01.png`, caption: 'Did-you-know cards that surface a home fact before you thought to ask.' },
+  { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, caption: 'A home dashboard concept: everything about the house in one calm view.' },
+  { src: `${BLOB}/mortgage-upload-01.png`, caption: 'A mortgage assistant that reads your terms and says, plainly, whether to refinance.' },
+  { src: `${BLOB}/cassi-error-reporting.mp4`, caption: 'Reporting a problem and watching it get fixed, no ticket number required.' },
 ];
 
 export function Cassi() {
@@ -106,6 +119,26 @@ export function Cassi() {
         />
 
         <PhoneRow id={id('The app')} items={PHONES} />
+
+        {/* PLACEHOLDER COPY — heading ~6 words, paragraph ~30 words. */}
+        <section id={id('In motion')} className="scroll-mt-24 pt-16 md:pt-24">
+          <h2 className="mb-4 font-sans font-medium text-2xl md:text-3xl tracking-tight" style={{ color: FG }}>
+            Every screen, not just the good ones.
+          </h2>
+          <p className="max-w-[60ch] font-sans text-lg leading-relaxed" style={{ color: MUTED }}>
+            Onboarding, uploads, the half-booked job, the fact you needed back in March. The in-between states are the
+            product — everything else is a screenshot you cannot tap.
+          </p>
+        </section>
+
+        <MarqueeWall
+          rows={[CAROUSEL]}
+          aspect="aspect-[9/19.5]"
+          cardClass="w-[42vw] max-w-[200px] sm:w-[15vw] sm:max-w-[180px]"
+          durationsMs={[52000]}
+          onOpen={setLightbox}
+          className="mt-10"
+        />
       </div>
 
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
