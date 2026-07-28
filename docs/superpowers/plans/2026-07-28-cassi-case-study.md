@@ -59,7 +59,7 @@ Ship nothing new. Tactile Create must look identical at the end.
 
 **Interfaces:**
 - Consumes: nothing
-- Produces: baseline screenshots at `$SCRATCH/tc-baseline-1440.png` and `$SCRATCH/tc-baseline-375.png`, where `$SCRATCH` is the session scratchpad directory
+- Produces: the geometry fingerprint and DOM counts for `/work/tactile-create` at 1440×900 and 375×812, recorded verbatim in the SDD ledger. No files on disk — the Browser tools return screenshots inline and cannot save them.
 
 - [ ] **Step 1: Start the dev server**
 
@@ -81,9 +81,31 @@ Navigate the Browser pane to `http://localhost:3000/work/tactile-create`. Run th
 
 Expected shape: `imgs` and `videos` non-zero, `faqButtons` 5, `toc` containing `Overview, Creative Suite, In motion, Up close, FAQ`.
 
-- [ ] **Step 3: Take the baseline screenshots**
+- [ ] **Step 3: Record the geometry fingerprint**
 
-Resize the viewport to 1440×900, screenshot, save the image to `$SCRATCH/tc-baseline-1440.png`. Resize to the `mobile` preset (375×812), screenshot, save to `$SCRATCH/tc-baseline-375.png`. Scroll to the FAQ and capture a third at 1440 as `$SCRATCH/tc-baseline-faq.png`.
+The Browser tools return screenshots inline; they cannot write PNGs to disk, so parity is
+established numerically instead — which is stronger anyway, and survives into the ledger.
+
+At 1440×900 and again at the `mobile` preset, run:
+
+```js
+(() => {
+  const r = (el) => { if (!el) return null; const b = el.getBoundingClientRect(); return [Math.round(b.x), Math.round(b.y + window.scrollY), Math.round(b.width), Math.round(b.height)]; };
+  const q = (s) => document.querySelector(s);
+  return JSON.stringify({
+    docH: document.documentElement.scrollHeight,
+    h1: r(q('h1')), header: r(q('#overview')), suite: r(q('#creative-suite')),
+    inMotion: r(q('#in-motion')), upClose: r(q('#up-close')), faq: r(q('#faq')),
+    marqueeRows: [...document.querySelectorAll('.overflow-hidden.pb-7')].map(r),
+    suiteLogos: [...document.querySelectorAll('img[src*="-logo.png"]')].map(r),
+    featureCards: [...document.querySelectorAll('#up-close button.cursor-zoom-in')].map(r),
+    faqRows: [...document.querySelectorAll('#faq [aria-expanded]')].map(r),
+  });
+})()
+```
+
+Write both outputs to the ledger verbatim. Also take screenshots at both sizes for a human
+sanity check, but the fingerprint is the gate.
 
 - [ ] **Step 4: Record the typecheck baseline**
 
@@ -259,7 +281,7 @@ Reload `/work/tactile-create`. Re-run the Task 1 Step 2 assertion — `imgs`, `v
 ```
 Expected: `zoomButtons` ≥ 12, `hasExpandIcon` true.
 
-Screenshot at 1440 and compare against `$SCRATCH/tc-baseline-1440.png`. Any visible difference is a bug in this task.
+Re-run the Task 1 geometry fingerprint at 1440×900 and diff it against the ledger's recorded values. Any numeric deviation is a bug in this task.
 
 - [ ] **Step 6: Commit**
 
@@ -660,7 +682,7 @@ Reload `/work/tactile-create`, scroll to the marquee. Assert both rows and the d
 ```
 Expected: `rows` 2, `perRow` `[12, 12]` (6 and 6, each duplicated).
 
-Confirm it is moving, then hover a row and confirm it slows without a jump. Screenshot and compare the vertical position against `$SCRATCH/tc-baseline-1440.png` — the pull-up must still be applied.
+Confirm it is moving, then hover a row and confirm it slows without a jump. Re-run the geometry fingerprint and check `marqueeRows` against the ledger — it must still read `[[-7,4531,1440,353],[-7,4896,1440,353]]`, which is what proves the pull-up survived.
 
 - [ ] **Step 5: Commit**
 
@@ -779,7 +801,7 @@ Reload, scroll to the FAQ. Assert:
 ```
 Expected: `count` 5, `openIndex` 0, `firstQ` starting `What was your role`, `sectionId` `"faq"`.
 
-Click item 2 and confirm item 0 closes. Screenshot against `$SCRATCH/tc-baseline-faq.png`.
+Click item 2 and confirm item 0 closes. Re-run the geometry fingerprint and check `faq` and `faqRows` against the ledger's recorded values.
 
 - [ ] **Step 5: Commit**
 
@@ -817,7 +839,7 @@ Expected: build completes; `/work/[slug]` listed as a static route. No errors.
 
 - [ ] **Step 4: Full visual comparison**
 
-Screenshot `/work/tactile-create` at 1440×900 and at the `mobile` preset, plus one scrolled to the FAQ. Compare all three against the Task 1 baselines. **Any visible difference is a regression** — fix it before starting Phase 2.
+Re-run the Task 1 Step 3 geometry fingerprint at 1440×900 and at the `mobile` preset and diff both against the values the ledger recorded in Task 1. **Any numeric deviation is a regression** — fix it before starting Phase 2. Take screenshots at both sizes too, as a human sanity check.
 
 - [ ] **Step 5: Check for console and server errors**
 
@@ -1453,7 +1475,7 @@ Set the viewport to emulate `prefers-reduced-motion: reduce`, reload, and confir
 
 - [ ] **Step 7: Confirm Tactile Create still matches its baseline**
 
-Load `/work/tactile-create` one last time and compare against `$SCRATCH/tc-baseline-1440.png`. Phase 2 should not have touched it, but the shared components it now depends on were edited in Task 4 — this is the check that catches an accidental regression.
+Load `/work/tactile-create` one last time and re-run the Task 1 geometry fingerprint at 1440×900, diffing against the ledger's recorded values. Phase 2 should not have touched it, but the shared components it now depends on were edited in Task 4 — this is the check that catches an accidental regression.
 
 - [ ] **Step 8: Console and server errors**
 
