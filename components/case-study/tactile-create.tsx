@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useAnimationFrame, type MotionValue } from 'motion/react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { Plus, Minus, Expand } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
 import { FG, BG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
-import { MediaCard, ZoomableShot } from './shared/media-card';
+import { MediaCard } from './shared/media-card';
 import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
+import { MarqueeWall } from './shared/marquee-wall';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -155,53 +156,6 @@ function ScrollVideoCarousel() {
   );
 }
 
-// ── Two bigger image rows auto-scrolling in opposite directions ──────────────
-// Full-bleed edge-to-edge, sits right under the green carousel. Click opens the
-// image; hovering a row slows its scroll way down.
-
-// Per-frame speed so hover can slow it smoothly (no jump). `reverse` flips direction.
-function Marquee({ shots, reverse = false, durationMs, onOpen }: { shots: { file: string; caption: string }[]; reverse?: boolean; durationMs: number; onOpen: (src: string) => void }) {
-  const reduce = useReducedMotion();
-  const pct = useMotionValue(reverse ? -50 : 0);
-  const x = useTransform(pct, (v) => `${v}%`);
-  const speed = useRef(1);
-  useAnimationFrame((_, delta) => {
-    if (reduce) return;
-    const step = (delta / durationMs) * 50 * speed.current;
-    let v = pct.get() + (reverse ? step : -step);
-    if (v <= -50) v += 50;
-    if (v >= 0) v -= 50;
-    pct.set(v);
-  });
-  const loop = [...shots, ...shots];
-  return (
-    <div className="overflow-hidden pb-7" onMouseEnter={() => (speed.current = 0.3)} onMouseLeave={() => (speed.current = 1)}>
-      <motion.div className="flex w-max gap-4" style={reduce ? undefined : { x }}>
-        {loop.map((s, i) => (
-          <ZoomableShot
-            key={i}
-            item={{ src: `${IMG}/${s.file}`, caption: s.caption }}
-            aspect="aspect-[16/10]"
-            className="w-[70vw] max-w-[520px] sm:w-[40vw]"
-            onOpen={onOpen}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-function MarqueeWall({ onOpen }: { onOpen: (src: string) => void }) {
-  return (
-    <Reveal>
-      <div className={`${FULL_BLEED} -mt-[12vh] space-y-3 pb-16 md:-mt-[18vh]`}>
-        <Marquee shots={SHOTS.slice(0, 6)} durationMs={46000} onOpen={onOpen} />
-        <Marquee shots={SHOTS.slice(6)} reverse durationMs={54000} onOpen={onOpen} />
-      </div>
-    </Reveal>
-  );
-}
-
 // ── Isolated feature videos — carousel with captions ─────────────────────────
 function FeatureCarousel({ onOpen }: { onOpen: (src: string) => void }) {
   return (
@@ -332,7 +286,17 @@ export function TactileCreate() {
         />
         <SuiteShelf />
         <ScrollVideoCarousel />
-        <MarqueeWall onOpen={setLightbox} />
+        <MarqueeWall
+          rows={[
+            SHOTS.slice(0, 6).map((s) => ({ src: `${IMG}/${s.file}`, caption: s.caption })),
+            SHOTS.slice(6).map((s) => ({ src: `${IMG}/${s.file}`, caption: s.caption })),
+          ]}
+          aspect="aspect-[16/10]"
+          cardClass="w-[70vw] max-w-[520px] sm:w-[40vw]"
+          durationsMs={[46000, 54000]}
+          onOpen={setLightbox}
+          className="-mt-[12vh] md:-mt-[18vh]"
+        />
         <FeatureCarousel onOpen={setLightbox} />
         <FaqAccordion />
       </div>
