@@ -9,6 +9,7 @@ import { Lightbox } from './shared/lightbox';
 import { PhoneRow } from './shared/phone-row';
 import { MarqueeWall } from './shared/marquee-wall';
 import { BentoGrid, type BentoTile } from './shared/bento-grid';
+import { HighlightBanner } from './shared/highlight-banner';
 import { FaqAccordion } from './shared/faq-accordion';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
@@ -45,16 +46,37 @@ const PHONES = [
   { src: '/work/cassi/your-home-handled.webp', alt: 'Your home, handled' },
 ];
 
-// All seven portrait-ish assets. Captions are the ones already written in
-// lib/work/local.ts, trimmed of the leading "Cassi — ".
-const CAROUSEL = [
-  { src: `${BLOB}/cassi-onboarding-splash.mp4`, caption: 'Onboarding splash screens that feel like a deep breath, not a signup.' },
-  { src: `${BLOB}/property-listing-02.png`, caption: "A home's full profile from just an address: value, flood-zone risk, the works." },
-  { src: `${BLOB}/cassi-bathroom-maintenance-video.mp4`, caption: 'Booking bathroom maintenance by just walking it through on video.' },
-  { src: `${BLOB}/fact-card-01.png`, caption: 'Did-you-know cards that surface a home fact before you thought to ask.' },
-  { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, caption: 'A home dashboard concept: everything about the house in one calm view.' },
-  { src: `${BLOB}/mortgage-upload-01.png`, caption: 'A mortgage assistant that reads your terms and says, plainly, whether to refinance.' },
-  { src: `${BLOB}/cassi-error-reporting.mp4`, caption: 'Reporting a problem and watching it get fixed, no ticket number required.' },
+// Twenty-one local UI screenshots, native 1000×2168 (0.4613) — a near-exact
+// match for aspect-[9/19.5] (0.4615), so they sit in MarqueeWall uncropped.
+// Split across two rows, with near-duplicate families (welcome*,
+// operations-overview*, financials-*) spread apart rather than adjacent, so
+// neither row reads as repetitive. Captions are derived from filenames.
+// PLACEHOLDER COPY — captions to be rewritten by Joy.
+const SCREENS_BASE = '/work/cassi/screens';
+const ROW_A = [
+  { src: `${SCREENS_BASE}/splash.webp`, caption: 'The splash screen' },
+  { src: `${SCREENS_BASE}/welcome.webp`, caption: 'The welcome screen' },
+  { src: `${SCREENS_BASE}/home.webp`, caption: 'The home dashboard' },
+  { src: `${SCREENS_BASE}/operations-overview.webp`, caption: 'The operations overview' },
+  { src: `${SCREENS_BASE}/documents.webp`, caption: 'Every document, filed and searchable' },
+  { src: `${SCREENS_BASE}/financials-intro.webp`, caption: 'An introduction to the financials view' },
+  { src: `${SCREENS_BASE}/search-address.webp`, caption: 'Searching by address' },
+  { src: `${SCREENS_BASE}/task-list.webp`, caption: 'The task list' },
+  { src: `${SCREENS_BASE}/insurance-summary.webp`, caption: 'An insurance summary at a glance' },
+  { src: `${SCREENS_BASE}/operations-overview-1.webp`, caption: 'Operations overview, a second pass' },
+  { src: `${SCREENS_BASE}/thinking.webp`, caption: 'Cassi, thinking it over' },
+];
+const ROW_B = [
+  { src: `${SCREENS_BASE}/welcome-1.webp`, caption: 'Welcome, screen two' },
+  { src: `${SCREENS_BASE}/financials-overview.webp`, caption: 'The financials overview' },
+  { src: `${SCREENS_BASE}/task-is-not-started-provider.webp`, caption: 'A task not yet started, provider view' },
+  { src: `${SCREENS_BASE}/cassi-example-voice-system-03.webp`, caption: 'The voice assistant, mid-conversation' },
+  { src: `${SCREENS_BASE}/welcome-2.webp`, caption: 'Welcome, screen three' },
+  { src: `${SCREENS_BASE}/operations-overview-2.webp`, caption: 'Operations overview, a third pass' },
+  { src: `${SCREENS_BASE}/task-list-summer-past.webp`, caption: "The task list, last summer's jobs" },
+  { src: `${SCREENS_BASE}/financials-intro-1.webp`, caption: 'Financials, one step further in' },
+  { src: `${SCREENS_BASE}/voice-step-02.webp`, caption: 'Voice input, step two' },
+  { src: `${SCREENS_BASE}/financials-overview-1.webp`, caption: 'Financials overview, a second look' },
 ];
 
 // The six non-portrait assets. All titles and blurbs are PLACEHOLDER COPY —
@@ -88,15 +110,10 @@ const BENTO: BentoTile[] = [
   },
   {
     src: `${BLOB}/cassi-carousel.mp4`,
-    span: 'half',
+    span: 'full',
+    aspect: 'aspect-[16/9]',
     title: 'Scored at a glance',
     blurb: 'Animated home-condition cards, each property scored so the comparison happens before anyone opens a spreadsheet.',
-  },
-  {
-    src: `${BLOB}/cassi-fundraising-deck.mp4`,
-    span: 'half',
-    title: 'The pitch itself',
-    blurb: 'The fundraising deck that carried the prototype into the room and helped land the first round of funding.',
   },
 ];
 
@@ -194,10 +211,10 @@ export function Cassi() {
         </section>
 
         <MarqueeWall
-          rows={[CAROUSEL]}
+          rows={[ROW_A, ROW_B]}
           aspect="aspect-[9/19.5]"
-          cardClass="w-[42vw] max-w-[200px] sm:w-[15vw] sm:max-w-[180px]"
-          durationsMs={[52000]}
+          cardClass="w-[48vw] max-w-[220px] sm:w-[20vw] sm:max-w-[260px]"
+          durationsMs={[44000, 63000]}
           onOpen={setLightbox}
           className="mt-10"
         />
@@ -208,6 +225,15 @@ export function Cassi() {
           /* PLACEHOLDER COPY */
           blurb="The parts that do not fit on a phone screen: the flows, the pitch, and the states in between."
           tiles={BENTO}
+          onOpen={setLightbox}
+        />
+
+        <HighlightBanner
+          src={`${BLOB}/cassi-fundraising-deck.mp4`}
+          /* PLACEHOLDER COPY */
+          eyebrow="What actually got delivered"
+          title="The deck that carried the room"
+          blurb="Underneath every screen was this: the fundraising deck that turned a prototype into a case for the round. It is the one artefact investors actually held, and it helped land the first check."
           onOpen={setLightbox}
         />
 
