@@ -19,6 +19,9 @@
 - **Blob base (exact):** `https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work`
 - **All copy in this plan is placeholder.** Every placeholder run must carry a `// PLACEHOLDER COPY` comment so Joy can grep for it. Never lorem ipsum — plausible prose at the target length.
 - Dev server: `preview_start` with `{name: "folioofjoy"}` (from `.claude/launch.json`, port 3000). Never run `next dev` via Bash.
+- **`navigate` needs `force: true` in this environment.** Without it the call reports success but silently does not move, and you will assert against the previous page. Always confirm arrival before asserting anything:
+  `(() => JSON.stringify({ href: location.href, h1: document.querySelector('h1')?.textContent }))()`
+- **The right-rail index renders `<nav><button>`, not links, and is `hidden lg:flex`.** Read its labels with `[...document.querySelectorAll('nav button')].map(b => b.textContent.trim())`, at a viewport ≥1024px wide. `a[href^="/work/"]` matches `CaseNav`, which is a different thing.
 
 ---
 
@@ -71,7 +74,7 @@ Navigate the Browser pane to `http://localhost:3000/work/tactile-create`. Run th
   const shots = document.querySelectorAll('img[src*="/work/tactile-create/"]');
   const vids  = document.querySelectorAll('video[src*="/work/tactile-create/"]');
   const faq   = document.querySelectorAll('[aria-expanded]');
-  const toc   = [...document.querySelectorAll('nav a, aside a')].map(a => a.textContent.trim());
+  const toc   = [...document.querySelectorAll('nav button')].map(b => b.textContent.trim());
   return JSON.stringify({ imgs: shots.length, videos: vids.length, faqButtons: faq.length, toc });
 })()
 ```
@@ -96,7 +99,7 @@ No commit — this task produces reference material only.
 **Files:**
 - Create: `components/case-study/shared/tokens.ts`
 - Create: `components/case-study/shared/media-card.tsx`
-- Modify: `components/case-study/tactile-create.tsx` (delete `VideoCard` at lines 203-211 and `SmallShot` at lines 216-240; delete the constants at lines 16-21 and 92-97; add imports)
+- Modify: `components/case-study/tactile-create.tsx` (delete `VideoCard` at lines 203-211 and `SmallShot` at lines 216-240; delete the palette constants at lines **16-20 only** — line 21 is `IMG` and must stay — and the layout constants at 92-97; add imports)
 
 **Interfaces:**
 - Consumes: nothing
@@ -964,7 +967,7 @@ Load `http://localhost:3000/work/cassi`. Assert:
 (() => {
   const h1 = document.querySelector('h1');
   const lines = [...document.querySelectorAll('p')].filter(p => p.className.includes('md:text-5xl') && p.className.includes('font-light'));
-  const nav = [...document.querySelectorAll('nav a, aside a')].map(a => a.textContent.trim());
+  const nav = [...document.querySelectorAll('nav button')].map(b => b.textContent.trim());
   return JSON.stringify({
     h1: h1?.textContent,
     statementLines: lines.length,
@@ -1426,7 +1429,7 @@ Reload `/work/cassi` and assert every section, in order, plus the chrome:
   return JSON.stringify({
     sections: ids.map(i => !!document.querySelector('#' + i)),
     order: [...document.querySelectorAll('[id]')].map(e => e.id).filter(i => ids.includes(i)),
-    toc: [...document.querySelectorAll('nav a, aside a')].map(a => a.textContent.trim()),
+    toc: [...document.querySelectorAll('nav button')].map(b => b.textContent.trim()),
     faqButtons: document.querySelectorAll('[aria-expanded]').length,
     caseNavLinks: [...document.querySelectorAll('a[href^="/work/"]')].map(a => a.getAttribute('href')),
     noHScroll: document.documentElement.scrollWidth <= window.innerWidth,
