@@ -6,6 +6,7 @@ import { slugify } from '@/lib/writings/slug';
 import { FG, FAINT, MUTED } from './shared/tokens';
 import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
+import { PhoneRow } from './shared/phone-row';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
 // link and case nav come from the page; collapsed title + right rail are here).
@@ -21,6 +22,16 @@ const STATEMENT = [
   'Owning a home means a hundred small decisions a year, and nobody obvious to ask about any of them.',
   'Most home apps answer that with a dashboard. A dashboard is just the question, rearranged.',
   'Cassi answers by doing the thing — quietly, and usually before you thought to ask.',
+];
+
+// The five most phone-shaped assets. error-reporting and fact-card are natively
+// 9:19.5; the rest take a small crop.
+const PHONES = [
+  { src: `${BLOB}/cassi-onboarding-splash.mp4`, alt: 'Cassi onboarding splash screens' },
+  { src: `${BLOB}/cassi-home-dashboard-concept.mp4`, alt: 'Cassi home dashboard concept' },
+  { src: `${BLOB}/property-listing-02.png`, alt: "A home's full profile from just an address" },
+  { src: `${BLOB}/cassi-error-reporting.mp4`, alt: 'Reporting a problem and watching it get fixed' },
+  { src: `${BLOB}/fact-card-01.png`, alt: 'Did-you-know cards surfacing a home fact' },
 ];
 
 export function Cassi() {
@@ -93,6 +104,8 @@ export function Cassi() {
             </>
           }
         />
+
+        <PhoneRow id={id('The app')} items={PHONES} />
       </div>
 
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
