@@ -2,7 +2,7 @@
 
 import { Reveal } from '@/components/reveal';
 import { Media } from './media-card';
-import { FG, MUTED, FAINT } from './tokens';
+import { FG, MUTED } from './tokens';
 
 export type BentoTile = {
   src: string;
@@ -45,7 +45,7 @@ export function BentoGrid({
           <div
             key={t.src}
             className={`overflow-hidden rounded-2xl ${t.span === 'full' ? 'md:col-span-2' : ''}`}
-            style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: `1px solid ${FAINT}` }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
           >
             <button type="button" onClick={() => onOpen(t.src)} className="group block w-full cursor-zoom-in overflow-hidden">
               <Media
