@@ -57,20 +57,24 @@ export function ZoomableShot({
   aspect,
   className = '',
   onOpen,
+  objectPosition = 'object-top',
 }: {
   item: MediaItem;
   aspect: string;
   className?: string;
   onOpen: (src: string) => void;
+  /** Which edge survives the crop. Defaults to the top, matching current behaviour. */
+  objectPosition?: string;
 }) {
   return (
     <div className={`group relative shrink-0 ${className}`}>
       <button
         type="button"
         onClick={() => onOpen(item.src)}
+        aria-label={item.caption ?? item.alt ?? ''}
         className={`relative block w-full cursor-zoom-in overflow-hidden ${aspect} ${SHELL}`}
       >
-        <Media src={item.src} alt={item.alt ?? ''} className="h-full w-full object-cover object-top" />
+        <Media src={item.src} alt={item.alt ?? ''} className={`h-full w-full object-cover ${objectPosition}`} />
         <span
           className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           style={{ backgroundColor: 'rgba(11,11,11,0.28)' }}

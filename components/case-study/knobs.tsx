@@ -8,8 +8,7 @@ import { ProportionalSlider } from '@/components/ui/proportional-slider';
 import { CaseCredits } from './shared/case-credits';
 import { JOY } from './team';
 import type { CaseStudySection } from './types';
-
-const ACCENT = '#2CA152';
+import { ACCENT } from './shared/tokens';
 
 // ── Live demos (own their own state; the stage renders them as interactive) ──
 

@@ -16,6 +16,8 @@ export function HighlightBanner({
   title,
   blurb,
   onOpen,
+  aspect = 'aspect-[16/9]',
+  objectPosition = 'object-center',
 }: {
   id?: string;
   src: string;
@@ -24,11 +26,16 @@ export function HighlightBanner({
   blurb: string;
   /** If passed, clicking the media opens it in the shared lightbox. */
   onOpen?: (src: string) => void;
+  /** Tailwind aspect-ratio class for the media frame. Defaults to 16:9 — the
+   *  source video here is native 4:3, so ~25% of its height is lost (split
+   *  top/bottom), the same tolerance already accepted elsewhere on this page
+   *  for a 4:3 clip in a 16:9 frame. */
+  aspect?: string;
+  /** Which point of the media survives the crop. Defaults to centre, matching
+   *  current behaviour. */
+  objectPosition?: string;
 }) {
-  // 16:9 keeps the banner feeling big without cropping a 4:3 source too hard —
-  // ~25% of the source height is lost (split top/bottom), the same tolerance
-  // already accepted elsewhere on this page for a 4:3 clip in a 16:9 frame.
-  const mediaClass = 'aspect-[16/9] w-full object-cover';
+  const mediaClass = `${aspect} w-full object-cover ${objectPosition}`;
 
   return (
     <section id={id} className="scroll-mt-24 py-16 md:py-24">
@@ -38,12 +45,17 @@ export function HighlightBanner({
             <button
               type="button"
               onClick={() => onOpen(src)}
+              aria-label={`Open ${title}`}
               className="group block w-full cursor-zoom-in overflow-hidden"
             >
-              <Media src={src} className={`${mediaClass} transition-transform duration-300 group-hover:scale-[1.01]`} />
+              <Media
+                src={src}
+                alt={title}
+                className={`${mediaClass} transition-transform duration-300 group-hover:scale-[1.01]`}
+              />
             </button>
           ) : (
-            <Media src={src} className={mediaClass} />
+            <Media src={src} alt={title} className={mediaClass} />
           )}
         </div>
       </Reveal>

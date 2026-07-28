@@ -99,7 +99,7 @@ function Row({
           {wip && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="inline-block leading-none">
+                <span className="inline-block leading-none" tabIndex={0}>
                   <ConstructionSign className="h-6 w-auto opacity-70 transition-opacity group-hover:opacity-100 md:h-8" />
                 </span>
               </TooltipTrigger>

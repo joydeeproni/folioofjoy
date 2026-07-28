@@ -1,8 +1,9 @@
+import { ACCENT } from '../shared/tokens';
+
 // Outcome metrics rendered as the preview-panel visual (kind: 'component'):
 // large Praktikal-thin numbers with mono labels, centered in the stage.
 const FG = '#EDEAE0';
 const MUTED = 'rgba(237,234,224,0.5)';
-const ACCENT = '#2CA152';
 
 export function MetricsPanel({
   stats,

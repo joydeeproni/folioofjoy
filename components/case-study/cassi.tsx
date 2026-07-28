@@ -33,19 +33,14 @@ const STATEMENT = [
 // Twelve local UI screenshots, native 900×2336 (0.3853) — kept at their own
 // ratio in PhoneRow so the app's bottom tab bar survives instead of getting
 // cropped off by a forced 9:19.5 card.
+// Five screens, hand-picked by Joy — kept deliberately short so the lineup fits
+// one centred row at desktop widths and each card can stay large.
 const PHONES = [
-  { src: '/work/cassi/home.webp', alt: "Cassi's home dashboard" },
-  { src: '/work/cassi/all-properties.webp', alt: 'Every property in one list' },
+  { src: '/work/cassi/your-home-handled.webp', alt: 'Your home, handled' },
   { src: '/work/cassi/setup-home.webp', alt: 'Setting up a new home in Cassi' },
   { src: '/work/cassi/calendar.webp', alt: "Cassi's maintenance calendar" },
-  { src: '/work/cassi/seasonal-plan.webp', alt: 'A seasonal home maintenance plan' },
-  { src: '/work/cassi/hvac-service.webp', alt: 'Scheduling HVAC service' },
-  { src: '/work/cassi/hvac-service-1.webp', alt: 'Confirming an HVAC service appointment' },
   { src: '/work/cassi/dishwasher.webp', alt: 'Diagnosing a dishwasher issue' },
   { src: '/work/cassi/where-is-circuit-breaker.webp', alt: 'Asking Cassi where the circuit breaker is' },
-  { src: '/work/cassi/vendor-coordination.webp', alt: 'Coordinating with a vendor on a repair' },
-  { src: '/work/cassi/handoff-overview.webp', alt: 'A handoff overview for a new homeowner' },
-  { src: '/work/cassi/your-home-handled.webp', alt: 'Your home, handled' },
 ];
 
 // Twenty-one local UI screenshots, native 1000×2168 (0.4613) — a near-exact

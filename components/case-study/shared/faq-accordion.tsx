@@ -41,7 +41,10 @@ export function FaqAccordion({
                 >
                   {item.q}
                 </span>
-                <span className="shrink-0 text-[rgba(237,234,224,0.55)] transition-colors group-hover:text-[#EDEAE0]">
+                <span
+                  className="shrink-0 text-[var(--faq-icon-muted)] transition-colors group-hover:text-[var(--faq-icon-fg)]"
+                  style={{ '--faq-icon-muted': MUTED, '--faq-icon-fg': FG } as React.CSSProperties}
+                >
                   {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                 </span>
               </button>

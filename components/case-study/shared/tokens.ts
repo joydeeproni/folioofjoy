@@ -13,6 +13,5 @@ export const FULL_BLEED = 'w-screen ml-[calc(50%-50vw)]';
 // A full-viewport-width scroll strip whose FIRST card is padded to line up with
 // the content column — so a row "starts aligned with the text, then scrolls edge
 // to edge". SHELF_PAD is that left inset (matches the max-w-5xl column).
-export const SHELF =
-  'w-screen ml-[calc(50%-50vw)] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
+export const SHELF = `${FULL_BLEED} overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`;
 export const SHELF_PAD = 'pl-[max(1.5rem,calc(50vw-32rem))] pr-6 md:pl-[max(4rem,calc(50vw-32rem))]';

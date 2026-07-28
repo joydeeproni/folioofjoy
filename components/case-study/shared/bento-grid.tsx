@@ -21,12 +21,15 @@ export function BentoGrid({
   blurb,
   tiles,
   onOpen,
+  objectPosition = 'object-top',
 }: {
   id?: string;
   heading: string;
   blurb?: string;
   tiles: BentoTile[];
   onOpen: (src: string) => void;
+  /** Which edge survives the crop. Defaults to the top, matching current behaviour. */
+  objectPosition?: string;
 }) {
   return (
     <section id={id} className="scroll-mt-24 py-16 md:py-24">
@@ -47,10 +50,16 @@ export function BentoGrid({
             className={`overflow-hidden rounded-2xl ${t.span === 'full' ? 'md:col-span-2' : ''}`}
             style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
           >
-            <button type="button" onClick={() => onOpen(t.src)} className="group block w-full cursor-zoom-in overflow-hidden">
+            <button
+              type="button"
+              onClick={() => onOpen(t.src)}
+              aria-label={`Open ${t.title}`}
+              className="group block w-full cursor-zoom-in overflow-hidden"
+            >
               <Media
                 src={t.src}
-                className={`w-full ${t.aspect ?? (t.span === 'full' ? 'aspect-[16/9]' : 'aspect-[4/3]')} object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]`}
+                alt={t.title}
+                className={`w-full ${t.aspect ?? (t.span === 'full' ? 'aspect-[16/9]' : 'aspect-[4/3]')} object-cover ${objectPosition} transition-transform duration-300 group-hover:scale-[1.02]`}
               />
             </button>
             <div className="px-5 pb-6 pt-5 md:px-6">
