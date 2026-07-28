@@ -9,6 +9,7 @@ import { Lightbox } from './shared/lightbox';
 import { PhoneRow } from './shared/phone-row';
 import { MarqueeWall } from './shared/marquee-wall';
 import { BentoGrid, type BentoTile } from './shared/bento-grid';
+import { FaqAccordion } from './shared/faq-accordion';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
 // link and case nav come from the page; collapsed title + right rail are here).
@@ -89,6 +90,15 @@ const BENTO: BentoTile[] = [
     title: 'The pitch itself',
     blurb: 'The fundraising deck that carried the prototype into the room and helped land the first round of funding.',
   },
+];
+
+// PLACEHOLDER COPY — questions mirror the Tactile Create set; answers are Joy's to write.
+const FAQ = [
+  { q: 'What was your role in this?', a: 'Solo designer for six months, working with one engineer. I owned the maintenance flow end to end and designed every state around it.' },
+  { q: 'What was your design stack?', a: 'Figma for design, and a clickable prototype real enough that investors could hold it rather than watch a walkthrough.' },
+  { q: 'What were some design challenges?', a: 'Placeholder — the honest answer is about drawing the in-between states nobody screenshots, and keeping the assistant out of the way.' },
+  { q: 'How did you measure success of this project?', a: 'Placeholder — the prototype raised a $3M seed and the company went on to a $10M Series A.' },
+  { q: 'What were your learnings from this?', a: 'Placeholder — a prototype earns trust in its edges, not its hero screens.' },
 ];
 
 export function Cassi() {
@@ -192,6 +202,8 @@ export function Cassi() {
           tiles={BENTO}
           onOpen={setLightbox}
         />
+
+        <FaqAccordion id={id('FAQ')} heading="The questions I get asked." items={FAQ} />
       </div>
 
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />
