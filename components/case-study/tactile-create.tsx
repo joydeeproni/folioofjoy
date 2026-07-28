@@ -8,6 +8,7 @@ import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
 import { FG, BG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
 import { MediaCard, ZoomableShot } from './shared/media-card';
+import { Statement } from './shared/statement';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -84,41 +85,6 @@ const FAQ = [
   { q: 'How did you measure success of this project?', a: '{Answer coming from Joy.}' },
   { q: 'What were your learnings from this?', a: '{Answer coming from Joy.}' },
 ];
-
-// ── Big statement — fades in on scroll ───────────────────────────────────────
-// Each line brightens from 5% → 100% opacity as it scrolls up through the view.
-function StatementLine({ progress, index, children }: { progress: MotionValue<number>; index: number; children: string }) {
-  const start = index * 0.28;
-  const opacity = useTransform(progress, [start, start + 0.45], [0.05, 1]);
-  return <motion.p style={{ opacity }} className="font-sans font-light text-3xl leading-[1.18] tracking-tight md:text-5xl">{children}</motion.p>;
-}
-
-function Statement() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.9', 'end 0.55'] });
-  return (
-    <section ref={ref} className="py-16 md:py-28">
-      <div className="max-w-3xl space-y-8 md:space-y-10" style={{ color: FG }}>
-        {STATEMENT.map((line, i) =>
-          reduce ? (
-            <p key={i} className="font-sans font-light text-3xl leading-[1.18] tracking-tight md:text-5xl">{line}</p>
-          ) : (
-            <StatementLine key={i} progress={scrollYProgress} index={i}>{line}</StatementLine>
-          ),
-        )}
-      </div>
-      <Reveal>
-        <p className="mt-14 max-w-3xl font-sans text-base leading-relaxed md:text-lg" style={{ color: FG }}>
-          Tactile has invested for years in building tech and tools to bridge this gap — to enable studios around
-          the globe, including their own, to iterate and ship quality games. Create Suite lets game studios scout,
-          plan, design, spec, prototype, launch and test games, all in one place. The suite has several tools; I led
-          the product design, prototyping, and usability improvements on the main three: Create Hub, Art &amp; Code.
-        </p>
-      </Reveal>
-    </section>
-  );
-}
 
 // ── Creative Suite — horizontal shelf, aligned to the heading ────────────────
 function SuiteShelf() {
@@ -383,7 +349,17 @@ export function TactileCreate() {
           <hr className="mt-8 border-0 border-t" style={{ borderColor: FAINT }} />
         </header>
 
-        <Statement />
+        <Statement
+          lines={STATEMENT}
+          trailing={
+            <>
+              Tactile has invested for years in building tech and tools to bridge this gap — to enable studios around
+              the globe, including their own, to iterate and ship quality games. Create Suite lets game studios scout,
+              plan, design, spec, prototype, launch and test games, all in one place. The suite has several tools; I led
+              the product design, prototyping, and usability improvements on the main three: Create Hub, Art &amp; Code.
+            </>
+          }
+        />
         <SuiteShelf />
         <ScrollVideoCarousel />
         <MarqueeWall onOpen={setLightbox} />
