@@ -5,6 +5,8 @@ import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import { Knob } from './controls/knob';
 import { ProportionalSlider } from '@/components/ui/proportional-slider';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 const ACCENT = '#2CA152';
@@ -154,9 +156,10 @@ export function Knobs() {
           <p className="mt-6 max-w-[34ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
             A small obsession with physical controls, and how I put the tactility back into the ones I build.
           </p>
-          <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-            Craft note · Interactive · Play with everything
-          </p>
+          <CaseCredits
+            people={[JOY]}
+            meta="Craft note · Interactive · Play with everything"
+          />
         </header>
       }
     />

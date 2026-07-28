@@ -4,6 +4,8 @@ import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import { MiniCanvas } from './controls/mini-canvas';
 import { MetricsPanel } from './controls/metrics-panel';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 const BLOB = 'https://yqyhl5b6mya2r8ci.public.blob.vercel-storage.com/work';
@@ -124,9 +126,10 @@ export function Canvas() {
           <p className="mt-6 max-w-[34ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
             Rebuilding an infinite whiteboard in production code, because you can&rsquo;t judge one from a static frame.
           </p>
-          <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-            Tactile Games · Prototype → product · Interactive
-          </p>
+          <CaseCredits
+            people={[JOY]}
+            meta="Tactile Games · Prototype → product · Interactive"
+          />
         </header>
       }
     />

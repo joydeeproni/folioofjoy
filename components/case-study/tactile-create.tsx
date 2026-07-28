@@ -6,12 +6,14 @@ import { Expand } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
-import { FG, BG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
+import { FG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
 import { MediaCard } from './shared/media-card';
 import { Statement } from './shared/statement';
 import { Lightbox } from './shared/lightbox';
 import { MarqueeWall } from './shared/marquee-wall';
 import { FaqAccordion } from './shared/faq-accordion';
+import { CaseCredits } from './shared/case-credits';
+import { JOY, DIANA, GUI } from './team';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -237,12 +239,10 @@ export function TactileCreate() {
             professional virtual camera controls, character consistency tools, and multi-model workspaces into a
             single dashboard.
           </p>
-          <div className="mt-8 flex items-center gap-4">
-            <div className="flex -space-x-2" aria-hidden>
-              {[0, 1, 2].map((i) => <span key={i} className="h-6 w-6 rounded-full" style={{ backgroundColor: 'rgba(237,234,224,0.45)', border: `2px solid ${BG}` }} />)}
-            </div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em]" style={{ color: MUTED }}>Team of 3&nbsp;&nbsp;//&nbsp;&nbsp;Tactile Games&nbsp;&nbsp;//&nbsp;&nbsp;2025</p>
-          </div>
+          <CaseCredits
+            people={[JOY, DIANA, GUI]}
+            meta={`Team of 3  //  Tactile Games  //  2025`}
+          />
           <hr className="mt-8 border-0 border-t" style={{ borderColor: FAINT }} />
         </header>
 

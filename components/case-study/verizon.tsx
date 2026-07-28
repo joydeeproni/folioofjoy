@@ -3,6 +3,8 @@
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull, List } from './prose';
 import { MetricsPanel } from './controls/metrics-panel';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 // Process images (drop the pasted files into public/work/verizon/ with these names).
@@ -147,9 +149,10 @@ export function Verizon() {
           <p className="mt-6 max-w-[36ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: FG }}>
             A stock-management app that lets warehouse managers scan inventory with a phone camera — and stop counting boxes one at a time.
           </p>
-          <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-            Product design · Mobile · Retail ops
-          </p>
+          <CaseCredits
+            people={[JOY]}
+            meta="Product design · Mobile · Retail ops"
+          />
         </header>
       }
     />
