@@ -118,10 +118,11 @@ const BENTO: BentoTile[] = [
   },
 ];
 
-// PLACEHOLDER COPY — questions mirror the Tactile Create set; answers are Joy's to write.
+// The first two answers are Joy's. The last three are still PLACEHOLDER COPY —
+// they open with "Placeholder —" so they're obvious on the page as well as in here.
 const FAQ = [
-  { q: 'What was your role in this?', a: 'Solo designer for six months, working with one engineer. I owned the maintenance flow end to end and designed every state around it.' },
-  { q: 'What was your design stack?', a: 'Figma for design, and a clickable prototype real enough that investors could hold it rather than watch a walkthrough.' },
+  { q: 'What was your role in this?', a: 'I worked as a solo product designer (visual focus) and prototyper with the founder and 1 full stack engineer to test feasibility of the features.' },
+  { q: 'What was your design stack?', a: 'Figma and Xcode (sometimes). Prototypes were made with Figma Make.' },
   { q: 'What were some design challenges?', a: 'Placeholder — the honest answer is about drawing the in-between states nobody screenshots, and keeping the assistant out of the way.' },
   { q: 'How did you measure success of this project?', a: 'Placeholder — the prototype raised a $3M seed and the company went on to a $10M Series A.' },
   { q: 'What were your learnings from this?', a: 'Placeholder — a prototype earns trust in its edges, not its hero screens.' },
