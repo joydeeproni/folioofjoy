@@ -233,7 +233,6 @@ export function Cassi() {
         <HighlightBanner
           src={`${BLOB}/cassi-fundraising-deck.mp4`}
           /* PLACEHOLDER COPY */
-          eyebrow="What actually got delivered"
           title="The deck that carried the room"
           blurb="Underneath every screen was this: the fundraising deck that turned a prototype into a case for the round. It is the one artefact investors actually held, and it helped land the first check."
           onOpen={setLightbox}
