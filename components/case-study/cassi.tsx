@@ -117,8 +117,7 @@ const BENTO: BentoTile[] = [
   },
 ];
 
-// All but the last answer are Joy's. The remaining one is PLACEHOLDER COPY and
-// opens with "Placeholder —" so it's obvious on the page, not just in here.
+// All five answers are Joy's.
 const FAQ = [
   { q: 'What was your role in this?', a: 'I worked as a solo product designer (visual focus) and prototyper with the founder and 1 full stack engineer to test feasibility of the features.' },
   { q: 'What was your design stack?', a: 'Figma and Xcode (sometimes). Prototypes were made with Figma Make.' },
@@ -143,7 +142,22 @@ const FAQ = [
     q: 'How did you measure success of this project?',
     a: 'We shipped an MVP and the founder could raise $3 million first and $10 million later with that MVP, which was the whole point of this exercise.',
   },
-  { q: 'What were your learnings from this?', a: 'Placeholder — a prototype earns trust in its edges, not its hero screens.' },
+  {
+    q: 'What were your learnings from this?',
+    a: (
+      <>
+        <p>
+          One of our biggest mistakes was that we were trying to solve too many things at once — it would have been
+          smarter to just focus on 1 problem that this solves and ship it.
+        </p>
+        <p>
+          Secondly, a lot of problems cannot be solved with tech and we have to accept it. There are regulations,
+          people’s trust, ground level operational challenges that must be taken into account. Just an app cannot be a
+          panacea.
+        </p>
+      </>
+    ),
+  },
 ];
 
 export function Cassi() {
