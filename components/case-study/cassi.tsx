@@ -11,7 +11,7 @@ import { MarqueeWall } from './shared/marquee-wall';
 import { BentoGrid, type BentoTile } from './shared/bento-grid';
 import { HighlightBanner } from './shared/highlight-banner';
 import { FaqAccordion } from './shared/faq-accordion';
-import { CaseCredits } from './shared/case-credits';
+import { CaseCredits, SEP } from './shared/case-credits';
 import { JOY } from './team';
 
 // Cassi — Apple-Books-style scroll case study. Keeps the standard chrome (back
@@ -182,7 +182,20 @@ export function Cassi() {
           </h1>
           <CaseCredits
             people={[JOY]}
-            meta="Freelance  //  iOS + Web  //  6 months  //  Solo designer"
+            meta={
+              <>
+                Team of 1{SEP}
+                <a
+                  href="https://cassihome.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-1 underline-offset-4 transition-colors hover:text-[#EDEAE0]"
+                >
+                  Cassi Home
+                </a>
+                {SEP}2025
+              </>
+            }
           />
           <hr className="mt-8 border-0 border-t" style={{ borderColor: FAINT }} />
         </header>
