@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { Plus, Minus } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
@@ -14,7 +14,8 @@ export function FaqAccordion({
 }: {
   id?: string;
   heading: string;
-  items: { q: string; a: string }[];
+  /** `a` is a ReactNode so an answer can run to more than one paragraph. */
+  items: { q: string; a: ReactNode }[];
 }) {
   const [open, setOpen] = useState<number | null>(0);
 
@@ -54,9 +55,15 @@ export function FaqAccordion({
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="overflow-hidden"
               >
-                <p className="max-w-[68ch] pb-6 font-sans text-[17px] md:text-lg leading-relaxed" style={{ color: MUTED }}>
+                {/* A div, not a p: a multi-paragraph answer passes its own <p>
+                    children, and nesting those inside a <p> is invalid HTML.
+                    space-y-4 is inert for the single-string answers. */}
+                <div
+                  className="max-w-[68ch] space-y-4 pb-6 font-sans text-[17px] md:text-lg leading-relaxed"
+                  style={{ color: MUTED }}
+                >
                   {item.a}
-                </p>
+                </div>
               </motion.div>
             </div>
           );

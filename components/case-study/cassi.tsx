@@ -30,11 +30,10 @@ const STATEMENT = [
   'Cassi answers by doing the thing — quietly, and usually before you thought to ask.',
 ];
 
-// Twelve local UI screenshots, native 900×2336 (0.3853) — kept at their own
-// ratio in PhoneRow so the app's bottom tab bar survives instead of getting
+// Five screens hand-picked by Joy, kept short so the lineup fits one centred row
+// at desktop widths and each card can stay large. Native 900×2336 (0.3853) and
+// shown at that ratio, so the app's bottom tab bar survives instead of being
 // cropped off by a forced 9:19.5 card.
-// Five screens, hand-picked by Joy — kept deliberately short so the lineup fits
-// one centred row at desktop widths and each card can stay large.
 const PHONES = [
   { src: '/work/cassi/your-home-handled.webp', alt: 'Your home, handled' },
   { src: '/work/cassi/setup-home.webp', alt: 'Setting up a new home in Cassi' },
@@ -118,13 +117,32 @@ const BENTO: BentoTile[] = [
   },
 ];
 
-// The first two answers are Joy's. The last three are still PLACEHOLDER COPY —
-// they open with "Placeholder —" so they're obvious on the page as well as in here.
+// All but the last answer are Joy's. The remaining one is PLACEHOLDER COPY and
+// opens with "Placeholder —" so it's obvious on the page, not just in here.
 const FAQ = [
   { q: 'What was your role in this?', a: 'I worked as a solo product designer (visual focus) and prototyper with the founder and 1 full stack engineer to test feasibility of the features.' },
   { q: 'What was your design stack?', a: 'Figma and Xcode (sometimes). Prototypes were made with Figma Make.' },
-  { q: 'What were some design challenges?', a: 'Placeholder — the honest answer is about drawing the in-between states nobody screenshots, and keeping the assistant out of the way.' },
-  { q: 'How did you measure success of this project?', a: 'Placeholder — the prototype raised a $3M seed and the company went on to a $10M Series A.' },
+  {
+    q: 'What were some design challenges?',
+    a: (
+      <>
+        <p>
+          Well, most of our potential users were in the US and preferred meeting in person and showing us what issues
+          they had. We also were interviewing with home maintenance companies to see what people deal with. Being
+          remote, it was hard for me to see those, I had to empathize and rely a lot on secondary knowledge.
+        </p>
+        <p>
+          Also balancing the product which has the best visuals versus shipping the MVP was challenging, because the
+          tech team wanted to cut down a lot of it, which led the company to rehire the engineering team a couple of
+          times.
+        </p>
+      </>
+    ),
+  },
+  {
+    q: 'How did you measure success of this project?',
+    a: 'We shipped an MVP and the founder could raise $3 million first and $10 million later with that MVP, which was the whole point of this exercise.',
+  },
   { q: 'What were your learnings from this?', a: 'Placeholder — a prototype earns trust in its edges, not its hero screens.' },
 ];
 
