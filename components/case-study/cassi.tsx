@@ -232,9 +232,9 @@ export function Cassi() {
 
         <HighlightBanner
           src={`${BLOB}/cassi-fundraising-deck.mp4`}
-          /* PLACEHOLDER COPY */
+          /* PLACEHOLDER COPY — title only; the blurb below is Joy's. */
           title="The deck that carried the room"
-          blurb="Underneath every screen was this: the fundraising deck that turned a prototype into a case for the round. It is the one artefact investors actually held, and it helped land the first check."
+          blurb="I also designed the final pitch deck of course. There were several versions of it, with quite a lot of varied pages that were used as per VC’s needs. This was designed in Figma and then later recreated in Google Slides (yes, it was a nightmare)"
           onOpen={setLightbox}
         />
 
