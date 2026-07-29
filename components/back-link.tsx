@@ -22,6 +22,9 @@ export function BackLink({ href = '/' }: { href?: string }) {
       if (e.key !== 'Escape') return;
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      // A modal (e.g. the Lightbox) handles its own Escape-to-close; if one is
+      // open, let it close without also navigating away from the page.
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
       router.push(href);
     };
     window.addEventListener('keydown', onKey);

@@ -3,14 +3,14 @@
 import { CaseStudyLayout } from './case-study-layout';
 import { P } from './prose';
 import { AsciiPanel } from './controls/ascii-panel';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 // Lightweight scaffolds for case studies that don't have screens yet. Each is a
 // real, navigable page: header + planned sections, with an ASCII flow in the
 // preview panel describing the work. Swap the ASCII for real visuals as content
 // lands, or replace the whole entry with a bespoke component.
-
-const MUTED = 'rgba(237,234,224,0.4)';
 
 type StubSection = { heading: string; note: string; ascii: string };
 type StubConfig = { title: string; tag: string; premise: string; sections: StubSection[] };
@@ -37,9 +37,7 @@ function makeStub(cfg: StubConfig) {
             <p className="mt-6 max-w-[34ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: '#EDEAE0' }}>
               {cfg.premise}
             </p>
-            <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: MUTED }}>
-              {cfg.tag}
-            </p>
+            <CaseCredits people={[JOY]} meta={cfg.tag} />
           </header>
         }
       />

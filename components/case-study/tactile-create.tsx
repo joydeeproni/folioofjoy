@@ -1,11 +1,19 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion, useMotionValue, useAnimationFrame, type MotionValue } from 'motion/react';
-import { Plus, Minus, Expand } from 'lucide-react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { Expand } from 'lucide-react';
 import { Reveal } from '@/components/reveal';
 import { ArticleToc } from '@/components/writings/article-toc';
 import { slugify } from '@/lib/writings/slug';
+import { FG, MUTED, FAINT, FULL_BLEED, SHELF, SHELF_PAD } from './shared/tokens';
+import { MediaCard } from './shared/media-card';
+import { Statement } from './shared/statement';
+import { Lightbox } from './shared/lightbox';
+import { MarqueeWall } from './shared/marquee-wall';
+import { FaqAccordion } from './shared/faq-accordion';
+import { CaseCredits } from './shared/case-credits';
+import { JOY, DIANA, GUI } from './team';
 
 // Tactile Create ("Create Suite") — bespoke, Apple-TV-style scroll case study.
 // KEEPS the standard case-study chrome (header, right-rail index, sticky title);
@@ -13,11 +21,6 @@ import { slugify } from '@/lib/writings/slug';
 // `font-sans` + mono labels). Media + icons are PLACEHOLDER. Copy from Joy's
 // design; {/* ASK JOY */} marks lines to confirm/replace.
 
-const FG = '#EDEAE0';
-const BG = '#0B0B0B';
-const MUTED = 'rgba(237,234,224,0.55)';
-const FAINT = 'rgba(237,234,224,0.14)';
-const ACCENT = '#2CA152';
 const IMG = '/work/tactile-create';
 
 const TOC = ['Overview', 'Creative Suite', 'In motion', 'Up close', 'FAQ'];
@@ -88,49 +91,6 @@ const FAQ = [
   { q: 'What were your learnings from this?', a: '{Answer coming from Joy.}' },
 ];
 
-// FULL_BLEED: span the whole viewport (cinematic scroll-video + the image marquee).
-const FULL_BLEED = 'w-screen ml-[calc(50%-50vw)]';
-// SHELF: a full-viewport-width scroll strip whose FIRST card is padded to line up
-// with the content column (heading) — so it "starts aligned with the text, then
-// scrolls edge to edge". SHELF_PAD is that left inset (matches the max-w-5xl column).
-const SHELF = 'w-screen ml-[calc(50%-50vw)] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
-const SHELF_PAD = 'pl-[max(1.5rem,calc(50vw-32rem))] pr-6 md:pl-[max(4rem,calc(50vw-32rem))]';
-
-// ── Big statement — fades in on scroll ───────────────────────────────────────
-// Each line brightens from 5% → 100% opacity as it scrolls up through the view.
-function StatementLine({ progress, index, children }: { progress: MotionValue<number>; index: number; children: string }) {
-  const start = index * 0.28;
-  const opacity = useTransform(progress, [start, start + 0.45], [0.05, 1]);
-  return <motion.p style={{ opacity }} className="font-sans font-light text-3xl leading-[1.18] tracking-tight md:text-5xl">{children}</motion.p>;
-}
-
-function Statement() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.9', 'end 0.55'] });
-  return (
-    <section ref={ref} className="py-16 md:py-28">
-      <div className="max-w-3xl space-y-8 md:space-y-10" style={{ color: FG }}>
-        {STATEMENT.map((line, i) =>
-          reduce ? (
-            <p key={i} className="font-sans font-light text-3xl leading-[1.18] tracking-tight md:text-5xl">{line}</p>
-          ) : (
-            <StatementLine key={i} progress={scrollYProgress} index={i}>{line}</StatementLine>
-          ),
-        )}
-      </div>
-      <Reveal>
-        <p className="mt-14 max-w-3xl font-sans text-base leading-relaxed md:text-lg" style={{ color: FG }}>
-          Tactile has invested for years in building tech and tools to bridge this gap — to enable studios around
-          the globe, including their own, to iterate and ship quality games. Create Suite lets game studios scout,
-          plan, design, spec, prototype, launch and test games, all in one place. The suite has several tools; I led
-          the product design, prototyping, and usability improvements on the main three: Create Hub, Art &amp; Code.
-        </p>
-      </Reveal>
-    </section>
-  );
-}
-
 // ── Creative Suite — horizontal shelf, aligned to the heading ────────────────
 function SuiteShelf() {
   return (
@@ -175,7 +135,7 @@ function ScrollVideoCarousel() {
     return (
       <section id={id('In motion')} className="scroll-mt-24 py-16">
         <div className={`${SHELF} flex gap-4 ${SHELF_PAD}`}>
-          {VIDEOS.map((v, n) => <VideoCard key={n} className="w-[64vw] max-w-[720px] shrink-0" src={v} />)}
+          {VIDEOS.map((v, n) => <MediaCard key={n} src={`${IMG}/${v}`} aspect="aspect-[16/10]" className="w-[64vw] max-w-[720px] shrink-0" />)}
         </div>
       </section>
     );
@@ -186,122 +146,16 @@ function ScrollVideoCarousel() {
       <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
         <motion.div style={{ x, opacity: outOpacity }} className="flex items-center gap-4 pl-[calc(50vw-22vw)] pr-[40vw] will-change-transform">
           <motion.div style={{ scale }} className="relative z-10 origin-center shrink-0">
-            <VideoCard className="w-[44vw] max-w-[720px]" src={VIDEOS[0]} />
+            <MediaCard src={`${IMG}/${VIDEOS[0]}`} aspect="aspect-[16/10]" className="w-[44vw] max-w-[720px]" />
           </motion.div>
           {VIDEOS.slice(1).map((v, n) => (
             <motion.div key={n} style={{ opacity: fade }} className="shrink-0">
-              <VideoCard className="w-[44vw] max-w-[720px]" src={v} />
+              <MediaCard src={`${IMG}/${v}`} aspect="aspect-[16/10]" className="w-[44vw] max-w-[720px]" />
             </motion.div>
           ))}
         </motion.div>
       </div>
     </section>
-  );
-}
-
-// A bare autoplaying video — no green, no stroke, no play button.
-function VideoCard({ className = '', src }: { className?: string; src: string }) {
-  return (
-    <video
-      src={`${IMG}/${src}`}
-      autoPlay muted loop playsInline preload="metadata"
-      className={`aspect-[16/10] rounded-xl border border-white/10 object-cover shadow-2xl ${className}`}
-    />
-  );
-}
-
-// ── Two bigger image rows auto-scrolling in opposite directions ──────────────
-// Full-bleed edge-to-edge, sits right under the green carousel. Click opens the
-// image; hovering a row slows its scroll way down.
-function SmallShot({ shot, onOpen }: { shot: { file: string; caption: string }; onOpen: (src: string) => void }) {
-  const src = `${IMG}/${shot.file}`;
-  return (
-    <div className="group relative w-[70vw] max-w-[520px] shrink-0 sm:w-[40vw]">
-      <button
-        type="button"
-        onClick={() => onOpen(src)}
-        className="relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden rounded-xl border border-white/10 shadow-2xl"
-      >
-        <img src={src} alt="" loading="lazy" draggable={false} className="h-full w-full object-cover object-top" />
-        <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100" style={{ backgroundColor: 'rgba(11,11,11,0.28)' }}>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm" style={{ backgroundColor: 'rgba(11,11,11,0.55)', border: `1px solid rgba(237,234,224,0.35)` }}>
-            <Expand className="h-5 w-5" style={{ color: FG }} aria-hidden />
-          </span>
-        </span>
-      </button>
-      <span
-        className="pointer-events-none absolute inset-x-0 top-full mt-2 truncate text-center font-sans text-[13px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-        style={{ color: MUTED }}
-      >
-        {shot.caption}
-      </span>
-    </div>
-  );
-}
-
-// Per-frame speed so hover can slow it smoothly (no jump). `reverse` flips direction.
-function Marquee({ shots, reverse = false, durationMs, onOpen }: { shots: { file: string; caption: string }[]; reverse?: boolean; durationMs: number; onOpen: (src: string) => void }) {
-  const reduce = useReducedMotion();
-  const pct = useMotionValue(reverse ? -50 : 0);
-  const x = useTransform(pct, (v) => `${v}%`);
-  const speed = useRef(1);
-  useAnimationFrame((_, delta) => {
-    if (reduce) return;
-    const step = (delta / durationMs) * 50 * speed.current;
-    let v = pct.get() + (reverse ? step : -step);
-    if (v <= -50) v += 50;
-    if (v >= 0) v -= 50;
-    pct.set(v);
-  });
-  const loop = [...shots, ...shots];
-  return (
-    <div className="overflow-hidden pb-7" onMouseEnter={() => (speed.current = 0.3)} onMouseLeave={() => (speed.current = 1)}>
-      <motion.div className="flex w-max gap-4" style={reduce ? undefined : { x }}>
-        {loop.map((s, i) => <SmallShot key={i} shot={s} onOpen={onOpen} />)}
-      </motion.div>
-    </div>
-  );
-}
-
-function MarqueeWall({ onOpen }: { onOpen: (src: string) => void }) {
-  return (
-    <Reveal>
-      <div className={`${FULL_BLEED} -mt-[12vh] space-y-3 pb-16 md:-mt-[18vh]`}>
-        <Marquee shots={SHOTS.slice(0, 6)} durationMs={46000} onOpen={onOpen} />
-        <Marquee shots={SHOTS.slice(6)} reverse durationMs={54000} onOpen={onOpen} />
-      </div>
-    </Reveal>
-  );
-}
-
-// Click-to-open image lightbox.
-function Lightbox({ src, onClose }: { src: string | null; onClose: () => void }) {
-  useEffect(() => {
-    if (!src) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
-  }, [src, onClose]);
-  return (
-    <AnimatePresence>
-      {src && (
-        <motion.div
-          className="fixed inset-0 z-[120] flex items-center justify-center p-6 md:p-12"
-          style={{ backgroundColor: 'rgba(11,11,11,0.93)' }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          onClick={onClose} role="dialog" aria-modal="true"
-        >
-          <motion.img
-            src={src} alt="" draggable={false}
-            className="max-h-[90dvh] max-w-[94vw] rounded-xl object-contain"
-            initial={{ scale: 0.97 }} animate={{ scale: 1 }} exit={{ scale: 0.97 }}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
@@ -331,34 +185,6 @@ function FeatureCarousel({ onOpen }: { onOpen: (src: string) => void }) {
             );
           })}
         </div>
-      </Reveal>
-    </section>
-  );
-}
-
-// ── FAQ accordion ────────────────────────────────────────────────────────────
-function FaqAccordion() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id={id('FAQ')} className="scroll-mt-24 py-16 md:py-24">
-      <Reveal>
-        <h2 className="mb-8 font-sans font-medium text-2xl md:text-3xl tracking-tight" style={{ color: FG }}>The questions I get asked.</h2>
-      </Reveal>
-      <Reveal className="max-w-[70ch]">
-        {FAQ.map((item, i) => {
-          const isOpen = open === i;
-          return (
-            <div key={i} style={{ borderTop: `1px solid ${FAINT}` }}>
-              <button onClick={() => setOpen(isOpen ? null : i)} className="group flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-left" aria-expanded={isOpen}>
-                <span className="font-sans text-[17px] md:text-lg leading-relaxed transition-opacity group-hover:opacity-70" style={{ color: FG }}>{item.q}</span>
-                <span className="shrink-0 text-[rgba(237,234,224,0.55)] transition-colors group-hover:text-[#EDEAE0]">{isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}</span>
-              </button>
-              <motion.div initial={false} animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-                <p className="max-w-[68ch] pb-6 font-sans text-[17px] md:text-lg leading-relaxed" style={{ color: MUTED }}>{item.a}</p>
-              </motion.div>
-            </div>
-          );
-        })}
       </Reveal>
     </section>
   );
@@ -413,21 +239,39 @@ export function TactileCreate() {
             professional virtual camera controls, character consistency tools, and multi-model workspaces into a
             single dashboard.
           </p>
-          <div className="mt-8 flex items-center gap-4">
-            <div className="flex -space-x-2" aria-hidden>
-              {[0, 1, 2].map((i) => <span key={i} className="h-6 w-6 rounded-full" style={{ backgroundColor: 'rgba(237,234,224,0.45)', border: `2px solid ${BG}` }} />)}
-            </div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.25em]" style={{ color: MUTED }}>Team of 3&nbsp;&nbsp;//&nbsp;&nbsp;Tactile Games&nbsp;&nbsp;//&nbsp;&nbsp;2025</p>
-          </div>
+          <CaseCredits
+            people={[JOY, DIANA, GUI]}
+            meta={`Team of 3  //  Tactile Games  //  2025`}
+          />
           <hr className="mt-8 border-0 border-t" style={{ borderColor: FAINT }} />
         </header>
 
-        <Statement />
+        <Statement
+          lines={STATEMENT}
+          trailing={
+            <>
+              Tactile has invested for years in building tech and tools to bridge this gap — to enable studios around
+              the globe, including their own, to iterate and ship quality games. Create Suite lets game studios scout,
+              plan, design, spec, prototype, launch and test games, all in one place. The suite has several tools; I led
+              the product design, prototyping, and usability improvements on the main three: Create Hub, Art &amp; Code.
+            </>
+          }
+        />
         <SuiteShelf />
         <ScrollVideoCarousel />
-        <MarqueeWall onOpen={setLightbox} />
+        <MarqueeWall
+          rows={[
+            SHOTS.slice(0, 6).map((s) => ({ src: `${IMG}/${s.file}`, caption: s.caption })),
+            SHOTS.slice(6).map((s) => ({ src: `${IMG}/${s.file}`, caption: s.caption })),
+          ]}
+          aspect="aspect-[16/10]"
+          cardClass="w-[70vw] max-w-[520px] sm:w-[40vw]"
+          durationsMs={[46000, 54000]}
+          onOpen={setLightbox}
+          className="-mt-[12vh] md:-mt-[18vh]"
+        />
         <FeatureCarousel onOpen={setLightbox} />
-        <FaqAccordion />
+        <FaqAccordion id={id('FAQ')} heading="The questions I get asked." items={FAQ} />
       </div>
 
       <Lightbox src={lightbox} onClose={() => setLightbox(null)} />

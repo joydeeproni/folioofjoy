@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
+import { ACCENT } from './shared/tokens';
 
 // Editorial prose primitives for case studies. Mirror the look of the writings
 // articles (dark theme, pixel/sans/mono, green accent) so a case study reads as
 // part of the same family. Server-safe — no client hooks.
 
 const FG = '#EDEAE0';
-const ACCENT = '#2CA152';
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (

@@ -3,6 +3,8 @@
 import { CaseStudyLayout } from './case-study-layout';
 import { P, Pull } from './prose';
 import { MetricsPanel } from './controls/metrics-panel';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 // Screens (drop the pasted files into public/work/deterge/ with these names).
@@ -164,9 +166,10 @@ export function Deterge() {
           <p className="mt-6 max-w-[34ch] font-sans text-xl md:text-2xl leading-snug text-balance" style={{ color: FG }}>
             An online laundry service five of us built in college — fast, cheap, no hassle — that grew faster than we expected.
           </p>
-          <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-            Co-founder &amp; design · Mobile · 2015–17 · University venture
-          </p>
+          <CaseCredits
+            people={[JOY]}
+            meta="Co-founder & design · Mobile · 2015–17 · University venture"
+          />
         </header>
       }
     />

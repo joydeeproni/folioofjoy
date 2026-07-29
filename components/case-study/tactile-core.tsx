@@ -5,6 +5,8 @@ import { P, Pull, List } from './prose';
 import { ContactSheet } from './controls/contact-sheet';
 import { Bento } from './controls/bento';
 import { AsciiPanel } from './controls/ascii-panel';
+import { CaseCredits } from './shared/case-credits';
+import { JOY } from './team';
 import type { CaseStudySection } from './types';
 
 // Tactile Core — internal tooling platform, designed SOLO 2021–25 on a from-
@@ -505,9 +507,10 @@ export function TactileCore() {
             The internal panel that runs the studio&rsquo;s live games — made calm and cohesive enough for
             outside studios to run on too.
           </p>
-          <p className="mt-6 font-mono uppercase tracking-widest text-[11px]" style={{ color: 'rgba(237,234,224,0.4)' }}>
-            Sole product designer · Internal platform · 2021–25 · Tactile Games
-          </p>
+          <CaseCredits
+            people={[JOY]}
+            meta="Sole product designer · Internal platform · 2021–25 · Tactile Games"
+          />
         </header>
       }
     />

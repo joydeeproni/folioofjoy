@@ -1,6 +1,21 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Classic (non-overlay) scrollbars are ~7-17px wide and counted in 100vw, so
+   any full-bleed section sized off 100vw (see FULL_BLEED/SHELF in
+   components/case-study/shared/tokens.ts) pushes the document a few px wider
+   than the viewport, producing a permanent horizontal scrollbar. `clip` (not
+   `hidden`) so vertical scrolling and any in-container horizontal scroll
+   regions are unaffected — it only trims the document's own overflow.
+
+   It has to be on BOTH html and body: overflow on the root propagates to the
+   viewport, and with it set on html alone the viewport stayed scrollable —
+   measured 7.5px of real scrollLeft on /work/cassi. */
+html,
+body {
+  overflow-x: clip;
+}
+
 @font-face {
   font-family: 'Praktikal';
   src: url('/fonts/APK-Praktikal-Light.otf') format('opentype');
