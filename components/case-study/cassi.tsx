@@ -190,11 +190,11 @@ export function Cassi() {
         <Statement
           lines={STATEMENT}
           trailing={
-            /* PLACEHOLDER COPY — ~45 words, matching the reference body paragraph. */
             <>
-              A pre-revenue founder needed a prototype real enough to raise on, not a deck of pretty frames. I was
-              the solo designer alongside one engineer for six months, and the bar never moved: every state a real
-              homeowner would hit had to already exist.
+              A pre-revenue founder needed some concepts and prototype of his idea built out. In order for it to be
+              even prototyped, the product needed to be figured out first and the idea polished. 1 year and 2
+              engineering teams later, I was able to design some concepts and prototype of what the product could be
+              and how it can solve the homeowner&rsquo;s problem we set out to solve.
             </>
           }
         />
