@@ -115,7 +115,7 @@ export default async function WritingPost({ params }: { params: Promise<{ slug: 
             {post.body.map((para, i) => (
               <p
                 key={i}
-                className={`font-sans text-lg leading-relaxed mb-6 ${i === 0 ? 'first-letter:font-pixel first-letter:text-5xl first-letter:mr-2 first-letter:float-left first-letter:leading-none' : ''}`}
+                className={`font-sans text-lg leading-relaxed mb-6 ${i === 0 ? 'first-letter:font-geist first-letter:text-5xl first-letter:mr-2 first-letter:float-left first-letter:leading-none' : ''}`}
               >
                 {para}
               </p>

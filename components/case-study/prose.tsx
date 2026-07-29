@@ -28,7 +28,7 @@ export function P({ children, lead }: { children: ReactNode; lead?: boolean }) {
     <p
       className={`font-sans text-[17px] md:text-lg leading-relaxed mb-5 text-pretty ${
         lead
-          ? 'first-letter:font-pixel first-letter:text-5xl first-letter:mr-2 first-letter:float-left first-letter:leading-none'
+          ? 'first-letter:font-geist first-letter:text-5xl first-letter:mr-2 first-letter:float-left first-letter:leading-none'
           : ''
       }`}
       style={{ color: FG }}

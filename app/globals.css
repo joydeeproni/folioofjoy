@@ -72,10 +72,20 @@ body {
   font-weight: 300;
   font-display: swap;
 }
+/* APK Avionica (trial) — used for the hero quote. Single trial weight, declared
+   across the full weight range so any requested weight maps to it (no faux-bold). */
+@font-face {
+  font-family: 'Avionica';
+  src: url('/fonts/APK-Avionica-Trial.otf') format('opentype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+/* Geist Pixel — hero quote, About header, article/case-study drop-caps.
+   Single weight, declared across the range so any requested weight maps to it. */
 @font-face {
   font-family: 'Geist Pixel';
   src: url('/fonts/GeistPixel-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
 }
 
@@ -126,7 +136,11 @@ body {
   --font-mono: 'Praktikal', monospace;
   --font-heading: 'Praktikal', sans-serif;
   --font-body: 'Galeria', sans-serif;
-  --font-pixel: 'Geist Pixel', monospace;
+  --font-pixel: 'argent-pixel-cf', monospace;
+  --font-avionica: 'Avionica', sans-serif;
+  --font-loretta: 'loretta', serif;
+  --font-jubilat: 'jubilat-variable', serif;
+  --font-geist: 'Geist Pixel', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

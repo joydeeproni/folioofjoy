@@ -45,7 +45,7 @@ export default function About() {
         {/* Lede */}
         <Reveal>
           <header className="mx-auto max-w-2xl">
-            <h1 className="font-pixel text-4xl md:text-6xl leading-[1.05] text-balance">
+            <h1 className="font-geist text-4xl md:text-6xl leading-[1.05] text-balance">
               {about?.lede}
             </h1>
             {about?.subLede && (

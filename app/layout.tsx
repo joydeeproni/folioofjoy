@@ -95,6 +95,11 @@ export default async function RootLayout({
   const writings = getWritingsNav()
   return (
     <html lang="en">
+      <head>
+        {/* Adobe Fonts (Typekit) — argent-pixel-cf (`font-pixel`) + jubilat-variable (`font-jubilat`). */}
+        <link rel="stylesheet" href="https://use.typekit.net/pvk2ybx.css" />
+        <link rel="stylesheet" href="https://use.typekit.net/pzg7soy.css" />
+      </head>
       <body className="font-sans antialiased min-h-dvh">
         <Providers>
           <ContentProvider work={work} writings={writings}>
