@@ -98,16 +98,20 @@ const BENTO: BentoTile[] = [
     title: 'Talking to your house',
     blurb: 'Sometimes the fastest input is your voice. Describe the problem out loud, watch it listen, get an answer back.',
   },
+  // These two pair up side by side at md and stack below it. Both keep an
+  // explicit 16/9 rather than the half-tile 4/3 default: the flow map is 1.84
+  // natively, so 4/3 would crop its sides off, and matching the two aspects
+  // keeps the row's two cards the same height.
   {
     src: `${BLOB}/onboarding-flow-01.png`,
-    span: 'full',
+    span: 'half',
     aspect: 'aspect-[16/9]',
     title: 'Onboarding, mapped',
     blurb: 'The whole first run drawn end to end, from the home-intelligence score through to the first insurance upload.',
   },
   {
     src: `${BLOB}/cassi-carousel.mp4`,
-    span: 'full',
+    span: 'half',
     aspect: 'aspect-[16/9]',
     title: 'Scored at a glance',
     blurb: 'Animated home-condition cards, each property scored so the comparison happens before anyone opens a spreadsheet.',
