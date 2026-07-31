@@ -131,14 +131,18 @@ function Row({
   );
 }
 
+// Same treatment as the homepage text links: sans, an alpha'd foreground that
+// goes green on hover. State rides on the base colour's alpha rather than
+// element opacity, so the green lands full-strength on the dimmed tabs too —
+// and the colour can't be set inline here, since that would outrank the
+// hover class and the green would never apply.
 function Tab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className={`cursor-pointer font-mono uppercase tracking-[0.25em] text-xs transition-opacity ${
-        active ? 'opacity-100' : 'opacity-40 hover:opacity-70'
+      className={`cursor-pointer font-sans text-sm transition-colors hover:text-[#2CA152] ${
+        active ? 'text-[#EDEAE0]' : 'text-[#EDEAE0]/40'
       }`}
-      style={{ color: FG }}
       aria-pressed={active}
     >
       {label}
