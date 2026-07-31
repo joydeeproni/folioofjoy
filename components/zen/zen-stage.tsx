@@ -260,11 +260,16 @@ export function ZenStage() {
           </div>
 
           {/* Lawn illustration — pinned to the viewport bottom. On mobile it sits
-              IN FRONT of the menu (z-20); on desktop behind it (z-0). */}
+              IN FRONT of the menu (z-20); on desktop behind it (z-0).
+              The mobile width is set so the art clears the third row: this
+              artwork is 3:2 where the previous one was ~1.93:1, and since
+              height is width/aspect, the old 175vw would stand ~100px taller
+              and bury "Lo-Fi World Radio". 136vw ≈ 175 × (1.50/1.93) keeps the
+              height the layout was tuned for. */}
           <img
-            src="/zen/me-and-my-boys.svg"
-            alt="Me and my boys hanging out in the lawn with a record player"
-            className="pointer-events-none select-none fixed bottom-0 left-1/2 -translate-x-1/2 max-w-none w-[175vw] md:w-[min(1000px,80vw)] z-20 md:z-0"
+            src="/zen/me-and-my-boys.webp"
+            alt="Me and my boys hanging out in the lawn, sharing earbuds plugged into a cassette player"
+            className="pointer-events-none select-none fixed bottom-0 left-1/2 -translate-x-1/2 max-w-none w-[136vw] md:w-[min(1000px,80vw)] z-20 md:z-0"
           />
         </div>
       )}
