@@ -43,12 +43,19 @@ const RESOURCES: { title: string; desc: string; href?: string; wip?: boolean }[]
   },
 ];
 
+// Display order: Cases leads, Tools trails. The `resources` key is deliberately
+// left alone behind the "Tools" label — it's the sessionStorage value and the
+// ?tab= value, so renaming it would strand anyone mid-visit and break existing
+// ?tab=resources links for no visible gain.
 type TabKey = 'resources' | 'cases' | 'thoughts';
 const TABS: { key: TabKey; label: string }[] = [
-  { key: 'resources', label: 'Resources' },
   { key: 'cases', label: 'Cases' },
   { key: 'thoughts', label: 'Thoughts' },
+  { key: 'resources', label: 'Tools' },
 ];
+
+const isTabKey = (v: string | null): v is TabKey =>
+  v === 'resources' || v === 'cases' || v === 'thoughts';
 
 function Row({
   n,
@@ -131,17 +138,30 @@ function Row({
   );
 }
 
-// Same treatment as the homepage text links: sans, an alpha'd foreground that
-// goes green on hover. State rides on the base colour's alpha rather than
-// element opacity, so the green lands full-strength on the dimmed tabs too —
-// and the colour can't be set inline here, since that would outrank the
-// hover class and the green would never apply.
+// File-folder tabs. The strip carries the baseline rule; a tab sits ON that
+// line and punches a gap in it, which is what reads as "this folder is open".
+//
+// Three things make that work, and none of them are obvious:
+//   · Only top/left/right get a border WIDTH. The colour is then set with a
+//     single `border-*` utility that can only reach those three sides, so there
+//     is no shorthand-vs-longhand fight with a bottom edge.
+//   · `-mb-px` drops the tab one pixel past the strip's border-bottom, and the
+//     tab's own opaque background paints over that pixel — that's the gap. No
+//     background means no gap, which is exactly what the resting inactive tabs
+//     want, since the baseline has to run straight under them.
+//   · The colours stay in classes, never inline: an inline `border-color` would
+//     outrank the hover rule and the outline would never appear.
+// `border-[#EDEAE0]/15` is RULE, spelled as a class so hover can reach it.
 function Tab({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className={`cursor-pointer font-sans text-sm transition-colors hover:text-[#2CA152] ${
-        active ? 'text-[#EDEAE0]' : 'text-[#EDEAE0]/40'
+      // Hovering an inactive tab raises a SHORTER folder than the active one —
+      // the extra pt on the active tab is the whole height difference.
+      className={`-mb-px cursor-pointer border-t border-x px-5 pb-3 font-sans text-sm transition-colors ${
+        active
+          ? 'pt-4 border-[#EDEAE0]/15 bg-[#0B0B0B] text-[#EDEAE0]'
+          : 'pt-2 border-transparent text-[#EDEAE0]/40 hover:border-[#EDEAE0]/15 hover:bg-[#0B0B0B] hover:text-[#EDEAE0]/70'
       }`}
       aria-pressed={active}
     >
@@ -155,14 +175,25 @@ function Tab({ label, active, onClick }: { label: string; active: boolean; onCli
 const rowAnim = (i: number) => ({ className: 'animate-row-in', style: { animationDelay: `${i * 45}ms` } });
 
 export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
-  const [tab, setTab] = useState<TabKey>('resources');
+  const [tab, setTab] = useState<TabKey>('cases');
 
   // Restore the tab + scroll from a prior visit (e.g. coming back from a case
   // study), so returning lands where you left off — on the Cases tab if that's
   // where you were.
+  //
+  // A ?tab= link outranks the restored visit and skips the scroll restore: an
+  // inbound "read cases here" has to land on Cases at the top, not on whatever
+  // tab and offset the visitor happened to leave behind. Read off `location`
+  // rather than useSearchParams so this stays a plain mount effect and the page
+  // needs no Suspense boundary.
   useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get('tab');
+    if (isTabKey(wanted)) {
+      setTab(wanted);
+      return;
+    }
     const savedTab = sessionStorage.getItem('writings-tab');
-    if (savedTab === 'resources' || savedTab === 'cases' || savedTab === 'thoughts') setTab(savedTab);
+    if (isTabKey(savedTab)) setTab(savedTab);
     const savedScroll = sessionStorage.getItem('writings-scroll');
     if (savedScroll) {
       const y = parseInt(savedScroll, 10);
@@ -182,7 +213,12 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
 
   return (
     <div className="max-w-4xl mx-auto pt-28">
-      <div className="mb-16 flex gap-7">
+      {/* The strip owns the baseline the tabs sit on, so it spans the same
+          max-w-4xl as the rows below and their divide-y lines up under it. No
+          gap between tabs — they're adjacent folder cells. `items-end` keeps
+          them standing on the line while their heights differ, and pl-8 is the
+          short run of rule that leads in before the first tab. */}
+      <div className="mb-16 flex items-end border-b border-[#EDEAE0]/15 pl-8">
         {TABS.map((t) => (
           <Tab key={t.key} label={t.label} active={tab === t.key} onClick={() => setTab(t.key)} />
         ))}
