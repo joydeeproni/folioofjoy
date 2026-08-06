@@ -14,8 +14,8 @@ const RULE = 'rgba(237,234,224,0.15)';
 // Hovering a barricaded case row says the quiet part out loud.
 const WIP_CASE_NOTE = 'Trying to do some actual work instead of writing case studies';
 
-// Folio of Joy lives in Thoughts (a personal, reflective piece), not Cases.
-const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Spring 2026', href: '/work/folio-of-joy', wip: true };
+// Folio of Joy lives in Thoughts, but stays disabled until the piece is ready.
+const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', wip: true };
 
 // Tools and resources I've made — some for sale, some free.
 const RESOURCES: { title: string; desc: string; href?: string; wip?: boolean }[] = [
@@ -80,8 +80,7 @@ function Row({
   wipNote?: string;
 }) {
   // Unfinished *and* unlinked — the row reads as disabled: light weight, text
-  // knocked back to 20%. A WIP row that still links (Folio of Joy) keeps its
-  // normal weight; only the sign says it's in progress.
+  // knocked back to 20%.
   const disabled = wip && !href;
   // The whole row is the hover target, but the tooltip anchors to the title so
   // it sits above the first characters rather than floating over the row's
@@ -296,8 +295,6 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
             <Row
               n={FOLIO_THOUGHT.number}
               title={FOLIO_THOUGHT.title}
-              meta={FOLIO_THOUGHT.meta}
-              href={FOLIO_THOUGHT.href}
               wip={FOLIO_THOUGHT.wip}
             />
           </li>

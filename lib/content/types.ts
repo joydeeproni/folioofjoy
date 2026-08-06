@@ -26,7 +26,11 @@ export interface WorkItem {
 // A paragraph is either plain text or a run of segments, where a segment is
 // plain text or an inline link. Keeps the About essay in code without a
 // rich-text runtime.
-export type RichSegment = string | { text: string; href: string };
+export type RichInlineArt = 'denmark' | 'metro' | 'tactile';
+export type RichSegment =
+  | string
+  | { text: string; href: string }
+  | { icon: RichInlineArt; label: string };
 export type Para = string | RichSegment[];
 
 // A design value, shown as a colour chip + title + body on the About page.

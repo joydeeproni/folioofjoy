@@ -1,19 +1,40 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Para } from '@/lib/content/types';
 import { RichText } from '@/components/rich-text';
+import { scrambleSwap } from '@/lib/scramble';
 
 const MUTED = 'rgba(237,234,224,0.5)';
 const RULE = 'rgba(237,234,224,0.14)';
 
-// A single hairline accordion — a mono label and a +/− glyph over a rule. Holds
-// the long-form "so what is design, then" answer so the essay above stays short.
+const HOVER_LABEL = 'What design means to me';
+
+// A single hairline accordion whose label explains itself on hover. Holds the
+// long-form "so what is design, then" answer so the essay above stays short.
 export function Thesis({ title, paras }: { title: string; paras: Para[] }) {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const panelId = useId();
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const tweenRef = useRef<ReturnType<typeof scrambleSwap> | null>(null);
+
+  const scrambleTo = useCallback(
+    (nextLabel: string) => {
+      const label = labelRef.current;
+      if (!label) return;
+      tweenRef.current?.kill();
+      if (reduce) {
+        label.textContent = nextLabel;
+        return;
+      }
+      tweenRef.current = scrambleSwap(label, label.textContent ?? title, nextLabel, 0.42);
+    },
+    [reduce, title],
+  );
+
+  useEffect(() => () => tweenRef.current?.kill(), []);
 
   return (
     <section className="my-12 mx-auto max-w-2xl">
@@ -22,22 +43,21 @@ export function Thesis({ title, paras }: { title: string; paras: Para[] }) {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
+            onMouseEnter={() => scrambleTo(HOVER_LABEL)}
+            onMouseLeave={() => scrambleTo(title)}
+            onFocus={() => scrambleTo(HOVER_LABEL)}
+            onBlur={() => scrambleTo(title)}
             aria-expanded={open}
             aria-controls={panelId}
-            className="group flex w-full items-center justify-between gap-4 py-4 text-left outline-none"
+            aria-label={title}
+            className="flex w-full items-center py-4 text-left outline-none focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
           >
             <span
-              className="font-mono text-[11px] uppercase tracking-[0.25em] transition-colors group-hover:text-current"
+              ref={labelRef}
+              className="font-mono text-[11px] uppercase tracking-[0.25em]"
               style={{ color: open ? undefined : MUTED }}
             >
               {title}
-            </span>
-            <span
-              aria-hidden
-              className="font-mono text-sm leading-none transition-transform duration-300"
-              style={{ color: MUTED, transform: open ? 'rotate(45deg)' : 'none' }}
-            >
-              +
             </span>
           </button>
         </h2>
