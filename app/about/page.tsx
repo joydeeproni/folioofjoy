@@ -1,6 +1,10 @@
 import { BackLink } from '@/components/back-link';
 import { Reveal } from '@/components/reveal';
+import { ScrollFade } from '@/components/scroll-fade';
 import { RichText } from '@/components/rich-text';
+import { Thesis } from '@/components/about/thesis';
+import { Values } from '@/components/about/values';
+import { Kit } from '@/components/about/kit';
 import { getAbout, getInspiration, type InspirationItem } from '@/lib/content';
 
 // Dark, to match the rest of the site (mirrors the Writings page palette).
@@ -61,9 +65,12 @@ export default function About() {
           <RichText paras={about.intro} />
         </div>
 
+        {/* Design thesis — collapsed by default */}
+        {about.thesis && <Thesis {...about.thesis} />}
+
         {/* Tagore quote */}
         {about?.quote && (
-          <Reveal>
+          <ScrollFade>
             <figure className="my-16 mx-auto max-w-2xl">
               <blockquote className="font-sans text-2xl md:text-3xl leading-snug tracking-tight text-balance">
                 &ldquo;{about.quote}&rdquo;
@@ -77,7 +84,7 @@ export default function About() {
                 </figcaption>
               )}
             </figure>
-          </Reveal>
+          </ScrollFade>
         )}
 
         {/* Essay — after the quote */}
@@ -85,23 +92,38 @@ export default function About() {
           <RichText paras={about.outro} />
         </div>
 
+        {/* Values */}
+        {about.values?.length ? <Values values={about.values} /> : null}
+
+        {/* Kit */}
+        {about.kit?.length ? <Kit lede={about.kitLede} items={about.kit} /> : null}
+
         {/* Inspiration table */}
         <section className="mt-16 md:mt-24">
+          <ScrollFade>
+            <h2 className="font-mono text-[11px] uppercase tracking-[0.25em] pb-5">
+              Inspiration
+            </h2>
+          </ScrollFade>
           {groups.map((group) => (
-            <Reveal key={group.category}>
+            <div key={group.category}>
               <div
                 className="flex flex-col md:flex-row md:items-baseline md:gap-10 border-t"
                 style={{ borderColor: RULE }}
               >
-                <h2
-                  className="pt-5 md:pt-4 md:w-28 md:shrink-0 font-mono text-[11px] uppercase tracking-[0.25em]"
-                  style={{ color: MUTED }}
-                >
-                  {group.category}
-                </h2>
+                {/* Fades row by row rather than group by group — a group is taller
+                    than the fade window, so its last rows would arrive already lit. */}
+                <ScrollFade className="pt-5 md:pt-4 md:w-28 md:shrink-0">
+                  <h2
+                    className="font-mono text-[11px] uppercase tracking-[0.25em]"
+                    style={{ color: MUTED }}
+                  >
+                    {group.category}
+                  </h2>
+                </ScrollFade>
                 <div className="flex-1">
                   {group.items.map((item, i) => (
-                    <div
+                    <ScrollFade
                       key={item.name}
                       className="grid grid-cols-1 md:grid-cols-[minmax(0,15rem)_1fr] gap-x-10 gap-y-1 py-3 md:py-4"
                       style={i > 0 ? { borderTop: `1px solid ${RULE}` } : undefined}
@@ -115,11 +137,11 @@ export default function About() {
                       >
                         {item.note}
                       </p>
-                    </div>
+                    </ScrollFade>
                   ))}
                 </div>
               </div>
-            </Reveal>
+            </div>
           ))}
         </section>
 

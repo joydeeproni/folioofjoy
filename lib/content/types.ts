@@ -29,13 +29,33 @@ export interface WorkItem {
 export type RichSegment = string | { text: string; href: string };
 export type Para = string | RichSegment[];
 
+// A design value, shown as a colour chip + title + body on the About page.
+export interface AboutValue {
+  title: string;
+  color: string; // hex, drives the chip
+  body: string;
+}
+
+// A piece of kit. `image` is a path under /public (or a Blob URL); until one is
+// set the card renders an empty slot so the grid keeps its shape.
+export interface KitItem {
+  name: string;
+  note: string;
+  image?: string;
+}
+
 export interface AboutDoc {
   lede: string;
   subLede?: string;
   intro: Para[];
+  // Collapsed by default on the page — the long-form "what design is" answer.
+  thesis?: { title: string; paras: Para[] };
   quote?: string;
   quoteAttribution?: string;
   outro: Para[];
+  values?: AboutValue[];
+  kitLede?: string;
+  kit?: KitItem[];
 }
 
 export interface InspirationItem {

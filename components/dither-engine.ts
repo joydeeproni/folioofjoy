@@ -1,4 +1,5 @@
 import { animate } from 'motion';
+import { BRAND } from '@/lib/brand';
 
 // Shared dither-reveal engine used by BOTH the route transition and the
 // in-page nav-preview transition, so every dither looks identical. This is the
@@ -77,7 +78,7 @@ export interface DitherSettings {
 }
 
 // Shared dither color for every transition.
-export const DITHER_COLOR = '#2CA152';
+export const DITHER_COLOR = BRAND.green;
 
 // The "good one" — the original first-load reveal that animates in from the
 // corners (drift + edge spread). `color` is supplied per use.

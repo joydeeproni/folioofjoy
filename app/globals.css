@@ -82,6 +82,16 @@ body {
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Brand palette — the four swing-set colours, and the only accent colours the
+     site reaches for. Kept in sync with lib/brand.ts, which is the value-side
+     source for inline styles, canvas and SVG fills. Declared here (not straight
+     into @theme) so `var(--brand-green)` works in plain CSS too; @theme inline
+     below maps them onto `text-brand-green`, `bg-brand-yellow` and friends. */
+  --brand-purple: #705292;
+  --brand-red: #dd3430;
+  --brand-green: #2ca152;
+  --brand-yellow: #e9d80c;
+
   /* Dark theme by default - deep charcoal background */
   --background: oklch(0.12 0 0);
   /* Live theme background (set per-track by the audio context); default to the
@@ -122,6 +132,12 @@ body {
 }
 
 @theme inline {
+  /* Brand palette as utilities — see the :root block above for the values. */
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-red: var(--brand-red);
+  --color-brand-green: var(--brand-green);
+  --color-brand-yellow: var(--brand-yellow);
+
   --font-sans: 'Galeria', sans-serif;
   --font-mono: 'Praktikal', monospace;
   --font-heading: 'Praktikal', sans-serif;
@@ -240,6 +256,29 @@ body {
 
 .animate-caption-fade {
   animation: caption-fade 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Tiny inventory-sprite motion for illustrated objects on the About page.
+   The stepped timing keeps the movement in the same chunky pixel language. */
+@keyframes kit-pixel-idle {
+  0%, 82%, 100% { transform: translateY(0); }
+  88% { transform: translateY(-2px); }
+  94% { transform: translateY(1px); }
+}
+
+.kit-pixel-object {
+  animation: kit-pixel-idle 4.5s steps(2, end) infinite;
+  transition: filter 180ms ease-out;
+}
+
+.group:hover .kit-pixel-object {
+  filter: brightness(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kit-pixel-object {
+    animation: none;
+  }
 }
 
 /* Writings index rows stagger in when switching tabs (delay set per row inline). */

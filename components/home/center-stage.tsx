@@ -6,6 +6,7 @@ import { scrambleReveal } from '@/lib/scramble';
 import { SwingSet } from './swing-set';
 import { DitherReveal } from './dither-reveal';
 import Link from 'next/link';
+import { BRAND } from '@/lib/brand';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
 
@@ -24,7 +25,7 @@ const QUOTE_SEGMENTS: { t: string; href?: string }[] = [
   { t: '.' },
 ];
 const QUOTE = QUOTE_SEGMENTS.map((s) => s.t).join('');
-const GREEN = '#2CA152';
+const GREEN = BRAND.green;
 const YELLOW = '#F2E30C';
 
 export function CenterStage({
