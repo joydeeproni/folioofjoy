@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Volume2, VolumeX, MoveRight } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { MODE_OPTIONS, SHAPE_OPTIONS, PALETTES, paletteOf, type PaletteName, type ZenConfig } from './zen-config';
 
 // Config knobs — 4-character labels per the spec.
@@ -481,8 +481,7 @@ export function ZenDock({
 
         {/* SET / RESET — pinned footer */}
         <div className="flex gap-[16px] items-center px-[24px] py-[20px] bg-black" style={{ borderTop: '1px solid rgba(237,233,221,0.12)' }}>
-          <button onClick={set} className="flex flex-1 gap-[8px] items-center transition-opacity hover:opacity-80">
-            <MoveRight className="w-[24px] h-[24px]" style={{ color: lav }} />
+          <button onClick={set} className="flex flex-1 items-center transition-opacity hover:opacity-80">
             <span className="text-[18px] leading-none font-mono whitespace-nowrap" style={{ color: lav, letterSpacing: '-0.9px' }}>{saved ? 'SET ✓' : 'SET'}</span>
           </button>
           <button onClick={onReset} className="text-[18px] leading-none font-mono text-white whitespace-nowrap transition-opacity hover:opacity-80" style={{ letterSpacing: '-0.9px' }}>RESET</button>
