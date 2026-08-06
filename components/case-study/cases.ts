@@ -1,7 +1,9 @@
 // Canonical case-study list — the single source of truth for the Cases index
 // and for prev/next navigation. Order here is the display order (newest first).
-// `wip` marks a case whose write-up isn't finished — the Cases index shows a
-// barricade on those rows. Drop the flag once a case is done.
+// `wip` marks a case whose write-up isn't finished: the Cases index renders
+// those rows barricaded and unclickable, and prev/next skips them, so nothing
+// on the site links into a draft. The pages themselves still render at
+// /work/<slug> for previewing. Drop the flag once a case is done.
 export type CaseMeta = { title: string; category: string; year: number; slug: string; wip?: boolean };
 
 export const CASES: CaseMeta[] = [
@@ -16,11 +18,19 @@ export const CASES: CaseMeta[] = [
   { title: 'Deterge', category: 'Mobile', year: 2015, slug: 'deterge', wip: true },
 ];
 
-// Newest first; ties keep listed order (stable sort).
-export const SORTED_CASES = [...CASES].sort((a, b) => b.year - a.year);
+// Finished cases lead the list; drafts fall below. Newest first within each
+// group, ties keeping listed order (stable sort). Dropping a `wip` flag floats
+// that case up on its own.
+export const SORTED_CASES = [...CASES].sort(
+  (a, b) => Number(!!a.wip) - Number(!!b.wip) || b.year - a.year,
+);
+
+// The finished cases, in display order. Prev/next walks this list only — a live
+// case should never hand you off to a draft.
+export const LIVE_CASES = SORTED_CASES.filter((c) => !c.wip);
 
 export function getPrevNext(slug: string): { prev?: CaseMeta; next?: CaseMeta } {
-  const i = SORTED_CASES.findIndex((c) => c.slug === slug);
+  const i = LIVE_CASES.findIndex((c) => c.slug === slug);
   if (i === -1) return {};
-  return { prev: SORTED_CASES[i - 1], next: SORTED_CASES[i + 1] };
+  return { prev: LIVE_CASES[i - 1], next: LIVE_CASES[i + 1] };
 }

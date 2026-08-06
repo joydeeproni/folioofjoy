@@ -11,6 +11,9 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 const FG = '#EDEAE0';
 const RULE = 'rgba(237,234,224,0.15)';
 
+// Hovering a barricaded case row says the quiet part out loud.
+const WIP_CASE_NOTE = 'Trying to do some actual work instead of writing case studies';
+
 // Folio of Joy lives in Thoughts (a personal, reflective piece), not Cases.
 const FOLIO_THOUGHT = { title: 'Folio of Joy', number: '00', meta: 'Spring 2026', href: '/work/folio-of-joy', wip: true };
 
@@ -58,6 +61,7 @@ function Row({
   href,
   external,
   wip,
+  wipNote = 'Under construction',
 }: {
   n: string;
   title: string;
@@ -66,23 +70,40 @@ function Row({
   href?: string;
   external?: boolean;
   wip?: boolean;
+  wipNote?: string;
 }) {
+  // Unfinished *and* unlinked — the row reads as disabled: light weight, text
+  // knocked back to 20%. A WIP row that still links (Folio of Joy) keeps its
+  // normal weight; only the sign says it's in progress.
+  const disabled = wip && !href;
+  // The whole row is the hover target, but the tooltip anchors to the title so
+  // it sits above the first characters rather than floating over the row's
+  // midpoint. Hence: controlled open, trigger on the title span alone.
+  const [open, setOpen] = useState(false);
+
+  const titleSpan = (
+    <span
+      className={`inline-flex items-center gap-2 font-sans text-4xl md:text-6xl tracking-tight ${disabled ? 'font-light opacity-20' : ''} ${href ? 'transition-opacity group-hover:opacity-70' : ''}`}
+    >
+      {title}
+      {external && href && (
+        <ArrowUpRight strokeWidth={1} className="h-[0.6em] w-[0.6em] shrink-0" style={{ opacity: 0.5 }} aria-hidden />
+      )}
+    </span>
+  );
+
   const body = (
     <>
-      <span className="shrink-0 font-pixel text-sm" style={{ color: FG, opacity: 0.5 }}>
+      <span className="shrink-0 font-pixel text-sm" style={{ color: FG, opacity: disabled ? 0.2 : 0.5 }}>
         {n}
       </span>
-      <span className="flex min-w-0 flex-col">
-        <span
-          className={`inline-flex items-center gap-2 font-sans text-4xl md:text-6xl tracking-tight ${href ? 'transition-opacity group-hover:opacity-70' : ''}`}
-        >
-          {title}
-          {external && href && (
-            <ArrowUpRight strokeWidth={1} className="h-[0.6em] w-[0.6em] shrink-0" style={{ opacity: 0.5 }} aria-hidden />
-          )}
-        </span>
+      <span className="flex min-w-0 flex-col items-start">
+        {wip ? <TooltipTrigger asChild>{titleSpan}</TooltipTrigger> : titleSpan}
         {desc && (
-          <span className="mt-3 max-w-xl font-sans text-base md:text-lg" style={{ opacity: 0.5 }}>
+          <span
+            className={`mt-3 max-w-xl font-sans text-base md:text-lg ${disabled ? 'font-light' : ''}`}
+            style={{ opacity: disabled ? 0.2 : 0.5 }}
+          >
             {desc}
           </span>
         )}
@@ -94,40 +115,56 @@ function Row({
               {meta}
             </span>
           )}
-          {/* Roadworks sign for unfinished write-ups, with the same tooltip
-              treatment as the Lounge cassette. */}
+          {/* Roadworks sign for unfinished write-ups — just the marker; the
+              hover message is handled by the row. */}
           {wip && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-block leading-none" tabIndex={0}>
-                  <ConstructionSign className="h-6 w-auto opacity-70 transition-opacity group-hover:opacity-100 md:h-8" />
-                </span>
-              </TooltipTrigger>
-              {/* Top, not left like the cassette — left would cover the date
-                  sitting next to the sign on some rows. */}
-              <TooltipContent side="top">Under construction</TooltipContent>
-            </Tooltip>
+            <span className="inline-block leading-none">
+              <ConstructionSign className="h-6 w-auto opacity-70 transition-opacity group-hover:opacity-100 md:h-8" />
+            </span>
           )}
         </span>
       )}
     </>
   );
   const cls = 'flex items-baseline gap-6 py-8';
-  if (!href) {
-    return (
-      <div className={`group ${cls} cursor-default`} aria-disabled>
-        {body}
-      </div>
-    );
-  }
-  return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={`group ${cls}`}>
+  // Hovering (or focusing) anywhere on a WIP row opens the note; on the rest
+  // these are no-ops.
+  const hoverProps = wip
+    ? {
+        onPointerEnter: () => setOpen(true),
+        onPointerLeave: () => setOpen(false),
+        onFocus: () => setOpen(true),
+        onBlur: () => setOpen(false),
+      }
+    : {};
+  const row = !href ? (
+    // Unfinished rows aren't linked — the whole row is inert, and hovering it
+    // explains why rather than making you hunt for the sign.
+    <div className={`group ${cls} cursor-default`} aria-disabled tabIndex={wip ? 0 : undefined} {...hoverProps}>
+      {body}
+    </div>
+  ) : external ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={`group ${cls}`} {...hoverProps}>
       {body}
     </a>
   ) : (
-    <Link href={href} className={`group ${cls}`}>
+    <Link href={href} className={`group ${cls}`} {...hoverProps}>
       {body}
     </Link>
+  );
+
+  if (!wip) return row;
+  return (
+    // Controlled, so row hover drives it while the title stays the anchor. The
+    // trigger lives inside `row` (see titleSpan above).
+    <Tooltip open={open}>
+      {row}
+      {/* Top-start: above the first characters of the title, not centred over
+          the full-width row. */}
+      <TooltipContent side="top" align="start" sideOffset={4}>
+        {wipNote}
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -203,8 +240,10 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
                 title={c.title}
                 // The sign stands in for the category on unfinished cases.
                 meta={c.wip ? undefined : c.category}
-                href={c.slug ? `/work/${c.slug}` : undefined}
+                // Unfinished cases aren't linked at all — barricaded, not just marked.
+                href={c.wip ? undefined : `/work/${c.slug}`}
                 wip={c.wip}
+                wipNote={WIP_CASE_NOTE}
               />
             </li>
           ))}
