@@ -128,7 +128,7 @@ export function CenterStage({
         </p>
         {/* pointer-events-none so the quote's word-links underneath stay clickable;
             the tilt is driven by onHeroMove reading the cursor's side of this art */}
-        <SwingSet ref={swingRef} tilt={tilt} className="absolute w-[62vw] max-w-[720px] h-auto pointer-events-none" />
+        <SwingSet ref={swingRef} tilt={tilt} className="absolute w-[88vw] md:w-[62vw] max-w-[720px] h-auto pointer-events-none" />
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}

@@ -22,7 +22,7 @@ export function HomeStage() {
         </a>
         <Link href="/about" className={linkCls} aria-label="Joy Sengupta">
           {/* Logo on mobile, name on desktop */}
-          <img src="/icon.svg" alt="Joy Sengupta" className="w-7 h-7 md:hidden" />
+          <img src="/icon.svg" alt="Joy Sengupta" className="w-10 h-10 md:hidden" />
           <span className="hidden md:inline">Joy Sengupta</span>
         </Link>
         <Link href="/writings" className={linkCls}>

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import { X } from 'lucide-react';
 import { MobileGallery } from './mobile-gallery';
 import { WorkCarousel } from './work/work-carousel';
@@ -115,13 +116,27 @@ export function WorkLink() {
             <X className="w-5 h-5 text-white" />
           </button>
 
+          {/* Cases mirrors the close button's corner and drops in on the same
+              choreography. stopPropagation because the overlay's own onClick
+              closes the carousel — no point tearing it down mid-navigation. */}
+          <Link
+            href="/writings?tab=cases"
+            onClick={(e) => e.stopPropagation()}
+            className={`absolute top-6 right-6 z-20 font-sans text-sm text-white/90 transition-all duration-300 hover:text-[#2CA152] ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
+            style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}
+          >
+            Cases
+          </Link>
+
           <div className={`relative z-10 w-full transition-all duration-500 ${carouselVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             <WorkCarousel items={WORK_ITEMS} />
           </div>
 
-          {/* Pinned to the bottom of the screen, independent of the carousel. */}
+          {/* Pinned to the bottom of the screen, independent of the carousel.
+              Stays pointer-events-none so it never eats a drag meant for the
+              carousel. */}
           <p className={`pointer-events-none select-none absolute inset-x-0 bottom-[calc(1.5rem+var(--sab))] z-10 px-6 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-white/30 transition-opacity duration-500 ${carouselVisible ? 'opacity-100' : 'opacity-0'}`}>
-            Snippets of my shipped work, WIP frames, prototypes, both messy &amp; polished. Scroll to go through
+            Preview of both messy &amp; polished frames
           </p>
         </div>
       ), document.body)}
