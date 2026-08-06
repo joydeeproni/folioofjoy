@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { CenterStage } from './center-stage';
+import { ScrambleSwapText } from '@/components/scramble-swap-text';
 
 const INSTAGRAM = 'https://www.instagram.com/joyingntravelling/';
 
@@ -21,9 +22,13 @@ export function HomeStage() {
           Photography
         </a>
         <Link href="/about" className={linkCls} aria-label="Joy Sengupta">
-          {/* Logo on mobile, name on desktop */}
+          {/* Logo on mobile, name on desktop — the name scrambles to “About Me” on hover */}
           <img src="/icon.svg" alt="Joy Sengupta" className="w-10 h-10 md:hidden" />
-          <span className="hidden md:inline">Joy Sengupta</span>
+          <ScrambleSwapText
+            label="Joy Sengupta"
+            hoverLabel="About Me"
+            className="hidden md:inline-block"
+          />
         </Link>
         <Link href="/writings" className={linkCls}>
           Writings

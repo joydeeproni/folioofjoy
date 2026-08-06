@@ -4,6 +4,7 @@ import { useState, type MouseEventHandler } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { SpinningText } from '@/components/ui/spinning-text';
+import { BRAND } from '@/lib/brand';
 
 // Circular action button (back / view live / explore / read case study).
 // Two states:
@@ -14,7 +15,7 @@ import { SpinningText } from '@/components/ui/spinning-text';
 // so on mobile the spun-out state shows while the button is pressed (:active).
 
 const DARK = '#2C2C2C';
-const YELLOW = '#E9D80C';
+const YELLOW = BRAND.yellow;
 
 export interface CircleButtonProps {
   label: string; // default-state text, max 6 chars

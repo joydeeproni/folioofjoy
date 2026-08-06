@@ -1,11 +1,13 @@
 // Shared palette + layout constants for the bespoke (non-CaseStudyLayout) case
 // studies, so Cassi and Tactile Create cannot drift apart.
 
+import { BRAND } from '@/lib/brand';
+
 export const FG = '#EDEAE0';
 export const BG = '#0B0B0B';
 export const MUTED = 'rgba(237,234,224,0.55)';
 export const FAINT = 'rgba(237,234,224,0.14)';
-export const ACCENT = '#2CA152';
+export const ACCENT = BRAND.green;
 
 // Span the whole viewport regardless of the parent's max-width.
 export const FULL_BLEED = 'w-screen ml-[calc(50%-50vw)]';

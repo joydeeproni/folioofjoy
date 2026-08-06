@@ -1,3 +1,5 @@
+import { BRAND } from '@/lib/brand';
+
 export type PaletteName = 'subdued' | 'lit' | 'mono';
 
 export interface ZenConfig {
@@ -26,7 +28,7 @@ export const DEFAULT_ZEN_CONFIG: ZenConfig = {
   feather: 0.15,
   scale: 0.025,
   palette: 'subdued',
-  color: '#2CA152',   // SUBDUED c1
+  color: BRAND.green,   // SUBDUED c1
   background: '#000000',
 };
 
@@ -37,7 +39,7 @@ export const SHAPE_OPTIONS = ['dot', 'square', 'plus', 'cross', 'minus', 'binary
 // white as needed; every UI accent is derived from these. Default is LIT.
 export interface Palette { name: PaletteName; label: string; c1: string; c2: string; c3: string; }
 export const PALETTES: Palette[] = [
-  { name: 'subdued', label: 'SUBDUED', c1: '#2CA152', c2: '#DD3430', c3: '#705292' },
+  { name: 'subdued', label: 'SUBDUED', c1: BRAND.green, c2: BRAND.red, c3: BRAND.purple },
   { name: 'lit', label: 'LIT', c1: '#5300FF', c2: '#FF3D00', c3: '#D8F31F' },
   { name: 'mono', label: 'MONO', c1: '#FFFFFF', c2: '#A4A4A4', c3: '#4F4F4F' },
 ];
