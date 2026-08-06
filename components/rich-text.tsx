@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react';
 import { ScrollFade } from './scroll-fade';
 import type { Para } from '@/lib/content/types';
+import { InlinePixelArt } from '@/components/about/inline-pixel-art';
 
 // Renders the About essay paragraphs. A paragraph is plain text, or a run of
 // segments where a segment can be an inline link. Each paragraph brightens as it
@@ -22,6 +23,8 @@ export function RichText({ paras, reveal = true }: { paras?: Para[]; reveal?: bo
               : para.map((seg, j) =>
                   typeof seg === 'string' ? (
                     seg
+                  ) : 'icon' in seg ? (
+                    <InlinePixelArt key={j} icon={seg.icon} label={seg.label} />
                   ) : (
                     <a
                       key={j}

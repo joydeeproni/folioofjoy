@@ -11,13 +11,16 @@ export const ABOUT: AboutDoc = {
   intro: [
     "This website changes every other month, so I’m not sure which version you’re seeing — or if you’re one of the unlucky ones to catch an avant-garde version of it.",
     [
-      "My name is Joy, product designer based in Copenhagen, Denmark, designing creative tools for artists, designers and game programmers at ",
+      "My name is Joy, product designer based in Copenhagen, Denmark",
+      { icon: "denmark", label: "Danish flag" },
+      ", designing creative tools for artists, designers and game programmers at ",
       { text: "Tactile", href: TACTILE_INTERVIEW },
+      { icon: "tactile", label: "Tactile logo" },
       ". I think that style, intention and joy is the key to creating amazing products, a fresh way to approach dull and complex things. Looking for interesting opportunities in web SaaS or AI based apps, where companies are not too tied up with processes and design bureaucracies.",
     ],
   ],
   thesis: {
-    title: "Thesis",
+    title: "Design Thesis",
     paras: [
       "It’s a state of mind. It’s a process of communicating solutions and showing people how things can be done to achieve their goals. I was a designer as a kid, trying to organize my dad’s old computer desktop so it’d be easy for him to find things, or my mom’s spice rack so it’d be accessible to her. I just didn’t know what it was called, but the idea was the same. I watched them use it, fixed it, and then iterated.",
       "Today I do the same, except now with more elaborate Figma files and Claude Code prototypes to explain how something can be made easy and simple to use. And I’d still be a designer even if the job “UX designer” didn’t exist tomorrow.",
@@ -29,7 +32,10 @@ export const ABOUT: AboutDoc = {
     "That’s how I think of design — a service, and that service brings me joy.",
     "I can be annoying sometimes at dinner parties, when I’m trying to tell people why their app feels off, why their landing page doesn’t convert, and why their app looks like slop and is still hard to use.",
     "The world is full of optimizations and people trying to optimize everything. Trying to make money, careers, goals, dreams, numbers out of all. I think we have forgotten to have fun with what we do or what we create. That’s what I aspire to do. Creating something fun that provides joy, not because I need to objectively reach some number.",
-    "I have been a designer for almost a decade. It’s usually hard for me to focus on one thing (not because I have a low attention span), it’s because I have too many interests. I don’t go to a restaurant that has a bad menu design, I am obsessed with metro maps and public signage, I love typography and I am probably one of the few designers who doesn’t use an iPhone.",
+    [
+      "I have been a designer for almost a decade. It’s usually hard for me to focus on one thing (not because I have a low attention span), it’s because I have too many interests. I don’t go to a restaurant that has a bad menu design, I am obsessed with metro maps and public signage.",
+      { icon: "metro", label: "Pixel metro sign" },
+    ],
   ],
   // One brand colour each, in BRAND_ORDER — green on Fun & Joy since it's the
   // site's primary accent.
