@@ -34,7 +34,14 @@ export function Thesis({ title, paras }: { title: string; paras: Para[] }) {
     [reduce, title],
   );
 
-  useEffect(() => () => tweenRef.current?.kill(), []);
+  // Braced so the cleanup returns void — `kill()` returns a Tween, and an
+  // arrow that implicitly returns it isn't a valid effect destructor.
+  useEffect(
+    () => () => {
+      tweenRef.current?.kill();
+    },
+    [],
+  );
 
   return (
     <section className="my-12 mx-auto max-w-2xl">

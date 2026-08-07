@@ -1,42 +1,159 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from 'motion/react';
 
 // Decorative pixel swing-set illustration for the homepage hero. The art is
 // inlined (600×487) and split into three groups so the subject can actually
 // swing:
 //   frame            — A-frame legs + top beam, static
-//   .swing-pendulum  — ropes + seat + rider, pivots where the ropes meet the beam
-//   .swing-pusher    — the kid pushing, pivots at their feet
-// Idle, CSS keyframes (globals.css) run a subtle pendulum arc with the pusher
-// leaning in counter-phase. `tilt` (degrees) overrides the idle motion — the
-// hero drives it from which side of the art the cursor is on, kicking the
-// swing toward the cursor; null resumes the idle animation.
+//   pendulum         — ropes + seat + rider, pivots where the ropes meet the beam
+//   pusher           — the kid pushing, pivots at their feet
+// One spring owns both idle and interactive motion. Keeping a single motion
+// value avoids the snap that happened when CSS keyframes and inline transforms
+// handed control back and forth on pointer enter/leave.
 // (The source export duplicated every pusher path; the duplicates are dropped.)
-export const SwingSet = forwardRef<SVGSVGElement, { className?: string; tilt?: number | null }>(
-  function SwingSet({ className, tilt = null }, ref) {
-    const idle = tilt == null;
-    // SVG-positive rotation moves the seat left, so negate: positive tilt
-    // (cursor right of center) swings the seat right, toward the cursor.
-    // The pusher recoils slightly the opposite way, like bracing for the catch.
-    const driven = (factor: number): React.CSSProperties | undefined =>
-      idle
-        ? undefined
-        : {
-            transform: `rotate(${tilt * factor}deg)`,
-            transition: 'transform 300ms ease-out',
-            willChange: 'transform',
-          };
+export interface SwingSetHandle {
+  readonly element: SVGSVGElement | null;
+  /** Energize the pendulum while the pointer is over it, or release to idle. */
+  energize: (active: boolean) => void;
+  /** Give the pendulum a short burst of extra amplitude. */
+  kick: () => void;
+}
+
+const IDLE_AMPLITUDE = 2.4;
+const HOVER_AMPLITUDE = 5.4;
+const KICK_AMPLITUDE = 9;
+const PERIOD_MS = 3400;
+const PENDULUM_PIVOT = { x: 295, y: 98 };
+
+function rotateWithPendulum(point: { x: number; y: number }, angle: number) {
+  const radians = (angle * Math.PI) / 180;
+  const dx = point.x - PENDULUM_PIVOT.x;
+  const dy = point.y - PENDULUM_PIVOT.y;
+  return {
+    x: PENDULUM_PIVOT.x + dx * Math.cos(radians) - dy * Math.sin(radians),
+    y: PENDULUM_PIVOT.y + dx * Math.sin(radians) + dy * Math.cos(radians),
+  };
+}
+
+// Rebuild the upper section of a rope as one stepped pixel stroke. Its beam
+// endpoint stays fixed while its lower endpoint follows the rotating artwork,
+// so this piece of rope physically grows and shrinks instead of leaving a gap.
+function elasticRopeTop(
+  anchor: { x: number; y: number },
+  restingJoin: { x: number; y: number },
+  angle: number,
+) {
+  const movingJoin = rotateWithPendulum(restingJoin, angle);
+  const steps = 10;
+  let path = `M ${anchor.x} ${anchor.y}`;
+  let previousY = anchor.y;
+
+  for (let index = 1; index <= steps; index += 1) {
+    const progress = index / steps;
+    const x = Math.round((anchor.x + (movingJoin.x - anchor.x) * progress) * 2) / 2;
+    const y = Math.round((anchor.y + (movingJoin.y - anchor.y) * progress) * 2) / 2;
+    path += ` L ${x} ${previousY} L ${x} ${y}`;
+    previousY = y;
+  }
+  return path;
+}
+
+export const SwingSet = forwardRef<SwingSetHandle, { className?: string }>(
+  function SwingSet({ className }, ref) {
+    const svgRef = useRef<SVGSVGElement>(null);
+    const energized = useRef(false);
+    const kickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const reduceMotion = useReducedMotion();
+
+    // The phase is always a true left/right pendulum. Interaction only changes
+    // its amplitude; a spring smooths those energy changes without ever making
+    // the seat point at or chase the cursor.
+    const amplitudeTarget = useMotionValue(IDLE_AMPLITUDE);
+    const amplitude = useSpring(amplitudeTarget, {
+      stiffness: 72,
+      damping: 11,
+      mass: 0.75,
+      restDelta: 0.01,
+    });
+    const pendulumAngle = useMotionValue(0);
+    const pusherAngle = useTransform(pendulumAngle, (angle) => angle * -0.18);
+    const leftRopeTop = useTransform(pendulumAngle, (value) =>
+      elasticRopeTop({ x: 236.343, y: 80.904 }, { x: 232, y: 126 }, value),
+    );
+    const rightRopeTop = useTransform(pendulumAngle, (value) =>
+      elasticRopeTop({ x: 336.787, y: 115.012 }, { x: 333, y: 158 }, value),
+    );
+
+    const energize = useCallback(
+      (active: boolean) => {
+        energized.current = active;
+        if (reduceMotion || kickTimer.current) return;
+        amplitudeTarget.set(active ? HOVER_AMPLITUDE : IDLE_AMPLITUDE);
+      },
+      [amplitudeTarget, reduceMotion],
+    );
+
+    const kick = useCallback(
+      () => {
+        if (reduceMotion) return;
+        if (kickTimer.current) clearTimeout(kickTimer.current);
+        amplitudeTarget.set(KICK_AMPLITUDE);
+        kickTimer.current = setTimeout(() => {
+          amplitudeTarget.set(energized.current ? HOVER_AMPLITUDE : IDLE_AMPLITUDE);
+          kickTimer.current = null;
+        }, 260);
+      },
+      [amplitudeTarget, reduceMotion],
+    );
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        get element() {
+          return svgRef.current;
+        },
+        energize,
+        kick,
+      }),
+      [energize, kick],
+    );
+
+    useAnimationFrame((time) => {
+      if (reduceMotion) {
+        pendulumAngle.set(0);
+        return;
+      }
+      // One complete sine cycle is one left → right → left journey.
+      const phase = (time / PERIOD_MS) * Math.PI * 2;
+      pendulumAngle.set(Math.sin(phase) * amplitude.get());
+    });
+
+    useEffect(
+      () => () => {
+        if (kickTimer.current) clearTimeout(kickTimer.current);
+      },
+      [],
+    );
+
     return (
       <svg
-        ref={ref}
+        ref={svgRef}
         width="600"
         height="487"
         viewBox="0 0 600 487"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden
-        className={`select-none pointer-events-none ${idle ? 'animate-swing' : ''} ${className ?? ''}`}
+        className={`select-none pointer-events-none ${className ?? ''}`}
       >
         {/* frame — static */}
         <g>
@@ -53,7 +170,14 @@ export const SwingSet = forwardRef<SVGSVGElement, { className?: string; tilt?: n
           <path d="M523.003 211.471C523.842 209.473 524.019 208.881 525.962 208.035C529.216 210.107 528.357 213.235 527.895 216.564C531.458 216.335 531.492 215.925 534.658 217.49C541.719 220.982 537.612 226.078 539.859 230.567C544.894 233.325 540.89 236.601 543.142 240.452C544.021 240.616 546.195 240.695 546.44 241.081C548.349 244.067 545.542 255.48 548.462 256.619C548.648 256.692 549.993 256.959 550.341 257.021C552.225 259.193 550.969 268.658 551.921 271.792C552.333 273.135 554.777 271.756 555.317 273.978C556.446 278.635 555.562 283.639 556.804 288.204C556.907 288.578 558.207 288.749 558.659 288.784C558.953 288.807 559.248 288.825 559.542 288.84C561.696 292.048 557.511 300.317 561.77 300.348C561.952 300.349 562.923 300.538 563.198 300.578C565.76 303.754 561.765 314.458 565.455 314.548C565.588 314.551 566.687 314.613 566.937 314.621C569.087 317.262 565.779 327.405 569.381 327.409C569.509 327.409 570.593 327.496 570.819 327.508C572.973 330.414 569.985 338.883 572.541 341.486C573.336 341.58 574.98 341.59 575.25 342.1C577.051 345.492 573.994 354.354 576.511 356.908C577.326 357.011 579.004 357.032 579.313 357.563C581.134 360.662 578.028 370.76 580.663 372.503C582.38 372.606 582.42 372.322 583.553 373.167C584.942 377.998 582.68 386.335 585.104 387.881C587.121 387.954 586.92 387.602 587.97 388.655C588.421 392.733 587.16 399.961 588.99 402.166C591.061 402.573 590.649 402.157 591.631 403.462C592.087 405.827 591.896 407.528 590.679 409.659C589.511 410.072 589.01 410.08 587.808 410.21C585.973 410.006 580.79 406.301 576.649 405.436L576.703 393.181C575.088 392.869 574.838 392.903 573.513 392.008C571.908 389.152 572.689 381.822 572.689 377.986C572.08 377.947 571.187 377.819 570.598 377.799C566.525 377.661 569.528 370.009 568.419 366.143C567.364 362.472 564.935 362.632 564.827 362.201C563.851 358.372 565.416 353.416 564.312 349.525C563.782 347.935 560.705 349.189 560.146 346.346C559.527 343.209 561.274 335.976 559.792 333.775L557.064 333.339C554.488 331.164 557.668 322.039 555.773 318.873L553.227 318.285C550.621 315.805 553.251 307.094 551.754 304.288C550.115 304.089 549.87 304.087 548.359 303.486C546.42 301.217 547.971 293.6 547.981 289.713C547.269 288.886 546.244 289.103 544.84 288.995C542.47 286.818 544.909 278.373 543.839 275.196C543.049 272.845 540.232 275.696 539.688 271.446C539.359 268.889 540.399 261.444 539.197 259.874C537.592 259.653 537.101 259.691 535.723 258.93C534.947 256.945 535.443 248.947 535.502 246.283C533.863 246.022 533.446 246.064 532.081 245.212C530.094 242.155 530.987 234.614 531.046 230.587C521.977 231.266 528.381 222.664 526.811 217.351C525.383 215.721 526.095 216.243 523.661 215.58C522.689 213.967 523.018 213.542 523.003 211.471Z" fill="#6A429B" />
         </g>
         {/* the pendulum — ropes + seat + rider, everything that swings */}
-        <g className="swing-pendulum" style={driven(-1)}>
+        <motion.g
+          style={{
+            rotate: pendulumAngle,
+            transformOrigin: '295px 98px',
+            transformBox: 'view-box',
+            willChange: 'transform',
+          }}
+        >
           <path d="M336.789 115.012C341.957 116.423 343.802 113.881 347.237 118.619C347.222 122.112 342.124 127.7 341.172 132.003C340.077 136.938 341.824 141.136 338.266 144.686C337.256 148.246 337.82 151.878 337.177 155.447C336.784 157.624 335.43 157.155 334.478 158.693C333.546 160.211 334.557 164.6 334.355 166.457C334.1 168.756 332.564 168.401 331.774 170.033C330.336 172.987 329.468 187.368 327.225 188.767C326.793 189.036 326.273 189.221 325.802 189.412C323.967 193.22 327.682 199.253 322.205 201.772C321.567 202.064 321.945 211.71 321.729 212.871C321.498 215.642 318.613 215.565 318.422 216.076C316.464 221.389 320.355 226.459 314.933 229.82C314.064 231.4 314.285 233.15 314.28 235.025C313.755 240.389 311.179 237.706 311.326 246.483C307.297 243.987 305.678 246.173 305.03 241.127L304.76 237.782C299.499 241.032 291.152 243.166 284.871 246.386C283.016 247.452 280.283 249.146 278.374 249.836C275.528 249.257 266.682 245.729 263.571 244.554C255.042 241.326 246.479 238.192 237.881 235.152C235.829 234.432 231.217 232.527 229.47 232.434C225.647 230.593 224.741 229.953 221.764 226.904C221.35 219.995 221.883 211.567 222.019 204.31C222.107 199.559 223.458 194.694 223.911 188.705C224.549 180.259 223.9 166.863 229.92 159.938C235.075 156.429 249.011 150.74 255.069 151.55C266.721 153.109 279.527 159.683 290.745 163.444C296.84 165.538 311.974 169.252 315.571 173.286C320.826 175.422 317.906 186.389 318.976 191.349C321.891 189.381 319.379 182.364 320.802 178.702C321.827 178.231 322.21 178.146 323.265 177.875C324.453 174.692 322.666 170.297 324.266 167.26C324.816 166.912 326.435 165.835 326.523 165.284C327.75 157.554 329.777 150.506 330.552 142.673C330.734 140.83 332.922 141.454 333.286 138.946C334.144 132.928 332.245 130.738 336.431 125.999L336.789 115.012ZM228.631 217.014C236.197 221.525 256.818 227.904 265.553 231.433C267.973 232.411 275.179 235.351 277.574 236.176C281.73 230.11 280.95 216.215 282.324 208.748C283.885 200.287 283.875 191.53 283.821 182.956C281.711 181.502 274.584 178.512 272.205 177.944C263.234 175.804 243.508 165.092 235.305 165.476C231.027 168.812 232.029 179.134 231.144 184.649C229.471 195.076 228.319 206.466 228.631 217.014Z" fill="#F3E9DB" />
           <path d="M336.786 115.012C341.953 116.423 343.798 113.881 347.233 118.619C347.219 122.112 342.12 127.7 341.168 132.003C340.074 136.938 341.821 141.136 338.263 144.686C337.252 148.246 337.816 151.878 337.173 155.447C336.781 157.624 335.426 157.155 334.474 158.693C333.542 160.211 334.553 164.6 334.352 166.457C334.097 168.756 332.561 168.401 331.771 170.033C330.333 172.987 329.464 187.368 327.222 188.767C326.79 189.036 326.27 189.221 325.799 189.412C323.963 193.22 327.678 199.253 322.202 201.772C321.564 202.064 321.941 211.71 321.725 212.871C321.495 215.642 318.609 215.565 318.418 216.076C316.46 221.389 320.351 226.459 314.929 229.82C314.06 231.4 314.281 233.15 314.276 235.025C313.751 240.389 311.175 237.706 311.322 246.483C307.293 243.987 305.674 246.173 305.026 241.127L304.756 237.782C299.496 241.032 291.149 243.166 284.867 246.386C284.843 238.086 288.342 215.126 289.053 205.498C289.053 205.476 289.936 204.52 289.961 204.2C290.506 197.455 290.874 189.084 291.782 182.532C296.502 180.051 308.584 176.475 315.567 173.287C320.823 175.422 317.903 186.389 318.973 191.349C321.887 189.381 319.375 182.364 320.798 178.702C321.824 178.231 322.206 178.146 323.261 177.875C324.449 174.692 322.663 170.297 324.263 167.26C324.812 166.912 326.432 165.835 326.52 165.284C327.747 157.554 329.773 150.506 330.549 142.673C330.73 140.83 332.919 141.454 333.282 138.946C334.141 132.928 332.242 130.738 336.428 125.999L336.786 115.012Z" fill="#D0BDA1" />
           <path d="M336.787 115.012C341.955 116.423 343.8 113.881 347.235 118.619C347.22 122.112 342.121 127.7 341.169 132.003C340.075 136.938 341.822 141.136 338.264 144.686C337.253 148.246 337.818 151.878 337.175 155.447C336.782 157.624 335.428 157.155 334.476 158.693C333.544 160.211 334.554 164.6 334.353 166.457C334.098 168.756 332.562 168.401 331.772 170.033C330.334 172.987 329.466 187.368 327.223 188.767C326.791 189.036 326.271 189.221 325.8 189.412C323.965 193.22 327.679 199.253 322.203 201.772C321.565 202.064 321.943 211.71 321.727 212.871C321.496 215.642 318.611 215.565 318.42 216.076C316.462 221.389 320.353 226.459 314.93 229.82C314.062 231.4 314.283 233.15 314.278 235.025C313.753 240.389 311.176 237.706 311.324 246.483C307.295 243.987 305.675 246.173 305.028 241.127L304.758 237.782C305.926 237.583 305.347 237.783 306.402 236.741C308.816 226.927 312.089 220.796 311.849 210.687L315.269 208.231C314.847 202.845 315.088 201.123 317.291 196.086C318.061 194.314 317.06 192.906 318.974 191.349C321.889 189.381 319.376 182.364 320.8 178.702C321.825 178.231 322.208 178.146 323.263 177.875C324.45 174.692 322.664 170.297 324.264 167.26C324.814 166.912 326.433 165.835 326.521 165.284C327.748 157.554 329.775 150.506 330.55 142.673C330.732 140.83 332.92 141.454 333.284 138.946C334.142 132.928 332.243 130.738 336.429 125.999L336.787 115.012Z" fill="#F4C218" />
@@ -100,10 +224,35 @@ export const SwingSet = forwardRef<SVGSVGElement, { className?: string; tilt?: n
           <path d="M208.035 211.326L210.4 212.203L214.061 217.669C214.093 219.578 214.219 220.935 213.685 222.796C209.282 227.159 207.878 232.468 201.842 235.262C201.57 234.598 201.228 233.899 200.925 233.243C199.174 232.116 196.748 233.063 194.181 232.276C193.556 231.551 192.338 230.501 191.594 229.815C197.522 224.939 198.402 232.379 203.941 229.356C203.883 227.572 203.606 227.541 204.304 226.166L205.903 226.001L206.911 224.759C207.336 222.056 206.708 222.661 205.935 219.517C207.019 218.519 207.081 220.899 209.463 220.907C211.703 216.144 208.694 215.045 208.035 211.326Z" fill="black" />
           <path d="M197.68 222.189C201.73 223.425 202.475 224.681 205.897 226.002L204.298 226.168C203.6 227.543 203.877 227.574 203.935 229.358C203.139 225.559 200.867 224.6 197.68 222.189Z" fill="#190706" />
           <path d="M194.178 232.277C196.745 233.064 199.171 232.117 200.922 233.244C201.225 233.9 201.567 234.599 201.839 235.263C200.176 239.936 196.792 236.932 198.514 246.305C195.478 248.68 196.214 249.955 195.505 253.848C194.035 261.921 191.349 269.311 188.02 276.7C187.951 276.854 187.922 278.366 187.92 278.614C182.454 279.382 185.515 281.431 177.664 280.752C181.557 274.208 185.241 264.755 185.735 257.382C185.856 255.577 188.016 256.096 188.258 254.401C188.63 251.795 188.075 249.237 188.939 246.707C191.211 245.26 194.023 235.09 194.178 232.277Z" fill="#F4C218" />
-        </g>
+        </motion.g>
+        {/* Elastic upper rope sections: fixed at the beam, joined well inside
+            the moving rope, and lengthened/shortened from the current angle. */}
+        <motion.path
+          d={leftRopeTop}
+          fill="none"
+          stroke="#F4C218"
+          strokeWidth="12"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+        />
+        <motion.path
+          d={rightRopeTop}
+          fill="none"
+          stroke="#F4C218"
+          strokeWidth="12"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
+        />
         {/* the pusher — painted last so their arm crosses in front of the rope;
             nothing they overlap belongs to the pendulum */}
-        <g className="swing-pusher" style={driven(0.25)}>
+        <motion.g
+          style={{
+            rotate: pusherAngle,
+            transformOrigin: '372px 356px',
+            transformBox: 'view-box',
+            willChange: 'transform',
+          }}
+        >
           <path d="M339.812 187.842C339.498 184.651 339.989 184.86 337.309 182.859C336.706 179.1 336.303 167.886 337.177 164.288C338.016 164.022 338.32 163.966 339.194 163.824C340.401 160.915 338.89 160.239 340.273 158.233L341.898 157.864L342.197 157.309C345.878 150.564 352.061 147.564 359.196 145.076C362.484 143.93 373.667 143.433 376.724 145.014L377.235 146.704C380.145 147.56 382.525 146.141 385.17 147.179L385.268 147.802C385.371 148.419 385.371 148.562 385.695 149.113C397.762 151.944 395.961 153.301 403.886 163.528C406.6 167.024 403.096 168.533 407.63 170.679C408.592 173.887 407.802 177.427 407.89 180.615C408.136 189.471 407.978 188.77 401.604 195.078C401.619 196.921 401.923 199.257 400.981 200.659C400.058 200.877 399.837 200.988 398.88 200.931C398.689 203.413 398.88 203.279 396.633 205.245C394.513 207.101 389.228 209.362 386.411 209.504C386.235 209.831 386.053 210.003 386.107 210.242L385.557 211.711C384.473 213.772 381.082 216.444 379.212 218.094L376.783 216.812C367.293 221.286 367.999 220.835 357.935 221.961C357.454 219.966 353.935 217.693 352.105 216.257L349.813 214.999C342.256 208.926 344.636 209.3 339.547 202.781C339.233 199.097 339.557 191.61 339.812 187.842Z" fill="#9E3820" />
           <path d="M339.812 187.842C339.498 184.651 339.989 184.86 337.309 182.859C336.706 179.1 336.303 167.886 337.177 164.288C338.016 164.022 338.32 163.966 339.194 163.824C340.401 160.915 338.89 160.239 340.273 158.233L341.898 157.864L342.197 157.309C345.878 150.564 352.061 147.564 359.196 145.076C362.484 143.93 373.667 143.433 376.724 145.014L377.235 146.704C380.145 147.56 382.525 146.141 385.17 147.179L385.268 147.802C385.371 148.419 385.371 148.562 385.695 149.113C397.762 151.944 395.961 153.301 403.886 163.528C406.6 167.024 403.096 168.533 407.63 170.679C408.592 173.887 407.802 177.427 407.89 180.615C408.136 189.471 407.978 188.77 401.604 195.078C401.619 196.921 401.923 199.257 400.981 200.659C400.058 200.877 399.837 200.988 398.88 200.931C398.91 198.379 399.543 193.991 398.905 191.839C396.471 190.982 397.001 190.393 395.804 189.594C391.534 186.754 387.996 195.83 384.453 196.558C381.74 194.546 384.326 181.871 383.163 178.882C382.52 177.226 375.875 173.378 374.496 170.428C367.15 170.673 367.253 167.8 361.512 168.392C356.762 168.844 355.373 169.736 353.018 165.369C347.463 163.856 349.46 169.638 344.405 170.269C340.484 174.482 343.821 185.105 339.812 187.842Z" fill="black" />
           <path d="M361.508 168.391C363.073 167.429 364.943 168.075 365.424 167.868C367.863 166.819 368.795 164.347 371.901 165.035C374.154 167.236 373.344 167.731 374.492 170.428C367.146 170.672 367.249 167.799 361.508 168.391Z" fill="#90321B" />
@@ -142,7 +291,7 @@ export const SwingSet = forwardRef<SVGSVGElement, { className?: string; tilt?: n
           <path d="M349.25 225.246C349.515 227.628 350.08 236.766 350.512 238.092C349.456 238.156 349.309 238.062 348.475 238.715C347.979 240.553 347.896 241.085 346.811 242.695C346.134 241.517 346.144 239.651 346.031 238.23C348.931 235.709 348.21 229.773 349.25 225.246Z" fill="#E2AC05" />
           <path d="M377.003 226.549C373.553 230.96 369.132 235.491 365.142 239.462L364.867 238.538C366.899 235.153 373.784 229.062 377.003 226.549Z" fill="#E2AC05" />
           <path d="M314.281 235.024C318.511 234.991 317.779 237.744 323.118 234.34C325.989 232.508 329.974 230.848 333.021 229.207C341.575 230.801 346.688 238.02 341.045 245.428C336.417 246.224 338.939 248.343 332.521 248.757C328.183 249.037 322.431 253.784 317.264 254.157C316.239 251.715 313.029 249.156 311.326 246.482C311.179 237.705 313.755 240.388 314.281 235.024Z" fill="#722D17" />
-        </g>
+        </motion.g>
       </svg>
     );
   },

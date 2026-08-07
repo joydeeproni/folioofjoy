@@ -309,33 +309,6 @@ body {
   }
 }
 
-/* Swing-set hero art. The pendulum (ropes + seat + rider) hangs from the beam
-   midway between the two rope anchors; the pusher pivots at their feet, leaning
-   in counter-phase so they read as pushing. Origins are in viewBox units. */
-@keyframes swing-pendulum {
-  0%, 100% { transform: rotate(2.4deg); }
-  50%      { transform: rotate(-2.4deg); }
-}
-@keyframes swing-pusher-lean {
-  0%, 100% { transform: rotate(-0.8deg); }
-  50%      { transform: rotate(0.8deg); }
-}
-.swing-pendulum {
-  transform-origin: 295px 98px;
-  transform-box: view-box;
-  will-change: transform;
-}
-.swing-pusher {
-  transform-origin: 372px 356px;
-  transform-box: view-box;
-}
-.animate-swing .swing-pendulum {
-  animation: swing-pendulum 3.2s ease-in-out infinite;
-}
-.animate-swing .swing-pusher {
-  animation: swing-pusher-lean 3.2s ease-in-out infinite;
-}
-
 @keyframes work-drop {
   0% { opacity: 0; transform: translateY(-40px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -362,3 +335,35 @@ body {
   to   { stroke-dashoffset: 0; }
 }
 .animate-knob-fill { animation: knob-fill 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Guestbook page-turn. The leaf rotates about the spine edge and dims as it goes
+   over, so the flip reads as paper catching light rather than a sliding panel.
+   See components/about/notebook.tsx. */
+@keyframes nb-turn-next {
+  from {
+    transform: translateZ(3px) rotateY(0deg);
+    filter: brightness(1);
+  }
+  to {
+    transform: translateZ(3px) rotateY(-172deg);
+    filter: brightness(0.35);
+  }
+}
+@keyframes nb-turn-prev {
+  from {
+    transform: translateZ(3px) rotateY(0deg);
+    filter: brightness(1);
+  }
+  to {
+    transform: translateZ(3px) rotateY(172deg);
+    filter: brightness(0.35);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes nb-turn-next {
+    from, to { transform: translateZ(3px); filter: brightness(1); }
+  }
+  @keyframes nb-turn-prev {
+    from, to { transform: translateZ(3px); filter: brightness(1); }
+  }
+}

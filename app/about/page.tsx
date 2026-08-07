@@ -3,6 +3,7 @@ import { Reveal } from '@/components/reveal';
 import { ScrollFade } from '@/components/scroll-fade';
 import { RichText } from '@/components/rich-text';
 import { Thesis } from '@/components/about/thesis';
+import { Guestbook } from '@/components/about/guestbook';
 import { Values } from '@/components/about/values';
 import { Kit } from '@/components/about/kit';
 import { getAbout, getInspiration, type InspirationItem } from '@/lib/content';
@@ -144,6 +145,10 @@ export default function About() {
             </div>
           ))}
         </section>
+
+        {/* Guestbook — last thing on the page, under Inspiration. Full width so
+            the spread has room rather than being pinched into the essay column. */}
+        <Guestbook />
 
         <div className="h-24" />
       </div>
