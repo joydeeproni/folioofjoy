@@ -3,16 +3,21 @@
 import { useEffect, useRef } from 'react'
 import { useDialKit } from 'dialkit'
 import { CircleButton, circleTexts } from '@/components/circle-button'
+import { MediaLoading } from '@/components/media-loading'
 import type { WorkItem } from '@/lib/content/types'
 
 const isVideo = (s: string) => s.endsWith('.mp4')
 
 function Media({ item }: { item: WorkItem }) {
   const cls = 'h-full w-auto max-w-none object-contain rounded-xl border border-white/10 shadow-2xl pointer-events-none select-none'
-  return isVideo(item.src) ? (
-    <video src={item.src} autoPlay loop muted playsInline draggable={false} className={cls} />
-  ) : (
-    <img src={item.src} alt={item.caption} draggable={false} className={cls} />
+  return (
+    <MediaLoading loaderSize={26}>
+      {isVideo(item.src) ? (
+        <video src={item.src} autoPlay loop muted playsInline draggable={false} className={cls} />
+      ) : (
+        <img src={item.src} alt={item.caption} draggable={false} className={cls} />
+      )}
+    </MediaLoading>
   )
 }
 

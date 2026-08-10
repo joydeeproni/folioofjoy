@@ -1,6 +1,7 @@
 'use client';
 
 import { Expand } from 'lucide-react';
+import { MediaLoading } from '@/components/media-loading';
 import { FG, MUTED } from './tokens';
 
 // Which srcs are video. Query strings tolerated so Blob URLs with params work.
@@ -19,10 +20,17 @@ export function Media({
   className?: string;
   alt?: string;
 }) {
-  return isVideo(src) ? (
-    <video src={src} autoPlay muted loop playsInline preload="metadata" className={className} />
-  ) : (
-    <img src={src} alt={alt} loading="lazy" draggable={false} className={className} />
+  // The className stays on the media element — it carries the aspect ratio,
+  // object-fit and any hover transform, and MediaLoading sizes itself from that
+  // rather than duplicating it.
+  return (
+    <MediaLoading>
+      {isVideo(src) ? (
+        <video src={src} autoPlay muted loop playsInline preload="metadata" className={className} />
+      ) : (
+        <img src={src} alt={alt} loading="lazy" draggable={false} className={className} />
+      )}
+    </MediaLoading>
   );
 }
 

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { CircleButton, circleTexts } from '@/components/circle-button';
 import { isVideo } from '@/components/work-preview';
-import { useWork } from '@/components/content-provider';
+import { useWork } from '@/components/content-provider'
+import { MediaLoading } from '@/components/media-loading';
 
 // Marquee physics — tuned live via the old dialkit panel, now baked in.
 const PHYSICS = { driftSpeed: 0.5, wheelSpeed: 0.8, dragSpeed: 1.1, friction: 0.94 };
@@ -125,13 +126,15 @@ export function WorkMarquee() {
         <div ref={trackRef} className="flex items-center gap-6 will-change-transform" style={{ width: 'max-content' }}>
           {items.map((item, i) => (
             <div key={i} ref={(el) => { itemRefs.current[i] = el; }} className="shrink-0 h-[44vh] md:h-[60vh]">
-              {isVideo(item.src) ? (
-                <video src={item.src} autoPlay loop muted playsInline
-                  className="h-full w-auto rounded-lg shadow-2xl pointer-events-none select-none" />
-              ) : (
-                <img src={item.src} alt="" draggable={false}
-                  className="h-full w-auto rounded-lg shadow-2xl pointer-events-none select-none" />
-              )}
+              <MediaLoading placeholderAspect="16 / 10" loaderSize={26} className="h-full">
+                {isVideo(item.src) ? (
+                  <video src={item.src} autoPlay loop muted playsInline
+                    className="h-full w-auto rounded-lg shadow-2xl pointer-events-none select-none" />
+                ) : (
+                  <img src={item.src} alt="" draggable={false}
+                    className="h-full w-auto rounded-lg shadow-2xl pointer-events-none select-none" />
+                )}
+              </MediaLoading>
             </div>
           ))}
         </div>
