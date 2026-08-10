@@ -79,6 +79,7 @@ export interface DitherSettings {
 
 // Shared dither color for every transition.
 export const DITHER_COLOR = BRAND.green;
+export const DITHER_LOADER_BG = '#0B0B0B';
 
 // The "good one" — the original first-load reveal that animates in from the
 // corners (drift + edge spread). `color` is supplied per use.
@@ -254,4 +255,78 @@ export function playDither(
   });
 
   return { stop: () => controls.stop() };
+}
+
+// Hold an opaque, animated dither field over the first paint while the page and
+// its fonts load. Unlike a normal reveal, the gaps between green cells are a
+// solid dark colour rather than transparency, so fallback type can never flash
+// through. Calling finish() swaps into the standard cover-to-clear reveal.
+export function playDitherLoader(
+  canvas: HTMLCanvasElement,
+  cfg: DitherSettings,
+  seed: number,
+): { finish: () => void; stop: () => void } {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  canvas.style.display = 'block';
+  canvas.style.backgroundColor = DITHER_LOADER_BG;
+
+  if (reduceMotion) {
+    let finished = false;
+    const hide = () => {
+      if (finished) return;
+      finished = true;
+      canvas.style.display = 'none';
+      canvas.style.backgroundColor = 'transparent';
+    };
+    return { finish: hide, stop: hide };
+  }
+
+  const dpr = window.devicePixelRatio || 1;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    const hide = () => {
+      canvas.style.display = 'none';
+      canvas.style.backgroundColor = 'transparent';
+    };
+    return { finish: hide, stop: hide };
+  }
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const grid = buildGrid(cfg, seed, w, h);
+  drawDither(ctx, grid, cfg, 0.18, w, h);
+
+  const loop = animate(0.18, 0.78, {
+    duration: 1.45,
+    ease: 'easeInOut',
+    repeat: Infinity,
+    repeatType: 'mirror',
+    onUpdate: (v: number) => drawDither(ctx, grid, cfg, v, w, h),
+  });
+
+  let finished = false;
+  let reveal: { stop: () => void } | null = null;
+
+  return {
+    finish() {
+      if (finished) return;
+      finished = true;
+      loop.stop();
+      canvas.style.backgroundColor = 'transparent';
+      reveal = playDither(canvas, cfg, seed + 1);
+    },
+    stop() {
+      finished = true;
+      loop.stop();
+      reveal?.stop();
+      canvas.style.display = 'none';
+      canvas.style.backgroundColor = 'transparent';
+    },
+  };
 }

@@ -24,7 +24,7 @@ export type Focus = { x: number; y: number; scale: number };
 export type Visual =
   | { kind: 'image'; src: string; alt: string; fit?: 'contain' | 'cover' }
   | { kind: 'video'; src: string; poster?: string; alt?: string }
-  | { kind: 'component'; render: () => ReactNode; annotations?: Annotation[] }
+  | { kind: 'component'; render: () => ReactNode; annotations?: Annotation[]; bleed?: boolean }
   | { kind: 'zoom'; src: string; alt: string; focus?: Focus; annotations?: Annotation[] };
 
 // One beat of the case study: prose on the left, a visual on the right.
