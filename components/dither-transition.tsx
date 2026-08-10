@@ -3,13 +3,20 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAudio } from '@/lib/audio-context';
-import { DEFAULT_DITHER, DITHER_COLOR, playDither } from './dither-engine';
+import {
+  DEFAULT_DITHER,
+  DITHER_COLOR,
+  DITHER_LOADER_BG,
+  playDither,
+  playDitherLoader,
+} from './dither-engine';
 
 // Route / first-load transition — the corners-in drift reveal (shared engine).
 export function DitherTransition() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<{ stop: () => void } | null>(null);
   const seedRef = useRef(0);
+  const initialReadyRef = useRef(false);
 
   const pathname = usePathname();
   const { gateOpen } = useAudio();
@@ -22,16 +29,46 @@ export function DitherTransition() {
     animRef.current = playDither(canvas, { ...DEFAULT_DITHER, color: DITHER_COLOR }, seedRef.current);
   }, []);
 
-  // 1. First load — reveal whatever mounts first.
+  // 1. First load — the canvas is already opaque in the server-rendered HTML,
+  // then becomes a living dither field until both the window and fonts are
+  // ready. Only after that does it reveal the page.
   useEffect(() => {
-    play();
-    return () => animRef.current?.stop();
-  }, [play]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    seedRef.current += 1;
+    const loader = playDitherLoader(
+      canvas,
+      { ...DEFAULT_DITHER, color: DITHER_COLOR },
+      seedRef.current,
+    );
+    animRef.current = loader;
+
+    const windowReady =
+      document.readyState === 'complete'
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => window.addEventListener('load', () => resolve(), { once: true }));
+    const fontsReady = document.fonts?.ready?.catch(() => undefined) ?? Promise.resolve();
+    // Avoid a single-frame flash on a warm cache while keeping the loader brief.
+    const minimumRun = new Promise<void>((resolve) => window.setTimeout(resolve, 350));
+    let active = true;
+
+    void Promise.all([windowReady, fontsReady, minimumRun]).then(() => {
+      if (!active) return;
+      initialReadyRef.current = true;
+      loader.finish();
+    });
+
+    return () => {
+      active = false;
+      loader.stop();
+    };
+  }, []);
 
   // 2. Gate dismissed (gate -> home) — reveal the home page.
   const prevGate = useRef(gateOpen);
   useEffect(() => {
-    if (prevGate.current && !gateOpen) play();
+    if (initialReadyRef.current && prevGate.current && !gateOpen) play();
     prevGate.current = gateOpen;
   }, [gateOpen, play]);
 
@@ -47,7 +84,7 @@ export function DitherTransition() {
     }
     const leavingPreview = prevPath.current === '/preview';
     prevPath.current = pathname;
-    if (leavingPreview) return;
+    if (leavingPreview || !initialReadyRef.current) return;
     play();
   }, [pathname, play]);
 
@@ -56,7 +93,9 @@ export function DitherTransition() {
       ref={canvasRef}
       aria-hidden
       className="fixed inset-0 z-[500] pointer-events-none"
-      style={{ display: 'none' }}
+      // Opaque before hydration: the page never gets a chance to paint in its
+      // fallback font before the loader takes over.
+      style={{ display: 'block', backgroundColor: DITHER_LOADER_BG }}
     />
   );
 }

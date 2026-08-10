@@ -82,13 +82,22 @@ const FEATURE = [
   { file: 'feature-b.png', caption: 'Create Art — a Photoshop plugin, so the ecosystem follows you into Photoshop.' },
 ];
 
-// Real questions from Joy; answers still to come. {/* ASK JOY: fill the answers */}
+// Real questions from Joy.
 const FAQ = [
   { q: 'What was your role in this?', a: 'I worked as the product designer — I designed it in Figma, prototyped it in Make and Claude Code, then helped the developers through UAT and shipped it.' },
   { q: 'What was your design stack?', a: 'Figma, Make, and the Claude Code CLI. It’s built on React, with a custom design system I designed in Figma, based on MUI.' },
-  { q: 'What were some design challenges?', a: '{Answer coming from Joy.}' },
-  { q: 'How did you measure success of this project?', a: '{Answer coming from Joy.}' },
-  { q: 'What were your learnings from this?', a: '{Answer coming from Joy.}' },
+  {
+    q: 'What were some design challenges?',
+    a: 'Every artist and PM has a different process, so it was important to keep the system flexible enough for anyone to plug it into their own workflow. We also tried to design as little UI as possible: most users now prefer a chat-based interface over clicking through layers of controls. The other constant challenge is pace. New AI capabilities arrive every month, and we need to decide quickly which are worth integrating into the system.',
+  },
+  {
+    q: 'How did you measure success of this project?',
+    a: 'This project hasn’t really ended — it is ongoing R&D inside the company. Adoption has been healthy, and more people are moving their entire game-making process into the suite. For now, that growing depth of use is the clearest measure of success.',
+  },
+  {
+    q: 'What were your learnings from this?',
+    a: 'Keep it simple, silly. We started ambitiously, aiming for a full end-to-end suite, but soon realised nobody wants a Swiss Army knife when they are trying to make something great. People prefer specialised tools that do one job well.',
+  },
 ];
 
 // ── Creative Suite — horizontal shelf, aligned to the heading ────────────────

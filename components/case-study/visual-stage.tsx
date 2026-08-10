@@ -252,7 +252,11 @@ export function VisualStage({ visual, activeKey }: { visual: Visual; activeKey: 
   }, [activeKey]);
 
   return (
-    <div className="group relative h-full w-full overflow-hidden rounded-xl bg-white/[0.04] p-4 md:p-6">
+    <div
+      className={`group relative h-full w-full overflow-hidden rounded-xl bg-white/[0.04] ${
+        visual.kind === 'component' && visual.bleed ? 'p-0' : 'p-4 md:p-6'
+      }`}
+    >
       <div className="relative h-full w-full">
         {visual.kind === 'zoom' ? (
           <ZoomStage visual={visual} />
