@@ -122,6 +122,9 @@ importers:
       embla-carousel-react:
         specifier: 8.6.0
         version: 8.6.0(react@19.2.5)
+      geist:
+        specifier: ^1.7.2
+        version: 1.7.2(next@16.2.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       gsap:
         specifier: ^3.15.0
         version: 3.15.0
@@ -1572,6 +1575,11 @@ packages:
         optional: true
       react-dom:
         optional: true
+
+  geist@1.7.2:
+    resolution: {integrity: sha512-Gu5lDFa3pLRyoBlBPf0QIFHVdWAnpco7fS1bJm41jyLPFoguBgiubseUN2oLXMgqZ7uxAxDoXcHMhCY/fOTTgg==}
+    peerDependencies:
+      next: '>=13.2.0'
 
   get-nonce@1.0.1:
     resolution: {integrity: sha512-FJhYRoDaiatfEkUK8HKlicmu/3SGFD51q3itKDGoSTysQJBnfOcxU5GxnhE1E6soB76MbT0MBtnKJuXyAx+96Q==}
@@ -3388,6 +3396,10 @@ snapshots:
       '@emotion/is-prop-valid': 1.4.0
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
+
+  geist@1.7.2(next@16.2.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)):
+    dependencies:
+      next: 16.2.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
 
   get-nonce@1.0.1: {}
 

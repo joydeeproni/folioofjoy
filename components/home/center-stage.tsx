@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
-import { SwingSet } from './swing-set';
+import { SwingSet, type SwingSetHandle } from './swing-set';
 import { DitherReveal } from './dither-reveal';
 import Link from 'next/link';
 import { BRAND } from '@/lib/brand';
@@ -52,24 +52,29 @@ export function CenterStage({
   const hasScrambled = useRef(false);
   const [revealed, setRevealed] = useState(false);
 
-  // Kick the swing toward whichever side of the illustration the cursor is on
-  // (like giving it a push); null = resume the idle pendulum animation.
-  const swingRef = useRef<SVGSVGElement | null>(null);
-  const [tilt, setTilt] = useState<number | null>(null);
-  const MAX_TILT = 6;
+  // Pointer input energizes the illustration's left/right pendulum directly
+  // rather than rerendering the art or steering the seat toward the cursor.
+  const swingRef = useRef<SwingSetHandle | null>(null);
 
   const onHeroMove = (e: React.MouseEvent) => {
-    const el = swingRef.current;
-    if (!el) return;
+    const swing = swingRef.current;
+    const el = swing?.element;
+    if (!swing || !el) return;
     const r = el.getBoundingClientRect();
     const inside =
       e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
-    if (!inside) {
-      setTilt(null);
-      return;
-    }
-    const frac = (e.clientX - (r.left + r.width / 2)) / (r.width / 2); // -1 (left) .. 1 (right)
-    setTilt(Math.max(-MAX_TILT, Math.min(MAX_TILT, frac * MAX_TILT)));
+    swing.energize(inside);
+  };
+
+  const onHeroPush = (e: React.PointerEvent) => {
+    const swing = swingRef.current;
+    const el = swing?.element;
+    if (!swing || !el) return;
+    const r = el.getBoundingClientRect();
+    const inside =
+      e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) return;
+    swing.kick();
   };
 
   // Scramble the quote once on first mount, then swap the flat text for the
@@ -90,7 +95,8 @@ export function CenterStage({
         className="absolute inset-0 z-0 flex items-center justify-center px-6"
         hidden={hoverTarget !== null}
         onMouseMove={onHeroMove}
-        onMouseLeave={() => setTilt(null)}
+        onMouseLeave={() => swingRef.current?.energize(false)}
+        onPointerDown={onHeroPush}
       >
         <p
           ref={quoteRef}
@@ -128,8 +134,8 @@ export function CenterStage({
             : QUOTE}
         </p>
         {/* pointer-events-none so the quote's word-links underneath stay clickable;
-            the tilt is driven by onHeroMove reading the cursor's side of this art */}
-        <SwingSet ref={swingRef} tilt={tilt} className="absolute w-[88vw] md:w-[62vw] max-w-[720px] h-auto pointer-events-none" />
+            the hero wrapper energizes the pendulum when the pointer crosses the art */}
+        <SwingSet ref={swingRef} className="absolute w-[88vw] md:w-[62vw] max-w-[720px] h-auto pointer-events-none" />
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}

@@ -16,7 +16,7 @@ export const ABOUT: AboutDoc = {
       ", designing creative tools for artists, designers and game programmers at ",
       { text: "Tactile", href: TACTILE_INTERVIEW },
       { icon: "tactile", label: "Tactile logo" },
-      ". I think that style, intention and joy is the key to creating amazing products, a fresh way to approach dull and complex things. Looking for interesting opportunities in web SaaS or AI based apps, where companies are not too tied up with processes and design bureaucracies.",
+      ". Currently looking for interesting opportunities in web SaaS products, creative tools or consumer mobile apps, of companies that are design mature and not caught up in design bureaucracies.",
     ],
   ],
   thesis: {
