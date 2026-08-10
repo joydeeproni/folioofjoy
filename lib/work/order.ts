@@ -90,11 +90,11 @@ export function workKey(src: string): string {
 }
 
 // The Cassi work, grouped and pinned to the front of the reel in this order, so
-// the Preview Work carousel opens on the "Welcome home, James" onboarding and
-// keeps every Cassi screen together. Everything else is hue-sorted below.
+// the Preview Work carousel opens on the app's splash and keeps every Cassi screen
+// together. Everything else is hue-sorted below.
 const PINNED_FIRST = [
+  'cassi-onboarding-splash.mp4', // Splash — "Your home, always one step ahead"
   '574310b7cec0a7709455629df96fb81dab904c24-1929x1597.png', // Onboarding — "Welcome home, James"
-  'cassi-onboarding-splash.mp4',
   'onboarding-flow-01.png',
   '2bc3d726b69b603e16a87ff0e20d5316d5407e9d-1929x1653.png', // AI home concierge — "What do you want today?"
   'cassi-home-dashboard-concept.mp4',
