@@ -42,11 +42,15 @@ export interface StampRequest {
   y: number;
 }
 
-export const PAGE_CAPACITY = 42;
+// At the 19% stamp footprint, 24 marks preserve the intended overlap without
+// turning the spread into one solid block of ink. Once it reaches this point a
+// fresh spread becomes the landing page and the filled pages stay browsable.
+export const PAGE_CAPACITY = 24;
 export const MAX_PAGES = 24;
 
-// Derived from the id like the colour is, so a spread gets a mix of all three
-// designs without the client choosing and without storing a random draw.
+// Derived from a server-owned seed, so a spread gets a mix of all three designs
+// without letting the client choose arbitrary visual properties. The GET preview
+// and POST use the same visitor/page seed, so what is hovered is what gets pressed.
 export function stampStyleFor(seed: string): StampStyle {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 37 + seed.charCodeAt(i)) >>> 0;
@@ -57,6 +61,13 @@ export function stampColor(seed: string): BrandColor {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
   return BRAND_ORDER[h % BRAND_ORDER.length];
+}
+
+export function stampRotation(seed: string, max = 16): number {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 41 + seed.charCodeAt(i)) >>> 0;
+  const unit = h / 0xffffffff;
+  return Math.round((unit * 2 - 1) * max);
 }
 
 export function hexFor(color: BrandColor): string {

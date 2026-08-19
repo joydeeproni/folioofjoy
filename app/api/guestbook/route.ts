@@ -1,8 +1,16 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { greetingFor } from '@/lib/guestbook/greetings';
+import { safeStampPosition } from '@/lib/guestbook/layout';
 import { pageCounts, readPage, writeStamp } from '@/lib/guestbook/store';
-import { MAX_PAGES, PAGE_CAPACITY, stampColor, stampStyleFor, type Stamp } from '@/lib/guestbook/types';
+import {
+  MAX_PAGES,
+  PAGE_CAPACITY,
+  stampColor,
+  stampRotation,
+  stampStyleFor,
+  type Stamp,
+} from '@/lib/guestbook/types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -31,12 +39,14 @@ function visitorHash(req: Request): string {
   return createHash('sha256').update(`${ip}:${salt}`).digest('hex').slice(0, 16);
 }
 
-function clamp01(n: unknown): number {
-  const v = typeof n === 'number' && Number.isFinite(n) ? n : 0.5;
-  // Keep the stamp's centre inside the paper so it can never be half-lost off
-  // an edge, however the client was tampered with.
-  return Math.min(0.94, Math.max(0.06, v));
+function firstOpenPage(counts: Map<number, number>): number | null {
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    if ((counts.get(page) ?? 0) < PAGE_CAPACITY) return page;
+  }
+  return null;
 }
+
+const visualSeed = (visitor: string, page: number) => `${visitor}:p${page}`;
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -45,6 +55,10 @@ export async function GET(req: Request) {
   try {
     const [stamps, counts] = await Promise.all([readPage(page), pageCounts()]);
     const pagesInUse = Math.max(1, ...[...counts.keys()]);
+    const totalStamps = [...counts.values()].reduce((total, count) => total + count, 0);
+    const visitor = visitorHash(req);
+    const country = countryOf(req);
+    const seed = visualSeed(visitor, page);
     return NextResponse.json(
       {
         page,
@@ -52,14 +66,22 @@ export async function GET(req: Request) {
         pagesInUse,
         full: stamps.length >= PAGE_CAPACITY,
         capacity: PAGE_CAPACITY,
+        totalStamps,
+        firstOpenPage: firstOpenPage(counts),
         // Whether THIS visitor already signed this page. The server owns this — it
         // holds the stamps and the visitor hash. The client used to track it in
         // localStorage, which went stale the moment stamps were removed from the
         // store and then locked the visitor out of a page they hadn't signed.
-        mine: stamps.some((s) => s.id.endsWith(`-${visitorHash(req)}`)),
+        mine: stamps.some((s) => s.id.endsWith(`-${visitor}`)),
         // What this visitor's stamp will say, so the UI can show a true preview
         // before they commit to pressing it.
-        preview: { country: countryOf(req), ...greetingFor(countryOf(req)) },
+        preview: {
+          country,
+          ...greetingFor(country),
+          color: stampColor(seed),
+          style: stampStyleFor(seed),
+          rot: stampRotation(seed),
+        },
       },
       { headers: { 'cache-control': 'no-store' } },
     );
@@ -84,8 +106,9 @@ export async function POST(req: Request) {
     const existing = await readPage(page);
 
     if (existing.length >= PAGE_CAPACITY) {
+      const counts = await pageCounts();
       return NextResponse.json(
-        { error: 'page full', full: true, nextPage: Math.min(MAX_PAGES, page + 1) },
+        { error: 'page full', full: true, nextPage: firstOpenPage(counts) },
         { status: 409 },
       );
     }
@@ -105,15 +128,22 @@ export async function POST(req: Request) {
     // Visitor hash is the id's suffix so the per-page check above needs no
     // second index and no stored IP.
     const id = `${Date.now().toString(36)}-${randomUUID().slice(0, 8)}-${visitor}`;
+    const seed = visualSeed(visitor, page);
+    const rot = stampRotation(seed);
+    const position = safeStampPosition(
+      typeof x === 'number' ? x : 0.5,
+      typeof y === 'number' ? y : 0.5,
+      rot,
+    );
 
     const stamp: Stamp = {
       id,
       page,
-      x: clamp01(x),
-      y: clamp01(y),
-      rot: Math.round((Math.random() * 2 - 1) * 16),
-      color: stampColor(id),
-      style: stampStyleFor(id),
+      x: position.x,
+      y: position.y,
+      rot,
+      color: stampColor(seed),
+      style: stampStyleFor(seed),
       country,
       hello: g.hello,
       place: g.place,
@@ -123,7 +153,10 @@ export async function POST(req: Request) {
     };
 
     await writeStamp(stamp);
-    return NextResponse.json({ stamp }, { status: 201 });
+
+    const full = existing.length + 1 >= PAGE_CAPACITY;
+    const nextPage = full ? firstOpenPage(await pageCounts()) : null;
+    return NextResponse.json({ stamp, full, nextPage }, { status: 201 });
   } catch (err) {
     console.error('[guestbook] POST failed', err);
     return NextResponse.json({ error: 'could not save your stamp' }, { status: 500 });

@@ -1,28 +1,26 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { GuestbookStamp, StampDefs } from './guestbook-stamp';
 import { Notebook } from './notebook';
 import { NOTEBOOK_DEFAULTS, STAMP_DEFAULTS, type NotebookDesign, type StampDesign } from '@/lib/guestbook/design';
+import { safeStampPosition } from '@/lib/guestbook/layout';
 import { MAX_PAGES, PAGE_CAPACITY, type Stamp } from '@/lib/guestbook/types';
 import type { Greeting } from '@/lib/guestbook/greetings';
 
 const FG = '#EDEAE0';
 const MUTED = 'rgba(237,234,224,0.5)';
-const RULE = 'rgba(237,234,224,0.14)';
-
-// Stamp footprint as a fraction of the paper's width, so it scales with the box.
-const STAMP_W = 0.19;
-
 interface PageData {
   page: number;
   stamps: Stamp[];
   pagesInUse: number;
   full: boolean;
+  totalStamps: number;
+  firstOpenPage: number | null;
   /** Server-computed: has this visitor already signed this page? */
   mine: boolean;
-  preview: Greeting & { country: string };
+  preview: Greeting & Pick<Stamp, 'country' | 'color' | 'style' | 'rot'>;
 }
 
 export function Guestbook({
@@ -39,16 +37,22 @@ export function Guestbook({
   const [note, setNote] = useState<string | null>(null);
   const [hover, setHover] = useState<{ x: number; y: number } | null>(null);
   const [turning, setTurning] = useState<'next' | 'prev' | null>(null);
+  const [totalStamps, setTotalStamps] = useState<number | null>(null);
+  const [pendingStamp, setPendingStamp] = useState<Stamp | null>(null);
 
   const paperRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
   const load = useCallback(async (p: number) => {
     setLoading(true);
+    setData(null);
+    setPendingStamp(null);
     try {
       const res = await fetch(`/api/guestbook?page=${p}`, { cache: 'no-store' });
       if (!res.ok) throw new Error(String(res.status));
-      setData(await res.json());
+      const json = (await res.json()) as PageData;
+      setData(json);
+      setTotalStamps(json.totalStamps);
       setNote(null);
     } catch {
       setNote('Could not load the guestbook. Try again in a moment.');
@@ -68,10 +72,31 @@ export function Guestbook({
   // the next fetch confirms it.
   const [justPressed, setJustPressed] = useState<number | null>(null);
   const isFull = (data?.stamps.length ?? 0) >= PAGE_CAPACITY;
-  const canStamp = !!data && !mine && justPressed !== page && !isFull && !pressing;
+  const canStamp = !!data && !loading && !turning && !mine && justPressed !== page && !isFull && !pressing;
 
   const press = async (x: number, y: number) => {
-    if (!canStamp) return;
+    if (!canStamp || !data) return;
+    const position = safeStampPosition(
+      x,
+      y,
+      data.preview.rot,
+      stampDesign,
+      notebookDesign,
+    );
+    setPendingStamp({
+      id: 'pending-stamp',
+      page,
+      ...position,
+      rot: data.preview.rot,
+      color: data.preview.color,
+      style: data.preview.style,
+      country: data.preview.country,
+      hello: data.preview.hello,
+      place: data.preview.place,
+      line: data.preview.line,
+      font: data.preview.font,
+      at: new Date().toISOString(),
+    });
     setPressing(true);
     setHover(null);
     try {
@@ -83,9 +108,24 @@ export function Guestbook({
       const json = await res.json();
 
       if (res.status === 201) {
-        setData((d) => (d ? { ...d, stamps: [...d.stamps, json.stamp] } : d));
+        setData((d) =>
+          d
+            ? {
+                ...d,
+                stamps: [...d.stamps, json.stamp],
+                full: json.full,
+                totalStamps: d.totalStamps + 1,
+              }
+            : d,
+        );
+        setTotalStamps((count) => (count ?? 0) + 1);
         setJustPressed(page);
-        setNote(`${json.stamp.line} — pressed.`);
+        if (json.full && typeof json.nextPage === 'number') {
+          setNote(`${json.stamp.line} — pressed. Turning to a fresh page.`);
+          turnTo(json.nextPage, 'next');
+        } else {
+          setNote(`${json.stamp.line} — pressed.`);
+        }
         return;
       }
       if (json.alreadyStamped) {
@@ -95,7 +135,7 @@ export function Guestbook({
       }
       if (json.full) {
         setNote('That page filled up — turning over.');
-        turnForward();
+        if (typeof json.nextPage === 'number') turnTo(json.nextPage, 'next');
         return;
       }
       setNote(json.error ?? 'That didn’t press. Try again.');
@@ -103,51 +143,79 @@ export function Guestbook({
       setNote('That didn’t press. Check your connection and try again.');
     } finally {
       setPressing(false);
+      setPendingStamp(null);
     }
   };
 
-  // With the prev/next buttons gone the book has to turn itself: flip forward
-  // whenever the spread you're on is full or already carries your stamp. The page
-  // swaps halfway through the animation, so the new spread is in place before the
-  // leaf clears it rather than sliding in behind.
-  const turn = useCallback(
-    (dir: 'next' | 'prev') => {
+  // The page swaps halfway through the animation, so the destination spread is
+  // in place before the turning leaf clears it rather than sliding in behind.
+  const turnTo = useCallback(
+    (target: number, dir: 'next' | 'prev') => {
       if (turning) return;
-      if (dir === 'next' && page >= MAX_PAGES) return;
-      if (dir === 'prev' && page <= 1) return;
+      if (target === page || target < 1 || target > MAX_PAGES) return;
       setTurning(dir);
       window.setTimeout(
-        () => setPage((p) => (dir === 'next' ? Math.min(MAX_PAGES, p + 1) : Math.max(1, p - 1))),
+        () => setPage(target),
         notebookDesign.turnDuration * 500,
       );
       window.setTimeout(() => setTurning(null), notebookDesign.turnDuration * 1000);
     },
     [turning, page, notebookDesign.turnDuration],
   );
-  const turnForward = useCallback(() => turn('next'), [turn]);
 
-  // Advance only when the spread is genuinely FULL — never merely because this
-  // visitor already signed it. Turning away from your own stamp is the wrong
-  // behaviour (you came back to see it), and it was also a loop: localStorage
-  // remembers pages you signed even after those stamps are gone from the store, so
-  // "already signed" walked the book end to end, flipping the whole way.
-  //
-  // The ref makes it at most one hop per mount, so a bad page count can't drive it
-  // either.
-  const autoTurned = useRef(false);
+  const maxBrowsablePage = Math.min(
+    MAX_PAGES,
+    Math.max(data?.pagesInUse ?? 1, data?.firstOpenPage ?? 1, page),
+  );
+  const turn = useCallback(
+    (dir: 'next' | 'prev') => {
+      if (dir === 'next' && page < maxBrowsablePage) turnTo(page + 1, dir);
+      if (dir === 'prev' && page > 1) turnTo(page - 1, dir);
+    },
+    [maxBrowsablePage, page, turnTo],
+  );
+
+  // Find a usable landing page on first arrival. Ownership now comes directly
+  // from the stored stamps, so unlike the old localStorage check it cannot go
+  // stale and falsely walk the book. Once a stampable page is found, browsing
+  // back to an earlier signed page is left alone.
+  const seekingLandingPage = useRef(true);
+  const landingPagesSeen = useRef(new Set<number>());
   useEffect(() => {
-    if (loading || !data || turning || autoTurned.current) return;
-    if (data.stamps.length >= PAGE_CAPACITY) {
-      autoTurned.current = true;
-      turnForward();
+    if (loading || !data || turning || !seekingLandingPage.current) return;
+
+    if (!data.full && !data.mine) {
+      seekingLandingPage.current = false;
+      return;
     }
-  }, [loading, data, turning, turnForward]);
+
+    landingPagesSeen.current.add(page);
+    const target = data.full ? data.firstOpenPage : Math.min(MAX_PAGES, page + 1);
+    if (!target || target === page || landingPagesSeen.current.has(target)) {
+      seekingLandingPage.current = false;
+      return;
+    }
+
+    turnTo(target, target > page ? 'next' : 'prev');
+  }, [loading, data, turning, page, turnTo]);
+
+  const previewRotation = data?.preview.rot ?? 0;
+  const previewPosition = hover
+    ? safeStampPosition(hover.x, hover.y, previewRotation, stampDesign, notebookDesign)
+    : null;
 
   return (
     <section className="mt-14 md:mt-20">
       <StampDefs design={stampDesign} />
 
-      <h2 className="font-mono text-[11px] uppercase tracking-[0.25em] pb-4">Guestbook</h2>
+      <div className="flex items-baseline justify-between gap-4 pb-4">
+        <h2 className="font-mono text-[11px] uppercase tracking-[0.25em]">Guestbook</h2>
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: MUTED }}>
+          {totalStamps === null
+            ? 'Counting stamps…'
+            : `${totalStamps} ${totalStamps === 1 ? 'stamp' : 'stamps'}`}
+        </p>
+      </div>
 
       {/* Only shown while there's something to invite — once you've signed, the
           spread speaks for itself. */}
@@ -168,6 +236,8 @@ export function Guestbook({
         onHover={(p) => canStamp && setHover(p)}
         onPress={(x, y) => void press(x, y)}
         onTurn={(dir) => turn(dir)}
+        canTurnPrev={page > 1}
+        canTurnNext={page < maxBrowsablePage}
         overlay={
           loading ? (
             <p
@@ -179,39 +249,80 @@ export function Guestbook({
           ) : null
         }
       >
-        {/* Existing stamps. Keyed by id so a page turn doesn't reuse DOM nodes
-            and inherit the previous page's press animation. */}
-        <AnimatePresence mode="popLayout">
-          {(data?.stamps ?? []).map((s) => (
-            <motion.div
+        {/* Stored ink is static. Only the mark being actively pressed animates;
+            replaying a spring on every old stamp when a page opens made the whole
+            spread feel weightless. */}
+        {(data?.stamps ?? []).map((s) => {
+          const position = safeStampPosition(
+            s.x,
+            s.y,
+            s.rot,
+            stampDesign,
+            notebookDesign,
+          );
+          return (
+            <div
               key={s.id}
-              initial={reduce ? false : { scale: 1.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 700, damping: 26 }}
               className="pointer-events-none absolute"
               style={{
-                left: `${s.x * 100}%`,
-                top: `${s.y * 100}%`,
+                left: `${position.x * 100}%`,
+                top: `${position.y * 100}%`,
                 width: `${stampDesign.sizePct}%`,
                 aspectRatio: '1',
                 transform: `translate(-50%, -50%) rotate(${s.rot}deg)`,
               }}
             >
               <GuestbookStamp stamp={s} design={stampDesign} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
+            </div>
+          );
+        })}
 
-        {/* Ghost preview under the cursor */}
-        {hover && data && (
+        {/* Immediate contact mark. It uses the same server-owned visual identity
+            as the eventual stored stamp and is replaced in-place on success. */}
+        {pendingStamp && (
           <div
             className="pointer-events-none absolute"
             style={{
-              left: `${hover.x * 100}%`,
-              top: `${hover.y * 100}%`,
+              left: `${pendingStamp.x * 100}%`,
+              top: `${pendingStamp.y * 100}%`,
               width: `${stampDesign.sizePct}%`,
               aspectRatio: '1',
-              transform: 'translate(-50%, -50%) rotate(-7deg)',
+              transform: `translate(-50%, -50%) rotate(${pendingStamp.rot}deg)`,
+            }}
+          >
+            <motion.div
+              className="h-full w-full"
+              initial={reduce ? false : { opacity: 0, scale: 1.1, filter: 'blur(1.4px)' }}
+              animate={
+                reduce
+                  ? { opacity: 1 }
+                  : {
+                      opacity: [0, 1, 1],
+                      scale: [1.1, 0.985, 1],
+                      filter: ['blur(1.4px)', 'blur(0px)', 'blur(0px)'],
+                    }
+              }
+              transition={
+                reduce
+                  ? { duration: 0 }
+                  : { duration: 0.34, times: [0, 0.42, 1], ease: [0.2, 0.8, 0.2, 1] }
+              }
+            >
+              <GuestbookStamp stamp={pendingStamp} design={stampDesign} />
+            </motion.div>
+          </div>
+        )}
+
+        {/* Ghost preview under the cursor */}
+        {previewPosition && data && (
+          <div
+            className="pointer-events-none absolute"
+            style={{
+              left: `${previewPosition.x * 100}%`,
+              top: `${previewPosition.y * 100}%`,
+              width: `${stampDesign.sizePct}%`,
+              aspectRatio: '1',
+              transform: `translate(-50%, -50%) rotate(${previewRotation}deg)`,
             }}
           >
             <GuestbookStamp
@@ -220,11 +331,11 @@ export function Guestbook({
               stamp={{
                 id: 'preview',
                 page,
-                x: hover.x,
-                y: hover.y,
-                rot: -7,
-                color: 'green',
-                style: 'postal',
+                x: previewPosition.x,
+                y: previewPosition.y,
+                rot: previewRotation,
+                color: data.preview.color,
+                style: data.preview.style,
                 country: data.preview.country,
                 hello: data.preview.hello,
                 place: data.preview.place,
@@ -237,6 +348,16 @@ export function Guestbook({
         )}
 
       </Notebook>
+
+      <div
+        className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 pt-4 font-mono text-[10px] uppercase tracking-[0.16em]"
+        style={{ color: MUTED }}
+      >
+        <span>
+          Page {page} of {maxBrowsablePage}
+        </span>
+        <span>Tap or click the page edges to browse.</span>
+      </div>
 
       {note && (
         <p aria-live="polite" className="mt-3 font-sans text-sm" style={{ color: FG }}>
