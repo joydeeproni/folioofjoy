@@ -103,6 +103,8 @@ export const Notebook = forwardRef<
     turning?: 'next' | 'prev' | null;
     /** Clicking the outer edge of a leaf turns the book. */
     onTurn?: (dir: 'next' | 'prev') => void;
+    canTurnPrev?: boolean;
+    canTurnNext?: boolean;
     /** Width of each turn band, as a fraction of the whole spread. */
     edgeZone?: number;
   }
@@ -116,6 +118,8 @@ export const Notebook = forwardRef<
     cursor = 'default',
     turning = null,
     onTurn,
+    canTurnPrev = true,
+    canTurnNext = true,
     edgeZone = 0.11,
   },
   ref,
@@ -142,8 +146,8 @@ export const Notebook = forwardRef<
   // actually write on.
   const edgeAt = (x: number): 'next' | 'prev' | null => {
     if (!onTurn) return null;
-    if (x >= 1 - edgeZone) return 'next';
-    if (x <= edgeZone) return 'prev';
+    if (canTurnNext && x >= 1 - edgeZone) return 'next';
+    if (canTurnPrev && x <= edgeZone) return 'prev';
     return null;
   };
 
@@ -230,7 +234,7 @@ export const Notebook = forwardRef<
             e.preventDefault();
             onPress(0.25 + Math.random() * 0.5, 0.25 + Math.random() * 0.5);
           }}
-          className="absolute inset-0 flex select-none outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+          className="absolute inset-0 flex overflow-hidden select-none outline-none focus-visible:ring-1 focus-visible:ring-white/40"
           style={{ cursor: edge ? 'pointer' : cursor, borderRadius: cornerRadius }}
         >
           <Leaf side="left" design={design} />
@@ -242,7 +246,9 @@ export const Notebook = forwardRef<
 
           {/* Hover affordance on whichever outer edge is armed. */}
           {onTurn &&
-            (['prev', 'next'] as const).map((dir) => (
+            (['prev', 'next'] as const).filter((dir) =>
+              dir === 'prev' ? canTurnPrev : canTurnNext,
+            ).map((dir) => (
               <div
                 key={dir}
                 aria-hidden
@@ -250,12 +256,22 @@ export const Notebook = forwardRef<
                 style={{
                   [dir === 'prev' ? 'left' : 'right']: 0,
                   width: `${edgeZone * 100}%`,
-                  opacity: edge === dir ? 1 : 0,
+                  opacity: edge === dir ? 1 : 0.32,
                   background: `linear-gradient(to ${dir === 'prev' ? 'right' : 'left'},
-                    rgba(237,234,224,0.09) 0%, rgba(237,234,224,0) 100%)`,
+                    rgba(237,234,224,${edge === dir ? 0.09 : 0.035}) 0%, rgba(237,234,224,0) 100%)`,
                   borderRadius: cornerRadius,
                 }}
-              />
+              >
+                <span
+                  className="absolute top-1/2 -translate-y-1/2 font-sans text-xl"
+                  style={{
+                    [dir === 'prev' ? 'left' : 'right']: '22%',
+                    color: 'rgba(237,234,224,0.65)',
+                  }}
+                >
+                  {dir === 'prev' ? '‹' : '›'}
+                </span>
+              </div>
             ))}
 
           {/* The fold, over the ink — ink doesn't survive the crease of a real
