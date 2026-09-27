@@ -108,15 +108,15 @@ export function CloserLook({
                   type="button"
                   onClick={() => pick(i)}
                   aria-pressed={on}
-                  className="group relative shrink-0 overflow-hidden rounded-[22px] text-left transition-colors duration-300"
+                  className="group relative shrink-0 overflow-hidden text-left transition-colors duration-300"
                   style={{ backgroundColor: on ? 'rgba(237,234,224,0.1)' : 'rgba(237,234,224,0.05)' }}
                 >
                   <span className="flex items-center gap-3 px-4 py-3">
                     <span
-                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-transform duration-300"
-                      style={{ backgroundColor: on ? FG : 'rgba(237,234,224,0.14)', color: on ? '#0B0B0B' : FG, transform: on ? 'rotate(45deg)' : 'none' }}
+                      className="flex h-6 w-6 shrink-0 items-center justify-center transition-transform duration-300"
+                      style={{ color: FG, transform: on ? 'rotate(45deg)' : 'none' }}
                     >
-                      <Plus className="h-3.5 w-3.5" aria-hidden />
+                      <Plus className="h-4 w-4" aria-hidden />
                     </span>
                     <span className="font-sans font-medium text-[15px] whitespace-nowrap md:whitespace-normal" style={{ color: FG }}>
                       {it.label}
