@@ -108,8 +108,8 @@ export function CloserLook({
                   type="button"
                   onClick={() => pick(i)}
                   aria-pressed={on}
-                  className="group relative shrink-0 overflow-hidden text-left transition-colors duration-300"
-                  style={{ backgroundColor: on ? 'rgba(237,234,224,0.1)' : 'rgba(237,234,224,0.05)' }}
+                  className={`group relative shrink-0 overflow-hidden text-left transition-colors duration-300 ${on ? '' : 'hover:bg-[#EDEAE0]/[0.04]'}`}
+                  style={on ? { backgroundColor: 'rgba(237,234,224,0.1)' } : undefined}
                 >
                   <span className="flex items-center gap-3 px-4 py-3">
                     <span
