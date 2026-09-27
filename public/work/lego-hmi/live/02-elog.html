@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1280">
+<title>Moulding HMI · eLog</title>
+<link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="hmi.css">
+<style>
+  .lay{display:grid;grid-template-columns:1fr 320px;gap:16px;height:640px}
+  .tb{display:flex;align-items:center;background:var(--cds-layer-01);height:64px;padding-left:16px;gap:12px}
+  .tb .srch{display:flex;align-items:center;gap:10px;flex:1;height:48px;background:var(--cds-field-01);padding:0 14px;color:var(--cds-text-placeholder);border-bottom:1px solid var(--cds-border-strong-01)}
+  .cds--content-switcher{width:auto}
+  .cds--content-switcher-btn{min-width:56px}
+  .tb .cds--btn{height:64px;min-height:64px}
+  .cds--data-table--lg td{height:56px}
+  .cds--data-table tr.sel td{background:var(--cds-layer-selected-01);}
+  .cds--data-table tr.sel td:first-child{box-shadow:inset 4px 0 0 var(--cds-border-interactive)}
+  .cds--data-table tr.new td{background:#edf5ff}
+  .t{font-family:'IBM Plex Mono';font-size:13px;color:var(--cds-text-secondary)}
+  .panel{background:var(--cds-layer-01);padding:20px;display:flex;flex-direction:column;gap:16px}
+  .panel h3{font-size:20px;line-height:28px;font-weight:400}
+  .kv{display:grid;grid-template-columns:96px 1fr;gap:10px 12px;font-size:14px}
+  .kv dt{color:var(--cds-text-secondary)} .kv dd{margin:0}
+  .photo{height:140px;background:repeating-linear-gradient(135deg,#e0e0e0 0 10px,#e8e8e8 10px 20px);display:grid;place-items:center;color:var(--cds-text-secondary);font-size:12px}
+  .panel .cds--btn{max-width:none;width:100%}
+</style></head>
+<body class="cds--g10">
+<div class="shell"><main class="main">
+  <div class="ph"><div><h1>eLog</h1><p>Machine 152662 · Order 2 · 8 entries this shift</p></div></div>
+  <div class="lay">
+    <section style="background:var(--cds-layer-01);display:flex;flex-direction:column">
+      <div class="tb">
+        <div class="srch"><span data-ci="search" data-s="16"></span>Search entries</div>
+        <div class="cds--content-switcher" role="tablist">
+          <button class="cds--content-switcher-btn cds--content-switcher--selected" role="tab"><span class="cds--content-switcher__label">All</span></button>
+          <button class="cds--content-switcher-btn" role="tab"><span class="cds--content-switcher__label">Q</span></button>
+          <button class="cds--content-switcher-btn" role="tab"><span class="cds--content-switcher__label">M</span></button>
+          <button class="cds--content-switcher-btn" role="tab"><span class="cds--content-switcher__label">E</span></button>
+          <button class="cds--content-switcher-btn" role="tab"><span class="cds--content-switcher__label">I</span></button>
+        </div>
+        <button class="cds--btn cds--btn--primary">Add entry<span data-ci="add"></span></button>
+      </div>
+      <table class="cds--data-table cds--data-table--lg" id="tbl">
+        <thead><tr><th><div class="cds--table-header-label">Type</div></th><th><div class="cds--table-header-label">Time</div></th><th><div class="cds--table-header-label">Who</div></th><th><div class="cds--table-header-label">Reason</div></th><th><div class="cds--table-header-label">Action</div></th><th><div class="cds--table-header-label">Elements</div></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    <aside class="panel">
+      <div><span class="cds--tag cds--tag--purple cds--tag--md"><span class="cds--tag__label">Q · Quality</span></span></div>
+      <h3>Short shot on cavity 4</h3>
+      <dl class="kv"><dt>Logged</dt><dd class="num">Today 13:05 · M. Hansen</dd><dt>Module</dt><dd>M4 · cavity 4 of 8</dd><dt>Action</dt><dd>Raised holding pressure +10 bar</dd><dt>Elements</dt><dd><span class="cds--tag cds--tag--green cds--tag--sm"><span class="cds--tag__label">OK after fix</span></span></dd></dl>
+      <p style="font-size:14px;line-height:20px">Parts from cavity 4 were short at the stud tops. After the pressure change, 20 test parts passed the gauge.</p>
+      <div class="photo">Photo · cavity 4 · 13:04</div>
+      <span style="flex:1"></span>
+      <button class="cds--btn cds--btn--tertiary">Edit entry<span data-ci="edit"></span></button>
+    </aside>
+  </div>
+</main></div>
+<script src="icons.js"></script><script src="_shared.js"></script>
+<script>
+  const T = { Q: ['purple', 'Q'], M: ['teal', 'M'], E: ['magenta', 'E'], I: ['gray', 'I'] };
+  const rows = [['Q', '13:05', 'M. Hansen', 'Short shot · cavity 4', 'Raised holding pressure', 'OK', 'sel'],
+    ['I', '12:20', 'M. Hansen', 'Material batch changed', 'Logged batch 4299961', 'OK'],
+    ['M', '10:40', 'J. Sørensen', 'Ejector pin sticking', 'Cleaned and greased pin', 'OK'],
+    ['E', '09:15', 'Technician', 'Robot gripper misaligned', 'Handover to technician', 'NOT OK'],
+    ['Q', '08:00', 'J. Sørensen', 'Colour streaks', 'Purged barrel, 3 cycles', 'OK'],
+    ['I', '07:50', 'J. Sørensen', 'Oil level low', 'Machine oil topped up', 'OK'],
+    ['M', '06:00', 'Night shift', 'Inlet blocked', 'Handover to technician', 'NOT OK']];
+  document.querySelector('#tbl tbody').innerHTML = rows.map(([ty, t, w, r, a, e, c]) => `<tr class="${c || ''}"><td><span class="cds--tag cds--tag--${T[ty][0]} cds--tag--sm"><span class="cds--tag__label">${ty}</span></span></td><td class="t">${t}</td><td>${w}</td><td>${r}</td><td>${a}</td><td><span class="cds--tag cds--tag--${e === 'OK' ? 'green' : 'red'} cds--tag--sm"><span class="cds--tag__label">${e}</span></span></td></tr>`).join('');
+  const STOP = new URLSearchParams(location.search).get('stopped') === '1';
+  boot({ nav: 'eLog', status: STOP ? 'Stopped' : 'Running', alarms: STOP ? 1 : 0 });
+</script></body></html>

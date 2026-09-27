@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Pro tip</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .top{display:flex;justify-content:center;margin-top:14px}
+  .title{padding:30px 24px 0}
+  .title h1{font-size:22px;font-weight:400;letter-spacing:-.015em;line-height:1.36}
+  .title .lvl{display:block;margin-top:24px}
+  .card{position:absolute;left:24px;right:24px;top:278px;bottom:24px;border-radius:26px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .card .rc{flex:1;border-radius:0}
+  .card .read{font-size:25px}
+  .card .b{height:50px;background:var(--char);color:#fff;display:grid;place-items:center;font-weight:600;font-size:15.5px}
+</style></head>
+<body class="peach">
+<div class="top"><span class="pause press"><i data-lucide="pause"></i>Pause Quest</span></div>
+<div class="title"><h1>Socialisation Adventure Going On Errands</h1><span class="lvl">Level 1</span></div>
+<div class="card a-rise" style="animation-delay:.15s">
+  <article class="rc"><div class="k">Tip 1<span class="dots"><i class="on"></i><i></i><i></i></span></div>
+  <p class="read" id="tip">This Quest is written specifically from the perspective of visiting the Target on Geary, however could be done at any busy store or trafficked commercial area. That Target happens to have a wide variety of features and stimuli in one dense area.</p></article>
+  <a class="b press" id="go">Back to Quest</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  // the tip types itself in, word by word
+  const tip = document.getElementById('tip'), words = tip.textContent.split(' ');
+  if (!STATIC) tween((t) => { const n = Math.floor(clamp((t - 600) / 2600) * words.length); tip.innerHTML = words.slice(0, n).join(' ') + `<span style="opacity:0">${' ' + words.slice(n).join(' ')}</span>`; });
+  boot({});
+</script>
+</body></html>

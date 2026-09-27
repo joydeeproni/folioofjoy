@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Ask Scout</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .head .l{display:flex;align-items:center;gap:12px}
+  .pair{display:flex}.pair .av{width:40px;height:40px;font-size:15px;box-shadow:0 0 0 3px #000}.pair .av+.av{margin-left:-12px}
+  .head h1{font-size:22px}.head p{font-size:13px;color:rgba(255,255,255,.6);margin-top:2px}
+  .tog{width:48px;height:28px;border-radius:99px;background:var(--yellow);position:relative}.tog i{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff}
+  .feed{position:absolute;left:20px;right:20px;top:128px;bottom:170px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px}
+  .b{max-width:84%;padding:13px 16px;border-radius:22px;font-size:14.5px;line-height:1.45}
+  .b.me{background:var(--peach);color:var(--char);align-self:flex-end;border-bottom-right-radius:8px}
+  .b.ai{background:var(--teal);color:var(--char);align-self:flex-start;border-bottom-left-radius:8px}
+  .b.ai .who{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;margin-bottom:6px}
+  .b.ai ol{margin:8px 0 0 18px;padding:0}
+  .qp{align-self:flex-start;width:84%;border-radius:22px;background:var(--pink);color:var(--char);padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .qp b{display:block;font-size:14.5px;font-weight:600}.qp span{font-size:12.5px}
+  .hand{border-radius:22px;background:var(--char);padding:14px 16px;font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.8)}
+  .hand .row{display:grid;grid-template-columns:1fr 1.3fr;gap:8px;margin-top:10px}
+  .hand a{height:40px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:14px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4);color:#fff}
+  .hand a.y{background:#fff;color:var(--char);box-shadow:none}
+  .typing{align-self:flex-start;background:var(--teal);border-radius:20px;padding:14px 16px;display:flex;gap:5px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:var(--char);animation:typing 1.2s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  .comp{position:absolute;left:16px;right:16px;bottom:106px;height:52px;border-radius:18px;background:#1A1B21;display:flex;align-items:center;padding:0 6px 0 18px;color:rgba(255,255,255,.5);font-size:15px}
+  .comp .s{margin-left:auto;width:40px;height:40px;border-radius:13px;background:var(--yellow);color:var(--char);display:grid;place-items:center}
+</style></head>
+<body>
+<header class="head"><div class="l"><span class="pair"><span class="av" style="background:var(--lilac)">C</span><span class="av" style="background:var(--teal)"><i data-lucide="paw-print" class="sm"></i></span></span><div><h1>Christophe + Scout</h1><p>Trainer + assistant</p></div></div><span class="tog"><i></i></span></header>
+<div class="feed" id="feed">
+  <div class="b me" data-at="0">She keeps biting my hands when we play. Is that normal at 14 weeks?</div>
+  <div class="typing" id="ty"><i></i><i></i><i></i></div>
+  <div class="b ai" data-at="2"><span class="who"><i data-lucide="sparkles" class="sm"></i>Scout · Fido’s assistant</span>Very normal, puppies explore with their mouths. Try this tonight:<ol><li>Say “ouch” calmly and go still.</li><li>Offer a toy instead of your hand.</li><li>If she keeps going, pause play for 20 seconds.</li></ol></div>
+  <div class="qp" data-at="3"><span class="o" style="width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.55);display:grid;place-items:center"><i data-lucide="hand"></i></span><div><b>Gentle Mouth · Level 1</b><span>Quest · 10 min · 3 steps</span></div></div>
+  <div class="hand" data-at="4">Christophe usually replies within 2 hours. Want him to look at this too?<div class="row"><a class="press">That helped</a><a class="y press" id="go"><i data-lucide="user-round" class="sm"></i>Ask Christophe</a></div></div>
+</div>
+<div class="comp">Ask Scout or Christophe<span class="s"><i data-lucide="arrow-up" class="sm"></i></span></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const items = [...document.querySelectorAll('#feed [data-at]')], ty = document.getElementById('ty');
+  if (STATIC) ty.style.display = 'none';
+  else tween((t) => {
+    items.forEach((el) => { const at = 300 + (+el.dataset.at) * 700; const u = clamp((t - at) / 380); el.style.display = u > 0 ? '' : 'none'; el.style.opacity = eo(u); el.style.transform = `translateY(${(1 - eo(u)) * 14}px)`; });
+    ty.style.display = t > 900 && t < 1700 ? 'flex' : 'none';
+  });
+  boot({ tab: 'Talk' });
+</script>
+</body></html>

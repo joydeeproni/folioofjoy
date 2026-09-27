@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Account settings</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .lay{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start}
+  .side{display:flex;flex-direction:column;gap:2px;position:sticky;top:24px}
+  .side a{height:42px;border-radius:10px;display:flex;align-items:center;gap:10px;padding:0 12px;font-weight:600;color:var(--ink-2);font-size:14.5px}
+  .side a.on{background:#fff;color:var(--ink);box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)}
+  .sec{padding:26px 28px}
+  .sec + .sec{margin-top:16px}
+  .sec h2{font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .sec .h{color:var(--ink-2);font-size:14px;margin-top:2px}
+  .prof{display:grid;grid-template-columns:auto 1fr;gap:28px;margin-top:22px;align-items:start}
+  .big{width:88px;height:88px;border-radius:50%;background:var(--navy-700);color:#fff;display:grid;place-items:center;font-size:30px;font-weight:700;position:relative}
+  .big .e{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#fff;color:var(--navy-700);display:grid;place-items:center;box-shadow:var(--sh-2)}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .org{display:flex;align-items:center;gap:14px;margin-top:18px;padding:14px 16px;border-radius:14px;background:var(--bg)}
+  .org .lg{width:44px;height:44px;border-radius:12px;background:#3E5C76;color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+  .org b{display:block}.org span{font-size:13px;color:var(--ink-3)}
+  .org .sp{flex:1}
+  .nt{display:grid;grid-template-columns:1fr 70px 70px;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-size:14.5px}
+  .nt.hd{border-top:0;padding:14px 0 4px;font-size:12.5px;font-weight:600;color:var(--ink-3)}
+  .nt.hd span{text-align:center}
+  .nt b{display:block;font-weight:600}.nt span.s{font-size:12.5px;color:var(--ink-3)}
+  .sw{justify-self:center;width:38px;height:22px;border-radius:99px;background:var(--navy-700);position:relative}.sw::after{content:"";position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff}
+  .sw.off{background:var(--line-2)}.sw.off::after{right:auto;left:3px}
+  .sec.split{display:flex;align-items:center;gap:16px}
+  .sec.split .sp{flex:1}
+  .bar{position:relative;margin-top:20px;padding:14px 18px;display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;box-shadow:var(--sh-2),inset 0 0 0 1px var(--line)}
+  .bar .sp{flex:1}
+  .bar span.t{font-size:14px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+  .bar span.t i{width:8px;height:8px;border-radius:50%;background:var(--amber-600)}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Account settings</h1><p>Joydeep Sengupta · member since Oct 2019</p></div></div>
+  <div class="lay">
+    <nav class="side"><a class="on"><i data-lucide="user" class="sm"></i>Profile</a><a><i data-lucide="building-2" class="sm"></i>Organisation</a><a><i data-lucide="bell" class="sm"></i>Notifications</a><a><i data-lucide="shield" class="sm"></i>Password &amp; security</a><a><i data-lucide="file-text" class="sm"></i>Documents</a></nav>
+    <div>
+      <section class="card sec"><h2>Profile</h2><p class="h">Sellers see your name and organisation when you request their details.</p>
+        <div class="prof"><span class="big">JS<span class="e"><i data-lucide="pencil" class="sm"></i></span></span>
+          <div class="f2"><div><span class="fl">Full name</span><div class="inp">Joydeep Sengupta</div></div><div><span class="fl">Registered as</span><div class="inp">Wealth manager<i data-lucide="chevron-down" class="sm suf"></i></div></div>
+            <div><span class="fl">Email</span><div class="inp">joydeep.roni@gmail.com<span class="suf" style="display:flex;align-items:center;gap:6px;color:var(--green-700);font-size:13px;font-weight:600"><i data-lucide="badge-check" class="sm"></i>Verified</span></div></div>
+            <div><span class="fl">Phone</span><div class="inp focus">+91 72058 51389<span style="width:1.5px;height:20px;background:var(--blue-500);margin-left:-8px"></span></div><div class="hint">Shared only with people you choose to connect with</div></div></div></div>
+        <div class="org"><span class="lg">KW</span><div><b>Kalyan Wealth Advisors</b><span>Pune · 14 members on SXchange · you're an admin</span></div><span class="sp"></span><a class="btn ghost sm">Change</a></div>
+      </section>
+      <section class="card sec"><h2>Notifications</h2><p class="h">Choose what we tell you about, and how. Transfer and security emails always go out.</p>
+        <div class="nt hd"><span></span><span>Email</span><span>SMS</span></div>
+        <div class="nt"><div><b>New prospect on your listing</b><span class="s">When a buyer asks for your details</span></div><span class="sw"></span><span class="sw off"></span></div>
+        <div class="nt"><div><b>Seller information received</b><span class="s">When a seller shares their details with you</span></div><span class="sw"></span><span class="sw"></span></div>
+        <div class="nt"><div><b>Listing published or rejected</b><span class="s">The result of our review, with reasons</span></div><span class="sw"></span><span class="sw off"></span></div>
+        <div class="nt"><div><b>Saved search matches</b><span class="s">New listings that fit your filters · daily digest</span></div><span class="sw"></span><span class="sw off"></span></div>
+        <div class="nt"><div><b>Wishlist price changes</b><span class="s">When a seller changes the ask on a fund you watch</span></div><span class="sw off"></span><span class="sw off"></span></div>
+      </section>
+      <section class="card sec split"><div><h2>Password</h2><p class="h">Last changed 3 months ago.</p></div><span class="sp"></span><a class="btn ghost">Change password</a></section>
+      <div class="bar"><span class="t"><i></i>You have unsaved changes</span><span class="sp"></span><a class="btn ghost sm">Discard</a><a class="btn primary sm">Save changes</a></div>
+    </div>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ mode: 'buy', active: '' });</script>
+</body></html>

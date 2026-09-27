@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SXchange · Mobile fund details</title>
+<link rel="stylesheet" href="sx.css"><link rel="stylesheet" href="m.css">
+<style>
+  .top{background:#fff;padding:6px 16px 12px;display:flex;align-items:center;gap:8px}
+  .top .ib{box-shadow:inset 0 0 0 1px var(--line)}
+  .top .sp{flex:1}
+  .hero{background:#fff;padding:4px 20px 22px;border-bottom:1px solid var(--line)}
+  .hero .fm{width:52px;height:52px;border-radius:14px;font-size:15px}
+  .hero h1{font-size:24px;letter-spacing:-.025em;line-height:1.15;font-weight:800;margin-top:14px}
+  .hero .s{color:var(--ink-2);font-size:14px;margin-top:4px}
+  .hero .chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .px{margin:16px 20px 0;padding:18px}
+  .px .big{display:flex;align-items:baseline;gap:10px;margin-top:4px}
+  .px .big b{font-size:36px;letter-spacing:-.035em;font-weight:800}
+  .px .big .off{font-size:17px}
+  .px .deal{margin-top:14px}
+  .px .deal .bar{height:12px}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:10px 14px;font-size:14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .kv dt{color:var(--ink-2)}.kv dd{margin:0;font-weight:700;text-align:right}
+  .sec{margin:12px 20px 0;padding:16px 18px}
+  .sec h3{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .sec .kv{border-top:0;margin-top:8px;padding-top:0}
+  .os{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .os:first-of-type{border-top:0}
+  .os b{font-weight:700}
+  .cta{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:12px 20px 34px;display:flex;gap:10px}
+  .cta .btn{height:50px}
+  .cta .btn.primary{flex:1}
+  .pad{height:130px}
+</style></head>
+<body>
+<div class="sb" style="background:#fff"><span>9:41</span><span class="ic"><i data-lucide="signal" class="sm"></i><i data-lucide="wifi" class="sm"></i><i data-lucide="battery-full" class="sm"></i></span></div>
+<div class="top"><span class="ib"><i data-lucide="chevron-left"></i></span><span class="sp"></span><span class="ib"><i data-lucide="columns-3" class="sm"></i></span><span class="ib" style="color:var(--red-600)"><i data-lucide="heart" class="sm" fill="currentColor"></i></span></div>
+<section class="hero"><span class="fm" style="background:#1E3A5F">MIO</span><h1>Meridian Income Opportunities Fund</h1><div class="s">Meridian Capital · Series II · Special situations</div>
+  <div class="chips"><span class="chip cat">AIF Cat II</span><span class="chip">Vintage 2017</span><span class="chip green">Verified</span></div></section>
+<section class="card px"><span class="label">Asking price per unit</span><div class="big"><b>₹8.7487</b><span class="off">30% off</span></div>
+  <div class="deal"><div class="bar"><span class="ask" style="width:70%"></span><span class="gap" style="left:70%;right:0"></span></div><div class="lg"><span>Ask <b>₹8.7487</b></span><span>NAV ₹12.4981 · 30 Jun</span></div></div>
+  <dl class="kv"><dt>Units on offer</dt><dd>1,00,000</dd><dt>Minimum lot</dt><dd>10,000 units</dd><dt>Total asking value</dt><dd>₹8,74,870.00</dd></dl></section>
+<section class="card sec"><h3><i data-lucide="landmark" class="sm"></i>Seller's commitment</h3>
+  <dl class="kv"><dt>Commitment</dt><dd>₹25,00,000.00</dd><dt>Amount paid</dt><dd>₹17,50,000.00</dd><dt>Balance payable</dt><dd>₹7,50,000.00</dd><dt>Default case</dt><dd>No</dd></dl></section>
+<section class="card sec"><h3><i data-lucide="users" class="sm"></i>Other sellers · 2</h3>
+  <div class="os"><span>Seller B · Mumbai</span><span><b>₹9.3736</b> · <span style="color:var(--green-700);font-weight:700">25%</span></span></div>
+  <div class="os"><span>Seller C · Chennai</span><span><b>₹9.9985</b> · <span style="color:var(--green-700);font-weight:700">20%</span></span></div></section>
+<div class="pad"></div>
+<div class="cta"><a class="btn ghost" style="width:50px;padding:0"><i data-lucide="share-2" class="sm"></i></a><a class="btn primary"><i data-lucide="send" class="sm"></i>Request seller information</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({});</script></body></html>

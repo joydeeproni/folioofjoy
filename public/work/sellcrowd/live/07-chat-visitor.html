@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Visitor chat</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  body{background:#fff}
+  .chd{display:flex;align-items:center;gap:6px;height:52px;padding:0 14px 0 8px;position:relative;z-index:1;font-weight:700;font-size:15px}
+  .chd b{font-size:16px;font-weight:800;margin-left:14px}
+  .thread{position:absolute;left:0;right:0;top:112px;bottom:160px;padding:0 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;overflow:hidden}
+  .typing{display:flex;gap:4px;padding:13px 14px;background:#E9EBF1;border-radius:18px;border-bottom-left-radius:6px;width:62px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#8C93AA}
+  .composer{bottom:86px;border-top:0}
+  .late{display:none}
+  .done .late{display:block} .done .typing{display:none}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <div class="chd"><i data-lucide="chevron-left" class="lg"></i>Back<b>Visitor · Android</b></div>
+</header>
+<div class="thread" id="th" data-stagger style="--d:150ms">
+  <div class="bub in">Hi, I was just checking something on your website and I have a question.<small>09:36</small></div>
+  <div class="bub out">Hi! I’m Priya from Northbridge. What can I help with?<small>09:37</small></div>
+  <div class="bub in">Does the Growth plan work for a team of 8?<small>09:39</small></div>
+  <div class="bub out">It does, it covers up to 15 people. Want me to send the pricing?<small>09:40</small></div>
+  <div class="typing"><i></i><i></i><i></i></div>
+  <div class="bub in late">Yes please, and we’d add 3 more in spring.<small>09:41</small></div>
+</div>
+<div class="composer"><span class="in">Type your message</span><span class="send"><i data-lucide="arrow-up"></i></span></div>
+<span data-tabs="Chats"></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  if (STATIC || Q.get('state') === 'done') th.classList.add('done');
+  let tmr; onPlay.push(() => { th.classList.remove('done'); clearTimeout(tmr); tmr = setTimeout(() => th.classList.add('done'), 2600); });
+  boot();
+</script></body></html>

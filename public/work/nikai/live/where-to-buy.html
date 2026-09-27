@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nikai Egypt · Smart TVs and home appliances</title>
+<link rel="stylesheet" href="nikai.css">
+<style>
+  body{width:1440px}
+  /* hero */
+  .hero{background:radial-gradient(70% 60% at 72% 55%,rgba(227,20,30,.22),rgba(227,20,30,0) 60%),linear-gradient(180deg,#0A0A0C,#0E0E11);color:#fff;overflow:hidden;position:relative}
+  .hero .grid{display:grid;grid-template-columns:580px 1fr;align-items:center;min-height:720px;padding-bottom:40px}
+  .hero h1{font-size:74px;line-height:.98;letter-spacing:-.045em;margin-top:24px}
+  .hero h1 em{font-style:normal;color:#ff3b44}
+  .hero p.lead{font-size:19px;line-height:1.55;color:rgba(255,255,255,.7);margin-top:22px;max-width:40ch}
+  .hero .ctas{display:flex;gap:12px;margin-top:32px}
+  .stage{position:relative;height:620px}
+  .stage .tv{position:absolute;left:40px;right:-60px;top:70px}
+  .stage .tv img{width:100%;filter:drop-shadow(0 60px 80px rgba(0,0,0,.7))}
+  .stage .floor{position:absolute;left:-40px;right:-120px;bottom:40px;height:140px;background:radial-gradient(50% 50% at 50% 50%,rgba(255,255,255,.08),rgba(255,255,255,0) 70%)}
+  .sizes{position:absolute;right:-40px;bottom:30px;display:flex;gap:8px;align-items:center}
+  .sizes span{height:40px;min-width:62px;padding:0 14px;border-radius:99px;display:grid;place-items:center;font-weight:600;font-size:14px;color:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+  .sizes span.on{background:#fff;color:var(--ink);box-shadow:none}
+  .sizes small{color:rgba(255,255,255,.55);font-size:13px;margin-left:10px}
+  .spec-float{position:absolute;left:-10px;top:300px;background:rgba(20,20,23,.72);backdrop-filter:blur(14px);border-radius:18px;padding:16px 18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);font-size:13.5px;width:230px}
+  .spec-float b{display:block;font-size:26px;letter-spacing:-.03em;margin-top:2px}
+  .spec-float .r{display:flex;justify-content:space-between;color:rgba(255,255,255,.62);padding-top:8px;margin-top:8px;border-top:1px solid rgba(255,255,255,.08)}
+  .spec-float .r span:last-child{color:#fff;font-weight:600}
+  .buyat{display:flex;align-items:center;gap:16px;padding:22px 0 30px;border-top:1px solid rgba(255,255,255,.08)}
+  .buyat .l{color:rgba(255,255,255,.55);font-size:14px;margin-right:6px}
+  .buyat .rl{height:56px;padding:0 22px;border-radius:14px;background:#fff;display:flex;align-items:center}
+  .buyat .rl img{height:26px;max-width:120px;object-fit:contain}
+  .buyat .sp{flex:1}
+  /* categories */
+  section.s{padding:120px 0 0}
+  .bento{display:grid;grid-template-columns:1.35fr 1fr 1fr;grid-template-rows:300px 300px;gap:16px}
+  .cat{position:relative;border-radius:28px;overflow:hidden;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);padding:26px;display:flex;flex-direction:column}
+  .cat h3{font-size:30px}
+  .cat:not(.tv):not(.kitchen) .sub{max-width:15ch}
+  .cat .sub{color:var(--ink-3);font-size:15px;margin-top:6px}
+  .cat .go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;position:relative;z-index:2}
+  .cat .go .arr{width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
+  .cat.tv{grid-row:1/3;background:#0B0B0D;color:#fff}
+  .cat.tv .sub{color:rgba(255,255,255,.6)}
+  .cat.tv .go .arr{background:var(--red-500)}
+  .cat.tv .bg{position:absolute;left:0;right:0;bottom:0;height:62%;object-fit:cover;width:100%;opacity:.95}
+  .cat.tv::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0B0B0D 30%,rgba(11,11,13,0) 55%,rgba(11,11,13,.6));pointer-events:none}
+  .cat.tv h3,.cat.tv .sub,.cat.tv .tags{position:relative;z-index:2}
+  .tags{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+  .tags span{height:28px;padding:0 12px;border-radius:99px;font-size:12.5px;font-weight:600;display:grid;place-items:center;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  .cat .pimg{position:absolute;right:18px;bottom:18px}
+  .cat.kitchen{grid-column:2/4;background:linear-gradient(120deg,#fff 40%,#F2F0EC)}
+  .cat.kitchen .sub,.cat .sub{max-width:24ch}
+  .cat .txt{position:relative;z-index:2;max-width:52%}
+  /* new arrivals */
+  .na{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+  .na .big{border-radius:28px;background:var(--red-500);color:#fff;padding:44px;position:relative;overflow:hidden;min-height:440px;display:grid;grid-template-columns:1fr 236px;gap:20px;align-items:center}
+  .na .big h3{font-size:54px;max-width:8ch;line-height:.98}
+  .na .big p{max-width:22ch!important}
+  .na .big p{color:rgba(255,255,255,.82);font-size:17px;margin-top:16px;max-width:30ch}
+  .na .notify{display:flex;margin-top:28px;background:rgba(255,255,255,.14);border-radius:99px;padding:5px;max-width:380px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+  .na .notify span{flex:1;padding:0 16px;display:flex;align-items:center;color:rgba(255,255,255,.72);font-size:15px}
+  .na .notify b{white-space:nowrap;background:#fff;color:var(--red-700);border-radius:99px;padding:0 18px;height:42px;display:flex;align-items:center;font-size:14.5px}
+  .na .side{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+  .na .item{border-radius:28px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);display:grid;grid-template-columns:1fr 180px;align-items:center;padding:26px 28px;gap:12px}
+  .na .item h4{font-size:24px;letter-spacing:-.025em;line-height:1.1}
+  .na .item .m{font-size:13px;color:var(--ink-3);margin-top:6px;font-variant-numeric:tabular-nums}
+  /* numbers */
+  .nums{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+  .nums div{padding:38px 28px 40px 0}
+  .nums div + div{padding-left:28px;border-left:1px solid var(--line-2)}
+  .nums b{display:block;font-size:76px;letter-spacing:-.05em;line-height:1;font-weight:700}
+  .nums b sup{font-size:36px;color:var(--red-500);vertical-align:top;margin-left:2px;line-height:1.5}
+  .nums span{display:block;color:var(--ink-3);margin-top:12px;font-size:15px;max-width:26ch}
+  /* where to buy (signature) */
+  .wtb{background:#fff;border-radius:32px;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);display:grid;grid-template-columns:330px 1fr 360px;overflow:hidden;min-height:620px}
+  .wtb .cities{padding:32px;border-right:1px solid var(--line)}
+  .wtb .cities h3{font-size:34px}
+  .wtb .cities p{color:var(--ink-3);font-size:15px;margin-top:8px}
+  .clist{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .clist span{height:38px;padding:0 14px;border-radius:99px;display:inline-flex;align-items:center;font-weight:600;font-size:14px;box-shadow:inset 0 0 0 1px var(--line-2)}
+  .clist span.on{background:var(--ink);color:#fff;box-shadow:none}
+  .clist span small{margin-left:6px;color:var(--ink-4);font-weight:500}
+  .clist span.on small{color:rgba(255,255,255,.6)}
+  .wtb .map{background:radial-gradient(60% 60% at 50% 40%,#F7F7F5,#EFEFEC);position:relative;padding:36px 28px}
+  .delta{margin-top:26px;border-radius:18px;background:#EAF1F7;padding:12px 12px 6px;position:relative;overflow:hidden}
+  .delta svg{overflow:hidden!important}
+  .delta b{font-size:12px;color:var(--ink-3);font-weight:600}
+  .wtb .map .inset{position:absolute;left:22px;bottom:22px;width:230px;height:170px;background:#fff;border-radius:16px;box-shadow:var(--sh-2);padding:10px;overflow:hidden}
+  .wtb .map .inset b{position:absolute;left:12px;top:8px;font-size:11.5px;color:var(--ink-3);font-weight:600;z-index:2}
+  .wtb .stores{padding:32px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
+  .wtb .stores h4{font-size:24px;letter-spacing:-.025em;display:flex;align-items:center;gap:10px}
+  .st{display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;box-shadow:inset 0 0 0 1px var(--line)}
+  .st .lg{width:72px;height:48px;border-radius:12px;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line);flex:none;overflow:hidden}
+  .st .lg img{max-width:62px;max-height:34px}
+  .st b{display:block;font-size:15.5px}
+  .st span{font-size:13.5px;color:var(--ink-3)}
+  .st .dir{margin-left:auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--bg)}
+  .online{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+  .online .l{font-size:13px;color:var(--ink-3);font-weight:600}
+  .online .row{display:flex;gap:8px;margin-top:10px}
+  .online .row a{flex:1;height:44px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:13.5px}
+  /* support */
+  .sup{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px}
+  .sup .c{border-radius:28px;padding:30px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);display:flex;flex-direction:column;min-height:300px}
+  .sup .c .ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--bg)}
+  .sup .c h4{font-size:26px;letter-spacing:-.03em;margin-top:22px}
+  .sup .c p{color:var(--ink-3);margin-top:8px;font-size:15.5px}
+  .sup .c .b{margin-top:auto}
+  .sup .c.dark{background:var(--ink);color:#fff}
+  .sup .c.dark p{color:rgba(255,255,255,.62)}
+  .sup .c.dark .ic{background:rgba(255,255,255,.08)}
+  .sup .phone{white-space:nowrap;font-size:28px;font-weight:700;letter-spacing:-.03em;margin-top:18px}
+  /* footer */
+  .foot{background:#0B0B0D;color:#fff;margin-top:120px;padding:72px 0 30px}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  .fgrid h5{font-size:13px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:14px}
+  .fgrid a{display:block;color:rgba(255,255,255,.82);font-size:15px;padding:5px 0}
+  .news{display:flex;gap:6px;margin-top:26px;background:rgba(255,255,255,.07);border-radius:99px;padding:5px;max-width:380px}
+  .news input{flex:1;background:none;border:0;color:#fff;padding:0 14px;font:inherit;font-size:14.5px}
+  .fbot{display:flex;gap:22px;margin-top:56px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:13.5px;color:rgba(255,255,255,.5)}
+  .fbot .sp{flex:1}
+  section.s{padding:48px 0}
+  body{background:var(--bg);min-height:0}
+  .clist span{cursor:pointer;transition:background .2s,color .2s}
+  .clist span:hover:not(.on){background:var(--bg-2)}
+  .stores .count{font-size:15px;color:var(--ink-2);padding:14px;border-radius:18px;box-shadow:inset 0 0 0 1px var(--line)}
+  .stores .count b{display:block;font-size:28px;letter-spacing:-.03em;color:var(--ink)}
+  .wtb .map svg,.delta svg{transition:opacity .25s}
+</style></head>
+<body>
+<section class="s"><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Where to buy</span><h2 style="margin-top:12px">Find Nikai in your city.</h2></div><p>Pick your city on the map to see the nearest showrooms, or buy online.</p></div>
+  <div class="wtb">
+    <div class="cities"><h3>12 cities</h3><p>Showrooms from Alexandria to Sohag, with more opening.</p>
+      <div class="clist"><span class="on">Cairo<small>6</small></span><span>Giza<small>3</small></span><span>Alexandria<small>4</small></span><span>Mansoura<small>2</small></span><span>Tanta<small>2</small></span><span>Al Sharqia<small>2</small></span><span>Ismailia<small>1</small></span><span>Banha<small>1</small></span><span>Damanhour<small>1</small></span><span>Fayoum<small>1</small></span><span>Asyut<small>1</small></span><span>Sohag<small>1</small></span></div>
+      <div class="delta"><b>Delta &amp; Cairo</b><div data-map='{"w":290,"h":170,"box":[29.5,32.7,29.85,31.7],"sel":"Cairo","small":true,"zoom":true,"only":["Alexandria","Tanta","Mansoura","Cairo","Ismailia","Banha"]}' style="width:100%;height:170px"></div></div></div>
+    <div class="map"><div data-map='{"w":560,"h":500,"sel":"Cairo","only":["Alexandria","Cairo","Fayoum","Asyut","Sohag"]}' style="width:100%;height:100%"></div></div>
+    <div class="stores"><h4><i data-lucide="map-pin" style="color:var(--red-500)"></i>Cairo</h4>
+      <div class="st"><span class="lg"><img src="img/btech-logo.png" alt=""></span><div><b>B.TECH</b><span>Mokatam · Maadi · Hadayek</span></div><span class="dir"><i data-lucide="navigation" class="sm"></i></span></div>
+      <div class="st"><span class="lg"><img src="img/raya-logo.png" alt=""></span><div><b>Raya Shop</b><span>Abbas El Akad · Mega Concord Tagamo'a</span></div><span class="dir"><i data-lucide="navigation" class="sm"></i></span></div>
+      <div class="st"><span class="lg" style="font-weight:800;font-size:13px">HyperOne</span><div><b>Hyper One</b><span>10th of Ramadan</span></div><span class="dir"><i data-lucide="navigation" class="sm"></i></span></div>
+      <div class="online"><span class="l">Or buy online</span><div class="row"><a>btech.com<i data-lucide="arrow-up-right" class="sm"></i></a><a>rayashop.com<i data-lucide="arrow-up-right" class="sm"></i></a><a>amazon.eg<i data-lucide="arrow-up-right" class="sm"></i></a></div></div>
+    </div>
+  </div>
+</div></section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+boot();
+// Tap a city: the pin moves on both maps and the panel follows.
+const panel = document.querySelector('.wtb .stores'), cairo = panel.innerHTML, online = panel.querySelector('.online').outerHTML;
+const chips = [...document.querySelectorAll('.clist span')];
+const nameOf = (c) => c.firstChild.textContent.trim();
+function pick(city) {
+  const chip = chips.find((c) => nameOf(c) === city); if (!chip) return;
+  const n = +chip.querySelector('small').textContent;
+  chips.forEach((c) => c.classList.toggle('on', c === chip));
+  document.querySelectorAll('[data-map]').forEach((el) => { const o = JSON.parse(el.dataset.map); o.sel = city; el.innerHTML = egyptMap(o); });
+  panel.innerHTML = city === 'Cairo' ? cairo
+    : `<h4><i data-lucide="map-pin" style="color:var(--red-500)"></i>${city}</h4><div class="count"><b class="num">${n}</b>${n === 1 ? 'showroom' : 'showrooms'} in ${city}</div><span class="sp" style="flex:1"></span>${online}`;
+  lucide.createIcons({ attrs: { 'stroke-width': 1.9 } });
+}
+chips.forEach((chip) => chip.addEventListener('click', () => {
+  pick(nameOf(chip));
+  if (parent !== window) parent.postMessage({ nikaiCity: nameOf(chip) }, location.origin === 'null' ? '*' : location.origin);
+}));
+addEventListener('message', (e) => { if (e.data && e.data.nikaiCity) pick(e.data.nikaiCity); });
+</script>
+</body></html>

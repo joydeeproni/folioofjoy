@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Enroll · Payment</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  .enroll{display:grid;grid-template-columns:240px minmax(0,1fr) 340px;gap:32px;padding-top:32px;padding-bottom:64px;align-items:start}
+  .sub-steps{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px}
+  .sub-steps .t{font-size:13px;font-weight:600;color:var(--text-3);margin:0 0 10px 12px}
+  .ss{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:15px;font-weight:600;color:var(--text-3);position:relative}
+  .ss .d{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;box-shadow:inset 0 0 0 1.5px var(--ink-300)}
+  .ss.done{color:var(--text-2)} .ss.done .d{background:var(--sage-100);box-shadow:none;color:var(--sage-700)}
+  .ss.on{background:#fff;color:var(--text);box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)}
+  .ss.on .d{background:var(--petrol-600);color:#fff;box-shadow:none}
+  .ss .d svg{width:13px;height:13px;stroke-width:2.6}
+  .saved{margin:18px 12px 0;font-size:13px;color:var(--text-3);display:flex;gap:8px;align-items:center}
+  .saved svg{color:var(--sage-700)}
+  .pay{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+  .opt{padding:18px 20px;display:flex;gap:14px;align-items:flex-start;cursor:pointer}
+  .opt .o{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink-300);flex:none;margin-top:2px}
+  .opt.on{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--petrol-600)}
+  .opt.on .o{box-shadow:inset 0 0 0 6px var(--petrol-600)}
+  .opt .ic{width:40px;height:40px;border-radius:11px;background:var(--surface);color:var(--petrol-600);display:grid;place-items:center;flex:none}
+  .opt h3{font-size:16px;font-weight:700}
+  .opt p{font-size:14px;color:var(--text-2);margin-top:2px}
+  .opt .rec{margin-left:auto}
+  .form{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:16px 16px;padding-top:18px;border-top:1px solid var(--line)}
+  .form .full{grid-column:1/-1}
+  .in label{display:block;font-size:13.5px;font-weight:600;color:var(--text-2);margin-bottom:6px}
+  .in .box{height:46px;border-radius:var(--r-xs);background:#fff;box-shadow:inset 0 0 0 1px var(--line-strong);display:flex;align-items:center;padding:0 14px;font-size:15px;gap:10px}
+  .in .box.focus{box-shadow:inset 0 0 0 1.5px var(--petrol-600),0 0 0 4px rgba(50,100,125,.12)}
+  .in .box .ok{margin-left:auto;color:var(--sage-700)}
+  .in .help-t{font-size:12.5px;color:var(--text-3);margin-top:6px}
+  .nav-row{display:flex;align-items:center;margin-top:24px}
+  .nav-row .sp{flex:1}
+  .lock{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3)}
+  .plan-mini{display:flex;gap:12px;align-items:center;margin-top:4px}
+</style>
+</head><body>
+<div id="chrome"></div>
+
+<main class="wrap enroll">
+  <nav class="sub-steps" aria-label="Enrollment steps">
+    <span class="t">Enrollment · 4 of 6</span>
+    <span class="ss done"><span class="d"><i data-lucide="check"></i></span>Applicant info</span>
+    <span class="ss done"><span class="d"><i data-lucide="check"></i></span>Election period</span>
+    <span class="ss done"><span class="d"><i data-lucide="check"></i></span>Other coverage</span>
+    <span class="ss on"><span class="d">4</span>Payment</span>
+    <span class="ss"><span class="d">5</span>Representative</span>
+    <span class="ss"><span class="d">6</span>Authorize &amp; submit</span>
+    <span class="saved"><i data-lucide="cloud-check" class="sm"></i>Progress saved 2 min ago</span>
+  </nav>
+
+  <section>
+    <div class="head rise">
+      <h1>How would you like to pay your premium?</h1>
+      <p>Your $12 monthly premium starts with your coverage on January 1, 2027. You can change this anytime.</p>
+    </div>
+
+    <div class="pay">
+      <div class="card opt on">
+        <span class="o"></span>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px"><h3>Electronic funds transfer (EFT)</h3><span class="chip ok rec" style="height:24px">Most popular</span></div>
+          <p>Paid automatically from your bank account each month.</p>
+          <div class="form">
+            <div class="in full"><label>Account type</label>
+              <div class="seg"><button class="on"><i data-lucide="landmark" class="sm"></i>Checking</button><button><i data-lucide="piggy-bank" class="sm"></i>Savings</button></div>
+            </div>
+            <div class="in full"><label>Name on account</label><div class="box">John A. Doe<i data-lucide="check" class="sm ok"></i></div></div>
+            <div class="in"><label>Routing number</label><div class="box num">021 000 021<i data-lucide="check" class="sm ok"></i></div><div class="help-t">JPMorgan Chase Bank, N.A.</div></div>
+            <div class="in"><label>Account number</label><div class="box focus num">•••• •••• 4821</div><div class="help-t">The number at the bottom of your check</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card opt"><span class="o"></span><span class="ic"><i data-lucide="mail"></i></span><div><h3>Direct bill</h3><p>Get a monthly statement in the mail and pay by check.</p></div></div>
+      <div class="card opt"><span class="o"></span><span class="ic"><i data-lucide="landmark"></i></span><div><h3>Deduct from Social Security</h3><p>Taken from your monthly Social Security (SSA) benefit.</p></div></div>
+      <div class="card opt"><span class="o"></span><span class="ic"><i data-lucide="train-front"></i></span><div><h3>Deduct from Railroad Retirement</h3><p>Taken from your Railroad Retirement Board (RRB) benefit.</p></div></div>
+    </div>
+
+    <div class="nav-row">
+      <a class="btn quiet"><i data-lucide="arrow-left" class="sm"></i>Other coverage</a>
+      <span class="sp"></span>
+      <span class="lock" style="margin-right:16px"><i data-lucide="lock" class="sm"></i>256-bit encrypted</span>
+      <a class="btn primary">Save and continue <i data-lucide="arrow-right" class="sm"></i></a>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <div class="receipt">
+      <div class="top">
+        <div class="kicker"><i data-lucide="receipt" class="sm"></i>You're enrolling in</div>
+        <h3 style="font-size:18px;font-weight:700;letter-spacing:-.015em;margin-top:10px">Convey Advantage Plus (HMO)</h3>
+        <div class="sub num">H0000-001 · <span data-stars="4.5"></span></div>
+      </div>
+      <div class="perf"><i></i></div>
+      <div class="rows">
+        <div class="row"><span class="t">Monthly premium</span><span class="v num">$12.00</span></div>
+        <div class="row"><span class="t">Est. drug costs</span><span class="v num">$38.00 / mo</span></div>
+        <div class="row"><span class="t">Coverage starts</span><span class="v num">Jan 1, 2027</span></div>
+        <div class="row"><span class="t">Election period</span><span class="v">Annual (AEP)</span></div>
+      </div>
+      <div class="foot" style="border-top:1px solid var(--line);flex-direction:row;align-items:baseline;justify-content:space-between">
+        <span style="font-weight:600">Est. yearly cost</span><span class="num" style="font-size:24px;font-weight:700;letter-spacing:-.02em">$600</span>
+      </div>
+    </div>
+    <div class="card help">
+      <span class="avatar" style="background:var(--petrol-50);color:var(--petrol-600)"><i data-lucide="headset" class="sm"></i></span>
+      <div><b>Need a hand?</b>A licensed agent can finish this with you: <span class="num">1-800-234-5678</span></div>
+    </div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ step: 5 });</script>
+</body></html>

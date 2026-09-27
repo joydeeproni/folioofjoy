@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Objection handling</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .acc{margin-top:12px}
+  .say{margin:12px 0 0 52px;border-radius:14px;background:var(--blue-50);padding:12px 14px;font-size:14px;line-height:1.55;color:var(--ink);font-weight:600}
+  .say small{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue-700);margin-bottom:4px}
+  .fi.q{background:#FFF3D1 !important;color:#9A6A00 !important}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Objection handling" data-left="back" data-right='["search"]'></span>
+</header>
+<section class="acc" id="acc" data-stagger></section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const I = [['“It’s too expensive”', 'Price, and how to reframe it'], ['“We already have an accountant”', 'When they’re happy where they are', 1], ['“Send me an email”', 'Keep the call going'], ['“Now isn’t a good time”', 'Book a better time'], ['“We do it ourselves”', 'DIY bookkeeping'], ['“I need to ask my partner”', 'Bring the partner in']];
+  acc.innerHTML = I.map(r => `<div class="it ic ${r[2] ? 'open' : ''}"><div class="hd"><span class="fi"><i data-lucide="message-circle-question"></i></span><div class="grow"><h3>${r[0]}</h3><div class="ds num">${r[1]}</div></div><i data-lucide="chevron-down" class="cv"></i></div>${r[2] ? `<div class="body"><p>Most firms that say this are happy with their accountant but not with the admin around them: chasing receipts, late payroll, surprise bills.</p><p>Don’t argue with the relationship. Ask what they’d fix, then offer to run one month alongside.</p></div>` : ''}</div>`).join('');
+  boot();
+</script></body></html>

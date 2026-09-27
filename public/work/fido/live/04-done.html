@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · You did it</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .top{display:flex;justify-content:center;margin-top:14px}
+  .title{padding:30px 24px 0}
+  .title h1{font-size:22px;font-weight:400;letter-spacing:-.015em;line-height:1.36}
+  .title .lvl{display:block;margin-top:24px}
+  .peek{position:absolute;left:24px;right:24px;top:290px;height:120px;border-radius:26px;background:#fff}
+  .scrim{position:absolute;inset:0;background:rgba(50,54,65,.62);animation:fade .4s ease both}
+  .sheet{position:absolute;left:0;right:0;top:318px;bottom:0;border-radius:30px 30px 0 0;background:var(--char);color:#fff;text-align:center;padding:0 40px}
+  .badge{position:relative;width:150px;height:160px;margin:48px auto 0}
+  .badge svg{width:100%;height:100%}
+  .cf{position:absolute;animation:floaty 3s ease-in-out infinite}
+  .sheet h2{font-size:28px;font-weight:400;letter-spacing:-.02em;margin-top:34px}
+  .sheet p{font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);margin-top:24px}
+  .ok{display:inline-flex;height:44px;padding:0 18px;border-radius:10px;background:#fff;color:var(--char);align-items:center;font-weight:600;font-size:16px;margin-top:40px}
+</style></head>
+<body class="peach">
+<div class="top"><span class="pause"><i data-lucide="pause"></i>Pause Quest</span></div>
+<div class="title"><h1>Socialisation Adventure Going On Errands</h1><span class="lvl">Level 1</span></div>
+<div class="peek"></div>
+<div class="scrim"></div>
+<section class="sheet a-sheet" style="animation-delay:.1s">
+  <div class="badge a-pop" style="animation-delay:.45s"><span id="ck"></span></div>
+  <div id="conf"></div>
+  <h2 class="a-rise" style="animation-delay:.7s">You did it!</h2>
+  <p class="a-rise" style="animation-delay:.8s">Christophe will check in your quest progress and will let you know how you did and what to do next.</p>
+  <a class="ok press a-rise" id="go" style="animation-delay:.9s">Okay!</a>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('ck').outerHTML = ILL.check();
+  document.getElementById('conf').outerHTML = ILL.confetti();
+  document.querySelectorAll('.cf').forEach((c, i) => { c.style.animationDelay = `${-i * .7}s`; c.classList.add('a-pop'); });
+  boot({});
+</script>
+</body></html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Chats</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .list{height:640px;overflow:hidden}
+  .row{padding:13px 18px;align-items:flex-start}
+  .vav{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;color:#fff;position:relative;flex:none}
+  .vav svg.lucide{width:22px;height:22px}
+  .vav .c{position:absolute;top:-3px;right:-4px;min-width:21px;height:21px;border-radius:11px;background:#2F7BF6;color:#fff;font-size:10.5px;font-weight:800;display:grid;place-items:center;padding:0 5px;box-shadow:0 0 0 2.5px #fff}
+  .vav .on{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#2FD28A;box-shadow:0 0 0 2.5px #fff}
+  .msg{font-size:13.5px;color:var(--ink-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  .read .msg{color:var(--ink-3);font-weight:500}
+  .pg{font-size:12px;color:var(--ink-3);margin-top:3px;display:flex;align-items:center;gap:5px}
+  .pg code{font-family:inherit;font-weight:700;color:var(--blue);background:var(--blue-50);padding:1px 6px;border-radius:6px}
+  .row .tm.new{color:var(--blue)}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Chats" data-right='["search","bell"]'></span>
+</header>
+<div class="segc"><span>Teams</span><span class="on">Leads</span></div>
+<section class="list" id="list" data-stagger></section>
+<span data-tabs="Chats"></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const G = ['linear-gradient(150deg,#FFAE45,#FF7A1A)', 'linear-gradient(150deg,#8C72FF,#5B3FF6)', 'linear-gradient(150deg,#67CFFF,#2FA3F2)', 'linear-gradient(150deg,#FF8FA0,#F2475F)', 'linear-gradient(150deg,#5BE0A8,#18A56C)'];
+  const C = [
+    ['Visitor · Android', 'Does the Growth plan work for a team of 8?', '/pricing', '09:41', 2, 1],
+    ['Visitor · iPhone', 'Hi, I was just checking something on your…', '/services/payroll', '09:38', 1, 1],
+    ['Maya L. · Chrome', 'Thanks! Friday at 10 works for me.', '/contact', '09:12', 0, 0],
+    ['Visitor · Windows', 'Can you do bookkeeping in Xero?', '/services', '08:57', 0, 0],
+    ['Visitor · Android', 'What’s included in the onboarding?', '/pricing', 'Yesterday', 0, 0],
+    ['Tom N. · Safari', 'I’ll check with my manager and come back.', '/case-studies', 'Yesterday', 0, 0],
+    ['Visitor · iPad', 'Is there a monthly option?', '/pricing', 'Mon', 0, 0],
+  ];
+  list.innerHTML = C.map((c, i) => `<div class="row ${c[4] ? '' : 'read'}"><span class="vav" style="background:${G[i % 5]}"><i data-lucide="${c[0].startsWith('Visitor') ? 'user-round' : 'user-round-check'}"></i>${c[4] ? `<b class="c num">${c[4]}</b>` : ''}</span>
+    <div class="grow"><div class="nm" style="font-size:15px">${c[0]}</div><div class="msg">${c[1]}</div><div class="pg">Screen: ${c[2]}</div></div><span class="tm num ${c[4] ? 'new' : ''}">${c[3]}</span></div>`).join('');
+  boot();
+</script></body></html>

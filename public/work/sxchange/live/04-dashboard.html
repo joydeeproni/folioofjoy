@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Seller dashboard</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+  .k{padding:18px 20px}.k b{display:block;font-size:28px;letter-spacing:-.025em;font-weight:700;margin-top:4px}
+  .k .s{font-size:13px;color:var(--ink-3)}
+  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .tabs span{padding:10px 0;font-weight:600;color:var(--ink-3);margin-bottom:-1px}
+  .tabs span.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--navy-700)}
+  .tabs .n{font-size:12px;background:var(--navy-50);border-radius:99px;padding:1px 7px;margin-left:6px;color:var(--ink-2)}
+  .row{display:grid;grid-template-columns:minmax(0,1.6fr) 220px 110px 90px 110px 120px;gap:20px;align-items:center;padding:16px 20px}
+  .row + .row{border-top:1px solid var(--line)}
+  .who{display:flex;gap:12px;align-items:center;min-width:0}
+  .who b{display:block;font-weight:700;line-height:1.25}
+  .who span{font-size:13px;color:var(--ink-3)}
+  .fig .label{display:block}.fig b{font-size:17px;font-weight:700}
+  .th{display:grid;grid-template-columns:minmax(0,1.6fr) 220px 110px 90px 110px 120px;gap:20px;padding:12px 20px;background:#FAFBFC;border-bottom:1px solid var(--line)}
+  .th span{font-size:12.5px;font-weight:600;color:var(--ink-3)}
+  .pros{background:var(--navy-50);padding:6px 20px 14px 76px}
+  .pr{display:grid;grid-template-columns:36px 1fr 180px 150px 150px;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .pr:first-child{border-top:0}
+  .pr .av{width:32px;height:32px;font-size:12px;background:var(--blue-500)}
+  .pr b{display:block}.pr span.s{font-size:12.5px;color:var(--ink-3)}
+  .below{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-top:16px}
+  .box{padding:20px 22px}.box h3{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .box h3 a{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--blue-600)}
+  .ev{display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+  .ev:first-of-type{border-top:0}
+  .ev .ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+  .ev b{font-weight:700}.ev .t{font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+  .ev p{color:var(--ink-2);font-size:13px;margin-top:1px}
+  .past{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+  .past:first-of-type{border-top:0}.past b{display:block;font-weight:700;line-height:1.25}.past span.s{font-size:12.5px;color:var(--ink-3)}
+  .past .fm{opacity:.75}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Your listings</h1><p>3 live listings · 12 new prospects this week</p></div><span class="sp"></span><a class="btn primary"><i data-lucide="plus" class="sm"></i>Sell your units</a></div>
+  <div class="kpis">
+    <div class="card k"><span class="label">On offer</span><b>₹17.59 L</b><span class="s">Across 3 listings</span></div>
+    <div class="card k"><span class="label">Views</span><b>465</b><span class="s">+38 this week</span></div>
+    <div class="card k"><span class="label">Prospects</span><b>35</b><span class="s">12 new this week</span></div>
+    <div class="card k"><span class="label">Pending approval</span><b style="color:var(--amber-600)">1</b><span class="s">Usually within a day</span></div>
+  </div>
+  <div class="tabs"><span class="on">Current<span class="n">3</span></span><span>Past<span class="n">2</span></span><span>Prospects<span class="n">35</span></span></div>
+  <section class="card" style="overflow:hidden">
+    <div class="th"><span>Fund</span><span>Price</span><span>Status</span><span>Views</span><span>Prospects</span><span></span></div>
+    <div class="row"><div class="who"><span class="fm" style="background:#1E3A5F">MIO</span><div><b>Meridian Income Opportunities Fund</b><span>1,00,000 units · AIF Cat II</span></div></div><div data-deal="12.4981,8.7487"></div><span><span class="chip green">Active</span></span><div class="fig"><b>243</b></div><div class="fig"><b>17</b></div><div style="display:flex;gap:6px;justify-content:flex-end"><span class="ib"><i data-lucide="pencil" class="sm"></i></span><span class="ib"><i data-lucide="chevron-up" class="sm"></i></span></div></div>
+    <div class="pros">
+      <div class="pr"><span class="av">AM</span><div><b>Anita M.</b><span class="s">Wealth manager · Mumbai</span></div><span>Asked for 50,000 units</span><span class="s">Today, 10:24</span><a class="btn ghost sm">Share my details</a></div>
+      <div class="pr"><span class="av" style="background:var(--navy-700)">VS</span><div><b>Vikram S.</b><span class="s">Family office · Bengaluru</span></div><span>Asked for all units</span><span class="s">Yesterday</span><a class="btn ghost sm">Share my details</a></div>
+      <div class="pr"><span class="av" style="background:var(--green-700)">PN</span><div><b>Priya N.</b><span class="s">HNI investor · Pune</span></div><span>Viewed 3 times</span><span class="s">2 days ago</span><span class="chip green" style="justify-self:start">Details shared</span></div>
+    </div>
+    <div class="row"><div class="who"><span class="fm" style="background:#B5541F">ASF</span><div><b>Aravali Special Situations Fund</b><span>64,000 units · AIF Cat III</span></div></div><div data-deal="9.1243,6.8432"></div><span><span class="chip green">Active</span></span><div class="fig"><b>134</b></div><div class="fig"><b>12</b></div><div style="display:flex;gap:6px;justify-content:flex-end"><span class="ib"><i data-lucide="pencil" class="sm"></i></span><span class="ib"><i data-lucide="chevron-down" class="sm"></i></span></div></div>
+    <div class="row"><div class="who"><span class="fm" style="background:#2E6B4A">SGP</span><div><b>Sahyadri Growth Partners Fund</b><span>42,500 units · AIF Cat II</span></div></div><div data-deal="8.7343,6.9874"></div><span><span class="chip amber">In review</span></span><div class="fig"><b>—</b></div><div class="fig"><b>—</b></div><div style="display:flex;gap:6px;justify-content:flex-end"><span class="ib"><i data-lucide="pencil" class="sm"></i></span><span class="ib"><i data-lucide="more-horizontal" class="sm"></i></span></div></div>
+  </section>
+  <div class="below">
+    <section class="card box"><h3><i data-lucide="activity" class="sm"></i>Recent activity<a>View all</a></h3>
+      <div class="ev"><span class="ic" style="background:var(--blue-100);color:var(--blue-700)"><i data-lucide="user-plus" class="sm"></i></span><div><b>Anita M.</b> asked about Meridian Income Opportunities<p>Wealth manager, Mumbai · wants 50,000 units</p></div><span class="t">10:24</span></div>
+      <div class="ev"><span class="ic" style="background:var(--green-100);color:var(--green-700)"><i data-lucide="send" class="sm"></i></span><div>You shared your details with <b>Priya N.</b><p>She has your email and phone. Agree terms directly.</p></div><span class="t">Yesterday</span></div>
+      <div class="ev"><span class="ic" style="background:var(--amber-100);color:var(--amber-600)"><i data-lucide="clock" class="sm"></i></span><div><b>Sahyadri Growth Partners</b> is in review<p>Statement of account received. Usually approved within one working day.</p></div><span class="t">Mon</span></div>
+      <div class="ev"><span class="ic" style="background:var(--navy-50);color:var(--navy-700)"><i data-lucide="trending-up" class="sm"></i></span><div>NAV updated for <b>Aravali Special Situations</b><p>₹9.0412 → ₹9.1243. Your discount moved from 24% to 25%.</p></div><span class="t">Sun</span></div>
+    </section>
+    <section class="card box"><h3><i data-lucide="archive" class="sm"></i>Past listings<a>See all 2</a></h3>
+      <div class="past"><span class="fm" style="background:#7A4A2E">KCP</span><div><b>Kalahari Capital Partners India IV</b><span class="s">60,000 units · 25% off · sold to a family office</span></div><span class="chip">Sold · Aug</span></div>
+      <div class="past"><span class="fm" style="background:#4A5A7A">ORB</span><div><b>Orbit Tech Opportunities Fund</b><span class="s">20,000 units · withdrawn after 41 days</span></div><span class="chip">Withdrawn</span></div>
+      <div style="margin-top:14px;padding:14px;border-radius:12px;background:var(--yellow-100);font-size:13.5px;color:var(--ink-2);display:flex;gap:10px"><i data-lucide="lightbulb" class="sm" style="color:var(--amber-600);margin-top:2px"></i><span>Paid a new capital call? <b style="color:var(--ink)">Update your amount paid</b> so buyers see the right balance payable.</span></div>
+    </section>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ mode: 'sell', active: 'Dashboard' });</script></body></html>

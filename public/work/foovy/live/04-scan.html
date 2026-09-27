@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=375"><title>Foovy · Add items</title>
+<link rel="stylesheet" href="foovy.css">
+<style>
+  .photo{position:absolute;left:0;right:0;top:0;height:356px;background:url(assets/the-creative-exchange-ixS7UCRJTdM-unsplash.jpg) center 60%/cover}
+  .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,0) 30%,rgba(12,13,11,0) 70%,var(--bg))}
+  .box{position:absolute;border:2.5px solid #fff;border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,0)}
+  .box span{position:absolute;left:-2px;top:-26px;background:#fff;color:#0C0D0B;font-size:12px;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
+  .top{position:relative;z-index:3;display:flex;justify-content:space-between;padding:0 18px;font-size:16px;font-weight:600}
+  .top b{font-weight:700}
+  .top a{color:#fff}
+  .panel{position:absolute;left:0;right:0;top:330px;bottom:0;padding:0 20px}
+  .panel .hd{display:flex;justify-content:space-between;align-items:baseline}
+  .panel .hd b{font-size:22px;font-weight:700;letter-spacing:-.02em}
+  .panel .hd a{color:var(--green);font-weight:600}
+  .panel p{font-size:14px;color:var(--text-3);margin-top:4px}
+  .items{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .it{background:var(--card);border-radius:18px;padding:10px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12.5px;font-weight:600;position:relative}
+  .it img{width:50px;height:50px}
+  .it small{font-size:11px;color:var(--text-3);font-weight:500}
+  .it .ok{position:absolute;right:6px;top:6px;width:18px;height:18px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+  .it.add{border:1.5px dashed var(--line-2);background:transparent;color:var(--green);justify-content:center}
+  .cta{position:absolute;left:20px;right:20px;bottom:40px;display:grid;grid-template-columns:1fr 1.6fr;gap:10px}
+</style></head>
+<body>
+<div class="photo">
+  <div class="box" style="left:118px;top:140px;width:84px;height:130px"><span>Cucumber ×2</span></div>
+  <div class="box" style="left:196px;top:118px;width:56px;height:112px"><span>Tzatziki</span></div>
+  <div class="box" style="left:262px;top:222px;width:62px;height:62px"><span>Dill</span></div>
+</div>
+<div data-status></div>
+<div class="top"><a>Cancel</a><b>Add Items</b><a style="color:var(--green)">Scan More</a></div>
+<div class="panel">
+  <div class="hd"><b>We have detected the following items</b></div>
+  <p>Check the list, then pick where each one goes.</p>
+  <div class="items">
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/cucumber.png">Cucumber<small>×2</small></div>
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/bell_pepper.png">Peppers<small>×3</small></div>
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/glass_of_milk.png">Tzatziki<small>×1</small></div>
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/leafy_green.png">Dill<small>×1</small></div>
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/broccoli.png">Broccoli<small>×1</small></div>
+    <div class="it"><span class="ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#06260F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><img src="assets/food/lemon.png">Lemons<small>×4</small></div>
+    <div class="it add"><i data-lucide="plus"></i>Add<small>manually</small></div>
+  </div>
+  <div class="cta"><a class="btn ghost"><i data-lucide="pencil" class="sm"></i>Edit</a><a class="btn primary">Sort into sections<i data-lucide="arrow-right" class="sm"></i></a></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script><script>boot();</script>
+</body></html>

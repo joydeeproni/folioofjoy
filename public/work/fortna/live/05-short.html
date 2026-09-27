@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Items short</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  iframe{position:absolute;inset:0;width:100%;height:768px;border:0}
+  body{width:auto}
+  .scrim{position:absolute;inset:0;background:rgba(20,28,34,.5)}
+  .modal{position:absolute;left:50%;transform:translateX(-50%);top:120px;width:700px;background:#fff;border-radius:20px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);overflow:hidden}
+  .mh{padding:20px 22px 14px;display:flex;gap:14px;align-items:flex-start}
+  .mh .ic{width:44px;height:44px;border-radius:12px;background:var(--amber-100);color:var(--amber-600);display:grid;place-items:center;flex:none}
+  .mh h2{font-size:22px;font-weight:700;letter-spacing:-.015em}
+  .mh p{color:var(--ink-2);font-size:14px;margin-top:2px}
+  .row{display:grid;grid-template-columns:1fr 150px 190px;gap:14px;align-items:center;padding:14px 22px;border-top:1px solid var(--line)}
+  .row b{display:block;font-size:15px}.row span.s{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .step{display:flex;align-items:center;height:48px;border-radius:12px;background:var(--bg)}
+  .step button{width:48px;height:48px;display:grid;place-items:center;color:var(--ink-2)}
+  .step b{flex:1;text-align:center;font-size:20px;font-variant-numeric:tabular-nums}
+  .sel{height:48px;border-radius:12px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:600;font-size:14px}
+  .sel.ph{color:var(--ink-3);font-weight:500}
+  .reasons{display:flex;gap:8px;padding:0 22px 16px;flex-wrap:wrap}
+  .reasons span{height:36px;padding:0 14px;border-radius:99px;background:var(--bg);display:inline-flex;align-items:center;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .reasons span.on{background:var(--steel-700);color:#fff}
+  .mf{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;padding:16px 22px;background:#F7F8F9;border-top:1px solid var(--line)}
+</style></head>
+<body>
+<iframe id="bgf" src="04-pack.html?q=3" tabindex="-1" aria-hidden="true"></iframe>
+<div class="scrim"></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="t">
+  <div class="mh"><span class="ic"><i data-lucide="triangle-alert"></i></span><div><h2 id="t">Report items short</h2><p>Tote T0786456542 · order 112-5698-4789. The order will be flagged for a re-pick.</p></div></div>
+  <div class="row"><div><b>Husky Mechanics Tool Set</b><span class="s">SKU 1001381718 · 3 of 5 packed</span></div><div class="step"><button><i data-lucide="minus" class="sm"></i></button><b>2</b><button><i data-lucide="plus" class="sm"></i></button></div><div class="sel">Damaged<i data-lucide="chevron-down" class="sm"></i></div></div>
+  <div class="row"><div><b>Screw driver set</b><span class="s">SKU 1001381919 · 0 of 2 packed</span></div><div class="step"><button><i data-lucide="minus" class="sm"></i></button><b>0</b><button><i data-lucide="plus" class="sm"></i></button></div><div class="sel ph">Select reason<i data-lucide="chevron-down" class="sm"></i></div></div>
+  <div style="padding:6px 22px 8px" class="label">Common reasons</div>
+  <div class="reasons"><span class="on">Damaged</span><span>Not in tote</span><span>Wrong item</span><span>Missing label</span></div>
+  <div class="mf"><a class="btn ghost">Cancel</a><a class="btn primary"><i data-lucide="check"></i>Report 2 short</a></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>const WW = new URLSearchParams(location.search).get('w'); if (WW) { document.body.style.width = WW + 'px'; document.getElementById('bgf').src = '04-pack.html?q=3&w=' + WW; }
+lucide.createIcons({ attrs: { 'stroke-width': 2 } });</script>
+</body></html>

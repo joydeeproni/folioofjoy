@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Dump cart</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  .body{grid-template-columns:1fr 280px}
+  .cartcard{display:flex;flex-direction:column}.cartcard .hd{display:flex;align-items:center;gap:10px;padding:14px 18px 0}.cartcard .hd b{font-size:15px}
+  .side{display:flex;flex-direction:column;gap:14px}
+  .prog{padding:18px}
+  .prog .big{font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:8px;font-variant-numeric:tabular-nums}.prog .big small{font-size:20px;color:var(--ink-3);font-weight:600}
+  .dest{padding:16px;display:flex;gap:12px;align-items:center}
+  .dest .ic{width:44px;height:44px;border-radius:12px;background:var(--steel-100);color:var(--steel-800);display:grid;place-items:center}
+  .dest b{display:block}.dest span{font-size:13px;color:var(--ink-3)}
+  .side .btn{width:100%}
+</style></head>
+<body>
+<div id="top"></div>
+<div class="cue"><span class="ic"><i data-lucide="scan-barcode"></i></span><div><b>Scan the tote to remove</b><br><span>Drop it on conveyor lane 3 · pack stations 04–08</span></div></div>
+<main class="body">
+  <section class="card cartcard"><div class="hd"><b>Cart C00225</b><span class="pill amber" style="height:26px">Dumping</span></div><div id="cartbox"></div></section>
+  <aside class="side">
+    <section class="card prog"><span class="label">Removed from cart</span><div class="big">5<small> / 12</small></div></section>
+    <section class="card dest"><span class="ic"><i data-lucide="move-right"></i></span><div><b>Conveyor lane 3</b><span>Induct at the green light</span></div></section>
+    <span style="flex:1"></span>
+    <a class="btn warn"><i data-lucide="triangle-alert"></i>Tote damaged</a>
+    <a class="btn primary" style="opacity:.45"><i data-lucide="check"></i>Dump complete</a>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const rem = [0, 1, 2, 4, 5];
+  document.getElementById('cartbox').innerHTML = cart(TOTES.map((id, i) => ({ id, slot: SLOTS[i], state: rem.includes(i) ? 'removed' : 'tote' })));
+  boot({ task: 'Dump cart', sub: 'Wave 14 complete · send totes to packing', pills: '<span class="pill steel"><i data-lucide="shopping-cart" class="sm"></i>Cart <b>C00225</b></span>' });
+</script></body></html>

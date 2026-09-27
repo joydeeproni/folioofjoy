@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Pick to tote</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  .body{grid-template-columns:292px 1fr}
+  .item{padding:16px;display:flex;flex-direction:column}
+  .item .ph{height:170px;border-radius:12px;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+  .item .ph img{height:160px}
+  .item h3{font-size:18px;font-weight:700;line-height:1.25;margin-top:14px;letter-spacing:-.01em}
+  .item .sku{font-size:13px;color:var(--ink-3);margin-top:4px;font-variant-numeric:tabular-nums}
+  .qty{margin-top:16px;display:flex;align-items:flex-end;gap:14px;padding:14px;border-radius:14px;background:var(--steel-50);box-shadow:inset 0 0 0 1px var(--steel-100)}
+  .qty b{font-size:64px;font-weight:800;line-height:.9;letter-spacing:-.04em;color:var(--steel-800)}
+  .qty span{font-size:14px;color:var(--ink-2);padding-bottom:6px}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13.5px;margin-top:14px}
+  .kv dt{color:var(--ink-3)}.kv dd{margin:0;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+  .item .sp{flex:1}
+  .right{display:flex;flex-direction:column;gap:14px}
+  .cartcard{flex:1;display:flex;flex-direction:column}
+  .cartcard .hd{display:flex;align-items:center;gap:10px;padding:14px 18px 0}
+  .cartcard .hd b{font-size:15px;font-weight:700}
+  .cartcard .hd .sp{flex:1}
+  .legend{display:flex;gap:14px;font-size:12.5px;color:var(--ink-3)}
+  .legend span{display:flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border-radius:3px}
+  .acts{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:10px}
+</style></head>
+<body>
+<div id="top"></div>
+<div class="cue" id="cue"><span class="ic"><i data-lucide="lightbulb"></i></span><div><b>Put 5 into tote T-4633</b><br><span>Slot 0007 is lit on your cart</span></div><span class="sp"></span><span class="pill" style="background:rgba(255,255,255,.12);color:#fff">Scan tote to confirm</span></div>
+<main class="body">
+  <section class="card item">
+    <span class="label">What you scanned</span>
+    <div class="ph" style="margin-top:8px"><img src="assets/toolset.jpg" alt=""></div>
+    <h3 style="text-wrap:balance">Husky Mechanics Tool Set (205&#8209;pc)</h3><div class="sku">SKU 45 56728325 · Group 0123343</div>
+    <div class="qty"><b class="num" id="q">5</b><span>each to put<br>of 5 picked</span></div>
+    <dl class="kv"><dt>Picked from</dt><dd>675 · 082 · 24B</dd><dt>Order</dt><dd>112-5698-4789</dd></dl>
+    <span class="sp"></span>
+  </section>
+  <div class="right">
+    <section class="card cartcard">
+      <div class="hd"><b>Cart C00225</b><span class="pill steel" style="height:26px">12 totes</span><span class="sp"></span><div class="legend"><span><i style="background:#B2B83A"></i>Put here</span><span><i style="background:#5D87A1"></i>Open</span><span><i style="background:#5D87A1;opacity:.45"></i>Done</span></div></div>
+      <div id="cartbox"></div>
+    </section>
+    <div class="acts">
+      <a class="btn warn"><i data-lucide="minus-circle"></i>Short</a>
+      <a class="btn ghost"><i data-lucide="scan-line"></i>Rescan item</a>
+      <a class="btn go" id="confirm"><i data-lucide="check"></i>Confirm put · 5</a>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const DONE = new URLSearchParams(location.search).get('done') === '1';
+  const doneSet = [0, 1, 3, 4, 8, 10];
+  const cells = TOTES.map((id, i) => ({ id, slot: SLOTS[i], state: i === 6 ? (DONE ? 'done' : 'target') : doneSet.includes(i) ? 'done' : 'tote', put: 'Put 5' }));
+  document.getElementById('cartbox').innerHTML = cart(cells);
+  if (DONE) {
+    const c = document.getElementById('cue'); c.className = 'cue lime';
+    c.innerHTML = '<span class="ic"><i data-lucide="check-check"></i></span><div><b>5 put into T-4633</b><br><span>Next: aisle 675 · bay 083 · loc 12A</span></div><span class="sp"></span><span class="pill" style="background:rgba(0,0,0,.08);color:#1d1f08">7 of 12 totes done</span>';
+    document.getElementById('q').textContent = '0';
+    const b = document.getElementById('confirm'); b.className = 'btn primary'; b.innerHTML = '<i data-lucide="navigation"></i>Go to next location';
+  }
+  boot({ task: 'Cart picking', sub: 'Wave 14 · Zone 306 · Area 415', pills: `<span class="pill steel"><i data-lucide="shopping-cart" class="sm"></i>Cart <b>C00225</b></span><span class="pill lime">${DONE ? 7 : 6} of 12 totes done</span>` });
+</script></body></html>

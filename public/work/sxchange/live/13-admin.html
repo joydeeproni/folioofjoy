@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Admin · Review</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .lay{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+  .q{padding:8px}
+  .q .hd{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 12px}
+  .q .hd b{font-size:15px}.q .hd span{font-size:13px;color:var(--ink-3)}
+  .qi{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:12px;border-radius:12px;align-items:center}
+  .qi.on{background:var(--navy-50);box-shadow:inset 0 0 0 1.5px var(--navy-200)}
+  .qi b{display:block;font-size:14px;line-height:1.25}.qi span.s{font-size:12.5px;color:var(--ink-3)}
+  .qi .fm{width:40px;height:40px;font-size:12px;border-radius:11px}
+  .qi .m{display:flex;justify-content:space-between;margin-top:4px}
+  .qi.done{opacity:.55}
+  .rv{padding:24px}
+  .rv .top{display:flex;gap:16px;align-items:center}
+  .rv .top .fm{width:56px;height:56px;font-size:16px;border-radius:15px}
+  .rv .top h1{font-size:24px;letter-spacing:-.02em;font-weight:700;line-height:1.2}
+  .rv .top .s{color:var(--ink-3);font-size:14px;margin-top:2px}
+  .rv .top .sp{flex:1}
+  .slide{width:250px;height:52px;border-radius:14px;background:var(--green-100);position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(20,147,90,.25)}
+  .slide .fill{position:absolute;left:0;top:0;bottom:0;background:var(--green-600);border-radius:14px}
+  .slide .knob{position:absolute;top:4px;width:44px;height:44px;border-radius:11px;background:#fff;display:grid;place-items:center;color:var(--green-700);box-shadow:0 2px 6px rgba(15,122,71,.3)}
+  .slide .lab{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:40px;font-weight:700;color:var(--green-700);font-size:14.5px}
+  .slide.ok{background:var(--green-600)}.slide.ok .lab{color:#fff;padding-left:0;gap:8px}
+  .rej{height:52px}
+  .grid3{display:grid;grid-template-columns:repeat(4,1fr);margin-top:22px;border-radius:14px;background:var(--bg)}
+  .grid3 div{padding:14px 18px}.grid3 div+div{border-left:1px solid var(--line)}
+  .grid3 b{display:block;font-size:18px;font-weight:700;margin-top:2px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .box{padding:20px 22px}.box h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .chk{display:grid;grid-template-columns:24px 1fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;align-items:start}
+  .chk:first-of-type{border-top:0}
+  .chk .i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--green-100);color:var(--green-700)}
+  .chk .i.w{background:var(--amber-100);color:var(--amber-600)}
+  .chk span.s{display:block;font-size:12.5px;color:var(--ink-3)}
+  .chk a{font-size:13px;color:var(--blue-600);font-weight:600}
+  .tbl{width:100%;border-collapse:collapse;font-size:14px}
+  .tbl th{font-size:12.5px;font-weight:600;color:var(--ink-3);text-align:left;padding:0 0 8px}
+  .tbl td{padding:10px 0;border-top:1px solid var(--line)}
+  .tbl td:not(:first-child),.tbl th:not(:first-child){text-align:right}
+  .tbl tr.me td{font-weight:700}
+  .tbl .you{font-size:11px;font-weight:700;background:var(--amber-100);color:var(--amber-600);border-radius:6px;padding:2px 6px;margin-left:6px}
+  .sl{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:var(--bg);margin-top:4px}
+  .sl .av{background:#6B5A1E;color:#fff}
+  .sl b{display:block;font-size:14px}.sl span{font-size:12.5px;color:var(--ink-3)}
+  .note{margin-top:12px}
+  .toast{display:none}
+  body.is-ok .toast{display:flex}
+  body.is-ok .qi.on .fm{box-shadow:0 0 0 2px var(--green-600)}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="lay">
+    <aside class="card q">
+      <div class="hd"><b>Waiting for review</b><span>Oldest first</span></div>
+      <div class="qi on"><span class="fm" style="background:#6B5A1E">NRC</span><div><b>Narmada Real Estate Credit Fund</b><div class="m"><span class="s">55,000 units · 19% off</span><span class="s">4 h ago</span></div></div></div>
+      <div class="qi"><span class="fm" style="background:#2E6B4A">SGP</span><div><b>Sahyadri Growth Partners Fund</b><div class="m"><span class="s">42,500 units · 20% off</span><span class="s">Mon</span></div></div></div>
+      <div class="qi"><span class="fm" style="background:#1E3A5F">MIO</span><div><b>Meridian Income Opportunities</b><div class="m"><span class="s">1,25,000 units · 20% off</span><span class="s">Mon</span></div></div></div>
+      <div class="qi"><span class="fm" style="background:#3A6B8C">MGE</span><div><b>Meridian Growth Equity Fund</b><div class="m"><span class="s">New fund · NAV to confirm</span><span class="chip amber" style="height:20px">Needs NAV</span></div></div></div>
+      <div class="hd" style="padding-top:18px"><b style="font-size:13px;color:var(--ink-3)">Reviewed today</b><span>3</span></div>
+      <div class="qi done"><span class="fm" style="background:#1F5C6B">TLS</span><div><b>Thar Long–Short Fund</b><div class="m"><span class="s">Approved by MS</span><span class="s">09:12</span></div></div></div>
+    </aside>
+    <section>
+      <div class="card rv">
+        <div class="top"><span class="fm" style="background:#6B5A1E">NRC</span><div><h1>Narmada Real Estate Credit Fund</h1><div class="s">Narmada Investment Advisors · AIF Cat II · submitted 4 h ago</div></div><span class="sp"></span>
+          <a class="btn ghost rej"><i data-lucide="x" class="sm"></i>Reject with reason</a>
+          <div class="slide" id="sl"><span class="fill" id="fill"></span><span class="lab" id="lab">Slide to approve</span><span class="knob" id="knob"><i data-lucide="chevrons-right"></i></span></div></div>
+        <div class="grid3"><div><span class="label">Units</span><b>55,000</b></div><div><span class="label">Asking / unit</span><b>₹8.9761</b></div><div><span class="label">Latest NAV · 30 Jun</span><b>₹11.0815</b></div><div><span class="label">Discount</span><b style="color:var(--green-700)">19%</b></div></div>
+        <div class="deal" style="margin-top:16px"><div class="bar" style="height:12px"><span class="ask" style="width:81%"></span><span class="gap" style="left:81%;right:0"></span></div><div class="lg"><span>Ask <b>₹8.9761</b></span><span>Total asking value ₹4,93,685.50</span></div></div>
+      </div>
+      <div class="two">
+        <section class="card box"><h3><i data-lucide="list-checks" class="sm"></i>Checks</h3>
+          <div class="chk"><span class="i"><i data-lucide="check" class="sm"></i></span><div>Units match the statement of account<span class="s">55,000 of 55,000 held · statement dated 30 Jun</span></div><a>Open</a></div>
+          <div class="chk"><span class="i"><i data-lucide="check" class="sm"></i></span><div>NAV matches the manager's statement<span class="s">₹11.0815 · 30 Jun</span></div><a>Open</a></div>
+          <div class="chk"><span class="i"><i data-lucide="check" class="sm"></i></span><div>Balance payable adds up<span class="s">₹20,00,000.00 committed − ₹15,00,000.00 paid</span></div><span></span></div>
+          <div class="chk"><span class="i w"><i data-lucide="alert-triangle" class="sm"></i></span><div>Custom field to confirm<span class="s">"Expected exit: 2022" isn't in the manager's documents</span></div><a>Edit</a></div>
+        </section>
+        <section class="card box"><h3><i data-lucide="users" class="sm"></i>Other sellers of this fund</h3>
+          <table class="tbl"><tr><th>Seller</th><th>Ask / unit</th><th>Units</th><th>Discount</th></tr>
+            <tr class="me"><td>This listing<span class="you">In review</span></td><td>₹8.9761</td><td>55,000</td><td>19%</td></tr>
+            <tr><td>None live</td><td>—</td><td>—</td><td>—</td></tr></table>
+          <h3 style="margin-top:18px"><i data-lucide="user" class="sm"></i>Seller</h3>
+          <div class="sl"><span class="av">AK</span><div><b>Arjun K. · Kalyan Wealth Advisors</b><span>Wealth manager, Pune · verified Aug 2024 · 2 past listings</span></div></div>
+        </section>
+      </div>
+      <section class="card box" style="margin-top:16px"><h3><i data-lucide="paperclip" class="sm"></i>Documents<span style="margin-left:auto;font-size:13px;font-weight:500;color:var(--ink-3)">Only visible to reviewers</span></h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div class="sl" style="margin:0"><span class="fm" style="background:var(--red-100);color:var(--red-600)!important;width:40px;height:40px;font-size:11px;border-radius:11px">PDF</span><div><b>Statement of account</b><span>30 Jun · 212 KB</span></div></div>
+          <div class="sl" style="margin:0"><span class="fm" style="background:var(--red-100);color:var(--red-600)!important;width:40px;height:40px;font-size:11px;border-radius:11px">PDF</span><div><b>NAV statement</b><span>30 Jun · 1.4 MB</span></div></div>
+          <div class="sl" style="margin:0"><span class="fm" style="background:var(--navy-100);color:var(--navy-700)!important;width:40px;height:40px;font-size:11px;border-radius:11px">JPG</span><div><b>Capital call notice</b><span>Mar · 380 KB</span></div></div></div></section>
+    </section>
+  </div>
+</main>
+<div class="toast"><span class="ok"><i data-lucide="check" class="sm"></i></span>Listing published. Arjun has been emailed, and 3 saved searches matched.<a>Undo</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  boot({ admin: true, active: 'Review queue' });
+  const v = +(Q.get('s') ?? 0), W = 250, K = 44;
+  const knob = document.getElementById('knob'), fill = document.getElementById('fill'), lab = document.getElementById('lab');
+  const x = 4 + (W - K - 8) * v / 100; knob.style.left = x + 'px'; fill.style.width = (x + K + 4) * (v > 0 ? 1 : 0) + 'px';
+  lab.style.opacity = Math.max(0, 1 - v / 35);
+  if (Q.get('ok') === '1') { document.body.classList.add('is-ok'); const s = document.getElementById('sl'); s.classList.add('ok'); s.innerHTML = '<span class="lab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Approved</span>'; }
+</script></body></html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>Fido · Membership</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  :root{--ink:#323641;--paper:#FEFAEE;--mute:#9A9CA4;--coral:#E8616B;--violet:#8A7CF0}
+  body{width:1440px;height:auto;overflow:visible;background:#000;color:#fff;font-size:18px}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+  nav.site{height:84px;display:flex;align-items:center;gap:36px}
+  nav.site img{height:40px;filter:blur(6px)}
+  nav.site a{color:rgba(255,255,255,.62);font-weight:600;font-size:16px}nav.site a.on{color:#fff}
+  nav.site .sp{flex:1}
+  .btn.y{background:var(--yellow);color:var(--ink)}
+  .top{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;padding:70px 0 50px}
+  .top h1{font-size:80px;line-height:.96;letter-spacing:-.045em;font-weight:300}
+  .top h1 em{font-style:normal;color:var(--yellow);font-weight:600}
+  .top p{font-size:20px;line-height:1.55;color:rgba(255,255,255,.72);max-width:40ch}
+  .tiers{display:grid;grid-template-columns:1fr 1.25fr;gap:20px}
+  .tier{border-radius:36px;padding:36px;background:#323641;position:relative;overflow:hidden}
+  .tier.pro{background:var(--peach);color:var(--ink)}
+  .tier .k{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+  .tier h2{font-size:44px;letter-spacing:-.035em;font-weight:400;margin-top:10px}
+  .tier .d{font-size:17px;line-height:1.5;opacity:.75;margin-top:8px;max-width:34ch}
+  .tier ul{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-direction:column;gap:14px}
+  .tier li{display:flex;gap:12px;align-items:flex-start;font-size:17px;line-height:1.4}
+  .tier li i{flex:none;margin-top:1px}
+  .tier .btn{margin-top:30px;height:58px}
+  .tier img{position:absolute;right:-24px;bottom:-46px;width:250px}
+  .tier.pro ul,.tier.pro .d{max-width:430px}
+  .badge{position:absolute;top:30px;right:30px;height:34px;padding:0 14px;border-radius:17px;background:var(--ink);color:#fff;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:110px 0 0}
+  .steps div{border-top:2px solid #323641;padding-top:22px}
+  .steps b{font-size:14px;color:var(--yellow)}
+  .steps h3{font-size:26px;letter-spacing:-.02em;margin-top:8px}
+  .steps p{font-size:17px;line-height:1.5;color:rgba(255,255,255,.62);margin-top:8px;max-width:30ch}
+  .inv{margin:110px 0 60px;border-radius:44px;background:var(--lilac);color:var(--ink);padding:64px 70px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+  .inv h2{font-size:58px;line-height:1;letter-spacing:-.04em;font-weight:300}
+  .form{background:#fff;border-radius:28px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1}
+  .form .in{height:56px;border-radius:16px;background:var(--paper);display:flex;align-items:center;padding:0 18px;font-size:16.5px;color:#8E8EA3}
+  .form .in b{color:var(--ink);font-weight:650}
+  .form .btn{height:58px}
+  footer{padding:30px 0 60px;color:var(--mute);font-size:14px;display:flex;justify-content:space-between}
+</style></head>
+<body>
+<div class="wrap">
+  <nav class="site"><img src="assets/fido-white.png" alt="Client logo (blurred)"><span class="sp"></span><a>How it works</a><a>Our story</a><a class="on">Membership</a><a>FAQ</a><a class="btn y" style="height:46px;font-size:15px">Join the club</a></nav>
+  <header class="top"><h1>One club.<br>Two ways to <em>play</em>.</h1><p>Start with the quests on your own, or add a trainer who reads every check-in and adjusts the plan to your dog.</p></header>
+  <div class="tiers">
+    <article class="tier"><span class="k">Quests</span><h2>On your own</h2><p class="d">The full quest library and a plan that follows your dog’s age.</p>
+      <ul><li><i data-lucide="check" style="color:var(--teal)"></i>Every quest in Adventure, Learn, Train and Evaluate</li><li><i data-lucide="check" style="color:var(--teal)"></i>Read, listen or watch each lesson</li><li><i data-lucide="check" style="color:var(--teal)"></i>Skill tree and streaks</li><li><i data-lucide="check" style="color:var(--teal)"></i>Ask Scout, Fido’s assistant, anytime</li></ul>
+      <a class="btn" style="background:#F4F2EE;color:var(--ink)">Request an invite</a></article>
+    <article class="tier pro"><span class="badge"><i data-lucide="star" class="sm"></i>Most families</span><span class="k">Quests + trainer</span><h2>With Christophe’s team</h2><p class="d">Everything in Quests, plus a certified trainer who knows your dog by name.</p>
+      <ul><li><i data-lucide="check"></i>A personal plan built from your goals</li><li><i data-lucide="check"></i>Check-ins after every quest, with replies in hours</li><li><i data-lucide="check"></i>Send clips; get notes on timing and body language</li><li><i data-lucide="check"></i>Co-parents and up to three dogs on one account</li></ul>
+      <a class="btn char">Request an invite<i data-lucide="arrow-right" class="sm"></i></a><img src="assets/trainer.png" alt=""></article>
+  </div>
+  <div class="steps">
+    <div><b>01</b><h3>Request an invite</h3><p>We open to new families in small groups, so trainers are never stretched.</p></div>
+    <div><b>02</b><h3>Tell us about your dog</h3><p>Name, age, breed and what’s on your mind. It takes two minutes.</p></div>
+    <div><b>03</b><h3>Start your first quest</h3><p>Your plan is ready the same day. Your dog will think it’s playtime.</p></div>
+  </div>
+  <div class="inv"><div><h2>Save your dog a spot.</h2><p style="font-size:19px;margin-top:16px;max-width:30ch;opacity:.75">We’ll email you when the next group opens, usually within two weeks.</p></div>
+    <div class="form"><div class="in">Your email</div><div class="in"><b>Milou</b>&nbsp;· 14 weeks · Golden mix</div><a class="btn char">Request an invite<i data-lucide="arrow-right" class="sm"></i></a></div></div>
+  <footer><span>© 2023 Fido</span><span>Privacy · Terms · Trainers · Contact</span></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>lucide.createIcons({ attrs: { 'stroke-width': 2 } });</script>
+</body></html>

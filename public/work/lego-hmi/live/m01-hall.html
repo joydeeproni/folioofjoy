@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Moulding · Machine hall</title>
+<link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="mobile.css">
+<style>
+  .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:12px 16px 0;background:var(--cds-border-subtle-01)}
+  .sum div{background:var(--cds-layer-01);padding:12px}
+  .sum b{display:block;font-size:24px;font-weight:300;line-height:32px}
+  .sum b small{font-size:13px;color:var(--cds-text-secondary);font-weight:400;margin-left:2px}
+  .oee{width:44px;height:4px;background:#393939;margin:6px 0 0 auto}.oee i{display:block;height:100%;background:#78a9ff}
+  .scan{display:flex;gap:8px;margin:12px 16px 0}
+  .srch{flex:1;height:48px;background:var(--cds-field-01);border-bottom:1px solid var(--cds-border-strong-01);display:flex;align-items:center;gap:12px;padding:0 14px;color:var(--cds-text-placeholder);font-size:15px}
+  .srch svg{color:var(--cds-icon-secondary)}
+  .scan .sq{width:48px;height:48px;background:var(--cds-layer-01);display:grid;place-items:center;color:var(--cds-icon-primary);flex:none}
+</style></head><body>
+<div class="body">
+  <div class="scan"><div class="srch"><span data-ci="search" data-s="18"></span><span>SAP machine number</span></div><span class="sq"><span data-ci="qr-code"></span></span></div>
+  <div class="sum">
+    <div><span class="lab">Running</span><b class="num">21<small>/24</small></b></div>
+    <div><span class="lab">OEE · shift B</span><b class="num">84<small>%</small></b></div>
+    <div><span class="lab">Output</span><b class="num">1.9<small>M pcs</small></b></div>
+  </div>
+  <div class="chips"><span class="chip on">All <b>24</b></span><span class="chip"><i class="st alarm" style="box-shadow:none"></i>Alarm <b>1</b></span><span class="chip"><i class="st stop"></i>Stopped <b>2</b></span><span class="chip"><i class="st setup"></i>Run-in <b>1</b></span></div>
+  <div class="sect"><h3>Module 9 · Hall 4</h3><span class="lab">Updated 14:24</span></div>
+  <div id="list"></div>
+</div>
+<script src="icons.js"></script><script src="icons-extra.js"></script><script src="m-shared.js"></script>
+<script>
+const M = [
+  ['152662', 'alarm', 'Brick 2×4 · mould 2357023', 'E-2041 · 2 min', 0, 'R1/P12'],
+  ['103245', 'stop', 'Plate 1×6 · mould 2291884', 'Planned maint.', 0, 'R1/P7'],
+  ['152671', 'setup', 'Tile 2×2 · mould 2360410', 'Shot 12 of 20', 0, 'R2/P3'],
+  ['152664', 'run', 'Brick 1×2 · mould 2357211', '18.4 s', 91, 'R1/P13'],
+  ['152665', 'run', 'Slope 45° 2×1 · mould 2340987', '21.0 s', 88, 'R1/P14'],
+  ['152668', 'run', 'Plate 2×2 · mould 2291650', '16.2 s', 79, 'R2/P1'],
+  ['152669', 'run', 'Round 1×1 · mould 2312077', '12.9 s', 93, 'R2/P2'],
+];
+const lab = { alarm: ['red', 'Alarm'], stop: ['warm-gray', 'Stopped'], setup: ['blue', 'Run-in'], run: ['green', 'Running'] };
+document.getElementById('list').innerHTML = M.map(([n, s, p, v, o, pos]) => '<div class="row ' + (s === 'alarm' ? 'alarm' : '') + '"><i class="st ' + s + '"></i><div class="m"><div class="t num">' + n + '<span class="lab" style="font-weight:400">' + pos + '</span></div><div class="s">' + p + '</div></div><div class="v num">' +
+  (o ? o + '%<small>OEE · ' + v + '</small><div class="oee"><i style="width:' + o + '%"></i></div>' : '<span class="cds--tag cds--tag--' + lab[s][0] + ' cds--tag--sm"><span class="cds--tag__label">' + lab[s][1] + '</span></span><small style="margin-top:4px">' + v + '</small>') + '</div></div>').join('');
+mboot({ title: 'Machines', sub: 'Shift B · M. Hansen', alarms: 1 });
+</script></body></html>

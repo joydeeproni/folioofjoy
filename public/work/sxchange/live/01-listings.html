@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Listings</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .lay{display:grid;grid-template-columns:260px 1fr;gap:24px}
+  .filters{padding:20px;display:flex;flex-direction:column;gap:20px;align-self:start}
+  .filters h4{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between}
+  .filters h4 a{color:var(--blue-600);font-weight:600}
+  .ck{display:flex;align-items:center;gap:10px;font-size:14px;padding:5px 0}
+  .ck i{width:18px;height:18px;border-radius:5px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:grid;place-items:center}
+  .ck i.on{background:var(--navy-700);box-shadow:none}
+  .ck span{margin-left:auto;color:var(--ink-3);font-size:12.5px;font-variant-numeric:lining-nums proportional-nums}
+  .range{height:6px;border-radius:4px;background:var(--navy-100);position:relative;margin:14px 6px 8px}
+  .range b{position:absolute;left:25%;right:0;top:0;bottom:0;background:var(--navy-700);border-radius:4px}
+  .range i{position:absolute;top:-6px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--navy-700),var(--sh-1);transform:translateX(-9px)}
+  .rl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3)}
+  .strip{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:16px}
+  .strip div{padding:16px 20px}.strip div + div{border-left:1px solid var(--line)}
+  .strip b{display:block;font-size:26px;letter-spacing:-.02em;font-weight:700;font-variant-numeric:lining-nums proportional-nums;margin-top:2px}
+  .bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .bar .sp{flex:1}
+  .sort{font-size:14px;color:var(--ink-2)}.sort b{color:var(--ink)}
+  .row{display:grid;grid-template-columns:minmax(0,1.7fr) 220px 90px 110px 150px;gap:22px;align-items:center;padding:18px 20px;margin-bottom:10px}
+  .who{display:flex;gap:14px;align-items:center;min-width:0}
+  .who b{display:block;font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  .who .s{font-size:13px;color:var(--ink-3);margin-top:2px}
+  .who .chips{display:flex;gap:6px;margin-top:6px}
+  .fig .label{display:block}
+  .fig b{font-size:18px;font-weight:700;font-variant-numeric:lining-nums proportional-nums}
+  .off{font-size:26px;letter-spacing:-.02em}
+  .off small{font-size:14px;font-weight:700}
+  .acts{display:flex;gap:6px;justify-content:flex-end}
+  .row.hot{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--navy-200)}
+  .who .s .sl{color:var(--blue-600);font-weight:600}
+  .ib.on{color:var(--red-600)}
+  .pag{display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:14px;color:var(--ink-2)}
+  .pag .pp{display:flex;gap:6px}.pag .pp span{min-width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2);background:#fff}
+  .pag .pp span.on{background:var(--navy-700);color:#fff;box-shadow:none}
+  .saved{display:flex;align-items:center;gap:12px;padding:14px 18px;margin-top:20px;background:var(--blue-50);box-shadow:inset 0 0 0 1px rgba(18,132,252,.18)}
+  .saved b{font-weight:700}.saved span{color:var(--ink-2);font-size:14px}.saved .sp{flex:1}
+  .ck.sub{padding-left:28px;font-size:13.5px;color:var(--ink-2)}
+  .filters .tog{display:flex;align-items:center;justify-content:space-between;font-size:14px}
+  .sw{display:inline-block;flex:none;width:36px;height:22px;border-radius:99px;background:var(--navy-700);position:relative}.sw::after{content:"";position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff}
+  .sw.off{background:var(--line-2)}.sw.off::after{right:auto;left:3px}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>AIF units for sale</h1><p>Buy into established Alternative Investment Funds at a discount to NAV, from existing investors.</p></div></div>
+  <div class="lay">
+    <aside class="card filters">
+      <div><h4>Category <a>Clear</a></h4>
+        <div class="ck"><i class="on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></i>AIF Category I<span>6</span></div>
+        <div class="ck"><i class="on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></i>AIF Category II<span>19</span></div>
+        <div class="ck"><i class="on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></i>AIF Category III<span>7</span></div></div>
+      <div><h4>Discount to NAV</h4><div class="range"><b></b><i style="left:25%"></i><i style="left:100%"></i></div><div class="rl"><span>10% and above</span><span>40%</span></div></div>
+      <div><h4>Strategy</h4>
+        <div class="ck"><i></i>Special situations<span>8</span></div><div class="ck"><i></i>Private credit<span>9</span></div><div class="ck"><i></i>Growth equity<span>7</span></div><div class="ck"><i></i>Venture<span>6</span></div></div>
+      <div><h4>Vintage</h4><div class="ck"><i></i>2015 – 2017<span>12</span></div><div class="ck"><i></i>2018 – 2020<span>20</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:1px solid var(--line)"><div class="tog">Fully paid only<span class="sw off"></span></div><div class="tog">Hide default cases<span class="sw"></span></div></div>
+      <div class="card saved" style="margin-top:0;padding:14px;flex-direction:column;align-items:flex-start;gap:8px"><b style="font-size:14px"><i data-lucide="bell-ring" class="sm" style="vertical-align:-3px;margin-right:6px;color:var(--blue-600)"></i>Get new listings by email</b><span style="font-size:13px">We'll email you when units matching these filters are listed.</span><a class="btn ghost sm" style="margin-top:4px">Save this search</a></div>
+    </aside>
+    <section>
+      <div class="card strip">
+        <div><span class="label">Listings live</span><b>25</b><span style="font-size:13px;color:var(--ink-3)">4 new this week</span></div>
+        <div><span class="label">On offer</span><b>₹48.62 Cr</b><span style="font-size:13px;color:var(--ink-3)">Asking value, all listings</span></div>
+        <div><span class="label">Average discount</span><b style="color:var(--green-700)">24.6%</b><span style="font-size:13px;color:var(--ink-3)">To latest NAV on file</span></div>
+      </div>
+      <div class="bar"><span class="chip cat">Cat I</span><span class="chip cat">Cat II</span><span class="chip cat">Cat III</span><span class="chip">10%+ off</span><span class="sp"></span><span class="sort">Sort by <b>Biggest discount</b></span></div>
+      <div id="rows"></div>
+      <div class="pag"><span>Showing 1–7 of 25 listings</span><div class="pp"><span class="on">1</span><span>2</span><span>3</span><span style="padding:0 12px">Next<i data-lucide="chevron-right" class="sm" style="margin-left:4px"></i></span></div></div>
+    </section>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const rows = [...FUNDS].sort((a, b) => (b.nav - b.ask) / b.nav - (a.nav - a.ask) / a.nav);
+  document.getElementById('rows').innerHTML = rows.map((f, i) => {
+    const off = Math.round((1 - f.ask / f.nav) * 100);
+    return `<article class="card row ${i === 0 ? 'hot' : ''}">
+      <div class="who"><span class="fm" style="background:${f.color}">${f.id}</span><div style="min-width:0"><b>${f.name}</b><div class="s">${f.mgr} · ${f.strat}${f.sellers > 1 ? ` · <span class="sl">${f.sellers} sellers</span>` : ''}</div><div class="chips"><span class="chip cat">${f.cat}</span><span class="chip">Vintage ${f.vintage}</span>${f.isNew ? '<span class="tag-new">New this week</span>' : ''}${f.status === 'Processing' ? '<span class="chip amber">Transfer in progress</span>' : ''}</div></div></div>
+      ${deal(f.nav, f.ask)}
+      <div class="fig"><span class="label">Discount</span><span class="off">${off}<small>%</small></span></div>
+      <div class="fig"><span class="label">Units</span><b>${f.units.toLocaleString('en-IN')}</b></div>
+      <div class="acts"><span class="ib ${['MIO','DVF','NRC','KCA'].includes(f.id) ? 'on' : ''}" style="box-shadow:inset 0 0 0 1px var(--line-2)"><i data-lucide="heart" class="sm" ${['MIO','DVF','NRC','KCA'].includes(f.id) ? 'fill="currentColor"' : ''}></i></span><a class="btn ${i === 0 ? 'primary' : 'ghost'} sm">View details</a></div>
+    </article>`;
+  }).join('');
+  boot({ mode: 'buy', active: 'Listings' });
+</script></body></html>

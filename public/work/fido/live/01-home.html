@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Milou’s Quest</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  /* v6 home: an endless wall of quest cards — centre column in focus, neighbours peeking in from the edges */
+  .wall{position:absolute;inset:0;overflow:hidden}
+  .col{position:absolute;top:0;width:282px;display:flex;flex-direction:column;gap:16px;animation:drift 18s ease-in-out infinite alternate}
+  .col.c{left:54px;top:-58px;--dy:-150px}
+  .col.l{left:-244px;top:-150px;--dy:-60px;animation-duration:22s}
+  .col.r{left:352px;top:-110px;--dy:-220px;animation-duration:20s}
+  .qc{height:210px;flex:none;display:flex;flex-direction:column}
+  .qc .lvl{margin-top:auto}
+  .qc .row{margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+  .qc.tall{height:230px}
+  .clocks{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='76' height='76'%3E%3Cg fill='none' stroke='%237F979F' stroke-width='3' opacity='.7'%3E%3Ccircle cx='24' cy='24' r='17' fill='%238FA5AE' stroke='none'/%3E%3Cpath d='M24 15v10l6 4' stroke='%23A9BEC4' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#8FA5AE,#BCD1D6 70%)}
+  .stars{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cpath d='M30 10l7 15 16 2-12 11 3 16-14-8-14 8 3-16L7 27l16-2z' fill='%23F2898D' opacity='.75'/%3E%3C/svg%3E");background-color:var(--pink)}
+  .paws{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cg fill='%23F7B869' opacity='.7'%3E%3Cellipse cx='40' cy='52' rx='16' ry='13'/%3E%3Ccircle cx='24' cy='34' r='6'/%3E%3Ccircle cx='36' cy='26' r='6'/%3E%3Ccircle cx='50' cy='27' r='6'/%3E%3Ccircle cx='60' cy='36' r='6'/%3E%3C/g%3E%3C/svg%3E");background-color:var(--peach)}
+  .purple{background:linear-gradient(180deg,#3D4050,#68668A)}
+  .purple,.purple .lvl{color:rgba(255,255,255,.35)}
+  .fadeTop{position:absolute;left:0;right:0;top:0;height:180px;background:linear-gradient(180deg,#000 0,#000 50px,rgba(0,0,0,.72) 72px,rgba(0,0,0,.3) 120px,rgba(0,0,0,0) 180px);z-index:3;pointer-events:none}
+  .fadeBot{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(0deg,rgba(0,0,0,.6),rgba(0,0,0,0));z-index:3;pointer-events:none}
+  .head{position:absolute;left:0;right:0;top:50px}
+  .head h1{font-size:32px}
+  .purple h2{color:rgba(255,255,255,.35)}
+</style></head>
+<body>
+<div class="wall">
+  <div class="col l">
+    <div class="qc peachc"></div>
+    <div class="qc stars tall"><span class="cat">Learning</span><h2 class="xl">Loose leash walking</h2></div>
+    <div class="qc lilacc"></div>
+    <div class="qc skyc"></div>
+    <div class="qc peachc"></div>
+  </div>
+  <div class="col c">
+    <article class="qc purple"><span class="cat">Training</span><h2>Positive Association to Taking Medicine</h2><span class="lvl">Level 1</span></article>
+    <article class="qc clocks" id="go"><span class="cat">Evaluation</span><h2 class="xl">Weekly Pulse Survey</h2><div class="row"><span class="lvl">Level 1</span><span class="tsens"><i data-lucide="clock-3" class="sm"></i>Time Sensitive</span></div></article>
+    <article class="qc peachc" id="adv"><span class="cat">Adventure</span><h2>Socialisation Adventure Going On Errands</h2><span class="lvl">Level 1</span></article>
+    <article class="qc pinkc"><span class="cat">Learning</span><h2 class="xl">Intro to Recall</h2><span class="lvl">Level 1</span></article>
+    <article class="qc lilacc"><span class="cat">Training</span><h2>Go To Crate</h2><span class="lvl">Level 3</span></article>
+    <article class="qc skyc"><span class="cat">Evaluation</span><h2 class="xl">Crate Check</h2><span class="lvl">Level 2</span></article>
+  </div>
+  <div class="col r">
+    <div class="qc lilacc"><span class="cat">Training</span><h2>Settle on a mat</h2></div>
+    <div class="qc skyc"><span class="cat">Evaluation</span><h2 class="xl">Loose Walks</h2></div>
+    <div class="qc paws"><span class="cat">Adventure</span><h2 class="xl">Park Time</h2></div>
+    <div class="qc pinkc"></div>
+    <div class="qc peachc"></div>
+  </div>
+</div>
+<div class="fadeTop"></div>
+<header class="head a-fade"><h1>Milou’s Quest</h1><span class="sq press"><i data-lucide="bell" style="fill:currentColor"></i></span></header>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  stagger('.col.c .qc', 80, 90, 'a-riseS'); stagger('.col.l .qc', 260, 70, 'a-fade'); stagger('.col.r .qc', 320, 70, 'a-fade');
+  boot({ tab: 'Quests' });
+</script>
+</body></html>

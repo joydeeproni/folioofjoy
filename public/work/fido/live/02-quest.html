@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Quest goal</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .top{display:flex;justify-content:center;margin-top:14px}
+  .title{padding:30px 24px 0}
+  .title h1{font-size:22px;font-weight:400;letter-spacing:-.015em;line-height:1.36}
+  .title .lvl{display:block;margin-top:24px}
+  .pager{position:absolute;left:24px;top:290px;width:332px;bottom:92px}
+  .rc{height:100%;display:flex;flex-direction:column}
+  .rc .read{margin-top:26px}
+  .need{margin-top:34px;font-size:13px;font-weight:600}
+  .items{display:grid;grid-template-columns:1fr 1fr;margin-top:22px;text-align:center;font-size:16px;line-height:1.3}
+  .items span{width:58px;height:58px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;margin:0 auto 12px;color:var(--char)}
+  .next{position:absolute;left:372px;top:290px;width:332px;bottom:92px;border-radius:26px;background:rgba(255,255,255,.7)}
+  .bot{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:10px}
+  .bot span{height:36px;padding:0 16px;border-radius:99px;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+  .bot .on{background:var(--peach-d)}
+</style></head>
+<body class="peach">
+<div class="top"><span class="pause press a-fade"><i data-lucide="pause"></i>Pause Quest</span></div>
+<div class="title a-rise" style="animation-delay:.1s"><h1>Socialisation Adventure Going On Errands</h1><span class="lvl">Level 1</span></div>
+<div class="next a-fade" style="animation-delay:.7s"></div>
+<div class="pager a-rise" style="animation-delay:.2s">
+  <article class="rc">
+    <div class="k">Quest Goal<span class="dots"><i class="on"></i><i></i><i></i><i></i></span></div>
+    <p class="read">Take your dog on a socialisation field trip! Expose to a wide variety of stimuli.</p>
+    <p class="need">Things You Need</p>
+    <div class="items">
+      <div class="a-pop" style="animation-delay:.75s"><span><i data-lucide="bone"></i></span>Treats</div>
+      <div class="a-pop" style="animation-delay:.9s"><span><i data-lucide="person-standing"></i></span>Errands To Run<br>(optional)</div>
+    </div>
+  </article>
+</div>
+<div class="bot" id="go"><span class="on press"><i data-lucide="loader" class="sm"></i>Adventure</span><span class="press"><i data-lucide="lock" class="sm" style="fill:currentColor"></i>Check-in</span></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({});</script>
+</body></html>

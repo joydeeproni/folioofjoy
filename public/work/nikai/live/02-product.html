@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nikai 65″ UHD Smart TV · NE65SUHD-M</title>
+<link rel="stylesheet" href="nikai.css">
+<style>
+  body{width:1440px}
+  .top{background:#fff;border-bottom:1px solid var(--line)}
+  .crumb{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink-3);padding:22px 0 0}
+  .crumb b{color:var(--ink);font-weight:600}
+  .pd{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;padding:28px 0 64px;align-items:start}
+  .gal{border-radius:28px;background:radial-gradient(70% 70% at 50% 45%,#1d1d22,#09090b);height:600px;position:relative;display:grid;place-items:center;overflow:hidden}
+  .gal img.main{width:86%;filter:drop-shadow(0 50px 60px rgba(0,0,0,.6))}
+  .gal .badge{position:absolute;left:22px;top:22px;display:flex;gap:8px}
+  .thumbs{display:flex;gap:10px;margin-top:12px}
+  .thumbs span{width:96px;height:72px;border-radius:14px;background:#111;display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+  .thumbs span.on{box-shadow:0 0 0 2px var(--red-500)}
+  .thumbs img{width:84%}
+  .info h1{font-size:52px;margin-top:14px}
+  .info .model{font-size:14px;color:var(--ink-3);margin-top:10px;font-variant-numeric:tabular-nums}
+  .info p.d{color:var(--ink-2);font-size:17px;margin-top:18px;max-width:46ch}
+  .opt{margin-top:26px}
+  .opt .l{font-size:13px;font-weight:600;color:var(--ink-3);margin-bottom:10px}
+  .size{display:flex;gap:8px}
+  .size span{flex:1;height:64px;border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:18px;letter-spacing:-.02em}
+  .size span small{font-size:11.5px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+  .size span.on{box-shadow:0 0 0 2px var(--ink);background:#fff}
+  .keys{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:26px}
+  .keys div{border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);padding:14px}
+  .keys svg{color:var(--red-500)}
+  .keys b{display:block;font-size:17px;margin-top:10px;letter-spacing:-.02em}
+  .keys span{font-size:12.5px;color:var(--ink-3)}
+  .buy{margin-top:26px;border-radius:22px;background:var(--ink);color:#fff;padding:20px}
+  .buy .h{display:flex;align-items:center;justify-content:space-between}
+  .buy .h b{font-size:16px}
+  .buy .h span{font-size:13px;color:rgba(255,255,255,.55)}
+  .rows{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .rt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.06);border-radius:14px;padding:10px 12px}
+  .rt .lg{width:92px;height:40px;border-radius:10px;background:#fff;display:grid;place-items:center}
+  .rt .lg img{max-height:24px;max-width:78px}
+  .rt .s{flex:1;font-size:14px;color:rgba(255,255,255,.72)}
+  .rt .s b{color:#fff;display:block;font-size:14.5px}
+  .rt .stock{font-size:12.5px;font-weight:600;color:#6BE38F;display:flex;align-items:center;gap:6px}
+  .rt .stock i{width:7px;height:7px;border-radius:50%;background:#6BE38F}
+  .rt .a{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center}
+  .help{display:flex;gap:10px;margin-top:14px}
+  .help a{flex:1}
+  /* features */
+  .feat{padding:96px 0 0}
+  .fgrid2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+  .f1{border-radius:28px;overflow:hidden;position:relative;height:460px;color:#fff}
+  .f1 img{width:100%;height:100%;object-fit:cover}
+  .f1 .t{position:absolute;left:32px;bottom:30px;right:32px}
+  .f1 .t::before{content:"";position:absolute;inset:-160px -32px -30px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.8));z-index:-1}
+  .f1 h3{font-size:40px;max-width:14ch}
+  .f1 p{color:rgba(255,255,255,.78);max-width:44ch;margin-top:10px}
+  .fcol{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+  .f2{border-radius:28px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);padding:28px}
+  .f2 .big{font-size:60px;font-weight:700;letter-spacing:-.05em;line-height:1}
+  .f2 .big small{font-size:22px;color:var(--red-500)}
+  .f2 p{color:var(--ink-3);margin-top:10px;max-width:34ch}
+  .specs{padding:96px 0 0}
+  .spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sg{border-radius:24px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);padding:24px}
+  .sg h4{font-size:18px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .sg h4 svg{color:var(--red-500)}
+  .sg .r{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
+  .sg .r span:first-child{color:var(--ink-3)}
+  .sg .r span:last-child{font-weight:600;font-variant-numeric:tabular-nums}
+  .foot{background:#0B0B0D;color:#fff;margin-top:120px;padding:72px 0 30px}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  .fgrid h5{font-size:13px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:14px}
+  .fgrid a{display:block;color:rgba(255,255,255,.82);font-size:15px;padding:5px 0}
+  .news{display:flex;gap:6px;margin-top:26px;background:rgba(255,255,255,.07);border-radius:99px;padding:5px;max-width:380px}
+  .news input{flex:1;background:none;border:0;color:#fff;padding:0 14px;font:inherit;font-size:14.5px}
+  .fbot{display:flex;gap:22px;margin-top:56px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:13.5px;color:rgba(255,255,255,.5)}
+  .fbot .sp{flex:1}
+</style></head>
+<body>
+<div class="top"><div class="wrap"><div data-nav='{"on":"Lifestyle Entertainment"}'></div></div></div>
+<main class="wrap">
+  <div class="crumb">TVs <i data-lucide="chevron-right" class="sm"></i> UHD Smart TV <i data-lucide="chevron-right" class="sm"></i><b>65″ UHD Smart TV</b></div>
+  <section class="pd">
+    <div>
+      <div class="gal"><div class="badge"><span class="chip dark">4K UHD</span><span class="chip dark">Android TV</span></div><img class="main" src="img/tv-65.png" alt="Nikai 65 inch UHD Smart TV, front"></div>
+      <div class="thumbs"><span class="on"><img src="img/tv-65.png" alt=""></span><span><img src="img/tv-55.png" alt=""></span><span style="background:#fff"><img src="img/tv-lifestyle.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></span><span style="background:#fff"><img src="img/room.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></span></div>
+    </div>
+    <div class="info">
+      <span class="chip red">UHD Smart TV</span>
+      <h1>65″ UHD Smart TV</h1>
+      <div class="model">Model NE65SUHD-M</div>
+      <p class="d">A 65 inch screen for movies and sports at their fullest, crisp 3840 × 2160 detail, and a 20W speaker so you never miss a line.</p>
+      <div class="opt"><div class="l">Screen size</div>
+        <div class="size"><span class="on">65″<small>UHD</small></span><span>55″<small>UHD</small></span><span>50″<small>UHD</small></span><span>43″<small>Smart LED</small></span><span>32″<small>LED</small></span></div></div>
+      <div class="keys">
+        <div><i data-lucide="monitor"></i><b>3840×2160</b><span>4K resolution</span></div>
+        <div><i data-lucide="speaker"></i><b>2×10W</b><span>Dolby Digital</span></div>
+        <div><i data-lucide="cpu"></i><b>Quad-core</b><span>1GB / 8GB</span></div>
+        <div><i data-lucide="tv"></i><b>Netflix</b><span>One-button access</span></div>
+      </div>
+      <div class="buy"><div class="h"><b>Where to buy</b><span>Prices set by retailer</span></div>
+        <div class="rows">
+          <div class="rt"><span class="lg"><img src="img/btech-logo.png" alt="B.TECH"></span><span class="s"><b>B.TECH</b>btech.com · 38 stores</span><span class="stock"><i></i>In stock</span><span class="a"><i data-lucide="arrow-up-right" class="sm"></i></span></div>
+          <div class="rt"><span class="lg"><img src="img/raya-logo.png" alt="Raya Shop"></span><span class="s"><b>Raya Shop</b>rayashop.com</span><span class="stock"><i></i>In stock</span><span class="a"><i data-lucide="arrow-up-right" class="sm"></i></span></div>
+          <div class="rt"><span class="lg"><img src="img/souq-logo.png" alt="Souq"></span><span class="s"><b>Amazon.eg</b>Delivered in 2–4 days</span><span class="stock"><i></i>In stock</span><span class="a"><i data-lucide="arrow-up-right" class="sm"></i></span></div>
+        </div></div>
+      <div class="help"><a class="btn ghost sm"><i data-lucide="map-pin" class="sm"></i>Find a showroom</a><a class="btn ghost sm"><i data-lucide="download" class="sm"></i>Spec sheet</a></div>
+    </div>
+  </section>
+
+  <section class="feat">
+    <div class="sec-h"><div><span class="eyebrow">Why this TV</span><h2 style="margin-top:12px">A smarter way to watch.</h2></div></div>
+    <div class="fgrid2">
+      <div class="f1"><img src="img/tv-lifestyle.jpg" alt=""><div class="t"><h3>Crisp and crystal clear, in 4K.</h3><p>3840 × 2160 pixels take your viewing to a whole new level, with 16.7 million colours and a 3000:1 contrast ratio.</p></div></div>
+      <div class="fcol">
+        <div class="f2"><div class="big num">60<small>Hz</small></div><p>Refresh rate for top-quality images without lag, from football to film.</p></div>
+        <div class="f2"><div class="big">Android<small> 7.0</small></div><p>The PlayStore on your TV. A quad-core processor makes browsing and boot-up quicker.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="specs">
+    <div class="sec-h"><div><span class="eyebrow">Specifications</span><h2 style="margin-top:12px">Every detail.</h2></div></div>
+    <div class="spec-grid">
+      <div class="sg"><h4><i data-lucide="monitor"></i>Picture</h4><div class="r"><span>Resolution</span><span>3840 × 2160</span></div><div class="r"><span>Aspect ratio</span><span>16:9</span></div><div class="r"><span>Brightness</span><span>280 cd/m²</span></div><div class="r"><span>Contrast</span><span>3000:1</span></div><div class="r"><span>Viewing angle</span><span>176° × 176°</span></div><div class="r"><span>Response time</span><span>8 ms</span></div></div>
+      <div class="sg"><h4><i data-lucide="speaker"></i>Sound &amp; smart</h4><div class="r"><span>Audio output</span><span>2 × 10W</span></div><div class="r"><span>Sound technology</span><span>Dolby Digital</span></div><div class="r"><span>Equalizer</span><span>4 modes</span></div><div class="r"><span>OS</span><span>Android 7.0</span></div><div class="r"><span>RAM / ROM</span><span>1GB / 8GB</span></div><div class="r"><span>Apps</span><span>PlayStore, Netflix</span></div></div>
+      <div class="sg"><h4><i data-lucide="plug"></i>Connections</h4><div class="r"><span>HDMI</span><span>3</span></div><div class="r"><span>USB 2.0 / 3.0</span><span>1 / 1</span></div><div class="r"><span>AV in</span><span>2</span></div><div class="r"><span>Ethernet</span><span>RJ45</span></div><div class="r"><span>Video system</span><span>PAL, SECAM, NTSC</span></div><div class="r"><span>Earphone out · TF card</span><span>Yes</span></div></div>
+    </div>
+  </section>
+</main>
+<div data-footer></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script>
+</body></html>

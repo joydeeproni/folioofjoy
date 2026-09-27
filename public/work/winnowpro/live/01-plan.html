@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Select plan</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .wrap{display:grid;grid-template-columns:1fr 390px;gap:28px;padding:36px 48px 40px}
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .pl{padding:22px;position:relative}
+  .pl.on{box-shadow:0 0 0 2px var(--red-500),var(--sh-2)}
+  .pl .top{display:flex;align-items:flex-start;gap:12px}
+  .ck{width:24px;height:24px;border-radius:7px;box-shadow:inset 0 0 0 2px var(--line-2);display:grid;place-items:center;flex:none;margin-top:2px}
+  .pl.on .ck{background:var(--red-500);box-shadow:none;color:#fff}
+  .ck svg{width:14px;height:14px;stroke-width:3}
+  .pl h3{font-size:19px;font-weight:800;letter-spacing:-.015em}
+  .pl .for{font-size:13.5px;color:var(--ink-3)}
+  .pl .price{margin-left:auto;text-align:right}
+  .pl .price b{font-size:30px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .pl .price span{display:block;font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .feat{display:grid;gap:14px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .feat h4{font-size:12.5px;font-weight:800;color:var(--ink-3);margin-bottom:6px}
+  .feat li{list-style:none;display:flex;gap:9px;align-items:center;font-size:14px;padding:3px 0}
+  .feat li svg{color:var(--red-500)}
+  .tag{position:absolute;top:-11px;right:22px;background:var(--ink);color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px}
+  .adds{padding:18px 22px;margin-top:16px;display:flex;align-items:center;gap:14px}
+  .adds .sp{flex:1}
+  .add{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;box-shadow:inset 0 0 0 1.5px var(--line-2);font-weight:600;font-size:14px}
+  .foot{display:flex;align-items:center;gap:10px;margin-top:22px}.foot .sp{flex:1}
+  .sum{padding:20px;margin-top:0}
+  .sum .r{display:flex;justify-content:space-between;padding:9px 0;font-size:14px;border-bottom:1px solid var(--line)}
+  .sum .t{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px}
+  .sum .t b{font-size:30px;font-weight:800;letter-spacing:-.03em}
+</style></head>
+<body>
+<div data-onb="0"></div>
+<main class="wrap">
+  <section>
+    <span class="label">Step 1 of 6 · Welcome, Stevens Creek Hyundai</span>
+    <h1 class="h1" style="margin-top:6px">Pick your base plan</h1>
+    <p class="lead">Choose the digital services that fit your dealership. You can add more after onboarding.</p>
+    <div class="plans">
+      <div class="card pl on"><span class="tag">Most dealers start here</span>
+        <div class="top"><span class="ck"><i data-lucide="check"></i></span><div><h3>Ad Services</h3><span class="for">Paid ads, social and reporting</span></div><div class="price"><b class="num">$500</b><span>per month</span></div></div>
+        <div class="feat">
+          <div><h4>PAID ADS</h4><ul><li><i data-lucide="check" class="sm"></i>Google Search, Display and Local</li><li><i data-lucide="check" class="sm"></i>Facebook and Instagram</li></ul></div>
+          <div><h4>REPORTING</h4><ul><li><i data-lucide="check" class="sm"></i>Dedicated account manager</li><li><i data-lucide="check" class="sm"></i>Review calls twice a month</li><li><i data-lucide="check" class="sm"></i>Weekly performance report</li></ul></div>
+          <div><h4>SOCIAL CONTENT</h4><ul><li><i data-lucide="check" class="sm"></i>2–3 Facebook and Instagram posts a week</li></ul></div>
+        </div></div>
+      <div class="card pl">
+        <div class="top"><span class="ck"></span><div><h3>Showroom Chat</h3><span class="for">A chatbot that works your leads</span></div><div class="price"><b class="num">$400</b><span>per month</span></div></div>
+        <div class="feat">
+          <div><h4>FEATURES</h4><ul><li><i data-lucide="check" class="sm"></i>Connected to your inventory</li><li><i data-lucide="check" class="sm"></i>Leads sent straight to your CRM</li><li><i data-lucide="check" class="sm"></i>Natural conversations with buyers</li><li><i data-lucide="check" class="sm"></i>Lead qualification</li><li><i data-lucide="check" class="sm"></i>Agent and manager review sites</li></ul></div>
+          <div><h4>REPORTING</h4><ul><li><i data-lucide="check" class="sm"></i>Dedicated account manager</li><li><i data-lucide="check" class="sm"></i>Weekly performance report</li></ul></div>
+        </div></div>
+    </div>
+    <div class="card adds"><div><b>Optional add-ons</b><div style="font-size:13.5px;color:var(--ink-3)">Add these now or any time later.</div></div><span class="sp"></span><span class="add"><span class="ck"></span>SEO services</span><span class="add"><span class="ck"></span>Social media with graphics</span></div>
+    <div class="foot"><span class="sp"></span><a class="btn primary">Continue to payment<i data-lucide="arrow-right" class="sm"></i></a></div>
+  </section>
+  <aside>
+    <div class="card sum"><span class="label">Your plan</span>
+      <div class="r" style="margin-top:8px"><span>Ad Services</span><b class="num">$500/mo</b></div>
+      <div class="r"><span>Setup & onboarding</span><b>Included</b></div>
+      <div class="r"><span>Billing starts</span><b class="num">Apr 12, 2021</b></div>
+      <div class="t"><span class="label">Monthly total</span><b class="num">$500</b></div>
+    </div>
+    <div style="margin-top:16px" data-launch="0,0"></div>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script><script>boot()</script>
+</body></html>

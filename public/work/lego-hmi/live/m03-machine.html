@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Moulding · Machine 152662</title><link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="mobile.css">
+<style>
+  .alm{margin:12px 16px 0;background:#2d1a1c;border-left:3px solid #fa4d56;padding:12px 14px;display:flex;gap:12px}
+  .alm svg{color:#fa4d56;margin-top:2px}
+  .alm b{font-size:15px;font-weight:600;display:block}
+  .alm span{font-size:13px;color:#c6c6c6}
+  .trend{margin:1px 16px 0;background:var(--cds-layer-01);padding:12px 14px 10px}
+  .trend .r{display:flex;gap:18px}
+  .trend .r div b{display:block;font-size:24px;font-weight:300;line-height:30px}
+  .trend .r div b.red{color:#ff8389}
+  .kv{margin:12px 16px 0;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cds-border-subtle-01)}
+  .kv div{background:var(--cds-layer-01);padding:10px 12px}
+  .kv b{display:block;font-size:15px;font-weight:500;margin-top:2px}
+  .sc{margin:12px 16px 0;padding:14px;background:var(--cds-layer-01);display:flex;align-items:center;gap:12px}
+  .sc .ic{width:40px;height:40px;background:#393939;display:grid;place-items:center;flex:none}
+  .sc b{font-size:15px;display:block}
+  .foot{position:absolute;left:0;right:0;bottom:83px;padding:12px 16px;background:linear-gradient(180deg,rgba(22,22,22,0),#161616 30%);display:grid;grid-template-columns:1fr 1.5fr;gap:1px}
+  .toast{top:106px}
+</style></head><body>
+<div class="body">
+  <div class="alm" id="alm"><span data-ci="warning--filled"></span><div><b>E-2041 · Hot runner zone 3</b><span>Over temperature · stopped automatically 14:22</span></div></div>
+  <div class="trend"><div class="r"><div><span class="lab">Zone 3 actual</span><b class="num red">268<small style="font-size:13px;color:#a8a8a8"> °C</small></b></div><div><span class="lab">Set point</span><b class="num">240<small style="font-size:13px;color:#a8a8a8"> °C</small></b></div><div><span class="lab">Limit</span><b class="num">255<small style="font-size:13px;color:#a8a8a8"> °C</small></b></div></div>
+    <svg viewBox="0 0 330 64" width="100%" height="64" style="display:block;margin-top:8px"><line x1="0" y1="22" x2="330" y2="22" stroke="#fa4d56" stroke-dasharray="4 4" stroke-width="1"/><path d="M0 52 L40 50 L80 51 L120 48 L160 46 L190 42 L220 36 L250 30 L280 22 L305 16 L322 10" fill="none" stroke="#78a9ff" stroke-width="2"/><circle cx="322" cy="10" r="4" fill="#fa4d56"/><text x="0" y="16" fill="#8d8d8d" font-size="10" font-family="IBM Plex Mono">limit 255</text><text x="258" y="62" fill="#8d8d8d" font-size="10" font-family="IBM Plex Mono">last 30 min</text></svg></div>
+  <div class="sc" id="sc"><span class="ic"><span data-ci="stop--filled"></span></span><div style="flex:1"><span class="lab">Stop code</span><b id="scv">Not set · counts as unplanned</b></div><span class="cds--tag cds--tag--red cds--tag--sm" id="sct"><span class="cds--tag__label">2 min</span></span></div>
+  <div class="kv">
+    <div><span class="lab">Order</span><b>2 · Brick 2×4</b></div><div><span class="lab">Mould</span><b class="num">2357023</b></div>
+    <div><span class="lab">Output today</span><b class="num">48,210 pcs</b></div><div><span class="lab">OEE · shift B</span><b class="num">86%</b></div>
+  </div>
+  <div class="sect"><h3>Latest eLog</h3><span class="lab">See all</span></div>
+  <div class="row" style="padding:12px 16px"><span class="cds--tag cds--tag--purple cds--tag--sm"><span class="cds--tag__label">Q</span></span><div class="m"><div class="s" style="color:var(--cds-text-primary);font-size:14px">Short shot on cavity 4 · fixed</div><div class="s">13:05 · M. Hansen</div></div></div>
+</div>
+<div class="foot"><button class="cds--btn cds--btn--secondary full">eLog</button><button class="cds--btn cds--btn--primary full" id="setbtn">Set stop code<span data-ci="arrow--right"></span></button></div>
+<script src="icons.js"></script><script src="icons-extra.js"></script><script src="m-shared.js"></script>
+<script>
+mboot({ title: 'Machine 152662', sub: 'Module 9 · R1/P12', back: true, alarms: 1, right: '<span class="ib"><span data-ci="overflow-menu--vertical"></span></span>' });
+if (MQ.get('set') === '1') {
+  document.getElementById('scv').textContent = 'Breakdown · VITS no. 3';
+  const t = document.getElementById('sct'); t.className = 'cds--tag cds--tag--warm-gray cds--tag--sm'; t.firstChild.textContent = 'Set 14:25';
+  document.querySelector('#sc .ic').style.background = '#0f62fe';
+  document.querySelector('.foot').innerHTML = '<button class="cds--btn cds--btn--secondary full">Technician</button><button class="cds--btn cds--btn--primary full" id="setbtn">Add eLog entry<span data-ci="add"></span></button>';
+  document.body.insertAdjacentHTML('beforeend', '<div class="toast"><span data-ci="checkmark--filled" data-s="20" style="color:#24a148"></span><div><b>Stop code set · Breakdown</b><span>VITS no. 3 · technician notified · also on the machine tablet</span></div></div>');
+  hydrateIcons(); document.querySelector('.toast svg').style.color = '#24a148';
+}
+</script></body></html>

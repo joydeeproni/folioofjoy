@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Lesson</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .top{display:flex;justify-content:space-between;align-items:center;padding:12px 24px 0}
+  .title{padding:24px 24px 0}
+  .title .cat{font-size:14px;font-weight:500}
+  .title h1{font-size:26px;font-weight:400;letter-spacing:-.02em;line-height:1.25;margin-top:10px}
+  .fmt{display:flex;gap:6px;margin-top:18px}
+  .fmt span{height:34px;padding:0 13px;border-radius:99px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+  .fmt span.on{background:var(--char);color:#fff}
+  .card{position:absolute;left:24px;right:24px;top:292px;bottom:24px;border-radius:26px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .aud{display:flex;align-items:center;gap:12px;padding:18px 20px;background:var(--char);color:#fff}
+  .pl{width:46px;height:46px;border-radius:50%;background:var(--yellow);color:var(--char);display:grid;place-items:center;flex:none}
+  .wv{display:flex;align-items:center;gap:3px;height:32px}.wv i{width:3px;border-radius:2px;background:rgba(255,255,255,.3)}.wv i.p{background:var(--yellow)}
+  .aud small{font-size:12px;color:rgba(255,255,255,.6)}
+  .txt{padding:20px 22px 0;font-size:21px;font-weight:300;line-height:1.35;flex:1}
+  .txt b{font-weight:600}
+  .work{background:#F2F2F4;padding:16px 20px}
+  .work b{font-size:15px;font-weight:600}.work p{font-size:13px;color:#6B6E78;margin-top:2px}
+  .work .row{display:grid;grid-template-columns:1fr 1.3fr;gap:8px;margin-top:12px}
+  .work a{height:44px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:14.5px;background:#fff}
+  .work a.y{background:var(--char);color:#fff}
+</style></head>
+<body class="peach">
+<div class="top"><span class="sq o"><i data-lucide="chevron-down"></i></span><span class="pause"><i data-lucide="book-open" class="sm"></i>Learn · 4 min</span><span class="sq o"><i data-lucide="bookmark"></i></span></div>
+<div class="title"><span class="cat">Learning · Level 1</span><h1>Positive Reinforcement, In Plain Words</h1>
+<div class="fmt"><span><i data-lucide="book-open" class="sm"></i>Read</span><span class="on"><i data-lucide="headphones" class="sm"></i>Listen</span><span><i data-lucide="play" class="sm"></i>Watch</span></div></div>
+<div class="card a-rise" style="animation-delay:.1s">
+  <div class="aud"><span class="pl press"><i data-lucide="pause" style="fill:currentColor"></i></span><div style="flex:1"><div class="wv" id="wv"></div><small class="num" id="tc">1:12 / 3:58 · read by Christophe</small></div></div>
+  <p class="txt">Dogs repeat what pays. <b>Mark the moment</b> she gets it right with a clear “yes”, then reward within two seconds. Ignore the rest, for now.</p>
+  <div class="work"><b>Did this work for Milou?</b><p>Your answer helps Christophe tune the next quest.</p><div class="row"><a class="press">Not yet</a><a class="y press" id="go"><i data-lucide="thumbs-up" class="sm"></i>It worked</a></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const wv = document.getElementById('wv'), N = 40;
+  for (let i = 0; i < N; i++) { const h = 6 + Math.round(Math.abs(Math.sin(i * 1.7) * 16 + Math.sin(i * .5) * 6)); wv.insertAdjacentHTML('beforeend', `<i style="height:${h}px"></i>`); }
+  const bars = [...wv.children], tc = document.getElementById('tc');
+  const at = (sec) => { const p = Math.round(sec / 238 * N); bars.forEach((b, i) => b.classList.toggle('p', i < p)); tc.textContent = `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')} / 3:58 · read by Christophe`; };
+  if (STATIC) at(72); else tween((t) => at(72 + t / 1000 * 3));
+  boot({});
+</script>
+</body></html>

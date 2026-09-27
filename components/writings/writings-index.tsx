@@ -50,15 +50,16 @@ const RESOURCES: { title: string; desc: string; href?: string; wip?: boolean }[]
 // left alone behind the "Tools" label — it's the sessionStorage value and the
 // ?tab= value, so renaming it would strand anyone mid-visit and break existing
 // ?tab=resources links for no visible gain.
-type TabKey = 'resources' | 'cases' | 'thoughts';
+type TabKey = 'resources' | 'cases' | 'archive' | 'thoughts';
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'cases', label: 'Cases' },
+  { key: 'archive', label: 'Archive' },
   { key: 'thoughts', label: 'Thoughts' },
   { key: 'resources', label: 'Tools' },
 ];
 
 const isTabKey = (v: string | null): v is TabKey =>
-  v === 'resources' || v === 'cases' || v === 'thoughts';
+  v === 'resources' || v === 'cases' || v === 'archive' || v === 'thoughts';
 
 function Row({
   n,
@@ -270,9 +271,9 @@ export function WritingsIndex({ writings }: { writings: WritingListItem[] }) {
         </ul>
       )}
 
-      {tab === 'cases' && (
-        <ul key="cases" className="divide-y" style={{ borderColor: RULE }}>
-          {SORTED_CASES.map((c, i) => (
+      {(tab === 'cases' || tab === 'archive') && (
+        <ul key={tab} className="divide-y" style={{ borderColor: RULE }}>
+          {SORTED_CASES.filter((c) => !!c.archive === (tab === 'archive')).map((c, i) => (
             <li key={c.title} {...rowAnim(i)}>
               <Row
                 n={String(c.year)}

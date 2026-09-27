@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Reminders</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .ptabs{background:var(--bg);justify-content:space-between;padding-right:22px;height:56px}
+  .ev{padding:14px 18px}
+  .ev .when{text-align:right;align-self:flex-start}
+  .ev .when b{display:block;font-size:14px;font-weight:800}
+  .ev .when span{font-size:11.5px;font-weight:700;color:var(--ink-3)}
+  .ev .when span.soon{color:var(--coral)}
+  .ev.done{opacity:.5}
+  .sechd:first-of-type{padding-top:14px}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Reminders" data-right='["calendar","bell"]'></span>
+</header>
+<nav class="ptabs"><span class="on">Shift</span><span>Today</span><span>Week</span><span>Overdue</span></nav>
+<section class="list" id="a" data-stagger></section>
+<span data-tabs="Reminders" data-badges='{"Chats":3,"Reminders":4}'></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const r = (cls, ic, t, co, n, tm, rel, x = '') => `<div class="row ev ${x}"><span class="ico ${cls}"><i data-lucide="${ic}"></i></span><div class="grow"><div class="nm" style="font-size:15px">${t}</div><div class="mt">${co}</div><div class="nt">${n}</div></div><span class="dur num">${tm}</span></div>`;
+  a.innerHTML = r('call', 'phone', 'Andrew Duncan', 'Anderson Partners Accountants', 'Follow up on Growth plan pricing', '10:30', 'in 25 min')
+    + r('meet', 'calendar-check', 'Demo · Grace Okafor', 'Lumen Dental Group', 'Zoom link sent, bring the dental case study', '11:15', 'in 1h 10m');
+  a.innerHTML += r('call', 'phone', 'Lena Fischer', 'Keystone Insurance', 'Asked for a callback after lunch', '13:00', 'Callback')
+    + r('mail', 'mail', 'Samir Haddad', 'Northwind Coffee Co.', 'Send the annual plan and onboarding steps', '14:00', 'Email')
+    + r('call', 'phone', 'Tom Nguyen', 'Harbor Freight Logistics', 'Third try, mornings work better', '15:30', 'Call')
+    + r('call', 'phone', 'Maya Levin', 'Brightside Realty', 'New lead from the website chat', '09:10', 'Done');
+  boot();
+</script></body></html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Teen Health Planner · Learn</title>
+<link rel="stylesheet" href="thp.css">
+<style>
+  .course{margin:4px 16px 0;padding:16px;border-radius:24px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);position:relative;overflow:hidden}
+  .course .tag{display:inline-flex;height:26px;padding:0 10px;border-radius:99px;background:#fff;font-size:12px;font-weight:700;align-items:center;gap:5px;color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+  .course h2{font-size:24px;letter-spacing:-.02em;line-height:1.15;margin-top:10px;max-width:230px}
+  .course p{font-size:13.5px;color:var(--ink-2);margin-top:6px;max-width:210px}
+  .course .art{position:absolute;right:-10px;bottom:-14px;width:120px;height:120px;border-radius:50%;background:var(--tint);display:grid;place-items:center;color:#C9564B}
+  .course .art svg{width:52px;height:52px}
+  .course .meta{display:flex;gap:14px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+  .course .meta span{display:flex;gap:5px;align-items:center}
+  h3{font-size:17px;font-weight:700;padding:18px 20px 4px}
+  .h3s{font-size:13px;color:var(--ink-3);padding:0 20px 8px}
+  .voices{display:flex;flex-direction:column;gap:8px;padding:0 16px}
+  .v{display:flex;align-items:center;gap:12px;height:66px;padding:0 12px;border-radius:18px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1.5px var(--line)}
+  .v .av{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:18px;font-weight:800;color:#fff;flex:none}
+  .v b{display:block;font-size:15px}
+  .v span{font-size:12.5px;color:var(--ink-3)}
+  .v .play{margin-left:auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--bg)}
+  .v.on{box-shadow:inset 0 0 0 2px var(--ink),var(--sh-2)}
+  .v.on .play{background:var(--ink);color:#fff}
+  .wave{display:flex;gap:2px;align-items:center;height:18px;margin-left:8px}
+  .wave i{width:3px;border-radius:2px;background:var(--ink-3)}
+  .cta{position:absolute;left:16px;right:16px;bottom:30px}
+</style></head>
+<body>
+<div class="nav"><span class="b"><i data-lucide="chevron-left"></i></span><h1>Learn</h1><span class="pts"><i data-lucide="star" class="sm"></i>+40</span></div>
+<section class="course"><span class="tag"><i data-lucide="heart-pulse" class="sm"></i>Course · 4 lessons</span><h2>Your heart and blood pressure</h2><p>What your meds do, and why timing matters.</p>
+  <div class="meta"><span><i data-lucide="clock" class="sm"></i>12 min</span><span><i data-lucide="headphones" class="sm"></i>Audio + cards</span></div><span class="art"><i data-lucide="heart-pulse"></i></span></section>
+<h3>Pick your narrator</h3><p class="h3s">Same lessons, told your way. Tap to preview.</p>
+<div class="voices">
+  <div class="v"><span class="av" style="background:var(--violet)">M</span><div><b>Maya</b><span>Calm and clear</span></div><span class="play"><i data-lucide="play" class="sm"></i></span></div>
+  <div class="v on"><span class="av" style="background:var(--orange)">T</span><div><b style="display:flex;align-items:center">Theo<span class="wave" id="wave"></span></b><span>Upbeat, like a friend</span></div><span class="play"><i data-lucide="pause" class="sm"></i></span></div>
+  <div class="v"><span class="av" style="background:var(--teal)">A</span><div><b>Coach Ade</b><span>Sporty pep talk</span></div><span class="play"><i data-lucide="play" class="sm"></i></span></div>
+  <div class="v"><span class="av" style="background:var(--ink-3)"><i data-lucide="bot" class="sm"></i></span><div><b>Robo</b><span>Robot voice, just for fun</span></div><span class="play"><i data-lucide="play" class="sm"></i></span></div>
+</div>
+<a class="btn primary cta">Begin course with Theo<i data-lucide="arrow-right" class="sm"></i></a>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('wave').innerHTML = [6, 12, 16, 9, 14, 7, 11].map(h => `<i style="height:${h}px"></i>`).join('');
+  boot({ tabs: false });
+</script></body></html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Access control</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .hdr{display:flex;align-items:flex-end;gap:10px}
+  .tb{display:flex;gap:8px;margin-top:20px;align-items:center}
+  .flt{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .flt b{color:var(--ink)}
+  .tbl{margin-top:14px;overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-size:12px;font-weight:700;color:var(--ink-3);text-align:left;padding:12px 16px;background:#FBFAF6;border-bottom:1px solid var(--line)}
+  td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  .who{display:flex;align-items:center;gap:12px}.who b{display:block;font-weight:700}.who span{font-size:12.5px;color:var(--ink-3)}
+  .fr{display:flex;gap:4px;flex-wrap:wrap}
+  .fr span{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--bg-2);color:var(--ink-2)}
+  .dot{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:13px}
+  .dot i{width:8px;height:8px;border-radius:50%}
+  .acts{display:flex;gap:2px;justify-content:flex-end}
+  .acts button{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:var(--ink-3)}
+  tr.sel td{background:var(--red-50)}
+  .menu{position:absolute;right:48px;width:210px;background:#fff;border-radius:14px;box-shadow:var(--sh-3),0 0 0 1px var(--line);padding:6px;font-size:14px;z-index:5}
+  .menu a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;font-weight:600;color:var(--ink-2)}
+  .menu a:first-child{background:var(--bg)} .menu a.d{color:var(--red-600)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+  .s{padding:14px 18px}.s b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+</style></head>
+<body><div class="app"><div data-side="Access control"></div><div>
+<div data-atop></div>
+<main class="main" style="position:relative">
+  <div class="hdr"><div><h1 class="h1" style="font-size:30px">Access control</h1><p class="lead" style="margin-top:4px">Who can see and change what, across your 3 franchises</p></div><span style="flex:1"></span><a class="btn ghost"><i data-lucide="download" class="sm"></i>Export</a><a class="btn primary"><i data-lucide="user-plus" class="sm"></i>Add user</a></div>
+  <div class="stats"><div class="card s"><span class="label">Users</span><b>28</b></div><div class="card s"><span class="label">Admins</span><b>3</b></div><div class="card s"><span class="label">Pending invites</span><b style="color:#8A6D00">2</b></div><div class="card s"><span class="label">Disabled</span><b>1</b></div></div>
+  <div class="tb"><div class="search" style="width:280px;background:#fff"><i data-lucide="search" class="sm"></i>Search users</div><span class="flt">Status <b>All</b><i data-lucide="chevron-down" class="sm"></i></span><span class="flt">Role <b>All</b><i data-lucide="chevron-down" class="sm"></i></span><span class="flt">Franchise <b>All 3</b><i data-lucide="chevron-down" class="sm"></i></span></div>
+  <div class="card tbl"><table id="t"><tr><th>User</th><th>Role</th><th>Franchises</th><th>Last seen</th><th>Status</th><th></th></tr></table></div>
+  <div class="menu" id="menu"><a><i data-lucide="pencil" class="sm"></i>Edit permissions</a><a><i data-lucide="key-round" class="sm"></i>Reset password</a><a><i data-lucide="mail" class="sm"></i>Re-send invite</a><a><i data-lucide="user-x" class="sm"></i>Disable user</a><a class="d"><i data-lucide="trash-2" class="sm"></i>Delete user</a></div>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const U = [['Joydeep Sengupta', 'joy@stevenscreek.com', 'Admin', ['Hyundai', 'Genesis', 'Kia'], 'Now', 'Active'],
+    ['Arlene McCoy', 'arlene@stevenscreek.com', 'Manager', ['Kia'], 'Today 09:14', 'Active'],
+    ['Savannah Nguyen', 'savannah@stevenscreek.com', 'Manager', ['Hyundai'], 'Yesterday', 'Active'],
+    ['Robert Fox', 'robert@stevenscreek.com', 'Sales', ['Genesis'], 'Mar 28', 'Invite pending'],
+    ['Darlene Robertson', 'darlene@stevenscreek.com', 'Sales', ['Hyundai'], 'Mar 30', 'Active'],
+    ['Kathryn Murphy', 'kathryn@stevenscreek.com', 'Finance', ['Hyundai', 'Genesis'], 'Never', 'Invite pending'],
+    ['Annette Black', 'annette@stevenscreek.com', 'Finance', ['Kia'], 'Feb 12', 'Disabled']];
+  const tone = ['#FCE5E0,#B8311E', '#E1E9F5,#093B7D', '#FFF8D2,#8A6D00', '#DDF2E6,#1F8A55'];
+  const st = { Active: '#1F8A55', 'Invite pending': '#E8C930', Disabled: '#A6A6A6' };
+  document.getElementById('t').innerHTML += U.map(([n, e, r, f, l, s], i) => { const [bg, fg] = tone[i % 4].split(',');
+    return `<tr class="${i === 3 ? 'sel' : ''}"><td><div class="who"><span class="av" style="background:${bg};color:${fg}">${n.split(' ').map(x => x[0]).join('')}</span><div><b>${n}</b><span>${e}</span></div></div></td><td>${r}</td><td><div class="fr">${f.map(x => `<span>${x}</span>`).join('')}</div></td><td class="num" style="color:var(--ink-2)">${l}</td><td><span class="dot" style="color:${s === 'Disabled' ? 'var(--ink-3)' : 'var(--ink)'}"><i style="background:${st[s]}"></i>${s}</span></td><td><div class="acts"><button><i data-lucide="pencil" class="sm"></i></button><button style="${i === 3 ? 'background:#fff;color:var(--ink);box-shadow:var(--sh-1)' : ''}"><i data-lucide="more-horizontal" class="sm"></i></button></div></td></tr>`; }).join('');
+  boot();
+  requestAnimationFrame(() => { const r = document.querySelectorAll('#t tr')[4].getBoundingClientRect(), m = document.querySelector('main').getBoundingClientRect(); document.getElementById('menu').style.top = (r.bottom - m.top - 4) + 'px'; });
+</script></body></html>

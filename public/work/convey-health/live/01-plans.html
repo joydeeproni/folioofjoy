@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Compare plans</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  .toolbar{display:flex;align-items:center;gap:12px;margin-top:24px}
+  .toolbar .sp{flex:1}
+  .sort{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-2)}
+  .sort b{color:var(--text);font-weight:600;display:flex;align-items:center;gap:4px}
+  .filters{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .filters .chip{background:#fff;box-shadow:inset 0 0 0 1px var(--line-strong);height:32px;padding:0 12px;color:var(--text)}
+  .filters .chip.on{background:var(--petrol-50);box-shadow:inset 0 0 0 1px var(--petrol-200);color:var(--petrol-800)}
+  .list{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+  .plan{padding:22px 24px 20px;position:relative;transition:box-shadow .2s var(--ease)}
+  .plan.pick{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--petrol-500)}
+  .plan .ribbon{position:absolute;top:-11px;left:22px;height:22px;padding:0 10px;border-radius:var(--r-pill);background:var(--petrol-600);color:#fff;font-size:12px;font-weight:650;display:flex;align-items:center;gap:6px}
+  .plan .ribbon svg{width:13px;height:13px}
+  .p-top{display:flex;align-items:flex-start;gap:16px}
+  .p-top .name{flex:1}
+  .p-top h3{font-size:19px;font-weight:700;letter-spacing:-.015em;line-height:1.25}
+  .p-top .meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-3);margin-top:5px}
+  .p-top .meta .d{width:3px;height:3px;border-radius:50%;background:var(--ink-300)}
+  .save{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--text-3);box-shadow:inset 0 0 0 1px var(--line)}
+  .save.on{color:var(--petrol-600);background:var(--petrol-50);box-shadow:none}
+  .save.on svg{fill:currentColor}
+  .figs{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;margin-top:18px;border-radius:var(--r-md);background:var(--surface);padding:14px 4px}
+  .fig{padding:0 16px;border-left:1px solid var(--line)}
+  .fig:first-child{border-left:0}
+  .fig .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:2px;line-height:1.2}
+  .fig .v small{font-size:13px;font-weight:600;color:var(--text-3);letter-spacing:0}
+  .fig.hero .v{font-size:26px;color:var(--petrol-800)}
+  .fig .h{font-size:12.5px;color:var(--text-3);margin-top:2px}
+  .p-foot{display:flex;align-items:center;gap:8px;margin-top:16px}
+  .p-foot .sp{flex:1}
+  .cmp{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--text-2);margin-right:6px}
+  .cmp.on{color:var(--petrol-700)}
+  /* compare tray */
+  .tray{position:sticky;bottom:20px;margin-top:22px;background:var(--petrol-950);color:#fff;border-radius:var(--r-lg);padding:12px 12px 12px 20px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh-3)}
+  .tray .msg{font-size:13.5px;color:rgba(255,255,255,.66);white-space:nowrap;line-height:1.35}
+  .tray .msg b{color:#fff;display:block;font-size:15px}
+  .slots{display:flex;gap:6px;margin-left:4px}
+  .slot{white-space:nowrap;height:40px;border-radius:10px;padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;background:rgba(255,255,255,.1)}
+  .slot.empty{background:transparent;border:1.5px dashed rgba(255,255,255,.28);color:rgba(255,255,255,.55)}
+  .slot .x{opacity:.6}
+  .tray .sp{flex:1}
+  .tray .btn.primary{background:#fff;color:var(--petrol-900)}
+</style>
+</head><body>
+<div id="chrome"></div>
+
+<main class="wrap page">
+  <section>
+    <div class="head rise">
+      <h1>14 plans cover your drugs and your doctor</h1>
+      <p>Showing 2027 plans. Selecting a plan makes it easy to find a provider who is in-network.</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="seg" role="tablist">
+        <button class="on">Advantage + drugs <span class="c">MAPD · 6</span></button>
+        <button>Drug plans <span class="c">PDP · 4</span></button>
+        <button>Advantage <span class="c">MA · 4</span></button>
+      </div>
+      <span class="sp"></span>
+      <span class="sort">Sort by <b>Lowest yearly cost <i data-lucide="chevron-down" class="sm"></i></b></span>
+    </div>
+    <div class="filters">
+      <span class="chip on"><i data-lucide="pill" class="sm"></i>Covers my 3 drugs</span>
+      <span class="chip on"><i data-lucide="stethoscope" class="sm"></i>Dr. Peterson in network</span>
+      <span class="chip">$0 premium</span>
+      <span class="chip">Dental &amp; vision</span>
+      <span class="chip">4+ stars</span>
+      <span class="chip"><i data-lucide="sliders-horizontal" class="sm"></i>More filters</span>
+    </div>
+
+    <div class="list">
+      <article class="card plan pick">
+        <span class="ribbon"><i data-lucide="sparkles"></i>Lowest yearly cost for your drugs</span>
+        <div class="p-top">
+          <div class="name">
+            <h3>Convey Advantage Plus (HMO)</h3>
+            <div class="meta"><span data-stars="4.5"></span><span class="num">4.5 Medicare rating</span><span class="d"></span><span class="num">H0000-001</span></div>
+          </div>
+          <button class="save on" aria-label="Saved"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="figs">
+          <div class="fig hero"><div class="label">Est. yearly cost</div><div class="v num">$600</div><div class="h">Premium + your drugs</div></div>
+          <div class="fig"><div class="label">Monthly premium</div><div class="v num">$12</div></div>
+          <div class="fig"><div class="label">Drug deductible</div><div class="v num">$0</div></div>
+          <div class="fig"><div class="label">Medical deductible</div><div class="v num">$250 <small>in-network</small></div></div>
+        </div>
+        <div class="p-foot">
+          <span class="chip ok"><i data-lucide="check" class="sm"></i>3 of 3 drugs covered</span>
+          <span class="chip ok"><i data-lucide="check" class="sm"></i>Dr. Peterson in network</span>
+          <span class="chip">Dental · Vision · Hearing</span>
+          <span class="sp"></span>
+          <label class="cmp on"><span class="check on"><i data-lucide="check"></i></span>Compare</label>
+          <a class="btn ghost sm">Plan details</a>
+          <a class="btn primary sm">Enroll</a>
+        </div>
+      </article>
+
+      <article class="card plan">
+        <div class="p-top">
+          <div class="name">
+            <h3>MAPD Comprehensive (PPO)</h3>
+            <div class="meta"><span data-stars="4"></span><span class="num">4.0 Medicare rating</span><span class="d"></span><span class="num">H0000-014</span></div>
+          </div>
+          <button class="save" aria-label="Save plan"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="figs">
+          <div class="fig hero"><div class="label">Est. yearly cost</div><div class="v num">$792</div><div class="h">Premium + your drugs</div></div>
+          <div class="fig"><div class="label">Monthly premium</div><div class="v num">$19</div></div>
+          <div class="fig"><div class="label">Drug deductible</div><div class="v num">$100</div></div>
+          <div class="fig"><div class="label">Medical deductible</div><div class="v num">$0 <small>in-network</small></div></div>
+        </div>
+        <div class="p-foot">
+          <span class="chip ok"><i data-lucide="check" class="sm"></i>3 of 3 drugs covered</span>
+          <span class="chip ok"><i data-lucide="check" class="sm"></i>Dr. Peterson in network</span>
+                    <span class="sp"></span>
+          <label class="cmp on"><span class="check on"><i data-lucide="check"></i></span>Compare</label>
+          <a class="btn ghost sm">Plan details</a>
+          <a class="btn primary sm">Enroll</a>
+        </div>
+      </article>
+
+      <article class="card plan">
+        <div class="p-top">
+          <div class="name">
+            <h3>Convey Value Rx (HMO-POS)</h3>
+            <div class="meta"><span data-stars="3.5"></span><span class="num">3.5 Medicare rating</span><span class="d"></span><span class="num">H0000-022</span></div>
+          </div>
+          <button class="save" aria-label="Save plan"><i data-lucide="bookmark"></i></button>
+        </div>
+        <div class="figs">
+          <div class="fig hero"><div class="label">Est. yearly cost</div><div class="v num">$852</div><div class="h">Premium + your drugs</div></div>
+          <div class="fig"><div class="label">Monthly premium</div><div class="v num">$0</div></div>
+          <div class="fig"><div class="label">Drug deductible</div><div class="v num">$545</div></div>
+          <div class="fig"><div class="label">Medical deductible</div><div class="v num">$0 <small>in-network</small></div></div>
+        </div>
+        <div class="p-foot">
+          <span class="chip warn"><i data-lucide="alert-circle" class="sm"></i>2 of 3 drugs covered</span>
+          <span class="chip ok"><i data-lucide="check" class="sm"></i>Dr. Peterson in network</span>
+          <span class="sp"></span>
+          <label class="cmp"><span class="check"></span>Compare</label>
+          <a class="btn ghost sm">Plan details</a>
+          <a class="btn primary sm">Enroll</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="tray">
+      <div class="msg"><b>2 of 3 selected</b>Add one more or compare</div>
+      <div class="slots">
+        <span class="slot">Advantage Plus <i data-lucide="x" class="sm x"></i></span>
+        <span class="slot">MAPD Comprehensive <i data-lucide="x" class="sm x"></i></span>
+        <span class="slot empty"><i data-lucide="plus" class="sm"></i>Add</span>
+      </div>
+      <span class="sp"></span>
+      <a class="btn primary">Compare 2 plans <i data-lucide="arrow-right" class="sm"></i></a>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <div class="receipt">
+      <div class="top">
+        <div class="kicker"><i data-lucide="receipt" class="sm"></i>Your summary</div>
+        <div class="big num">$600<small>/ year</small></div>
+        <div class="sub">Estimated with Convey Advantage Plus, including premiums and your 3 drugs.</div>
+      </div>
+      <div class="perf"><i></i></div>
+      <div class="rows">
+        <div class="row"><span class="ic"><i data-lucide="pill" class="sm"></i></span><span class="t"><b>Drug cabinet</b>3 drugs · 1 switched to generic</span><a class="btn quiet sm">Edit</a></div>
+        <div class="row"><span class="ic"><i data-lucide="store" class="sm"></i></span><span class="t"><b>Pharmacy</b>Linden Pharmacy · 0.4 mi</span><a class="btn quiet sm">Edit</a></div>
+        <div class="row"><span class="ic"><i data-lucide="stethoscope" class="sm"></i></span><span class="t"><b>Doctors</b>Dr. Amy Peterson, MD</span><a class="btn quiet sm">Edit</a></div>
+      </div>
+      <div class="foot">
+        <a class="btn primary" style="width:100%">Continue with this plan</a>
+      </div>
+    </div>
+    <div class="tip">
+      <i data-lucide="lightbulb"></i>
+      <div><b>Medicare tip</b>Switching Lipitor to its generic saved you about $312 a year across these plans.</div>
+    </div>
+    <div class="card help">
+      <span class="avatar" style="background:var(--petrol-50);color:var(--petrol-600)"><i data-lucide="headset" class="sm"></i></span>
+      <div><b class="num">1-800-234-5678</b>Talk to a licensed agent · TTY 711</div>
+    </div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ step: 4 });</script>
+</body></html>

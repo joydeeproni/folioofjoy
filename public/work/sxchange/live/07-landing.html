@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Home</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .hero{display:grid;grid-template-columns:1fr 560px;gap:64px;padding:72px 40px 64px;align-items:center}
+  .hero .k{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .hero .k i{width:8px;height:8px;border-radius:50%;background:var(--green-600);box-shadow:0 0 0 4px var(--green-100)}
+  .hero h1{font-size:68px;line-height:1.02;letter-spacing:-.045em;font-weight:800;margin-top:22px;text-wrap:balance}
+  .hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--yellow-200) 62%)}
+  .hero p.l{font-size:19px;color:var(--ink-2);margin-top:20px;max-width:46ch;line-height:1.55}
+  .hero .ctas{display:flex;gap:12px;margin-top:30px}
+  .hero .ctas .btn{height:52px;padding:0 22px;font-size:16px}
+  .trust{display:flex;gap:26px;margin-top:34px;font-size:14px;color:var(--ink-2)}
+  .trust span{display:flex;align-items:center;gap:8px}
+  .trust svg{color:var(--green-600)}
+  .mkt{padding:22px;border-radius:22px;position:relative}
+  .mkt .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .mkt .hd b{font-size:15px}
+  .mkt .hd span{font-size:13px;color:var(--ink-3)}
+  .li{display:grid;grid-template-columns:44px 1fr 64px;gap:14px;align-items:center;padding:14px;border-radius:14px;background:var(--bg);margin-top:10px}
+  .li b{display:block;font-size:14.5px;line-height:1.25}
+  .li .s{font-size:12.5px;color:var(--ink-3);margin-bottom:8px}
+  .li .off{font-size:24px;justify-self:end}
+  .li .off small{font-size:13px}
+  .li .deal .lg{flex-wrap:nowrap;font-size:12px;white-space:nowrap}
+  .li .deal .lg b{display:inline;font-size:12px}
+  .li.top{background:#fff;box-shadow:var(--sh-2),inset 0 0 0 1px var(--line)}
+  .mkt .ft{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+  .mkt .ft a{color:var(--blue-600);font-weight:600;display:flex;align-items:center;gap:6px}
+  .stats{margin:0 40px;display:grid;grid-template-columns:repeat(4,1fr)}
+  .stats div{padding:24px 28px}.stats div+div{border-left:1px solid var(--line)}
+  .stats b{display:block;font-size:34px;letter-spacing:-.03em;font-weight:800}
+  .stats span{color:var(--ink-3);font-size:14px}
+  section.blk{padding:96px 40px 0}
+  .blk h2{font-size:44px;letter-spacing:-.035em;line-height:1.08;font-weight:800;max-width:20ch;text-wrap:balance}
+  .blk p.l{font-size:18px;color:var(--ink-2);margin-top:14px;max-width:56ch}
+  .how{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+  .how .card{padding:30px}
+  .how h3{font-size:22px;letter-spacing:-.02em;font-weight:700;display:flex;align-items:center;gap:12px}
+  .how h3 .mode span{height:30px;font-size:13px}
+  .how ol{list-style:none;padding:0;margin-top:22px;display:flex;flex-direction:column}
+  .how li{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+  .how li i{width:40px;height:40px;border-radius:12px;background:var(--navy-50);color:var(--navy-700);display:grid;place-items:center;font-style:normal;font-weight:800}
+  .how li b{display:block;font-size:16px}.how li span{color:var(--ink-2);font-size:14.5px}
+  .anat{margin-top:40px;padding:48px 56px 44px;display:grid;grid-template-columns:1fr 360px;gap:56px;align-items:center}
+  .anat .big .bar{height:28px;border-radius:10px;background:var(--navy-100);position:relative;overflow:hidden}
+  .anat .big .ask{position:absolute;left:0;top:0;bottom:0;width:70%;background:var(--navy-700);border-radius:10px}
+  .anat .big .gap{position:absolute;left:70%;right:0;top:0;bottom:0;background:repeating-linear-gradient(135deg,var(--yellow-500) 0 7px,var(--yellow-200) 7px 14px)}
+  .anat .ticks{position:relative;height:84px;margin-top:10px;font-size:14px}
+  .anat .ticks div{position:absolute;top:0;display:flex;flex-direction:column;gap:4px}
+  .anat .ticks div::before{content:"";width:1.5px;height:18px;background:var(--line-2)}
+  .anat .ticks b{font-size:20px;letter-spacing:-.02em}
+  .anat .ticks span{color:var(--ink-3)}
+  .anat .tx h3{font-size:26px;letter-spacing:-.025em;font-weight:800;line-height:1.15}
+  .anat .tx p{color:var(--ink-2);margin-top:10px}
+  .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+  .cats .card{padding:26px}
+  .cats .n{font-size:13px;font-weight:700;color:var(--ink-3)}
+  .cats h3{font-size:22px;letter-spacing:-.02em;font-weight:700;margin-top:8px}
+  .cats p{color:var(--ink-2);font-size:14.5px;margin-top:6px;min-height:66px}
+  .cats .ft{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+  .cats .ft b{font-size:22px;letter-spacing:-.02em}
+  .fmb{margin:96px 40px 0;border-radius:24px;background:var(--navy-700);color:#fff;padding:52px 56px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;position:relative;overflow:hidden}
+  .fmb h2{font-size:38px;letter-spacing:-.035em;font-weight:800;line-height:1.1;max-width:22ch}
+  .fmb p{color:rgba(255,255,255,.7);margin-top:12px;max-width:58ch;font-size:16.5px}
+  .fmb .btn.ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+  .fmb .stripe{position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:40px;background:repeating-linear-gradient(135deg,rgba(252,174,24,.2) 0 12px,transparent 12px 24px);transform:rotate(12deg)}
+  .faq{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;margin-top:32px}
+  .faq div{padding:20px 0;border-top:1px solid var(--line-2)}
+  .faq b{font-size:16.5px;display:block}.faq span{color:var(--ink-2);font-size:14.5px;display:block;margin-top:6px}
+  .foot{margin-top:96px}
+</style></head>
+<body>
+<div id="nav"></div>
+<section class="hero">
+  <div>
+    <span class="k"><i></i>25 listings live · 4 new this week</span>
+    <h1>Exit your AIF early. Or buy in at a <em>discount</em>.</h1>
+    <p class="l">SXchange is a second market for units in Alternative Investment Funds. Sellers list what they hold, buyers see the deal against NAV, and the fund manager approves the transfer.</p>
+    <div class="ctas"><a class="btn primary">Browse listings<i data-lucide="arrow-right" class="sm"></i></a><a class="btn ghost">Sell your units</a></div>
+    <div class="trust"><span><i data-lucide="badge-check" class="sm"></i>Every listing checked against a statement of account</span><span><i data-lucide="lock" class="sm"></i>Contact details shared only when you say so</span></div>
+  </div>
+  <div class="card mkt">
+    <div class="hd"><b>Biggest discounts right now</b><span>NAV as of 30 June</span></div>
+    <div id="mkt"></div>
+    <div class="ft"><span>₹48.62 Cr on offer across 25 listings</span><a>See all<i data-lucide="arrow-right" class="sm"></i></a></div>
+  </div>
+</section>
+<div class="card stats">
+  <div><b>25</b><span>Listings live</span></div>
+  <div><b>₹48.62 Cr</b><span>Asking value on offer</span></div>
+  <div><b style="color:var(--green-700)">24.6%</b><span>Average discount to NAV</span></div>
+  <div><b>Cat I–III</b><span>Every AIF category</span></div>
+</div>
+<section class="blk">
+  <h2>One account. Buy, sell, or both.</h2>
+  <p class="l">Switch between buying and selling from the top of every page. Your listings, prospects, wishlist and requests stay in one place.</p>
+  <div class="how">
+    <div class="card"><h3>For sellers<span class="mode"><span class="on">Selling</span></span></h3><ol>
+      <li><i>1</i><div><b>List your units</b><span>Pick your fund, set units and discount, and upload your statement of account.</span></div></li>
+      <li><i>2</i><div><b>We check it</b><span>Units and NAV are verified, usually within one working day, then it goes live.</span></div></li>
+      <li><i>3</i><div><b>Choose who you talk to</b><span>Prospects appear on your dashboard. Share your details only with the ones you want.</span></div></li></ol></div>
+    <div class="card"><h3>For buyers<span class="mode"><span class="on">Buying</span></span></h3><ol>
+      <li><i>1</i><div><b>Find the deal</b><span>Filter by category, strategy, vintage and discount. Compare up to three funds.</span></div></li>
+      <li><i>2</i><div><b>Request seller information</b><span>You both get each other's details by email and agree terms directly.</span></div></li>
+      <li><i>3</i><div><b>The manager approves</b><span>The fund manager approves the transfer and updates the unitholder register.</span></div></li></ol></div>
+  </div>
+</section>
+<section class="blk">
+  <h2>Read the deal before the numbers.</h2>
+  <div class="card anat">
+    <div class="big"><div class="bar"><span class="ask"></span><span class="gap"></span></div>
+      <div class="ticks"><div style="left:0"><b>₹0</b><span>Start</span></div><div style="left:calc(70% - 1px)"><b>₹8.7487</b><span>Asking price per unit</span></div><div style="right:0;align-items:flex-end"><b>₹12.4981</b><span>Latest NAV</span></div></div></div>
+    <div class="tx"><h3>The striped gap is your discount.</h3><p>Every listing shows its asking price against the latest NAV on file. The wider the yellow gap, the bigger the discount, here 30%.</p></div>
+  </div>
+</section>
+<section class="blk">
+  <h2>Every category of AIF.</h2>
+  <div class="cats">
+    <div class="card"><span class="n">Category I</span><h3>Venture &amp; infrastructure</h3><p>Early-stage, social venture and infrastructure funds, often with long lock-ins.</p><div class="ft"><span style="color:var(--ink-3);font-size:14px">6 listings</span><b style="color:var(--green-700)">up to 25% off</b></div></div>
+    <div class="card"><span class="n">Category II</span><h3>Private equity &amp; credit</h3><p>Special situations, growth equity, real estate and performing credit.</p><div class="ft"><span style="color:var(--ink-3);font-size:14px">12 listings</span><b style="color:var(--green-700)">up to 30% off</b></div></div>
+    <div class="card"><span class="n">Category III</span><h3>Hedge &amp; long–short</h3><p>Funds that trade listed markets, including long–short and absolute return.</p><div class="ft"><span style="color:var(--ink-3);font-size:14px">7 listings</span><b style="color:var(--green-700)">up to 25% off</b></div></div>
+  </div>
+</section>
+<div class="fmb"><span class="stripe"></span><div><h2>Run an AIF? Transfers still go through you.</h2><p>See who is selling units in your fund, confirm NAV for listings, and approve transfers from one place.</p></div><div style="display:flex;gap:10px;position:relative"><a class="btn primary" style="height:52px;padding:0 22px">Talk to us</a><a class="btn ghost" style="height:52px;padding:0 22px">How transfers work</a></div></div>
+<section class="blk">
+  <h2>Questions people ask first.</h2>
+  <div class="faq">
+    <div><b>Why are units sold at a discount?</b><span>Money in an AIF is locked in for years. Sellers who need liquidity early accept a lower price than NAV.</span></div>
+    <div><b>Does SXchange hold my money?</b><span>No. You agree terms with the other side directly, and the fund manager records the transfer.</span></div>
+    <div><b>Who can see my details?</b><span>Only the people you choose. Buyers see your listing, not your name, until you share your details.</span></div>
+    <div><b>Can I sell only part of my units?</b><span>Yes. List any number of units and set a minimum lot, so buyers can take a slice.</span></div>
+  </div>
+</section>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('mkt').innerHTML = ['MIO', 'ASF', 'DVF', 'SGP'].map((id, i) => { const f = fundById(id);
+    return `<div class="li ${i === 0 ? 'top' : ''}">${fm(f)}<div style="min-width:0"><b>${f.name}</b><div class="s">${f.cat} · ${f.strat}</div>${deal(f.nav, f.ask)}</div><span class="off">${offPct(f)}<small>%</small></span></div>`; }).join('');
+  boot({ auth: false, active: 'Listings' });
+</script></body></html>

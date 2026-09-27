@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Pack station</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  .body{grid-template-columns:250px 1fr;grid-template-rows:1fr auto;height:644px}
+  .ord{padding:16px;display:flex;flex-direction:column;gap:12px;grid-row:1/3}
+  .ord h4{font-size:13px;font-weight:700;color:var(--ink-2)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:13.5px}
+  .kv dt{color:var(--ink-3)}.kv dd{margin:0;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+  .sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .sizes span{height:40px;border-radius:10px;display:grid;place-items:center;font-weight:700;background:var(--bg);color:var(--ink-2)}
+  .sizes span.on{background:var(--steel-700);color:#fff}
+  .hr{height:1px;background:var(--line)}
+  .ord .sp{flex:1}
+  .ord .tb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .ord .tb a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;border-radius:12px;background:var(--bg);font-size:12px;font-weight:700;color:var(--ink-2)}
+  .cur{padding:20px;display:grid;grid-template-columns:270px 1fr;gap:24px;align-items:center}
+  .cur .ph{height:300px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);display:grid;place-items:center;background:#fff}
+  .cur .ph img{height:280px}
+  .cur h3{font-size:26px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+  .cur .sku{display:inline-flex;margin-top:8px;padding:4px 10px;border-radius:8px;background:var(--lime-100);color:var(--lime-700);font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .cnt{display:flex;align-items:flex-end;gap:12px;margin-top:14px}
+  .cnt b{font-size:104px;font-weight:800;letter-spacing:-.05em;line-height:.85;font-variant-numeric:tabular-nums;color:var(--steel-800)}
+  .cnt span{font-size:16px;color:var(--ink-2);padding-bottom:6px}
+  .dots{display:flex;gap:6px;margin-top:12px}
+  .dots i{flex:1;height:14px;border-radius:4px;background:var(--bg)}.dots i.on{background:var(--lime-500)}
+  .cur .acts{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:16px}
+  .list{overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{font-size:12px;font-weight:600;color:var(--ink-3);text-align:left;padding:10px 14px;background:#F7F8F9;border-bottom:1px solid var(--line)}
+  td{padding:11px 14px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  tr.now td{background:var(--lime-100)}
+  tr.now td:first-child{box-shadow:inset 4px 0 0 var(--lime-500)}
+  .tag{display:inline-flex;height:22px;align-items:center;padding:0 8px;border-radius:6px;font-size:12px;font-weight:700;background:var(--amber-100);color:var(--amber-600)}
+</style></head>
+<body>
+<div id="top"></div>
+<div class="cue" id="cue"><span class="ic"><i data-lucide="package-check"></i></span><div><b>Confirm the item and place it in the carton</b><br><span>Scan each tool set, or tap Confirm when all 5 are in</span></div></div>
+<main class="body">
+  <aside class="card ord">
+    <h4>Order</h4>
+    <dl class="kv"><dt>Order</dt><dd>112-5698-4789</dd><dt>Shipping</dt><dd>Ground</dd><dt>Units</dt><dd>15</dd></dl>
+    <div class="hr"></div>
+    <h4>Carton (LPN)</h4>
+    <dl class="kv"><dt>LPN</dt><dd>01001957456587</dd><dt>Type</dt><dd>Box</dd></dl>
+    <div class="sizes"><span>S</span><span class="on">M</span><span>L</span></div>
+    <span class="sp"></span>
+    <div class="tb"><a><i data-lucide="package-x"></i>End tote</a><a><i data-lucide="boxes"></i>Pack all</a><a><i data-lucide="package-plus"></i>New LPN</a></div>
+  </aside>
+  <section class="card cur">
+    <div class="ph"><img src="assets/faucet.jpg" alt=""></div>
+    <div>
+      <h3 style="text-wrap:balance">Husky Mechanics Tool Set (205&#8209;pc)</h3>
+      <span class="sku">SKU 1001381718 · fragile</span>
+      <div class="cnt"><b id="q">3</b><span>of 5 packed</span></div>
+      <div class="dots" id="dots"></div>
+      <div class="acts"><a class="btn warn"><i data-lucide="minus-circle"></i>Short</a><a class="btn go" id="cf"><i data-lucide="check"></i>Confirm 5</a></div>
+    </div>
+  </section>
+  <section class="card list">
+    <table><tr><th>SKU</th><th>Item</th><th>Ordered</th><th>Packed</th><th>Notes</th></tr>
+      <tr class="now"><td>1001381718</td><td><b>Husky Mechanics Tool Set</b></td><td>5</td><td id="pk">3</td><td><span class="tag">Fragile</span></td></tr>
+      <tr><td>1001381919</td><td>Screw driver set</td><td>2</td><td>0</td><td>—</td></tr>
+      <tr><td>1001385240</td><td>Warehouse broom</td><td>8</td><td>0</td><td>—</td></tr></table>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const Q = +(new URLSearchParams(location.search).get('q') ?? 3);
+  document.getElementById('q').textContent = Q; document.getElementById('pk').textContent = Q;
+  document.getElementById('dots').innerHTML = [...Array(5)].map((_, i) => `<i class="${i < Q ? 'on' : ''}"></i>`).join('');
+  if (new URLSearchParams(location.search).get('short') === '1') {
+    const c = document.getElementById('cue'); c.className = 'cue amber';
+    c.innerHTML = '<span class="ic"><i data-lucide="flag"></i></span><div><b>2 tool sets reported short · damaged</b><br><span>Order 112-5698-4789 flagged for re-pick · continue with the screw driver set</span></div>';
+    document.getElementById('dots').innerHTML = [0,1,2,3,4].map(i => `<i class="${i < 3 ? 'on' : ''}" style="${i >= 3 ? 'background:#FFF2CC;box-shadow:inset 0 0 0 1.5px rgba(201,138,0,.4)' : ''}"></i>`).join('');
+    document.getElementById('cf').innerHTML = '<i data-lucide="arrow-right"></i>Next item';
+  }
+  if (Q >= 5) {
+    const c = document.getElementById('cue'); c.className = 'cue lime';
+    c.innerHTML = '<span class="ic"><i data-lucide="check-check"></i></span><div><b>Tool sets packed · 5 of 5</b><br><span>Next: screw driver set × 2</span></div>';
+    document.getElementById('cf').innerHTML = '<i data-lucide="arrow-right"></i>Next item';
+  }
+  boot({ task: 'Pack station 06', sub: 'Scan · pack · label', pills: '<span class="pill steel"><i data-lucide="container" class="sm"></i>Tote <b>T0786456542</b></span><span class="pill">Item <b>1 of 3</b></span>' });
+</script></body></html>

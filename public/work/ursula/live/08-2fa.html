@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><link rel="stylesheet" href="ursula.css"><title>Ursula · Approve sign-in</title><style>
+iframe{position:absolute;inset:0;width:390px;height:844px;border:0}
+.scrim{position:absolute;inset:0;background:rgba(10,10,40,.45)}
+.sheet{position:absolute;left:8px;right:8px;bottom:8px;background:var(--card);border-radius:30px;padding:10px 20px 22px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.grab{width:40px;height:5px;border-radius:5px;background:var(--line-2);margin:0 auto 16px}
+.sh{display:flex;gap:12px;align-items:center}
+.sh .ic{width:48px;height:48px;border-radius:15px;background:var(--violet-100);color:var(--violet-600);display:grid;place-items:center}
+.sh h2{font-size:21px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.dev{margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--field);font-size:13.5px;color:var(--ink-2)}
+.dev .r{display:flex;justify-content:space-between;padding:4px 0}.dev b{color:var(--ink);font-weight:600}
+.pick{margin-top:16px;font-size:14px;font-weight:600;text-align:center}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.nums span{height:70px;border-radius:18px;display:grid;place-items:center;font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.nums span.on{box-shadow:inset 0 0 0 2.5px var(--violet-500),0 6px 16px -8px rgba(138,0,252,.6);color:var(--violet-600)}
+.acts{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:16px}
+</style></head><body>
+<iframe src="03-notifications.html" tabindex="-1" aria-hidden="true"></iframe><div class="scrim"></div>
+<div class="sheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <div class="sh"><span class="ic"><i data-lucide="shield-check"></i></span><div><h2>Is this you signing in to Ursula Cloud?</h2></div></div>
+  <div class="dev"><div class="r"><span>Browser</span><b>Chrome on Windows</b></div><div class="r"><span>Near</span><b>Port Louis, Mauritius</b></div><div class="r"><span>Time</span><b class="num">08:46 · just now</b></div></div>
+  <div class="pick">Tap the number shown on your computer</div>
+  <div class="nums"><span>27</span><span class="on">58</span><span>14</span></div>
+  <div class="acts"><a class="btn no">It's not me</a><a class="btn primary"><i data-lucide="check" class="sm"></i>Approve</a></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons({attrs:{'stroke-width':2}})</script></body></html>

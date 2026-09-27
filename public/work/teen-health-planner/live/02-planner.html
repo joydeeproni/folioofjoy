@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Teen Health Planner · Planner</title>
+<link rel="stylesheet" href="thp.css">
+<style>
+  .sub{padding:0 20px;font-size:15px;color:var(--ink-2)} .sub b{color:var(--ink)}
+  .filters{display:flex;gap:8px;padding:14px 16px 6px;overflow:hidden}
+  .tl{padding:8px 16px 120px;position:relative}
+  .tl::before{content:"";position:absolute;left:37px;top:24px;bottom:130px;width:2px;background:repeating-linear-gradient(var(--ink-3) 0 6px,transparent 6px 11px);opacity:.35}
+  .day{display:grid;grid-template-columns:44px 1fr;gap:12px;margin-top:12px;position:relative}
+  .node{width:26px;height:26px;border-radius:50%;margin:14px 0 0 9px;display:grid;place-items:center;background:#fff;box-shadow:inset 0 0 0 2px var(--line-2);z-index:1}
+  .node.miss{background:#C9564B;box-shadow:none;color:#fff}
+  .node.done{background:var(--green);box-shadow:none;color:#fff}
+  .node.today{box-shadow:inset 0 0 0 3px var(--ink),0 0 0 5px rgba(31,26,28,.08)}
+  .node svg{width:14px;height:14px;stroke-width:3}
+  .dc{padding:12px 14px}
+  .dc .h{display:flex;align-items:baseline;gap:8px}
+  .dc .h b{font-size:15px}
+  .dc .h span{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .dc .h em{margin-left:auto;font-style:normal;font-size:12px;font-weight:700}
+  .items{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .it{display:flex;align-items:center;gap:7px;height:34px;padding:0 10px 0 5px;border-radius:12px;background:var(--bg);font-size:13px;font-weight:600}
+  .it .ico{width:26px;height:26px;border-radius:9px}
+  .it .ico svg{width:14px;height:14px}
+  .it small{color:var(--ink-3);font-weight:500}
+  .dc.today{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--line-2)}
+</style></head>
+<body>
+<div class="nav"><span class="b"><i data-lucide="chevron-left"></i></span><h1>Planner</h1><span class="b"><i data-lucide="calendar-days"></i></span></div>
+<p class="sub">Today you have <b>3 entries</b></p>
+<div class="filters"><span class="chip on">All</span><span class="chip"><i data-lucide="file-text" class="sm"></i>Documents</span><span class="chip"><i data-lucide="calendar-check" class="sm"></i>Events</span><span class="chip"><i data-lucide="pill" class="sm"></i>Medications</span></div>
+<div class="tl">
+  <div class="day"><span class="node miss"><i data-lucide="x"></i></span>
+    <div class="card dc"><div class="h"><b>Tue 23</b><span>June</span><em style="color:#C9564B">1 missed</em></div>
+      <div class="items"><span class="it"><span class="ico orange"><i data-lucide="frown"></i></span>Nausea</span><span class="it"><span class="ico yellow"><i data-lucide="cloud-rain"></i></span>Feeling low</span><span class="it" style="box-shadow:inset 0 0 0 1.5px rgba(201,86,75,.28)"><span class="ico violet"><i data-lucide="pill"></i></span>Bisoprolol <small>missed</small></span></div></div></div>
+  <div class="day"><span class="node done"><i data-lucide="check"></i></span>
+    <div class="card dc"><div class="h"><b>Wed 24</b><span>June</span><em style="color:var(--green)">All done</em></div>
+      <div class="items"><span class="it"><span class="ico teal"><i data-lucide="file-text"></i></span>Blood test results</span><span class="it"><span class="ico violet"><i data-lucide="pill"></i></span>Bisoprolol <small>9:00</small></span><span class="it"><span class="ico green"><i data-lucide="smile"></i></span>Happy</span></div></div></div>
+  <div class="day"><span class="node today"></span>
+    <div class="card dc today"><div class="h"><b>Thu 25</b><span>Today</span><em style="color:var(--ink-3)">3 entries</em></div>
+      <div class="items"><span class="it"><span class="ico violet"><i data-lucide="pill"></i></span>Bisoprolol <small>9:00</small></span><span class="it"><span class="ico red"><i data-lucide="stethoscope"></i></span>Diabetes clinic <small>9:30</small></span><span class="it"><span class="ico teal"><i data-lucide="activity"></i></span>Glucose <small>18:00</small></span></div></div></div>
+  <div class="day"><span class="node"></span>
+    <div class="card dc"><div class="h"><b>Fri 26</b><span>June</span></div>
+      <div class="items"><span class="it"><span class="ico violet"><i data-lucide="pill"></i></span>Bisoprolol <small>9:00</small></span><span class="it"><span class="ico red"><i data-lucide="stethoscope"></i></span>AF clinic · Dr Ahmed</span></div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ tab: 'Home' });</script></body></html>

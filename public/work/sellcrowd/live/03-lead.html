@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Lead details</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .who{background:#fff;padding:20px 18px 18px;display:flex;gap:14px;align-items:center}
+  .who .tt{width:62px;height:62px;border-radius:18px}
+  .who .tt svg.lucide{width:30px;height:30px}
+  .who .co{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .who .nm{font-size:23px;font-weight:800;letter-spacing:-.025em;line-height:1.15}
+  .who .rl{font-size:13px;color:var(--ink-2);font-weight:600;display:flex;gap:8px;align-items:center;margin-top:3px}
+  .who .rl .tg{font-size:11.5px;font-weight:800;padding:2px 8px;border-radius:8px;background:#FFF3D1;color:#9A6A00}
+  .who .callb{width:50px;height:50px;margin-left:auto}
+  .who .callb svg.lucide{width:21px;height:21px}
+  .kv{background:#fff;padding:2px 18px 12px}
+  .kv div{display:flex;justify-content:space-between;align-items:center;height:40px;font-size:14.5px}
+  .kv div span{color:var(--ink-3);font-weight:500}
+  .kv div b{font-weight:700;color:var(--ink)}
+  .kv div b.lnk{color:var(--blue)}
+  .kv hr{border:0;height:1px;background:var(--line);margin:6px 0}
+  .note{background:#fff;padding:14px 18px 18px;font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+  .note .by{font-size:12px;color:var(--ink-4);font-weight:600;margin-top:10px}
+  .ev .chev{bottom:auto;top:40px}
+  /* call sheet */
+  .scrim{position:absolute;inset:0;background:rgba(10,14,40,.45);z-index:8}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:9;background:linear-gradient(180deg,#1A2356,#10163A);color:#fff;border-radius:30px 30px 0 0;padding:12px 24px 44px;text-align:center}
+  .sheet .grab{width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.25);margin:0 auto 22px}
+  .sheet .tt{margin:0 auto;width:68px;height:68px;border-radius:20px}
+  .sheet h2{font-size:22px;font-weight:800;margin-top:14px;letter-spacing:-.02em}
+  .sheet p{font-size:13px;opacity:.65;margin-top:3px}
+  .sheet .clock{font-size:40px;font-weight:800;letter-spacing:-.02em;margin:14px 0 22px}
+  .sheet .acts{display:flex;justify-content:center;gap:34px}
+  .sheet .acts span{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12px;font-weight:700;opacity:.85}
+  .sheet .acts i{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center}
+  .sheet .acts .on i{background:#fff;color:#10163A}
+  .sheet .end{width:66px;height:66px;border-radius:50%;background:var(--coral);display:grid;place-items:center;margin:26px auto 0;box-shadow:0 12px 26px -8px rgba(242,71,95,.8)}
+  .sheet .end svg{width:28px;height:28px;transform:rotate(135deg);fill:#fff;stroke-width:0}
+  .toast{position:absolute;left:16px;right:16px;bottom:34px;z-index:9;background:var(--ink);color:#fff;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;font-size:14px;font-weight:600;box-shadow:0 20px 40px -12px rgba(10,14,40,.6)}
+  .toast .ok{width:30px;height:30px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none}
+  .toast b{color:#7CF0BE}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Lead details" data-left="back" data-right='["pencil","bell"]'></span>
+</header>
+<section class="who">
+  <span class="tt warm"><i data-lucide="sun"></i></span>
+  <div><div class="co">Anderson Partners Accountants</div><div class="nm">Andrew Duncan</div><div class="rl">Staff accountant</div></div>
+  <span class="callb pulse" id="callbtn"><i data-lucide="phone"></i></span>
+</section>
+<section class="kv" data-stagger style="--d:120ms">
+  <div><span>Call time</span><b class="num" id="ct">56m 43s</b></div>
+  <div><span>Timezone</span><b>Asia/Saigon · GMT+7</b></div>
+  <hr>
+  <div><span>Phone</span><b class="num">+84 24 9235 6124</b></div>
+  <div><span>Email</span><b>andrew@andersonpartners.vn</b></div>
+  <div><span>Website</span><b class="lnk">andersonpartners.vn</b></div>
+</section>
+<div class="sechd"><span>Most recent contact</span><a>See all</a></div>
+<section class="list" id="recent"></section>
+<div class="sechd"><span>Notes</span></div>
+<section class="note">Interested in outsourcing bookkeeping for 3 clients. Wants Growth plan pricing before the partners meet on Thursday. Prefers calls after 14:00 his time.</section>
+<div id="overlay"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const S = Q.get('state');
+  const ev = (cls, ic, t, d, n, dur, x = '') => `<div class="row ev ${x}"><span class="ico ${cls}"><i data-lucide="${ic}"></i></span><div class="grow"><div class="nm" style="font-size:15px">${t}</div><div class="mt">${d}</div><div class="nt">${n}</div></div><span class="dur num">${dur}</span><i data-lucide="chevron-down" class="chev sm"></i></div>`;
+  recent.innerHTML = S === 'logged'
+    ? ev('meet', 'calendar-check', 'Meeting booked', 'Today<i></i>14:32 his time', 'Demo with both partners, Thu 15:00. Send Growth plan…', '04m 12s', 'new" data-fade style="--d:300ms')
+    : ev('call', 'phone', 'Discovery call', 'Sep 21, 2020<i></i>14:05', 'Asked about pricing for three client books, call back…', '12m 27s');
+  if (S === 'logged') ct.textContent = '1h 00m 55s';
+  if (S === 'calling') overlay.innerHTML = `<div class="scrim"></div><div class="sheet" data-sheet><div class="grab"></div><span class="tt warm"><i data-lucide="sun"></i></span><h2>Andrew Duncan</h2><p>Anderson Partners Accountants · recorded for coaching</p><div class="clock num" id="clock">04:12</div>
+    <div class="acts"><span><i><svg class="lucide" data-lucide="mic-off"></svg></i>Mute</span><span class="on"><i><svg class="lucide" data-lucide="file-text"></svg></i>Script</span><span><i><svg class="lucide" data-lucide="volume-2"></svg></i>Speaker</span></div>
+    <span class="end"><i data-lucide="phone"></i></span></div>`;
+  if (S === 'logged') overlay.innerHTML = `<div class="toast" data-rise style="--d:600ms"><span class="ok"><i data-lucide="check" class="sm"></i></span><span style="flex:1">Meeting booked · Thu 15:00</span><b class="num">+$60</b></div>`;
+  boot();
+  if (S === 'calling' && !STATIC) { let sec = 252; setInterval(() => { sec++; const c = document.getElementById('clock'); if (c) c.textContent = String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'); }, 1000); }
+</script></body></html>

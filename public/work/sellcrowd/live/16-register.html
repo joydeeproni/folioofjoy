@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Register</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  body{background:#fff}
+  .intro{padding:20px 24px 0;font-size:14.5px;color:var(--ink-3)}
+  form{padding:24px 24px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  form .full{grid-column:1/-1}
+  .cc{display:grid;grid-template-columns:96px 1fr;gap:10px}
+  .flag{width:22px;height:16px;border-radius:3px;background:linear-gradient(#DA251D 0 100%);position:relative;overflow:hidden}
+  .flag::after{content:"★";position:absolute;inset:0;display:grid;place-items:center;color:#FFDD00;font-size:10px}
+  .terms{font-size:12.5px;color:var(--ink-3);text-align:center;margin:18px 30px 0;line-height:1.5}
+  .terms a{color:var(--blue);font-weight:700}
+  .cta{padding:16px 24px 0}
+  .fbb{position:absolute;left:24px;right:24px;bottom:40px}
+  .fbb .fbm{width:22px;height:22px;border-radius:50%;background:#fff;color:#1877F2;display:grid;place-items:center;font-weight:800;font-size:14px;font-family:Arial,sans-serif}
+  .strength{display:flex;gap:4px;margin-top:6px}
+  .strength i{flex:1;height:4px;border-radius:2px;background:#E6E9F2}
+  .strength i.on{background:var(--green)}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Register" data-left="back:" data-right='[]'></span>
+</header>
+<form data-stagger style="--d:100ms">
+  <div class="field">Priya</div>
+  <div class="field">Raman</div>
+  <div class="field full">priya.raman@sellcrowd.co</div>
+  <div class="cc full"><div class="field" style="padding:0 12px"><span class="flag"></span><span class="num">+84</span><i data-lucide="chevron-down" class="xs" style="color:var(--ink-4)"></i></div><div class="field num">912 345 678</div></div>
+  <div class="full"><div class="field focus"><span style="letter-spacing:3px">••••••••••</span><i data-lucide="eye" class="sm" style="margin-left:auto;color:var(--ink-4)"></i></div></div>
+</form>
+<p class="terms">By clicking Create account you agree to our <a>terms and conditions</a> and <a>privacy policy</a>.</p>
+<div class="cta"><a class="btn primary block">Create account</a></div>
+<div class="fbb"><a class="btn fb block"><span class="fbm">f</span>Continue with Facebook</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script></body></html>

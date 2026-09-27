@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Quest step</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .top{display:flex;justify-content:center;margin-top:14px}
+  .title{padding:30px 24px 0}
+  .title h1{font-size:22px;font-weight:400;letter-spacing:-.015em;line-height:1.36}
+  .title .lvl{display:block;margin-top:24px}
+  .card{position:absolute;left:24px;right:24px;top:278px;bottom:24px;border-radius:26px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .card .rc{flex:1;border-radius:0;display:flex;flex-direction:column}
+  .card .read{font-size:25px}
+  .timer{margin-top:auto;display:flex;align-items:center;gap:14px}
+  .ring{width:64px;height:64px;position:relative}
+  .ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+  .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:700}
+  .timer p{font-size:14px;line-height:1.4;color:#6B6E78}
+  .card .row{display:grid;grid-template-columns:1fr 1fr;height:52px}
+  .card .row a{display:grid;place-items:center;font-weight:600;font-size:15.5px}
+  .card .row .n{background:var(--char);color:#fff}
+  .card .row .p{background:#E8E9EC;color:var(--char)}
+</style></head>
+<body class="peach">
+<div class="top"><span class="pause press"><i data-lucide="pause"></i>Pause Quest</span></div>
+<div class="title"><h1>Socialisation Adventure Going On Errands</h1><span class="lvl">Level 1</span></div>
+<div class="card a-rise" style="animation-delay:.1s">
+  <article class="rc"><div class="k">Step 2 of 4<span class="dots"><i></i><i class="on"></i><i></i><i></i></span></div>
+  <p class="read">At the entrance, pause for two minutes. Every time Milou looks at something new and stays relaxed, say “yes” and treat.</p>
+  <div class="timer"><div class="ring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" stroke="#EEE" stroke-width="6" fill="none"/><circle id="arc" cx="32" cy="32" r="28" stroke="#F8C954" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="70"/></svg><b class="num" id="tm">1:12</b></div><p>Two minutes at the doors.<br>Take your time, no rush.</p></div></article>
+  <div class="row"><a class="p press">Back</a><a class="n press" id="go">Next Step</a></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  // countdown from 2:00, ring empties with it
+  const tm = document.getElementById('tm'), arc = document.getElementById('arc');
+  const show = (left) => { const s = Math.max(0, Math.ceil(left)); tm.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; arc.setAttribute('stroke-dashoffset', String(176 * (1 - left / 120))); };
+  if (STATIC) show(72); else tween((t) => show(Math.max(72, 120 - t / 1000 * 4)));
+  boot({});
+</script>
+</body></html>

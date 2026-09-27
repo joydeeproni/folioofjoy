@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Quest menu</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .sheet{position:absolute;left:0;right:0;top:92px;bottom:0;border-radius:30px 30px 0 0;background:var(--char);padding:24px 24px 0;color:#fff}
+  body.peach .sheet .sq.o{color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.85)}
+  .r1,.r2{display:flex;justify-content:space-between}
+  .sq.o{width:48px;height:48px;border-radius:14px}
+  .r2{margin-top:30px}
+  .drop{margin-top:34px;height:74px;border-radius:26px;background:#fff;color:var(--char);display:flex;align-items:center;gap:16px;padding:0 24px;font-size:15px;font-weight:600}
+  .drop small{font-size:14px;font-weight:400;color:#8A8C94}
+  .drop svg{margin-left:auto}
+  .lockc{margin-top:18px;border-radius:26px;overflow:hidden;background:var(--yellow);color:var(--char)}
+  .lockc .art{margin-top:16px;height:170px;background:var(--char-2);position:relative}
+  .lockc .art .lk{position:absolute;left:78px;top:30px;width:86px}
+  .lockc .art .pp{position:absolute;left:150px;top:18px;width:196px}
+  .lockc .art i.s{position:absolute;border-radius:6px}
+  .lockc .t{padding:24px 30px 28px}
+  .lockc b{font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .lockc p{font-size:14px;line-height:1.45;margin-top:8px;color:var(--char)}
+</style></head>
+<body class="peach">
+<section class="sheet a-sheet">
+  <div class="r1"><span class="sq o press"><i data-lucide="layout-grid"></i></span><span class="sq o press"><i data-lucide="circle-x"></i></span></div>
+  <div class="r2"><span class="chipo press">Pro Tips</span><span class="chipo press" id="go">Talk to Trainer</span></div>
+  <div class="drop a-riseS" style="animation-delay:.3s">Adventure <small>1 of 3</small><i data-lucide="chevrons-up-down" class="sm"></i></div>
+  <article class="lockc a-riseS" style="animation-delay:.42s">
+    <div class="art">
+      <i class="s floaty" style="left:12px;top:12px;width:16px;height:16px;background:#639FD7;transform:rotate(20deg)"></i>
+      <i class="s floaty" style="left:40px;top:120px;width:16px;height:16px;border-radius:50%;background:#C9CACE;animation-delay:-1.4s"></i>
+      <span id="lk"></span><span id="pp"></span>
+    </div>
+    <div class="t"><b>Check-in Locked</b><p>Milou is waiting for you to finish the adventure first, before you checkin with your trainer!</p></div>
+  </article>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('lk').outerHTML = ILL.lock('lk wiggle');
+  document.getElementById('pp').outerHTML = ILL.pup('pp');
+  boot({});
+</script>
+</body></html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Sell · Choose fund</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .stp{display:flex;align-items:center;margin-bottom:22px}
+  .s{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-3)}
+  .s i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:13px;box-shadow:inset 0 0 0 2px var(--line-2);background:#fff}
+  .s.on{color:var(--ink)}.s.on i{background:var(--navy-700);color:#fff;box-shadow:0 0 0 5px var(--navy-100)}
+  .ln{width:80px;height:2px;background:var(--line-2);margin:0 14px}
+  .lay{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+  .f{padding:26px;min-height:560px}
+  .f h2{font-size:20px;font-weight:700;letter-spacing:-.015em}
+  .f .h{color:var(--ink-2);margin-top:2px;font-size:14px}
+  .dd{position:relative;margin-top:22px}
+  .menu{margin-top:8px;background:#fff;border-radius:14px;box-shadow:0 24px 50px -12px rgba(27,30,46,.22),0 0 0 1px var(--line);padding:6px}
+  .menu .gh{font-size:12px;font-weight:700;color:var(--ink-3);padding:8px 10px 4px}
+  .o{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:10px;border-radius:10px;font-size:14.5px}
+  .o.hl{background:var(--navy-50)}
+  .o b{display:block;font-weight:700;line-height:1.25}.o .s2{font-size:12.5px;color:var(--ink-3)}
+  .o mark{background:var(--yellow-200);color:inherit;border-radius:3px}
+  .o .r{font-size:12.5px;color:var(--ink-3);text-align:right}
+  .o.add{border-top:1px solid var(--line);margin-top:6px;border-radius:0 0 10px 10px}
+  .o.add .ic{width:40px;height:40px;border-radius:11px;background:var(--blue-100);color:var(--blue-700);display:grid;place-items:center}
+  .o.add b{color:var(--blue-700)}
+  .hold{margin-top:22px;padding:16px;border-radius:14px;background:var(--bg)}
+  .hold b{font-size:14px}
+  .hold .ln2{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .hold .ln2 span{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);font-size:13.5px;font-weight:600}
+  .hold .ln2 .fm{width:24px;height:24px;font-size:9px;border-radius:7px}
+  .actions{display:flex;align-items:center;gap:10px;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+  .actions .sp{flex:1}
+  .pv{padding:24px}
+  .pv h3{font-size:16px;font-weight:700}
+  .need{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  .need > div{display:grid;grid-template-columns:36px 1fr;gap:12px;font-size:14px}
+  .need .ic{width:36px;height:36px;border-radius:10px;background:var(--navy-50);color:var(--navy-700);display:grid;place-items:center}
+  .need b{display:block}.need span{color:var(--ink-3);font-size:13px}
+  .pv .tip{margin-top:18px;padding:14px;border-radius:12px;background:var(--yellow-100);font-size:13.5px;color:var(--ink-2);display:flex;gap:10px}
+  .pv .tip svg{color:var(--amber-600);flex:none;margin-top:2px}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Sell your AIF units</h1><p>Listings are reviewed within one working day before they go live.</p></div></div>
+  <div class="stp"><span class="s on"><i>1</i>Choose fund</span><span class="ln"></span><span class="s"><i>2</i>Units &amp; amounts</span><span class="ln"></span><span class="s"><i>3</i>Documents</span></div>
+  <div class="lay">
+    <section class="card f">
+      <h2>Which fund are you selling?</h2><p class="h">Search by fund name, manager or SEBI registration number.</p>
+      <div class="dd">
+        <div class="inp focus"><i data-lucide="search" class="sm" style="color:var(--ink-3)"></i>Mer<span style="width:1.5px;height:20px;background:var(--blue-500);margin-left:-8px"></span><span class="suf" style="font-size:13px">4 matches</span></div>
+        <div class="menu">
+          <div class="gh">Funds on SXchange</div>
+          <div class="o hl"><span class="fm" style="background:#1E3A5F;width:40px;height:40px;font-size:13px;border-radius:11px">MIO</span><div><b><mark>Mer</mark>idian Income Opportunities Fund</b><span class="s2">Meridian Capital · AIF Cat II · Series II</span></div><span class="r">3 sellers<br>NAV ₹12.4981</span></div>
+          <div class="o"><span class="fm" style="background:#3A6B8C;width:40px;height:40px;font-size:13px;border-radius:11px">MGE</span><div><b><mark>Mer</mark>idian Growth Equity Fund</b><span class="s2">Meridian Capital · AIF Cat II · Series I</span></div><span class="r">No listings yet<br>NAV ₹10.8820</span></div>
+          <div class="o"><span class="fm" style="background:#6B3A5C;width:40px;height:40px;font-size:13px;border-radius:11px">MRA</span><div><b><mark>Mer</mark>cantile Real Assets Trust</b><span class="s2">Mercantile Advisors · AIF Cat II</span></div><span class="r">1 seller<br>NAV ₹9.4410</span></div>
+          <div class="o add"><span class="ic"><i data-lucide="plus" class="sm"></i></span><div><b>Can't find your fund? Add it</b><span class="s2">Enter the fund name and manager. We'll confirm the NAV with the manager.</span></div><span></span></div>
+        </div>
+      </div>
+      <div class="hold"><b>From your statements</b><div class="ln2"><span>${MIO}Meridian Income Opportunities · 1,00,000 units</span><span>${SGP}Sahyadri Growth Partners · 42,500 units</span></div></div>
+      <div class="actions"><a class="btn ghost">Cancel</a><span class="sp"></span><span style="color:var(--ink-3);font-size:14px">Step 1 of 3</span><a class="btn primary">Continue<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </section>
+    <aside class="card pv">
+      <h3>Have these ready</h3>
+      <div class="need">
+        <div><span class="ic"><i data-lucide="file-check" class="sm"></i></span><div><b>Statement of account</b><span>From the fund manager, showing your units and commitment.</span></div></div>
+        <div><span class="ic"><i data-lucide="file-chart-column" class="sm"></i></span><div><b>Latest NAV statement</b><span>We'll use this to show buyers the discount.</span></div></div>
+        <div><span class="ic"><i data-lucide="calculator" class="sm"></i></span><div><b>Amount paid so far</b><span>So buyers know the balance still payable.</span></div></div>
+      </div>
+      <div class="tip"><i data-lucide="lock" class="sm"></i><span>Your name and your clients' details are never on the listing. You choose who to share them with.</span></div>
+    </aside>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const m = document.querySelector('main'); m.innerHTML = m.innerHTML.replace('${MIO}', fm(fundById('MIO'), 26, 8)).replace('${SGP}', fm(fundById('SGP'), 26, 8));
+  boot({ mode: 'sell', active: 'Dashboard' });
+</script></body></html>

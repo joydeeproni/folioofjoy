@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Your plan</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .wrap{padding:24px 24px 0}
+  .tag{display:inline-flex;height:30px;padding:0 14px;border-radius:99px;background:var(--yellow);color:var(--char);align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+  h1{font-size:30px;font-weight:300;letter-spacing:-.025em;line-height:1.1;margin-top:14px}
+  .sub{font-size:14.5px;color:rgba(255,255,255,.7);margin-top:10px}
+  .tl{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+  .ph{border-radius:26px;padding:14px 18px;color:var(--char)}
+  .ph .w{font-size:12.5px;font-weight:600;opacity:.7}
+  .ph b{display:block;font-size:19px;font-weight:400;letter-spacing:-.015em;margin-top:6px}
+  .ph .qs{display:flex;gap:6px;margin-top:10px}.ph .qs i{font-style:normal;height:26px;padding:0 10px;border-radius:99px;background:rgba(255,255,255,.55);font-size:12px;font-weight:600;display:inline-flex;align-items:center}
+  .ph.dim{opacity:.55}
+  .tr{margin-top:14px;display:flex;align-items:center;gap:12px;border-radius:22px;background:var(--char);padding:12px 14px}
+  .tr div{flex:1}.tr b{display:block;font-size:14.5px;font-weight:600}.tr span{font-size:13px;color:rgba(255,255,255,.6)}
+  .foot{position:absolute;left:24px;right:24px;bottom:36px}.foot .btn{width:100%}
+  .fine{text-align:center;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:12px}
+</style></head>
+<body>
+<div id="onb"></div>
+<div class="wrap">
+  <span class="tag a-pop"><i data-lucide="sparkles" class="sm"></i>Made for Milou</span>
+  <h1 class="a-rise" style="animation-delay:.1s">Milou’s first 12 weeks</h1>
+  <p class="sub a-rise" style="animation-delay:.15s">Built around potty, crate and biting, at her pace.</p>
+  <div class="tl">
+    <div class="ph" style="background:var(--peach)"><span class="w">Weeks 14–16 · starts today</span><b>House Rules</b><div class="qs"><i>Potty</i><i>Crate</i><i>Gentle mouth</i></div></div>
+    <div class="ph" style="background:var(--pink)"><span class="w">Weeks 16–20</span><b>The Big Wide World</b><div class="qs"><i>Errands</i><i>New people</i></div></div>
+    <div class="ph dim" style="background:var(--sky)"><span class="w">Weeks 20–26</span><b>Out and About</b><div class="qs"><i>Recall</i><i>Loose leash</i></div></div>
+  </div>
+  <div class="tr a-rise" style="animation-delay:.6s"><span class="av" style="width:42px;height:42px;background:var(--lilac)">C</span><div><b>Christophe L.</b><span>Adjusts this as you go. Nothing here is a test.</span></div><span class="chipo">Say hi</span></div>
+</div>
+<div class="foot"><a class="btn white press" id="go">Start week 14</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>document.body.classList.add('black'); document.getElementById('onb').outerHTML = onbBar(3); stagger('.tl .ph', 250, 110, 'a-rise'); boot({});</script>
+</body></html>

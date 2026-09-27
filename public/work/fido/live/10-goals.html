@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Goals</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .wrap{padding:26px 24px 0}
+  h1{font-size:30px;font-weight:300;letter-spacing:-.025em;line-height:1.12}
+  .sub{font-size:14.5px;line-height:1.5;margin-top:10px;opacity:.75}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+  .g{height:112px;border-radius:24px;background:var(--white);padding:16px;display:flex;flex-direction:column;justify-content:space-between;position:relative;transition:box-shadow .2s}
+  .g b{font-size:15px;font-weight:500;line-height:1.25}
+  .g .ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center}
+  .g .ck{position:absolute;right:14px;top:14px;width:24px;height:24px;border-radius:50%;background:var(--char);color:#fff;display:grid;place-items:center;opacity:0;transform:scale(.4);transition:opacity .2s,transform .3s var(--spring)}
+  .g.on{box-shadow:inset 0 0 0 2px var(--char)}.g.on .ck{opacity:1;transform:none}
+  .co{margin-top:12px;display:flex;align-items:center;gap:12px;border-radius:22px;background:rgba(255,255,255,.55);padding:12px 14px}
+  .co div{flex:1}.co b{display:block;font-size:14.5px;font-weight:600}.co span{font-size:13px;opacity:.7}
+  .co .add{height:34px;padding:0 12px;border-radius:10px;background:var(--char);color:#fff;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;opacity:1}
+  .foot{position:absolute;left:24px;right:24px;bottom:36px}.foot .btn{width:100%}
+</style></head>
+<body class="peach">
+<div id="onb"></div>
+<div class="wrap">
+  <h1>What’s on your mind with Milou?</h1>
+  <p class="sub">Pick as many as you like. Christophe uses this to build your first weeks.</p>
+  <div class="grid" id="gr">
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--peach)"><i data-lucide="droplets"></i></span><b>Potty accidents</b></div>
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--lilac)"><i data-lucide="box"></i></span><b>Crate &amp; alone time</b></div>
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--pink)"><i data-lucide="hand"></i></span><b>Biting &amp; mouthing</b></div>
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--sky)"><i data-lucide="megaphone"></i></span><b>Coming when called</b></div>
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--yellow)"><i data-lucide="link-2"></i></span><b>Pulling on the leash</b></div>
+    <div class="g press"><span class="ck"><i data-lucide="check" class="sm"></i></span><span class="ic" style="background:var(--teal)"><i data-lucide="users"></i></span><b>Meeting people &amp; dogs</b></div>
+  </div>
+  <div class="co"><span class="av" style="width:40px;height:40px;background:var(--lilac)">J</span><div><b>Training together?</b><span>Invite a co-parent to Milou</span></div><span class="add press"><i data-lucide="plus" class="sm"></i>Invite</span></div>
+</div>
+<div class="foot"><a class="btn char press" id="go">Build Milou’s plan</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('onb').outerHTML = onbBar(2);
+  const G = [...document.querySelectorAll('#gr .g')];
+  const n = +(Q.get('n') ?? 3);
+  if (Q.has('n') || STATIC) G.forEach((g, i) => g.classList.toggle('on', i < n));
+  else tween((t) => G.forEach((g, i) => g.classList.toggle('on', i < 3 && t > 600 + i * 450)));
+  stagger('#gr .g', 80, 50, 'a-riseS');
+  boot({});
+</script>
+</body></html>

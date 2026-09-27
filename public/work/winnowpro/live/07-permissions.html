@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Add user · permissions</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-top:18px;font-weight:700;font-size:14px;color:var(--ink-3)}
+  .tabs span{padding:12px 0;margin-bottom:-1px;display:flex;gap:8px;align-items:center}.tabs .on{color:var(--red-600);box-shadow:inset 0 -2px 0 var(--red-500)}
+  .tabs .d{color:var(--ink-2)}
+  .lay{display:grid;grid-template-columns:250px 1fr 250px;gap:16px;margin-top:18px}
+  .frs{padding:10px}
+  .f{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;font-weight:700;font-size:14px}
+  .f.on{background:var(--red-50)}
+  .f small{display:block;font-weight:600;color:var(--ink-3);font-size:12px}
+  .tg{margin-left:auto;width:38px;height:22px;border-radius:99px;background:var(--line-2);position:relative;flex:none}
+  .tg::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:var(--sh-1)}
+  .tg.on{background:var(--red-500)}.tg.on::after{left:19px}
+  .perm{padding:6px 20px 14px}
+  .pg{padding:14px 0;border-bottom:1px solid var(--line)}
+  .pg:last-child{border:0}
+  .pg .h{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+  .pg .h small{font-weight:600;color:var(--ink-3);font-size:12.5px}
+  .pg .h .all{margin-left:auto;font-size:13px;color:var(--red-600);font-weight:700}
+  .items{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+  .it{white-space:nowrap;display:flex;align-items:center;gap:9px;height:40px;padding:0 10px;border-radius:10px;background:var(--bg);font-size:13px;font-weight:600}
+  .cb{width:18px;height:18px;border-radius:5px;box-shadow:inset 0 0 0 1.5px var(--line-2);background:#fff;display:grid;place-items:center;flex:none}
+  .cb.on{background:var(--ink);box-shadow:none;color:#fff}.cb svg{width:12px;height:12px;stroke-width:3.2}
+  .it.on{background:#fff;box-shadow:inset 0 0 0 1.5px var(--line-2)}
+  .role{padding:18px}
+  .role .ro{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;margin-top:6px;box-shadow:inset 0 0 0 1.5px var(--line)}
+  .role .ro.on{box-shadow:inset 0 0 0 2px var(--red-500);background:var(--red-50)}
+  .role .ro b{display:block;font-size:14px}.role .ro span{font-size:12.5px;color:var(--ink-3)}
+  .foot{display:flex;align-items:center;gap:10px;margin-top:18px}.foot .sp{flex:1}
+</style></head>
+<body><div class="app"><div data-side="Access control"></div><div>
+<div data-atop></div>
+<main class="main">
+  <a class="btn quiet" style="padding:0;height:auto"><i data-lucide="arrow-left" class="sm"></i>Access control</a>
+  <h1 class="h1" style="font-size:30px;margin-top:8px">Add John Doe</h1>
+  <div class="tabs"><span class="d"><i data-lucide="check-circle-2" class="sm" style="color:var(--green-600)"></i>Basic profile</span><span class="on">Permissions</span><span>Summary</span></div>
+  <div class="lay">
+    <section class="card frs"><div class="label" style="padding:6px 12px">Franchises</div>
+      <div class="f on"><span class="av" style="background:var(--red-100);color:var(--red-600)">H</span><div>Stevens Creek Hyundai<small>12 of 18 permissions</small></div><span class="tg on"></span></div>
+      <div class="f"><span class="av">G</span><div>Stevens Creek Genesis<small>Same as Hyundai</small></div><span class="tg on"></span></div>
+      <div class="f"><span class="av" style="background:var(--bg-2);color:var(--ink-3)">K</span><div style="color:var(--ink-3)">Marcedi Kia<small>No access</small></div><span class="tg"></span></div>
+    </section>
+    <section class="card perm">
+      <div class="pg"><div class="h">Onboarding assets <small>Essentials · Data 360 · Nice to have</small><span class="all">Select all</span></div>
+        <div class="items" id="i1"></div></div>
+      <div class="pg"><div class="h">Dashboard <small>What they can see</small><span class="all">Select all</span></div><div class="items" id="i2"></div></div>
+      <div class="pg"><div class="h">Admin functions <small>What they can change</small><span class="all">Select all</span></div><div class="items" id="i3"></div></div>
+    </section>
+    <aside class="card role"><span class="label">Start from a role</span>
+      <div class="ro"><span class="av" style="background:var(--navy-100)"><i data-lucide="shield" class="sm"></i></span><div><b>Admin</b><span>Everything, all franchises</span></div></div>
+      <div class="ro on"><span class="av" style="background:var(--red-100);color:var(--red-600)"><i data-lucide="briefcase" class="sm"></i></span><div><b>Manager</b><span>Reports, campaigns, posts</span></div></div>
+      <div class="ro"><span class="av"><i data-lucide="car" class="sm"></i></span><div><b>Sales</b><span>Chat leads and inventory</span></div></div>
+      <div class="ro"><span class="av"><i data-lucide="calculator" class="sm"></i></span><div><b>Finance</b><span>Billing and reporting only</span></div></div>
+      <p style="font-size:13px;color:var(--ink-3);margin-top:12px">Edited 2 permissions from Manager.</p>
+    </aside>
+  </div>
+  <div class="foot"><a class="btn ghost">Back</a><span class="sp"></span><a class="btn primary">Review summary<i data-lucide="arrow-right" class="sm"></i></a></div>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const it = (arr, id) => document.getElementById(id).innerHTML = arr.map(([n, on]) => `<span class="it ${on ? 'on' : ''}"><span class="cb ${on ? 'on' : ''}">${on ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>' : ''}</span>${n}</span>`).join('');
+  it([['Google Ads', 1], ['Facebook Ads', 1], ['Google Analytics', 1], ['FB Business Manager', 1], ['Ads planner', 0], ['CRM', 1], ['Phone logs', 0], ['Facebook Pixel', 1], ['Google Tag Manager', 0]], 'i1');
+  it([['Posts', 1], ['Ads', 1], ['Reporting', 1], ['Billing', 0], ['Showroom chat', 1], ['Competitive intel', 1]], 'i2');
+  it([['Edit posts', 1], ['Edit ads', 0], ['Manage users', 0]], 'i3');
+  boot();
+</script></body></html>

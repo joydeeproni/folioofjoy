@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>MedForce · Dashboard</title>
+<link rel="stylesheet" href="mf.css">
+<style>
+  .row{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin-bottom:16px}
+  .bud{padding:22px 24px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+  .bud .big{font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1;margin-top:10px}
+  .bud .big small{font-size:15px;color:var(--text-3);font-weight:600;letter-spacing:0}
+  .meter{display:flex;height:10px;border-radius:6px;overflow:hidden;gap:2px;margin-top:18px;background:var(--bg-2)}
+  .meter i{display:block;height:100%}
+  .keys{margin-top:14px;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+  .keys div{display:flex;align-items:center;gap:8px}
+  .keys i{width:8px;height:8px;border-radius:3px}
+  .keys b{margin-left:auto;font-variant-numeric:tabular-nums}
+  .keys .rem{color:var(--text-3);padding-top:8px;border-top:1px solid var(--line)}
+  .chart-h{display:flex;align-items:center;justify-content:space-between}
+  .chart-h b{font-size:14px}
+  svg.ch{width:100%;height:170px;margin-top:8px;overflow:visible}
+  .act{padding:18px 20px}
+  .act h2,.up h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .todo{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .todo:last-child{border:0;padding-bottom:0}
+  .todo .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none}
+  .todo b{display:block;font-size:14px;font-weight:650}
+  .todo span{font-size:12.5px;color:var(--text-3)}
+  .todo .btn{margin-left:auto;height:34px;padding:0 12px;font-size:13px}
+  .up{overflow:hidden}
+  .up .hd{display:flex;align-items:center;gap:10px;padding:16px 20px}
+  .up .hd .sp{flex:1}
+  .rsvp{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums}
+  .rsvp i{display:block;width:60px;height:6px;border-radius:4px;background:var(--bg-2);overflow:hidden}
+  .rsvp i b{display:block;height:100%;background:var(--navy-500);border-radius:4px}
+</style></head>
+<body><div class="app"><div class="col">
+<main class="main">
+  <div class="ph"><div><h1>Good afternoon, Cameron</h1><p>3 programs need you this week · Northeast territory</p></div><span class="sp"></span>
+    <span class="filt">Program <b>All brands</b><i data-lucide="chevron-down" class="sm"></i></span><span class="filt"><i data-lucide="calendar" class="sm"></i><b>Q2 2027</b></span></div>
+
+  <div class="row">
+    <section class="card bud">
+      <div>
+        <span class="label">Q2 program budget</span>
+        <div class="big num">$3,456<small> of $4,000</small></div>
+        <div class="meter"><i style="width:52%;background:var(--navy-600)"></i><i style="width:24%;background:var(--sky-500)"></i><i style="width:10.4%;background:#9DB8DC"></i></div>
+        <div class="keys">
+          <div><i style="background:var(--navy-600)"></i>Restasis programs<b>$2,080</b></div>
+          <div><i style="background:var(--sky-500)"></i>Glaucoma drops<b>$960</b></div>
+          <div><i style="background:#9DB8DC"></i>Dry eye education<b>$416</b></div>
+          <div class="rem">Remaining<b style="color:var(--text)">$544</b></div>
+        </div>
+      </div>
+      <div>
+        <div class="chart-h"><b>Annual budget history</b><span class="label">vs. $16k plan</span></div>
+        <svg class="ch" id="ch" viewBox="0 0 312 190"></svg>
+      </div>
+    </section>
+    <section class="card act">
+      <h2>Needs your action <span class="chip amber">3</span></h2>
+      <div class="todo"><span class="ic" style="background:var(--amber-100);color:var(--amber-600)"><i data-lucide="clipboard-check"></i></span><div><b>Close program 25203</b><span>Glaucoma drops · occurred 3 days ago · attendance not submitted</span></div><a class="btn primary">Close</a></div>
+      <div class="todo"><span class="ic" style="background:var(--navy-100);color:var(--navy-700)"><i data-lucide="user-round-check"></i></span><div><b>Confirm speaker for 25539</b><span>Dr. Lindsey Bull accepted · Mount Airy, NC</span></div><a class="btn ghost">Review</a></div>
+      <div class="todo"><span class="ic" style="background:var(--rose-100);color:var(--rose-600)"><i data-lucide="map-pin-off"></i></span><div><b>Venue unconfirmed · 25553</b><span>13 Bones Restaurant hasn't replied in 4 days</span></div><a class="btn ghost">Call</a></div>
+    </section>
+  </div>
+
+  <section class="card up">
+    <div class="hd"><h2>Upcoming programs</h2><span class="sp"></span><div class="seg"><button class="on">All 12</button><button>Mine 8</button><button>Needs action 3</button></div><a class="btn ghost" style="height:36px"><i data-lucide="file-spreadsheet" class="sm" style="color:var(--green-600)"></i>Export</a></div>
+    <table class="tbl">
+      <tr><th>ID</th><th>Program</th><th>Date</th><th>Speaker</th><th>Venue</th><th>Lifecycle</th><th>RSVPs</th></tr>
+      <tr><td class="id">25203</td><td><b>Glaucoma drops</b><div class="label">Expert insights · dinner</div></td><td class="num">May 31</td><td><div class="who"><span class="av">JA</span><div><b>Dr. Jill Autry</b><span>OD, FAAO</span></div></div></td><td>Newburyport, MA</td><td><span data-life="3,warn"></span></td><td><span class="rsvp"><i><b style="width:90%"></b></i>18/20</span></td></tr>
+      <tr><td class="id">25537</td><td><b>Restasis 2027</b><div class="label">Standard slides · lunch</div></td><td class="num">Jun 14</td><td><div class="who"><span class="av" style="background:var(--sky-100);color:var(--sky-600)">MB</span><div><b>Dr. Marc Bloomstein</b><span>OD</span></div></div></td><td>Newburyport, MA</td><td><span data-life="2,ok"></span></td><td><span class="rsvp"><i><b style="width:60%"></b></i>12/20</span></td></tr>
+      <tr><td class="id">25539</td><td><b>Restasis 2027</b><div class="label">Expert insights · dinner</div></td><td class="num">Jun 21</td><td><div class="who"><span class="av" style="background:var(--violet-100);color:var(--violet-600)">LB</span><div><b>Dr. Lindsey Bull</b><span>MD, ophthalmology</span></div></div></td><td>Mount Airy, NC</td><td><span data-life="1"></span></td><td><span class="rsvp"><i><b style="width:30%"></b></i>6/20</span></td></tr>
+      <tr><td class="id">25553</td><td><b>Dry eye education</b><div class="label">Virtual · webinar</div></td><td class="num">Jul 05</td><td><div class="who"><span class="av" style="background:var(--green-100);color:var(--green-700)">DS</span><div><b>Dr. Dan Smith</b><span>OD</span></div></div></td><td>Morganville, NY</td><td><span data-life="0"></span></td><td><span class="rsvp"><i><b style="width:0%"></b></i>0/40</span></td></tr>
+      <tr><td class="id">25561</td><td><b>Glaucoma drops</b><div class="label">Standard slides · dinner</div></td><td class="num">Jul 12</td><td><div class="who"><span class="av">JA</span><div><b>Dr. Jill Autry</b><span>OD, FAAO</span></div></div></td><td>Salem, MA</td><td><span data-life="0"></span></td><td><span class="rsvp"><i><b style="width:0%"></b></i>0/20</span></td></tr>
+    </table>
+  </section>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  boot({ portal: 'rep', nav: 'Dashboard' });
+  // annual budget history: cumulative spend vs plan
+  const spent = [1100, 2500, 4000, 5200, 6300, 7456], plan = [...Array(12)].map((_, i) => (i + 1) * 16000 / 12);
+  const W = 296, H = 160, max = 17000, x = i => i / 11 * W, y = v => H - v / max * H + 6;
+  const now = 5; // Jun
+  const sp = spent.slice(0, now + 1).map((v, i) => `${i ? 'L' : 'M'}${x(i)} ${y(v)}`).join(' ');
+  const pl = plan.map((v, i) => `${i ? 'L' : 'M'}${x(i)} ${y(v)}`).join(' ');
+  const months = 'JFMAMJJASOND'.split('');
+  document.getElementById('ch').innerHTML = `
+    <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F5AA3" stop-opacity=".16"/><stop offset="1" stop-color="#1F5AA3" stop-opacity="0"/></linearGradient></defs>
+    ${[0, 4000, 8000, 12000, 16000].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(24,33,45,.07)"/><text x="${W}" y="${y(v) - 4}" text-anchor="end" font-size="10.5" fill="#6A7584" font-family="Plus Jakarta Sans">$${v / 1000}k</text>`).join('')}
+    <path d="${pl}" fill="none" stroke="#9DB8DC" stroke-width="1.6" stroke-dasharray="4 4"/>
+    <path d="${sp} L${x(now)} ${H + 6} L0 ${H + 6}Z" fill="url(#g)"/>
+    <path d="${sp}" fill="none" stroke="#1F5AA3" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="${x(now)}" cy="${y(spent[now])}" r="5" fill="#fff" stroke="#1F5AA3" stroke-width="2.4"/>
+    <g font-family="Plus Jakarta Sans" font-weight="700"><rect x="${x(now) - 40}" y="${y(spent[now]) - 36}" width="80" height="24" rx="7" fill="#0F2A4F"/><text x="${x(now)}" y="${y(spent[now]) - 20}" text-anchor="middle" font-size="11.5" fill="#fff">$7.5k · Jun</text></g>
+    ${months.map((m, i) => `<text x="${x(i)}" y="${H + 24}" text-anchor="middle" font-size="10.5" fill="#6A7584" font-family="Plus Jakarta Sans">${m}</text>`).join('')}`;
+</script></body></html>

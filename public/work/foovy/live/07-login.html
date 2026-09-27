@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=375"><title>Foovy · Login</title>
+<link rel="stylesheet" href="foovy.css">
+<style>
+  .bg{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.2fr 1fr 1fr;gap:4px}
+  .bg div{background-size:cover;background-position:center}
+  .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,13,11,.1) 0%,rgba(12,13,11,.2) 30%,rgba(12,13,11,.92) 58%,var(--bg) 70%)}
+  .brand{position:absolute;left:0;right:0;top:360px;text-align:center;z-index:2}
+  .brand img{height:40px;filter:blur(6.5px)}
+  .brand p{margin:14px auto 0;max-width:280px;font-size:17px;line-height:1.35;color:var(--text-2)}
+  .opts{position:absolute;left:20px;right:20px;bottom:50px;display:flex;flex-direction:column;gap:10px;z-index:2}
+  .o{height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:16px;background:var(--card-2)}
+  .o.g{background:#fff;color:#1f1f1f}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .reg{text-align:center;font-size:14px;color:var(--text-3);margin-top:6px}
+  .reg b{color:var(--green)}
+</style></head>
+<body>
+<div class="bg">
+  <div style="background-image:url(assets/monika-grabkowska-qSkWlOBHia0-unsplash.jpg)"></div>
+  <div style="background-image:url(assets/oriol-portell-AbwqpFnBDms-unsplash.jpg)"></div>
+  <div style="background-image:url(assets/jodie-morgan-v25z8P-CPB4-unsplash.jpg)"></div>
+  <div style="background-image:url(assets/spanish-tortilla-79987-1.jpg)"></div>
+  <div style="background-image:url(assets/markus-spiske-DPcj8-pMYSs-unsplash.jpg)"></div>
+  <div style="background-image:url(assets/heather-barnes-VHFTd9iM05I-unsplash.jpg)"></div>
+</div>
+<div style="position:relative;z-index:3"><div data-status></div></div>
+<div class="brand"><img src="assets/foovy-logo-light.png" alt="Client logo (blurred)"><p>Know what’s in your fridge. Cook it before it goes off.</p></div>
+<div class="opts">
+  <a class="o g"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continue with Google</a>
+  <div class="row"><a class="o"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.5h-2.8V24C19.62 23.1 24 18.1 24 12.07"/></svg>Facebook</a><a class="o"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.9 1.2h3.7l-8 9.2L24 22.8h-7.4l-5.8-7.6-6.6 7.6H.5l8.6-9.8L0 1.2h7.6l5.2 6.9 6.1-6.9zm-1.3 19.4h2L6.5 3.2H4.3l13.3 17.4z"/></svg>X / Twitter</a></div>
+  <a class="o" style="background:var(--green);color:var(--green-ink)"><i data-lucide="mail" class="sm"></i>Continue with email</a>
+  <div class="reg">New to Foovy? <b>Register</b> · 30 days free</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script><script>boot();</script>
+</body></html>

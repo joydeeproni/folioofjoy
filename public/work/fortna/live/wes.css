@@ -1,0 +1,75 @@
+/* Fortna WES — redesign tokens. Brand palette from the client's sheet:
+   burgundy #8B2346 · steel #5D87A1 · olive-lime #B2B83A · amber #FDB913 · charcoal #333 / #4C4C4C · gray #B6B6B6 */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+:root{
+  --steel-900:#1F3A4B; --steel-800:#2A4D63; --steel-700:#355F7A; --steel-600:#44718F; --steel-500:#5D87A1; --steel-300:#A9C2D2; --steel-100:#E2EBF1; --steel-50:#F1F6F9;
+  --lime-700:#7C8120; --lime-600:#979D2B; --lime-500:#B2B83A; --lime-200:#E3E6A8; --lime-100:#F1F3D4;
+  --amber-600:#C98A00; --amber-500:#FDB913; --amber-100:#FFF2CC;
+  --burgundy:#8B2346; --red-600:#C0392B; --red-100:#FBE4E1;
+  --ink:#232628; --ink-2:#4C4C4C; --ink-3:#6E7275; --gray:#B6B6B6;
+  --bg:#EEF0F2; --card:#fff; --line:rgba(35,38,40,.09); --line-2:rgba(35,38,40,.16);
+  --sh-1:0 1px 2px rgba(20,30,40,.06),0 1px 1px rgba(20,30,40,.04);
+  --sh-2:0 2px 4px rgba(20,30,40,.05),0 12px 24px -10px rgba(20,30,40,.18);
+  --font:'Archivo',ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);width:1024px;height:768px;overflow:hidden;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4}
+.num{font-variant-numeric:tabular-nums}
+svg.lucide{width:20px;height:20px;flex:none} svg.lucide.sm{width:16px;height:16px} svg.lucide.lg{width:26px;height:26px}
+button{font:inherit;border:0;background:none;color:inherit}
+
+/* top bar */
+.top{height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 16px}
+.top .menu{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--ink-2)}
+.top .logo{height:34px;filter:blur(2.4px);opacity:.95}
+.top .task{display:flex;flex-direction:column;line-height:1.15;padding-left:14px;border-left:1px solid var(--line)}
+.top .task b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.top .task span{font-size:12.5px;color:var(--ink-3)}
+.top .sp{flex:1}
+.pill{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:99px;background:var(--bg);font-size:13.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.pill b{color:var(--ink)}
+.pill.lime{background:var(--lime-100);color:var(--lime-700)}
+.pill.steel{background:var(--steel-100);color:var(--steel-800)}
+.pill.amber{background:var(--amber-100);color:var(--amber-600)}
+.op{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--steel-100);color:var(--steel-800);display:grid;place-items:center;font-weight:700;font-size:13px}
+
+/* instruction banner: the one thing to do now */
+.cue{height:64px;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--steel-800);color:#fff}
+.cue .ic{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.12);display:grid;place-items:center}
+.cue b{font-size:22px;font-weight:700;letter-spacing:-.015em}
+.cue span{color:rgba(255,255,255,.7);font-size:14px}
+.cue .sp{flex:1}
+.cue.lime{background:var(--lime-500);color:#1d1f08}.cue.lime span{color:rgba(29,31,8,.7)}.cue.lime .ic{background:rgba(0,0,0,.08)}
+.cue.amber{background:var(--amber-500);color:#2a1d00}.cue.amber span{color:rgba(42,29,0,.7)}.cue.amber .ic{background:rgba(0,0,0,.08)}
+
+.body{height:644px;padding:16px;display:grid;gap:14px}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)}
+.label{font-size:12.5px;font-weight:600;color:var(--ink-3);letter-spacing:.01em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 22px;border-radius:14px;font-weight:700;font-size:17px;white-space:nowrap}
+.btn.primary{background:var(--steel-700);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 2px rgba(20,40,60,.3)}
+.btn.go{background:var(--lime-500);color:#1d1f08;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 1px 2px rgba(60,60,10,.3)}
+.btn.ghost{background:#fff;box-shadow:inset 0 0 0 1.5px var(--line-2);color:var(--ink)}
+.btn.warn{background:var(--amber-100);color:var(--amber-600);box-shadow:inset 0 0 0 1.5px rgba(201,138,0,.35)}
+
+/* cart component */
+.cart{position:relative;padding:14px 16px 10px}
+.cart .shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:10px 12px 0;position:relative}
+.cart .shelf::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;border-radius:3px;background:linear-gradient(#c9ced3,#aeb4ba)}
+.cart .shelf + .shelf{margin-top:30px}
+.cart .post{position:absolute;top:8px;bottom:8px;width:8px;border-radius:3px;background:linear-gradient(90deg,#aeb4ba,#d5d9dd,#aeb4ba)}
+.slot{height:112px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.slot .sid{font-size:11.5px;font-weight:600;color:var(--ink-3);margin-top:6px;font-variant-numeric:tabular-nums}
+.slot.empty .well{width:100%;height:84px;border-radius:10px;border:2px dashed #c3c8cd;display:grid;place-items:center;color:#aab0b6;font-size:12px;font-weight:600}
+.tote{width:100%;height:84px;position:relative}
+.tote svg{width:100%;height:100%;display:block;overflow:visible}
+.tote .tid{position:absolute;left:0;right:0;top:42%;text-align:center;font-size:12.5px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.slot.done .tote{opacity:.45}
+.slot.done .ok{position:absolute;top:4px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--lime-500);display:grid;place-items:center}
+.slot.target .tote{filter:drop-shadow(0 0 14px rgba(178,184,58,.75))}
+.slot.target .beam{position:absolute;top:-10px;left:14%;right:14%;height:6px;border-radius:4px;background:var(--lime-500);box-shadow:0 0 16px 4px rgba(178,184,58,.7)}
+.slot.target .put{position:absolute;top:-38px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:4px 10px;border-radius:8px;white-space:nowrap}
+.slot.removed .tote{opacity:.2}
+.slot.removed .x{position:absolute;inset:0 0 18px;display:grid;place-items:center}
+.slot.new .tote{filter:drop-shadow(0 0 12px rgba(93,135,161,.8))}

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Plans (mobile)</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  body{background:var(--surface);font-size:15px}
+  .status{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 28px 0 34px;font-weight:650;font-size:16px;background:#fff}
+  .status .r{display:flex;gap:6px;align-items:center}
+  .mbar{background:#fff;display:flex;align-items:center;gap:10px;padding:6px 16px 12px}
+  .mbar .logo .blogo{height:30px}
+  .mbar .sp{flex:1}
+  .ib{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line)}
+  .prog{background:#fff;padding:0 16px 14px;border-bottom:1px solid var(--line)}
+  .prog .t{display:flex;justify-content:space-between;font-size:13px;color:var(--text-3);font-weight:600}
+  .prog .t b{color:var(--petrol-700)}
+  .prog .track{height:5px;border-radius:9px;background:var(--surface-2);margin-top:8px;overflow:hidden}
+  .prog .track i{display:block;height:100%;width:80%;background:var(--petrol-600);border-radius:9px}
+  .m{padding:18px 16px 120px}
+  .m h1{font-size:26px;letter-spacing:-.028em;line-height:1.15;font-weight:700}
+  .mini-r{margin-top:16px;border-radius:var(--r-lg);background:#fff;box-shadow:var(--sh-2),inset 0 0 0 1px var(--line);padding:16px 18px;display:flex;align-items:center;gap:14px}
+  .mini-r .k{font-size:12.5px;font-weight:600;color:var(--petrol-600)}
+  .mini-r .v{font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+  .mini-r .v small{font-size:13px;color:var(--text-3);font-weight:600;letter-spacing:0}
+  .mini-r .items{margin-left:auto;display:flex;gap:6px}
+  .mini-r .items span{width:34px;height:34px;border-radius:10px;background:var(--surface);display:grid;place-items:center;color:var(--petrol-600)}
+  .seg{margin-top:16px;width:100%;display:flex}
+  .seg button{flex:1;justify-content:center;padding:9px 6px;font-size:13.5px}
+  .mp{margin-top:14px;padding:18px;position:relative}
+  .mp.pick{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--petrol-500)}
+  .mp .ribbon{position:absolute;top:-11px;left:16px;height:22px;padding:0 10px;border-radius:99px;background:var(--petrol-600);color:#fff;font-size:12px;font-weight:650;display:flex;align-items:center;gap:6px}
+  .mp h3{font-size:17px;font-weight:700;letter-spacing:-.015em;padding-right:44px}
+  .mp .meta{font-size:12.5px;color:var(--text-3);display:flex;gap:8px;align-items:center;margin-top:4px}
+  .mp .save{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--petrol-50);color:var(--petrol-600)}
+  .mp .save svg{fill:currentColor}
+  .mp .save.off{background:none;box-shadow:inset 0 0 0 1px var(--line);color:var(--text-3)}
+  .mp .save.off svg{fill:none}
+  .mp .f{display:grid;grid-template-columns:1.2fr 1fr 1fr;background:var(--surface);border-radius:12px;padding:12px 2px;margin-top:14px}
+  .mp .f div{padding:0 12px;border-left:1px solid var(--line)}
+  .mp .f div:first-child{border:0}
+  .mp .f .label{font-size:11.5px}
+  .mp .f b{display:block;font-size:19px;letter-spacing:-.02em;font-weight:700}
+  .mp .f .hero b{color:var(--petrol-800);font-size:21px}
+  .mp .chips{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+  .mp .chips .chip{height:26px;font-size:12.5px}
+  .mp .acts{display:flex;gap:8px;margin-top:14px}
+  .mp .acts .btn{flex:1;height:42px}
+  .dock{position:fixed;left:12px;right:12px;bottom:24px;background:var(--petrol-950);color:#fff;border-radius:18px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-3)}
+  .dock .d{display:flex;gap:-6px}
+  .dock .d span{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:12px;font-weight:700;margin-right:4px}
+  .dock .d span.e{background:none;border:1.5px dashed rgba(255,255,255,.3)}
+  .dock .t{font-size:13px;color:rgba(255,255,255,.7);line-height:1.25}
+  .dock .t b{display:block;color:#fff;font-size:14px}
+  .dock .btn{margin-left:auto;background:#fff;color:var(--petrol-900);height:42px;padding:0 16px}
+</style>
+</head><body>
+<div class="status"><span class="num">9:41</span><span class="r"><i data-lucide="signal" class="sm"></i><i data-lucide="wifi" class="sm"></i><i data-lucide="battery-full"></i></span></div>
+<div class="mbar"><a class="logo" id="lg"></a><span class="sp"></span><span class="ib"><i data-lucide="phone" class="sm"></i></span><span class="ib"><i data-lucide="menu" class="sm"></i></span></div>
+<div class="prog"><div class="t"><span>Step 5 of 6 · <b>Plans</b></span><span>Brooklyn, NY 11212</span></div><div class="track"><i></i></div></div>
+
+<main class="m">
+  <h1>14 plans cover your drugs and your doctor</h1>
+  <div class="mini-r">
+    <div><div class="k">Your summary</div><div class="v num">$600<small> / year</small></div></div>
+    <div class="items"><span><i data-lucide="pill" class="sm"></i></span><span><i data-lucide="store" class="sm"></i></span><span><i data-lucide="stethoscope" class="sm"></i></span></div>
+  </div>
+  <div class="seg"><button class="on">MAPD <span class="c">6</span></button><button>PDP <span class="c">4</span></button><button>MA <span class="c">4</span></button></div>
+
+  <article class="card mp pick">
+    <span class="ribbon"><i data-lucide="sparkles" class="sm"></i>Lowest yearly cost</span>
+    <button class="save" aria-label="Saved"><i data-lucide="bookmark" class="sm"></i></button>
+    <h3>Convey Advantage Plus (HMO)</h3>
+    <div class="meta"><span data-stars="4.5"></span><span class="num">4.5 · H0000-001</span></div>
+    <div class="f"><div class="hero"><span class="label">Est. yearly</span><b class="num">$600</b></div><div><span class="label">Premium</span><b class="num">$12</b></div><div><span class="label">Drug ded.</span><b class="num">$0</b></div></div>
+    <div class="chips"><span class="chip ok"><i data-lucide="check" class="sm"></i>3 of 3 drugs</span><span class="chip ok"><i data-lucide="check" class="sm"></i>Dr. Peterson</span><span class="chip">Dental · Vision</span></div>
+    <div class="acts"><a class="btn ghost">Details</a><a class="btn primary">Enroll</a></div>
+  </article>
+
+  <article class="card mp">
+    <button class="save off" aria-label="Save plan"><i data-lucide="bookmark" class="sm"></i></button>
+    <h3>MAPD Comprehensive (PPO)</h3>
+    <div class="meta"><span data-stars="4"></span><span class="num">4.0 · H0000-014</span></div>
+    <div class="f"><div class="hero"><span class="label">Est. yearly</span><b class="num">$792</b></div><div><span class="label">Premium</span><b class="num">$19</b></div><div><span class="label">Drug ded.</span><b class="num">$100</b></div></div>
+  </article>
+</main>
+
+<div class="dock">
+  <div class="d"><span>A+</span><span>MC</span><span class="e"></span></div>
+  <div class="t"><b>2 of 3</b>selected</div>
+  <a class="btn">Compare <i data-lucide="arrow-right" class="sm"></i></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('lg').innerHTML = LOGO;
+  document.querySelectorAll('[data-stars]').forEach(el => el.outerHTML = stars(+el.dataset.stars));
+  lucide.createIcons();
+</script>
+</body></html>

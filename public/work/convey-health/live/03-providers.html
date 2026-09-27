@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Find your doctors</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  .sbar{margin-top:24px;display:flex;background:#fff;border-radius:var(--r-md);box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);height:56px;align-items:center;padding:6px}
+  .sbar .f{display:flex;align-items:center;gap:10px;padding:0 14px;height:100%;font-size:15px}
+  .sbar .f.q{flex:1}
+  .sbar .f + .f{border-left:1px solid var(--line)}
+  .sbar .f svg{color:var(--text-3)}
+  .sbar .f small{display:block;font-size:11.5px;color:var(--text-3);font-weight:600;line-height:1}
+  .sbar .f span{line-height:1.2}
+  .sbar .btn{height:44px}
+  .cats{display:flex;gap:8px;margin-top:14px}
+  .res-hd{display:flex;align-items:center;margin-top:24px;font-size:14px;color:var(--text-2)}
+  .res-hd b{color:var(--text)}
+  .res-hd .sp{flex:1}
+  .doc{padding:20px 22px;margin-top:12px}
+  .doc .row1{display:flex;gap:16px;align-items:flex-start}
+  .ph{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+  .doc h3{font-size:18px;font-weight:700;letter-spacing:-.015em}
+  .doc .spec{font-size:14px;color:var(--text-2);margin-top:2px}
+  .doc .rv{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3);margin-top:6px}
+  .doc .who{flex:1}
+  .doc .net{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .doc .facts{display:flex;gap:24px;margin-top:16px;font-size:14px;color:var(--text-2)}
+  .doc .facts span{display:flex;align-items:center;gap:7px}
+  .doc .facts svg{color:var(--text-3)}
+  .doc .ft{display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .doc .ft .sp{flex:1}
+  .doc.open{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--petrol-500)}
+  .tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin-top:18px;font-size:14px;font-weight:600;color:var(--text-3)}
+  .tabs span{padding:10px 0;margin-bottom:-1px}
+  .tabs .on{color:var(--petrol-700);box-shadow:inset 0 -2px 0 var(--petrol-600)}
+  .prof{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding-top:18px;font-size:14px}
+  .prof h5{font-size:12.5px;color:var(--text-3);font-weight:600;margin-bottom:6px}
+  .prof p{color:var(--ink-700);line-height:1.55}
+  .prof .hrs{display:grid;grid-template-columns:auto 1fr;gap:2px 14px}
+  .hl{font-weight:600;color:var(--text)}
+</style>
+</head><body>
+<div id="chrome"></div>
+
+<main class="wrap page">
+  <section>
+    <div class="head rise">
+      <h1>Keep the doctors you trust</h1>
+      <p>Add your doctors and we'll show which plans have them in-network. You can skip this and come back later.</p>
+    </div>
+
+    <div class="sbar">
+      <div class="f q"><i data-lucide="search"></i><span><small>Doctor, specialty or clinic</small>Family practice</span></div>
+      <div class="f"><i data-lucide="map-pin"></i><span><small>Within</small>15 miles of 11212</span><i data-lucide="chevron-down" class="sm"></i></div>
+      <a class="btn primary">Search</a>
+    </div>
+    <div class="cats">
+      <span class="chip petrol"><i data-lucide="stethoscope" class="sm"></i>Doctors</span>
+      <span class="chip">Hospitals</span><span class="chip">Walk-in clinics</span><span class="chip">Labs &amp; imaging</span>
+      <span class="chip"><i data-lucide="sliders-horizontal" class="sm"></i>Gender, language, reviews</span>
+    </div>
+
+    <div class="res-hd"><span><b>42 family practitioners</b> near Brooklyn, NY</span><span class="sp"></span><span>Sort by <b>Distance</b></span></div>
+
+    <article class="card doc open">
+      <div class="row1">
+        <span class="ph" style="background:var(--petrol-50);color:var(--petrol-700)">AP</span>
+        <div class="who">
+          <h3>Dr. Amy Peterson, MD</h3>
+          <div class="spec">Family practice · Internal medicine · Geriatric medicine</div>
+          <div class="rv"><span data-stars="4"></span><span class="num">4.2 · 118 patient reviews</span></div>
+        </div>
+        <div class="net"><span class="chip ok"><i data-lucide="check" class="sm"></i>In network with 14 plans</span><span class="chip">Accepting new patients</span></div>
+      </div>
+      <div class="tabs"><span class="on">Overview</span><span>Locations</span><span>Patient reviews</span><span>Accepted plans</span><span>Enrollment information</span></div>
+      <div class="prof">
+        <div><h5>Contact</h5><p>1235 Linden Blvd, Suite 4<br>Brooklyn, NY 11212<br><span class="hl num">(718) 555-0142</span></p></div>
+        <div><h5>Office hours</h5><p class="hrs"><span>Mon–Fri</span><span class="num">8:00am – 6:00pm</span><span>Saturday</span><span class="num">9:00am – 1:00pm</span></p></div>
+        <div><h5>Accessibility &amp; languages</h5><p>Wheelchair accessible, parking on site<br>English, Spanish, Haitian Creole</p></div>
+      </div>
+      <div class="ft">
+        <label class="cmp" style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--text-2)"><span class="check"></span>Compare</label>
+        <span class="sp"></span>
+        <a class="btn ghost sm">Hide details</a>
+        <a class="btn primary sm"><i data-lucide="check" class="sm"></i>Added to my doctors</a>
+      </div>
+    </article>
+
+    <article class="card doc">
+      <div class="row1">
+        <span class="ph" style="background:var(--sage-100);color:var(--sage-700)">JD</span>
+        <div class="who">
+          <h3>Dr. Jonathan Diaz, MD</h3>
+          <div class="spec">Family practice · Internal medicine</div>
+          <div class="rv"><span data-stars="5"></span><span class="num">4.8 · 64 patient reviews</span></div>
+        </div>
+        <div class="net"><span class="chip warn"><i data-lucide="x" class="sm"></i>Not in network with your top plan</span></div>
+      </div>
+      <div class="facts"><span><i data-lucide="map-pin" class="sm"></i><span class="num">0.8 mi</span> · Flatbush Health Center</span><span><i data-lucide="clock" class="sm"></i>Next opening Thu</span><span><i data-lucide="languages" class="sm"></i>English, Spanish</span></div>
+      <div class="ft">
+        <label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--text-2)"><span class="check"></span>Compare</label>
+        <span class="sp"></span>
+        <a class="btn ghost sm">View more details</a>
+        <a class="btn ghost sm"><i data-lucide="plus" class="sm"></i>Add doctor</a>
+      </div>
+    </article>
+  </section>
+
+  <aside class="rail">
+    <div class="receipt">
+      <div class="top">
+        <div class="kicker"><i data-lucide="receipt" class="sm"></i>Your summary</div>
+        <div class="big num">14<small>of 18 plans</small></div>
+        <div class="sub">include Dr. Peterson in-network and cover all 3 of your drugs.</div>
+      </div>
+      <div class="perf"><i></i></div>
+      <div class="rows">
+        <div class="row"><span class="ic"><i data-lucide="pill" class="sm"></i></span><span class="t"><b>Drug cabinet</b>3 drugs</span><a class="btn quiet sm">Edit</a></div>
+        <div class="row"><span class="ic"><i data-lucide="store" class="sm"></i></span><span class="t"><b>Pharmacy</b>Linden Pharmacy · 0.4 mi</span><a class="btn quiet sm">Edit</a></div>
+        <div class="row"><span class="ic"><i data-lucide="stethoscope" class="sm"></i></span><span class="t"><b>Doctors</b>Dr. Amy Peterson, MD</span></div>
+      </div>
+      <div class="foot"><a class="btn primary" style="width:100%">See my 14 plans <i data-lucide="arrow-right" class="sm"></i></a></div>
+    </div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ step: 3, nav: 'Provider' });</script>
+</body></html>

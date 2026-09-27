@@ -1,0 +1,60 @@
+/* Teen Health Planner — redesign tokens.
+   Kept from the 2020 app: the sunrise gradient (red #E62224 → orange #EA6612 → yellow #F2B600),
+   the logo green, and the category colours on planner entries. */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+:root{
+  --red:#E62224; --red-600:#C8161B; --red-100:#FDE3E1; --red-50:#FFF2F0;
+  --orange:#C98052; --orange-100:#F6EDE6;
+  --amber:#C99A3E; --yellow:#D2A640; --yellow-100:#F7F0E1;
+  --green:#6E9C62; --green-100:#EEF3EB;
+  --violet:#8079B5; --violet-100:#F0EEF6;
+  --teal:#5C949A; --teal-100:#EBF2F2;
+  /* Toned down: category colours are muted markers on a warm neutral, never fills. */
+  --tint:#F4EFEB;
+  --sky-night:#1E2352; --sky-dusk:#433C8C;
+  --ink:#1F1A1C; --ink-2:#51484C; --ink-3:#8A8085;
+  --bg:#FBF7F4; --card:#FFFFFF; --line:rgba(40,20,25,.08); --line-2:rgba(40,20,25,.14);
+  --sunrise:linear-gradient(135deg,#E62224 0%,#EA6612 55%,#F2B600 100%);
+  --sh-1:0 1px 2px rgba(60,20,20,.05),0 2px 8px -2px rgba(60,20,20,.06);
+  --sh-2:0 2px 4px rgba(60,20,20,.05),0 14px 30px -12px rgba(120,30,20,.22);
+  --font:'Outfit',ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);width:390px;height:844px;overflow:hidden;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4;position:relative}
+.num{font-variant-numeric:tabular-nums}
+svg.lucide{width:20px;height:20px;flex:none} svg.lucide.sm{width:16px;height:16px} svg.lucide.lg{width:24px;height:24px}
+button{font:inherit;border:0;background:none;color:inherit}
+
+.status{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 32px;font-weight:600;font-size:15px;position:relative;z-index:3}
+.status .r{display:flex;gap:6px;align-items:center}
+.status.light{color:#fff}
+
+/* top nav (inner pages) */
+.nav{display:flex;align-items:center;gap:10px;padding:4px 16px 10px}
+.nav .b{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:#fff;box-shadow:var(--sh-1)}
+.nav h1{flex:1;font-size:20px;font-weight:700;letter-spacing:-.015em}
+.nav .pts{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:99px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);color:var(--ink);font-weight:700;font-size:14px}
+.nav .pts svg{color:var(--amber)}
+
+/* tab bar — same five destinations as 2020: settings, chat, home, search, add */
+.tabs{position:absolute;left:12px;right:12px;bottom:24px;height:68px;border-radius:26px;background:#fff;box-shadow:0 10px 30px -10px rgba(80,20,20,.28),0 0 0 1px var(--line);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;z-index:5}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--ink-3)}
+.tabs a.on{color:var(--ink)}
+.tabs a.add span{width:48px;height:48px;border-radius:17px;background:var(--ink);display:grid;place-items:center;color:#fff;box-shadow:0 8px 16px -8px rgba(31,26,28,.5)}
+
+.card{background:var(--card);border-radius:22px;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)}
+.label{font-size:12.5px;font-weight:600;color:var(--ink-3);letter-spacing:.01em}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:54px;border-radius:18px;font-weight:700;font-size:16px}
+.btn.primary{background:var(--sunrise);color:#fff;box-shadow:0 10px 20px -12px rgba(230,34,36,.55)}
+.btn.ghost{background:#fff;box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.btn.snap{background:#FFFC00;color:#111}
+.chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:99px;font-size:13px;font-weight:600;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink-2);white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;box-shadow:none}
+.ico{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;flex:none}
+.ico.red{background:var(--tint);color:#C9564B}
+.ico.violet{background:var(--tint);color:var(--violet)}
+.ico.teal{background:var(--tint);color:var(--teal)}
+.ico.green{background:var(--tint);color:var(--green)}
+.ico.yellow{background:var(--tint);color:var(--amber)}
+.ico.orange{background:var(--tint);color:var(--orange)}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Teen Health Planner · Add</title>
+<link rel="stylesheet" href="thp.css">
+<style>
+  iframe{position:absolute;inset:0;width:390px;height:844px;border:0}
+  .scrim{position:absolute;inset:0;background:rgba(30,15,18,.42)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:30px 30px 0 0;padding:10px 18px 30px;box-shadow:0 -20px 50px rgba(0,0,0,.2)}
+  .grab{width:40px;height:5px;border-radius:5px;background:#E4DCDF;margin:0 auto 14px}
+  .sheet h2{font-size:22px;letter-spacing:-.02em}
+  .sheet p{color:var(--ink-3);font-size:14px;margin-top:2px}
+  .mood{display:flex;justify-content:space-between;margin:16px 0 4px;padding:12px;border-radius:18px;background:var(--bg)}
+  .mood span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+  .mood i.f{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-style:normal}
+  .mood span.on i.f{background:#fff !important;box-shadow:0 0 0 2px var(--ink)}
+  .mood span.on{color:var(--ink)}
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .op{border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 0 0 1px var(--line-2)}
+  .op b{font-size:14px}
+  .op small{font-size:11.5px;color:var(--ink-3);display:block;margin-top:-6px}
+  .close{position:absolute;right:18px;top:26px;width:36px;height:36px;border-radius:12px;background:var(--bg);display:grid;place-items:center}
+</style></head>
+<body>
+<iframe src="01-home.html?t=day" tabindex="-1" aria-hidden="true"></iframe>
+<div class="scrim"></div>
+<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="t">
+  <div class="grab"></div><span class="close"><i data-lucide="x" class="sm"></i></span>
+  <h2 id="t">Add to your planner</h2><p>Log it now, earn stars for keeping track.</p>
+  <div class="mood">
+    <span><i class="f" style="background:#fff;color:#C9564B"><i data-lucide="angry"></i></i>Awful</span>
+    <span><i class="f" style="background:#fff;color:var(--orange)"><i data-lucide="frown"></i></i>Low</span>
+    <span><i class="f" style="background:#fff;color:var(--amber)"><i data-lucide="meh"></i></i>Okay</span>
+    <span class="on"><i class="f" style="background:#fff;color:var(--green)"><i data-lucide="smile"></i></i>Good</span>
+    <span><i class="f" style="background:#fff;color:var(--teal)"><i data-lucide="laugh"></i></i>Great</span>
+  </div>
+  <div class="opts">
+    <div class="op"><span class="ico orange"><i data-lucide="thermometer"></i></span><b>Symptom</b><small>Pain, nausea…</small></div>
+    <div class="op"><span class="ico violet"><i data-lucide="pill"></i></span><b>Medication</b><small>Dose + reminder</small></div>
+    <div class="op"><span class="ico red"><i data-lucide="calendar-plus"></i></span><b>Event</b><small>Clinic, check-up</small></div>
+    <div class="op"><span class="ico teal"><i data-lucide="file-plus"></i></span><b>Document</b><small>Results, letters</small></div>
+    <div class="op"><span class="ico green"><i data-lucide="ruler"></i></span><b>Measure</b><small>Glucose, weight</small></div>
+    <div class="op"><span class="ico yellow"><i data-lucide="sticker"></i></span><b>Sticker</b><small>For your story</small></div>
+  </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons({ attrs: { 'stroke-width': 2 } });</script>
+</body></html>

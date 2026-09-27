@@ -1,0 +1,55 @@
+/* Nikai Egypt — redesign tokens. Brand: Nikai red on white, near-black stage for TVs. */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&family=Tajawal:wght@500;700&display=swap');
+:root{
+  --red-700:#A80C14; --red-600:#D0101A; --red-500:#E3141E; --red-100:#FDE6E7; --red-50:#FFF3F3;
+  --ink:#0E0E10; --ink-2:#3A3A40; --ink-3:#6B6B73; --ink-4:#A3A3AB;
+  --stage:#0A0A0C; --stage-2:#141417; --stage-3:#1E1E22;
+  --bg:#F5F5F3; --bg-2:#ECECE9; --card:#FFFFFF;
+  --line:rgba(14,14,16,.08); --line-2:rgba(14,14,16,.14);
+  --sh-1:0 1px 2px rgba(14,14,16,.05),0 1px 1px rgba(14,14,16,.03);
+  --sh-2:0 2px 6px rgba(14,14,16,.05),0 20px 40px -18px rgba(14,14,16,.22);
+  --font:'Onest',ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);font-size:16px;line-height:1.5}
+img{display:block}
+.num{font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+button{font:inherit;border:0;background:none;color:inherit}
+svg.lucide{width:18px;height:18px;flex:none}svg.lucide.sm{width:15px;height:15px}svg.lucide.lg{width:22px;height:22px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* nav */
+.nav{height:76px;display:flex;align-items:center;gap:26px;white-space:nowrap}
+.nav .logo{height:30px;filter:blur(4.4px);mix-blend-mode:multiply}
+.nav.dark .logo{mix-blend-mode:normal;filter:blur(4.4px) brightness(1.05)}
+.nav .links{display:flex;gap:22px;font-size:14.5px;font-weight:500;color:var(--ink-2)}
+.nav.dark .links{color:rgba(255,255,255,.72)}
+.nav .links a.on{color:var(--ink)}.nav.dark .links a.on{color:#fff}
+.nav .sp{flex:1}
+.pillx{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:99px;font-size:13.5px;font-weight:600;box-shadow:inset 0 0 0 1px var(--line-2)}
+.nav.dark .pillx{box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);color:#fff}
+.flag{width:18px;height:12px;border-radius:2px;background:linear-gradient(#CE1126 0 33.3%,#fff 33.3% 66.6%,#000 66.6%);box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.ar{font-family:'Tajawal',sans-serif;font-weight:700;font-size:15px}
+.ib{width:40px;height:40px;border-radius:99px;display:grid;place-items:center}
+.nav.dark .ib{color:#fff}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:50px;padding:0 24px;border-radius:99px;font-weight:600;font-size:16px;white-space:nowrap;transition:transform .15s,background-color .15s}
+.btn:active{transform:scale(.98)}
+.btn.red{background:var(--red-500);color:#fff;box-shadow:0 10px 24px -10px rgba(227,20,30,.7),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn.ink{background:var(--ink);color:#fff}
+.btn.ghost{box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.btn.ghost-d{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28);color:#fff}
+.btn.sm{height:40px;padding:0 18px;font-size:14.5px}
+.chip{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:99px;font-size:13.5px;font-weight:600;background:var(--bg-2);color:var(--ink-2)}
+.chip.red{background:var(--red-100);color:var(--red-700)}
+.chip.dark{background:rgba(255,255,255,.08);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--red-500);box-shadow:0 0 0 4px rgba(227,20,30,.25)}
+.eyebrow{font-size:13px;font-weight:600;color:var(--red-600);letter-spacing:.02em}
+h1,h2,h3{letter-spacing:-.035em;line-height:1.02;font-weight:700}
+.sec-h{display:flex;align-items:flex-end;gap:24px;margin-bottom:36px}
+.sec-h h2{font-size:52px;max-width:16ch;text-wrap:balance}
+.sec-h p{color:var(--ink-3);font-size:17px;max-width:40ch;margin-left:auto}
+.card{background:var(--card);border-radius:24px;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)}
+.mult{mix-blend-mode:multiply}

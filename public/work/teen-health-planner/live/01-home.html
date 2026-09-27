@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Teen Health Planner · Home</title>
+<link rel="stylesheet" href="thp.css">
+<style>
+  .sky{position:absolute;inset:0 0 auto 0;height:318px;overflow:hidden;border-radius:0 0 34px 34px;z-index:0}
+  .sky.day{background:linear-gradient(180deg,#FFD39A 0%,#FFE6C4 50%,#FBF1E6 100%)}
+  .sky.dusk{background:linear-gradient(180deg,#4E4775 0%,#A8727A 58%,#E2AE8E 100%)}
+  .sky.night{background:linear-gradient(180deg,#171A33 0%,#252846 60%,#363659 100%)}
+  .orb{position:absolute;width:150px;height:150px;border-radius:50%;right:-26px;top:40px}
+  .day .orb{background:radial-gradient(circle,#FFF6D9 0 32%,#FFE08A 33% 52%,rgba(255,224,138,0) 53%);box-shadow:0 0 80px 24px rgba(255,220,150,.4)}
+  .dusk .orb{top:150px;background:radial-gradient(circle,#FFD9A0 0 34%,rgba(255,180,110,.5) 35% 50%,rgba(0,0,0,0) 51%)}
+  .night .orb{width:84px;height:84px;right:36px;top:64px;background:none;box-shadow:-24px 10px 0 0 #F6F1DE;filter:drop-shadow(0 0 18px rgba(246,241,222,.35))}
+  .hill{position:absolute;left:-40px;right:-40px;bottom:-60px;height:140px;border-radius:50%;opacity:.4}
+  .day .hill{background:#FFEBD2} .dusk .hill{background:#C98E86} .night .hill{background:#34345A}
+  .stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.8}
+  .day .stars,.dusk .stars{display:none}
+  .hd{position:relative;z-index:2;padding:6px 20px 0;display:flex;align-items:center;gap:14px}
+  .ring{position:relative;width:74px;height:74px;flex:none}
+  .ring svg{width:74px;height:74px;transform:rotate(-90deg)}
+  .ring .av{position:absolute;inset:9px;width:56px;height:56px;transform:none;border-radius:50%;box-shadow:0 0 0 3px #fff}
+  .ring .lv{position:absolute;right:-6px;bottom:-2px;height:24px;padding:0 8px;border-radius:99px;background:var(--ink);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+  .hi{flex:1}
+  .hi small{display:block;font-size:14px;font-weight:600;opacity:.8}
+  .hi b{display:block;font-size:26px;letter-spacing:-.02em;line-height:1.1}
+  .night .hi,.dusk .hi{color:#fff}
+  .stats{position:relative;z-index:2;display:flex;gap:8px;padding:16px 20px 0}
+  .stat{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:99px;background:rgba(255,255,255,.72);backdrop-filter:blur(8px);font-weight:700;font-size:14px}
+  .night .stat,.dusk .stat{background:rgba(255,255,255,.14);color:#fff}
+  .stat svg{color:var(--amber)}.night .stat svg,.dusk .stat svg{color:#F1D9A6}
+  .main{position:relative;z-index:2;padding:0 16px;margin-top:22px;display:flex;flex-direction:column;gap:12px}
+  .event{padding:16px;display:flex;gap:14px;align-items:center}
+  .event .t{flex:1}
+  .event .t span{font-size:13px;color:var(--ink-3);font-weight:600}
+  .event .t b{display:block;font-size:17px;letter-spacing:-.01em}
+  .event .cd{font-size:13px;color:var(--ink-2);font-weight:600;font-variant-numeric:tabular-nums}
+  .today{padding:14px 16px}
+  .today .h{display:flex;justify-content:space-between;align-items:baseline}
+  .today .h b{font-size:16px}
+  .today .h a{font-size:13px;color:var(--ink-2);font-weight:700}
+  .row{display:flex;gap:10px;margin-top:12px}
+  .ent{flex:1;border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+  .ent .ico{width:34px;height:34px;border-radius:11px}
+  .ent b{font-size:13.5px;line-height:1.2}
+  .ent span{font-size:12px;color:var(--ink-3)}
+  .ent.done{opacity:.55}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .tile{padding:12px;display:flex;flex-direction:column;gap:8px}
+  .tile b{font-size:15px}
+  .tile span{font-size:12px;color:var(--ink-3)}
+  .lb{padding:14px 16px}
+  .lb .h{display:flex;justify-content:space-between;align-items:center}
+  .seg{display:flex;background:var(--bg);border-radius:12px;padding:3px}
+  .seg span{padding:5px 12px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--ink-3)}
+  .seg span.on{background:#fff;color:var(--ink);box-shadow:var(--sh-1)}
+  .who{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:14px}
+  .who .r{width:22px;font-weight:800;color:var(--ink-3)}
+  .who .av{width:32px;height:32px;border-radius:50%;flex:none}
+  .who b{flex:1}
+</style></head>
+<body>
+<div class="sky" id="sky"><div class="orb"></div><div class="hill"></div><div class="stars" id="stars"></div></div>
+<div class="hd">
+  <div class="ring"><svg viewBox="0 0 74 74"><circle cx="37" cy="37" r="33" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="6"/><circle cx="37" cy="37" r="33" fill="none" id="lvl" stroke="#1F1A1C" stroke-width="6" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="62"/></svg><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="avA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD7A8"/><stop offset="1" stop-color="#F2B894"/></linearGradient><clipPath id="avAc"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#avAc)"><rect width="64" height="64" fill="url(#avA)"/><path d="M14 30c0-11 7-18 18-18s18 7 18 18v22c-3 2-7 3-10 3H24c-3 0-7-1-10-3z" fill="#2E1B17"/><path d="M10 66c1-12 10-18 22-18s21 6 22 18z" fill="#D46A5C"/><rect x="28" y="38" width="8" height="10" rx="4" fill="#C98A64"/><ellipse cx="32" cy="30" rx="11" ry="12.5" fill="#C98A64"/><path d="M20 28c1-8 6-13 13-13 6 0 11 4 12 10-6 0-12-2-16-6-2 4-5 7-9 9z" fill="#2E1B17"/></g></svg><span class="lv">Lv 4</span></div>
+  <div class="hi"><small id="greet">Good morning</small><b>Alisha</b></div>
+</div>
+<div class="stats"><span class="stat"><i data-lucide="star" class="sm"></i><span class="num">321</span> stars</span><span class="stat"><i data-lucide="flame" class="sm"></i>6-day streak</span><span class="stat"><i data-lucide="trophy" class="sm"></i>#2</span></div>
+<main class="main">
+  <section class="card event"><span class="ico red"><i data-lucide="stethoscope"></i></span><div class="t"><span>Next appointment</span><b>Diabetes clinic · Dr Fox</b><div class="cd">Thu 9:30 · in 1d 03:21:59</div></div><i data-lucide="chevron-right" style="color:var(--ink-3)"></i></section>
+  <section class="card today">
+    <div class="h"><b>Today · 3 entries</b><a>Planner</a></div>
+    <div class="row">
+      <div class="ent done"><span class="ico violet"><i data-lucide="pill" class="sm"></i></span><b>Bisoprolol</b><span>9:00 · taken</span></div>
+      <div class="ent"><span class="ico orange"><i data-lucide="smile" class="sm"></i></span><b>Mood check</b><span>After school</span></div>
+      <div class="ent"><span class="ico teal"><i data-lucide="activity" class="sm"></i></span><b>Glucose</b><span>Before dinner</span></div>
+    </div>
+  </section>
+  <div class="tiles">
+    <div class="card tile"><span class="ico yellow" style="width:38px;height:38px"><i data-lucide="graduation-cap" class="sm"></i></span><b>Learn</b><span>2 new</span></div>
+    <div class="card tile"><span class="ico red" style="width:38px;height:38px"><i data-lucide="message-circle" class="sm"></i></span><b>Chat</b><span>Group · 4</span></div>
+    <div class="card tile"><span class="ico green" style="width:38px;height:38px"><i data-lucide="sparkles" class="sm"></i></span><b>Quiz</b><span>+150 today</span></div>
+  </div>
+  <section class="card lb">
+    <div class="h"><b>Leaderboard</b><div class="seg"><span class="on">Weekly</span><span>Overall</span></div></div>
+    <div class="who"><span class="r">1</span><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="avI" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4DAFF"/><stop offset="1" stop-color="#CFC6EC"/></linearGradient><clipPath id="avIc"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#avIc)"><rect width="64" height="64" fill="url(#avI)"/><path d="M14 30c0-11 7-18 18-18s18 7 18 18v22c-3 2-7 3-10 3H24c-3 0-7-1-10-3z" fill="#9A4A22"/><path d="M10 66c1-12 10-18 22-18s21 6 22 18z" fill="#8A82BC"/><rect x="28" y="38" width="8" height="10" rx="4" fill="#F0C7A4"/><ellipse cx="32" cy="30" rx="11" ry="12.5" fill="#F0C7A4"/><path d="M20 28c1-8 6-13 13-13 6 0 11 4 12 10-6 0-12-2-16-6-2 4-5 7-9 9z" fill="#9A4A22"/></g></svg><b>Isabell M.</b><span class="num">1,390</span></div>
+    <div class="who" style="background:var(--tint);margin:8px -8px 0;padding:6px 8px;border-radius:12px"><span class="r" style="color:var(--ink)">2</span><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="avA2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD7A8"/><stop offset="1" stop-color="#F2B894"/></linearGradient><clipPath id="avA2c"><circle cx="32" cy="32" r="32"/></clipPath></defs><g clip-path="url(#avA2c)"><rect width="64" height="64" fill="url(#avA2)"/><path d="M14 30c0-11 7-18 18-18s18 7 18 18v22c-3 2-7 3-10 3H24c-3 0-7-1-10-3z" fill="#2E1B17"/><path d="M10 66c1-12 10-18 22-18s21 6 22 18z" fill="#D46A5C"/><rect x="28" y="38" width="8" height="10" rx="4" fill="#C98A64"/><ellipse cx="32" cy="30" rx="11" ry="12.5" fill="#C98A64"/><path d="M20 28c1-8 6-13 13-13 6 0 11 4 12 10-6 0-12-2-16-6-2 4-5 7-9 9z" fill="#2E1B17"/></g></svg><b>You</b><span class="num" style="font-weight:700">1,280</span></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const T = new URLSearchParams(location.search).get('t') || 'day';
+  document.getElementById('sky').classList.add(T);
+  document.body.classList.add(T);
+  document.getElementById('greet').textContent = { day: 'Good morning', dusk: 'Good evening', night: 'Still up?' }[T];
+  let s = ''; for (let i = 0; i < 26; i++) { const x = (i * 71) % 390, y = (i * 43) % 230 + 6; s += `<i style="left:${x}px;top:${y}px;opacity:${.3 + (i % 5) / 7}"></i>`; }
+  document.getElementById('stars').innerHTML = s;
+  if (T !== 'day') document.getElementById('lvl').setAttribute('stroke', '#F4EDE4');
+  boot({ light: T !== 'day', tab: 'Home' });
+</script></body></html>

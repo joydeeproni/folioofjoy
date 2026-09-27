@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Login</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  body{background:#fff}
+  .lg{display:flex;justify-content:center;margin-top:34px}
+  h1{text-align:center;font-size:34px;font-weight:800;letter-spacing:-.035em;margin-top:84px}
+  .sub{text-align:center;font-size:15px;color:var(--ink-3);margin-top:6px}
+  form{padding:30px 24px 0;display:flex;flex-direction:column;gap:12px}
+  .fg{text-align:right;font-size:13.5px;font-weight:700;color:var(--blue);margin-top:-2px}
+  .alt{display:flex;align-items:center;gap:12px;margin:22px 24px 0;font-size:12.5px;color:var(--ink-4);font-weight:600}
+  .alt::before,.alt::after{content:"";flex:1;height:1px;background:var(--line-2)}
+  .soc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 24px 0}
+  .soc .btn{height:50px;font-size:14.5px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line-2);color:var(--ink)}
+  .soc .fbm{width:20px;height:20px;border-radius:50%;background:#1877F2;color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;font-family:Arial,sans-serif}
+  .fbl{display:block;text-align:center;font-size:16px;font-weight:700;color:var(--blue);margin-top:26px}
+  .wave{position:absolute;left:0;right:0;bottom:0;height:176px;background:var(--grad);border-radius:60% 60% 0 0/34% 34% 0 0;padding:40px 24px 0;text-align:center;color:#fff}
+  .wave b{display:block;font-size:17px;font-weight:800;margin-bottom:14px}
+</style></head>
+<body>
+<span data-status></span>
+<div class="lg"><span class="lockup"><img src="assets/logo.png" alt="Sellcrowd logo (blurred)"><b>Sellcrowd</b></span></div>
+<h1 data-rise>Login</h1>
+<form data-stagger style="--d:120ms">
+  <div class="field"><i data-lucide="mail" class="sm" style="color:var(--ink-4)"></i>priya.raman@sellcrowd.co</div>
+  <div class="field focus"><i data-lucide="lock" class="sm" style="color:var(--blue)"></i><span style="letter-spacing:3px">••••••••</span><i data-lucide="eye" class="sm" style="margin-left:auto;color:var(--ink-4)"></i></div>
+  <div class="fg">Forgot password?</div>
+  <a class="btn solid block">Login</a>
+</form>
+<a class="fbl">Login with Facebook</a>
+<div class="wave" data-sheet><b>New to Sellcrowd?</b><a class="btn white block">Create account</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script></body></html>

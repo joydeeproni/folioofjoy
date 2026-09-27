@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1280">
+<title>Moulding HMI · Overview</title>
+<link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="hmi.css">
+<style>
+  .rowA{display:grid;grid-template-columns:1.9fr 1fr;gap:16px;margin-bottom:16px}
+  .order .top{display:flex;align-items:flex-start;gap:16px}
+  .order .swatch{width:40px;height:40px;background:#F5C518;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+  .order h2{font-size:20px;line-height:28px;font-weight:400}
+  .order .meta{font-size:14px;color:var(--cds-text-secondary)}
+  .order .prog{margin-top:18px}
+  .order .pl{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px}
+  .order .pl b{font-weight:600}
+  .stat{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .stat .v{font-size:24px;line-height:32px;font-variant-numeric:tabular-nums}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .kpi{display:flex;flex-direction:column;gap:2px;height:124px}
+  .kpi .h{display:flex;align-items:center;gap:8px;color:var(--cds-text-secondary)}
+  .kpi .h .cds--tag{margin-left:auto}
+  .kpi svg.sp{position:absolute;right:16px;bottom:18px;width:46%;height:40px}
+  .rowC{display:grid;grid-template-columns:1.55fr 1fr;gap:16px}
+  .tbl-wrap{background:var(--cds-layer-01)}
+  .tbl-h{padding:16px 16px 12px;display:flex;align-items:center;gap:8px}
+  .tbl-h h3{font-size:16px;font-weight:600;line-height:24px}
+  .tbl-h .label-01{margin-left:auto}
+  .cds--data-table td,.cds--data-table th{font-variant-numeric:tabular-nums}
+  .dev{color:#da1e28;font-weight:600}
+  .acts{display:flex;flex-direction:column;gap:1px}
+  .acts .cds--btn{max-width:none;width:100%;min-height:72px;font-size:16px;padding-right:64px}
+  .acts .cds--btn svg.bi{right:20px}
+  .recent{background:var(--cds-layer-01);margin-top:16px;padding:12px 16px}
+  .recent .r{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;border-top:1px solid var(--cds-border-subtle-01)}
+  .recent .r:first-of-type{border-top:0}
+  .recent .t{font-family:'IBM Plex Mono';color:var(--cds-text-secondary);font-size:13px;width:44px}
+</style></head>
+<body class="cds--g10">
+<div class="shell"><main class="main">
+  <div class="ph"><div><h1>Overview</h1><p>Producing since 06:00 · no open alarms</p></div></div>
+
+  <div class="rowA">
+    <section class="tile order">
+      <div class="top"><span class="swatch"></span><div><h2>GULI MODUL · Brick 2×4</h2><div class="meta">Order 2 · Part 3001 · Mould 2357023 · ABS Nature 4130402 · colour 986</div></div><span style="margin-left:auto" class="cds--tag cds--tag--blue cds--tag--md"><span class="cds--tag__label">Prio 2</span></span></div>
+      <div class="prog">
+        <div class="pl"><span><b class="num">4,464,000</b> of <span class="num">7,200,000</span> pcs</span><span class="num">62% · done Thu 06:40</span></div>
+        <div class="cds--progress-bar cds--progress-bar--big"><div class="cds--progress-bar__track" role="progressbar" aria-valuenow="62"><div class="cds--progress-bar__bar" style="transform:scaleX(.62)"></div></div></div>
+      </div>
+    </section>
+    <section class="tile stat">
+      <div><div class="label-01">Running since last stop</div><div class="v mono">22:48:32</div></div>
+      <div><div class="label-01">Cycles this shift</div><div class="v">3,212</div></div>
+      <div><div class="label-01">OEE this shift</div><div class="v">86%</div></div>
+      <div><div class="label-01">Scrap rate</div><div class="v">0.4%</div></div>
+    </section>
+  </div>
+
+  <div class="kpis">
+    <div class="tile kpi"><div class="h">${'x'}</div></div>
+  </div>
+
+  <div class="rowC">
+    <section class="tbl-wrap">
+      <div class="tbl-h"><h3>Mould card check</h3><span class="cds--tag cds--tag--red cds--tag--sm"><span class="cds--tag__label">1 deviation</span></span><span class="label-01">Compared 14:30</span></div>
+      <table class="cds--data-table cds--data-table--md">
+        <thead><tr><th><div class="cds--table-header-label">Parameter</div></th><th><div class="cds--table-header-label">Mould card</div></th><th><div class="cds--table-header-label">Machine</div></th><th><div class="cds--table-header-label">Status</div></th></tr></thead>
+        <tbody>
+          <tr><td>Cooling time</td><td>6.0 s</td><td class="dev">6.8 s</td><td><span class="cds--tag cds--tag--red cds--tag--sm"><span class="cds--tag__label">+13% deviation</span></span></td></tr>
+          <tr><td>Injection time</td><td>1.10 s</td><td>1.12 s</td><td><span class="cds--tag cds--tag--green cds--tag--sm"><span class="cds--tag__label">In tolerance</span></span></td></tr>
+          <tr><td>Holding pressure</td><td>450 bar</td><td>450 bar</td><td><span class="cds--tag cds--tag--green cds--tag--sm"><span class="cds--tag__label">In tolerance</span></span></td></tr>
+          <tr><td>Nozzle temperature</td><td>238 °C</td><td>238 °C</td><td><span class="cds--tag cds--tag--green cds--tag--sm"><span class="cds--tag__label">In tolerance</span></span></td></tr>
+          <tr><td>Back pressure</td><td>80 bar</td><td>78 bar</td><td><span class="cds--tag cds--tag--green cds--tag--sm"><span class="cds--tag__label">In tolerance</span></span></td></tr>
+        </tbody>
+      </table>
+    </section>
+    <div>
+      <div class="acts">
+        <button class="cds--btn cds--btn--primary cds--btn--xl">Add eLog entry<span data-ci="add"></span></button>
+        <button class="cds--btn cds--btn--secondary cds--btn--xl">Set stop code<span data-ci="stop--filled"></span></button>
+        <button class="cds--btn cds--btn--tertiary cds--btn--xl" style="background:var(--cds-layer-01)">Start changeover<span data-ci="renew"></span></button>
+      </div>
+      <div class="recent"><div class="label-01" style="margin-bottom:4px">Latest eLog</div>
+        <div class="r"><span class="t">13:05</span><span class="cds--tag cds--tag--purple cds--tag--sm"><span class="cds--tag__label">Q</span></span>Short shot on cavity 4 · fixed</div>
+        <div class="r"><span class="t">10:40</span><span class="cds--tag cds--tag--teal cds--tag--sm"><span class="cds--tag__label">M</span></span>Ejector pin cleaned</div>
+      </div>
+    </div>
+  </div>
+</main></div>
+<script src="icons.js"></script><script src="_shared.js"></script>
+<script>
+  const K = [['time', 'Cycle time', '18.2', 's', 'Target 18.0', [18.1, 18.3, 18.2, 18.4, 18.2, 18.1, 18.2, 18.3, 18.2, 18.2, 18.1, 18.2], 'green', 'OK'],
+    ['meter', 'Cushion', '5.9', 'mm', 'Target 6.0 ± 0.8', [6.0, 5.9, 6.1, 5.9, 5.8, 5.9, 6.0, 5.9, 5.8, 5.9, 6.0, 5.9], 'green', 'OK'],
+    ['temperature', 'Mass temperature', '229', '°C', 'Target 230 ± 5', [230, 229, 229, 228, 229, 230, 229, 229, 228, 229, 229, 229], 'green', 'OK'],
+    ['flow', 'Cooling time', '6.8', 's', 'Mould card 6.0', [6.0, 6.1, 6.1, 6.2, 6.3, 6.4, 6.5, 6.5, 6.6, 6.7, 6.8, 6.8], 'red', 'Drifting']];
+  document.querySelector('.kpis').innerHTML = K.map(([ic, n, v, u, t, d, tone, lab]) => {
+    const mn = Math.min(...d), mx = Math.max(...d), W = 200, H = 32;
+    const pts = d.map((y, i) => `${i / (d.length - 1) * W},${H - 2 - (y - mn) / ((mx - mn) || 1) * (H - 4)}`).join(' ');
+    const col = tone === 'red' ? '#da1e28' : '#0f62fe';
+    return `<div class="tile kpi"><div class="h">${ci(ic, 16)}<span class="label-01" style="color:inherit">${n}</span><span class="cds--tag cds--tag--${tone} cds--tag--sm"><span class="cds--tag__label">${lab}</span></span></div>
+      <div class="big">${v}<small>${u}</small></div><div class="label-01">${t}</div>
+      <svg class="sp" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>`;
+  }).join('');
+  boot({ nav: 'Overview', alarms: 0, status: 'Running' });
+</script></body></html>

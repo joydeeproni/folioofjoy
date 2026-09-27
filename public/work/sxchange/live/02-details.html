@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Fund details</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .lay{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+  .hero{padding:24px;display:flex;gap:18px;align-items:center}
+  .hero .fm{width:64px;height:64px;border-radius:16px;font-size:18px}
+  .hero h1{font-size:28px;letter-spacing:-.025em;line-height:1.15;font-weight:700}
+  .hero .s{color:var(--ink-2);margin-top:4px}
+  .hero .chips{display:flex;gap:6px;margin-top:10px}
+  .price{margin-top:16px;padding:24px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px}
+  .price .big{display:flex;align-items:baseline;gap:14px;margin-top:6px}
+  .price .big b{font-size:44px;letter-spacing:-.035em;font-weight:800}
+  .price .big .off{font-size:22px}
+  .price .deal .bar{height:14px}
+  .price .deal{margin-top:18px}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:12px 20px;font-size:15px;align-content:start}
+  .kv dt{color:var(--ink-2)}.kv dd{margin:0;font-weight:700;text-align:right}
+  .kv .tot{padding-top:12px;border-top:1px solid var(--line)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .box{padding:20px 24px}.box h3{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:0}
+  .ask{padding:22px}
+  .ask h3{font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .ask p{color:var(--ink-2);font-size:14px;margin-top:4px}
+  .ask .btn{width:100%;margin-top:10px}
+  .ask .meta{display:flex;justify-content:space-around;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);text-align:center}
+  .ask .meta b{display:block;font-size:20px;font-weight:700}
+  .doc{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .doc:first-of-type{border-top:0}
+  .doc .ic{width:36px;height:36px;border-radius:10px;background:var(--navy-50);color:var(--navy-700);display:grid;place-items:center}
+  .doc > span:last-child{margin-left:auto;color:var(--ink-3);font-size:13px}
+  .sent{display:none}
+  body.is-sent .sent{display:block}
+  body.is-sent .unsent{display:none}
+  .seller{display:flex;gap:12px;align-items:center;margin-top:14px;padding:14px;border-radius:12px;background:var(--green-100)}
+  .seller .av{background:var(--green-700)}
+  .seller b{display:block}.seller span{font-size:13px;color:var(--ink-2)}
+  .navh{display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:center}
+  .navh svg.ch{width:100%;height:150px;display:block}
+  .navh .leg{display:flex;flex-direction:column;gap:12px}
+  .navh .leg b{display:block;font-size:20px;font-weight:700;letter-spacing:-.01em}
+  .tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+  .tbl th{font-size:12.5px;font-weight:600;color:var(--ink-3);text-align:left;padding:0 0 10px}
+  .tbl td{padding:12px 0;border-top:1px solid var(--line);font-variant-numeric:lining-nums proportional-nums}
+  .tbl td:not(:first-child),.tbl th:not(:first-child){text-align:right}
+  .tbl tr.me td{font-weight:700}
+  .tbl tr.me td:first-child{position:relative}
+  .tbl .you{font-size:11px;font-weight:700;background:var(--navy-700);color:#fff;border-radius:6px;padding:2px 6px;margin-left:8px}
+  .wl{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line-2);font-weight:600;margin-top:10px;color:var(--red-600)}
+  .gate{position:fixed;inset:0;background:rgba(26,29,51,.45);display:none;align-items:center;justify-content:center}
+  body.is-gate .gate{display:flex}
+  .gate .m{width:440px;background:#fff;border-radius:18px;padding:28px;box-shadow:0 40px 90px -20px rgba(20,24,50,.5)}
+  .gate h3{font-size:22px;font-weight:700;letter-spacing:-.02em}
+  .gate p{color:var(--ink-2);font-size:14.5px;margin:6px 0 18px}
+  .gate .btn{width:100%;margin-top:12px}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <a class="crumb"><i data-lucide="arrow-left" class="sm"></i>All listings</a>
+  <div class="lay">
+    <div>
+      <section class="card hero"><span class="fm" style="background:#1E3A5F">MIO</span><div><h1>Meridian Income Opportunities Fund</h1><div class="s">Meridian Capital · Series II · Special situations</div><div class="chips"><span class="chip cat">AIF Cat II</span><span class="chip">Vintage 2017</span><span class="chip">Close-ended · 7 years</span><span class="chip green">Verified listing</span></div></div></section>
+      <section class="card price">
+        <div>
+          <span class="label">Asking price per unit</span>
+          <div class="big"><b>₹8.7487</b><span class="off">30% off NAV</span></div>
+          <div class="deal"><div class="bar"><span class="ask" style="width:70%"></span><span class="gap" style="left:70%;right:0"></span></div><div class="lg"><span>Ask <b>₹8.7487</b></span><span>Latest NAV ₹12.4981 · 30 Jun</span></div></div>
+        </div>
+        <dl class="kv">
+          <dt>Units on offer</dt><dd>1,00,000</dd>
+          <dt>Minimum lot</dt><dd>10,000 units</dd>
+          <dt class="tot">Total asking value</dt><dd class="tot">₹8,74,870.00</dd>
+        </dl>
+      </section>
+      <div class="two">
+        <section class="card box"><h3><i data-lucide="landmark" class="sm"></i>Seller's commitment</h3>
+          <dl class="kv"><dt>Commitment amount</dt><dd>₹25,00,000.00</dd><dt>Amount paid</dt><dd>₹17,50,000.00</dd><dt>Balance amount payable</dt><dd>₹7,50,000.00</dd><dt>Is this a default case?</dt><dd>No</dd></dl></section>
+        <section class="card box"><h3><i data-lucide="briefcase" class="sm"></i>Fund facts</h3>
+          <dl class="kv"><dt>Manager</dt><dd>Meridian Capital</dd><dt>Sponsor commitment</dt><dd>5%</dd><dt>Term remaining</dt><dd>2 years 4 months</dd><dt>Distributions to date</dt><dd>₹3.40 per unit</dd></dl></section>
+      </div>
+      <section class="card box" style="margin-top:16px"><h3><i data-lucide="line-chart" class="sm"></i>NAV history<span style="margin-left:auto;font-size:13px;font-weight:500;color:var(--ink-3)">Per unit, quarterly · from the manager's statements</span></h3>
+        <div class="navh"><svg class="ch" viewBox="0 0 600 150" preserveAspectRatio="none" id="navchart"></svg>
+          <div class="leg"><div><span class="label">Start NAV (2017)</span><b>₹10.0000</b></div><div><span class="label">Latest NAV · 30 Jun</span><b>₹12.4981</b></div><div><span class="label">Asking price</span><b style="color:var(--navy-700)">₹8.7487</b></div></div></div></section>
+      <section class="card box" style="margin-top:16px"><h3><i data-lucide="users" class="sm"></i>Other sellers of this fund<span style="margin-left:auto;font-size:13px;font-weight:500;color:var(--ink-3)">3 listings · sorted by discount</span></h3>
+        <table class="tbl"><tr><th>Seller</th><th>Asking / unit</th><th>Balance payable</th><th>Units</th><th>Discount</th></tr>
+        <tr class="me"><td>This listing<span class="you">Viewing</span></td><td>₹8.7487</td><td>₹7,50,000.00</td><td>1,00,000</td><td style="color:var(--green-700)">30%</td></tr>
+        <tr><td>Seller B · Mumbai</td><td>₹9.3736</td><td>₹0.00</td><td>40,000</td><td style="color:var(--green-700)">25%</td></tr>
+        <tr><td>Seller C · Chennai</td><td>₹9.9985</td><td>₹2,50,000.00</td><td>1,25,000</td><td style="color:var(--green-700)">20%</td></tr></table></section>
+      <section class="card box" style="margin-top:16px"><h3><i data-lucide="file-text" class="sm"></i>Documents</h3>
+        <div class="doc"><span class="ic"><i data-lucide="file-text" class="sm"></i></span>Private placement memorandum<span>PDF · 2.4 MB</span></div>
+        <div class="doc"><span class="ic"><i data-lucide="file-chart-column" class="sm"></i></span>NAV statement, 30 June<span>PDF · 180 KB</span></div>
+        <div class="doc"><span class="ic"><i data-lucide="file-check" class="sm"></i></span>Seller's statement of account (verified by SXchange)<span>PDF · 96 KB</span></div>
+        <div class="doc"><span class="ic"><i data-lucide="scroll-text" class="sm"></i></span>Transfer form (fund manager's template)<span>DOCX · 64 KB</span></div></section>
+    </div>
+    <aside class="rail">
+      <section class="card ask">
+        <div class="unsent"><h3>Interested in these units?</h3><p>We'll share the seller's contact details with you by email. Your details go to the seller too.</p>
+          <a class="btn primary" id="req"><i data-lucide="send" class="sm"></i>Request seller information</a>
+          <a class="btn ghost"><i data-lucide="columns-3" class="sm"></i>Add to compare</a>
+          <div class="wl"><i data-lucide="heart" class="sm" fill="currentColor"></i>In your wishlist</div></div>
+        <div class="sent"><h3>Seller details sent</h3><p>Check your inbox at joydeep.roni@gmail.com. The seller has your details too.</p>
+          <div class="seller"><span class="av" style="color:#fff">RK</span><div><b>Rohan K.</b><span>Seller since 2017 · replies within a day</span></div></div>
+          <a class="btn ghost" style="margin-top:14px"><i data-lucide="columns-3" class="sm"></i>Add to compare</a></div>
+        <div class="meta"><div><b>243</b><span class="label">Views</span></div><div><b>17</b><span class="label">Prospects</span></div><div><b>6 d</b><span class="label">Listed</span></div></div>
+      </section>
+      <section class="card box"><h3><i data-lucide="shield-check" class="sm"></i>How a transfer works</h3>
+        <ol style="font-size:14px;color:var(--ink-2);padding-left:18px;display:flex;flex-direction:column;gap:8px"><li><b style="color:var(--ink)">Request seller information.</b> You both get each other's details by email.</li><li><b style="color:var(--ink)">Agree terms directly.</b> Price, number of units and timing.</li><li><b style="color:var(--ink)">The fund manager approves</b> the transfer and updates the unitholder register.</li></ol></section>
+      <section class="card box"><h3><i data-lucide="badge-check" class="sm"></i>Verified by SXchange</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:14px">
+          <span style="display:flex;gap:8px;align-items:center"><i data-lucide="check" class="sm" style="color:var(--green-600)"></i>Units match the statement of account</span>
+          <span style="display:flex;gap:8px;align-items:center"><i data-lucide="check" class="sm" style="color:var(--green-600)"></i>NAV checked against the 30 June statement</span>
+          <span style="display:flex;gap:8px;align-items:center"><i data-lucide="check" class="sm" style="color:var(--green-600)"></i>Not a default case</span></div></section>
+    </aside>
+  </div>
+</main>
+<div id="foot"></div>
+<div class="gate"><div class="m"><span class="fm" style="background:#1E3A5F;width:48px;height:48px;border-radius:13px">MIO</span><h3 style="margin-top:16px">Log in to contact the seller</h3><p>Seller details are only shared between verified members. It takes a minute to register.</p>
+  <label class="fl">Email or phone</label><div class="inp">joydeep.roni@gmail.com</div><label class="fl" style="margin-top:14px">Password</label><div class="inp">••••••••••••</div>
+  <a class="btn primary">Log in and request details</a><p style="text-align:center;margin:14px 0 0;font-size:14px">New to SXchange? <a style="color:var(--blue-600);font-weight:600">Register</a></p></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+if (Q.get('sent') === '1') document.body.classList.add('is-sent');
+if (Q.get('gate') === '1') document.body.classList.add('is-gate');
+// NAV history, quarterly since 2017
+const pts = [10, 10.12, 10.3, 10.41, 10.2, 10.55, 10.7, 10.93, 11.1, 11.04, 11.32, 11.55, 11.61, 11.86, 12.02, 12.2, 12.31, 12.4981];
+const lo = 8, hi = 13, W = 600, H = 150, X = i => i / (pts.length - 1) * W, Y = v => H - (v - lo) / (hi - lo) * H;
+const line = pts.map((v, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join('');
+document.getElementById('navchart').innerHTML = `<defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#363C60" stop-opacity=".16"/><stop offset="1" stop-color="#363C60" stop-opacity="0"/></linearGradient></defs>
+  <path d="${line}L${W},${H}L0,${H}Z" fill="url(#gf)"/><path d="${line}" fill="none" stroke="#363C60" stroke-width="2.2" vector-effect="non-scaling-stroke"/>
+  <line x1="0" x2="${W}" y1="${Y(8.7487)}" y2="${Y(8.7487)}" stroke="#FCAE18" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/>`;
+boot({ mode: 'buy', active: 'Listings' });
+</script>
+</body></html>

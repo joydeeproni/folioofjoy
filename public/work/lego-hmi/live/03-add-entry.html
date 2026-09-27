@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1280">
+<title>Moulding HMI · Add eLog entry</title>
+<link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="hmi.css">
+<style>
+  .bg-frame{position:absolute;inset:0;border:0;width:1280px;height:800px;pointer-events:none}
+  .cds--modal{position:fixed;inset:0;z-index:9000}
+  .cds--modal-container{width:760px;max-height:none}
+  .types{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
+  .ty{background:var(--cds-layer-02,#fff);border:1px solid var(--cds-border-subtle-01);padding:14px;height:112px;display:flex;flex-direction:column;gap:6px;position:relative;cursor:pointer}
+  .ty b{font-size:28px;font-weight:300;line-height:32px}
+  .ty span{font-size:14px}
+  .ty.on{border:2px solid var(--cds-border-inverse,#161616);padding:13px}
+  .ty.on .chk{position:absolute;top:10px;right:10px;color:var(--cds-icon-primary)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .fld .cds--label{display:block}
+  .dd{height:48px;background:var(--cds-field-01);border-bottom:1px solid var(--cds-border-strong-01);display:flex;align-items:center;padding:0 16px;font-size:14px;justify-content:space-between}
+  .cds--content-switcher{height:48px}
+  .cds--text-area{width:100%;height:72px;resize:none}
+  .cds--modal-footer .cds--btn{height:64px}
+</style></head>
+<body class="cds--g10">
+<iframe class="bg-frame" src="02-elog.html?stopped=1" tabindex="-1" aria-hidden="true"></iframe>
+<div class="cds--modal is-visible" role="dialog" aria-modal="true" aria-labelledby="mh">
+  <div class="cds--modal-container">
+    <div class="cds--modal-header">
+      <p class="cds--modal-header__label">Machine 152662 · Order 2 · 14:32</p>
+      <h2 class="cds--modal-header__heading" id="mh">Add eLog entry</h2>
+      <button class="cds--modal-close" aria-label="Close" style="position:absolute;top:0;right:0;width:48px;height:48px;display:grid;place-items:center"><span data-ci="close"></span></button>
+    </div>
+    <div class="cds--modal-content" style="padding-right:16px;margin-bottom:48px">
+      <label class="cds--label">Type</label>
+      <div class="types">
+        <div class="ty on"><b>Q</b><span>Quality</span><span class="chk" data-ci="checkmark--filled"></span></div>
+        <div class="ty"><b>M</b><span>Mould</span></div>
+        <div class="ty"><b>E</b><span>Equipment</span></div>
+        <div class="ty"><b>I</b><span>Information</span></div>
+      </div>
+      <div class="row">
+        <div class="fld"><label class="cds--label">Reason</label><div class="dd">Short shot · cavity 4<span data-ci="chevron--down" data-s="16"></span></div></div>
+        <div class="fld"><label class="cds--label">Action</label><div class="dd">Raised holding pressure<span data-ci="chevron--down" data-s="16"></span></div></div>
+      </div>
+      <div class="row">
+        <div class="fld"><label class="cds--label">Elements after action</label>
+          <div class="cds--content-switcher"><button class="cds--content-switcher-btn cds--content-switcher--selected"><span class="cds--content-switcher__label">OK</span></button><button class="cds--content-switcher-btn"><span class="cds--content-switcher__label">NOT OK</span></button></div></div>
+        <div class="fld"><label class="cds--label">Evidence</label><button class="cds--btn cds--btn--tertiary" style="height:48px;min-height:48px;width:100%;max-width:none">Attach photo<span data-ci="camera"></span></button></div>
+      </div>
+      <div class="fld"><label class="cds--label">Comment</label><textarea class="cds--text-area">Parts from cavity 4 short at the stud tops. After +10 bar, 20 test parts passed the gauge.</textarea></div>
+    </div>
+    <div class="cds--modal-footer cds--btn-set">
+      <button class="cds--btn cds--btn--secondary">Cancel</button>
+      <button class="cds--btn cds--btn--primary">Log entry</button>
+    </div>
+  </div>
+</div>
+<script src="icons.js"></script>
+<script>hydrateIcons();</script>
+</body></html>

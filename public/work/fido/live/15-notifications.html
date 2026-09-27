@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Notifications</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .head h1{font-size:28px}
+  .grp{padding:0 24px;margin-top:24px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  .list{display:flex;flex-direction:column;gap:8px;padding:12px 16px 0}
+  .nt{display:flex;gap:12px;border-radius:24px;background:var(--char);padding:14px 16px;position:relative}
+  .nt .o{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:var(--char);flex:none}
+  .nt b{display:block;font-size:14.5px;font-weight:600;line-height:1.3;padding-right:14px}
+  .nt p{font-size:13.5px;line-height:1.45;color:rgba(255,255,255,.7);margin-top:4px}
+  .nt small{display:block;font-size:12px;color:rgba(255,255,255,.45);margin-top:6px}
+  .nt.new::after{content:'';position:absolute;right:16px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--yellow)}
+  .perk{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;background:rgba(248,201,84,.16);color:var(--yellow);font-size:12.5px;font-weight:600;margin-top:8px}
+  .empty{position:absolute;left:24px;right:24px;top:170px;text-align:center}
+  .empty .c{height:280px;border-radius:30px;background:var(--sky);position:relative;overflow:hidden}
+  .empty img{position:absolute;left:50%;bottom:-10px;width:250px;transform:translateX(-50%)}
+  .empty h2{font-size:28px;font-weight:300;letter-spacing:-.02em;margin-top:28px}
+  .empty p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.7);margin-top:10px}
+</style></head>
+<body>
+<header class="head"><h1>Notifications</h1><span class="sq press"><i data-lucide="check-check"></i></span></header>
+<div id="full">
+<div class="grp">Today</div>
+<div class="list">
+  <div class="nt new"><span class="av" style="width:42px;height:42px;background:var(--lilac)">C</span><div><b>Christophe replied to your check-in</b><p>“Close the door halfway, treat, open. Five reps before you close it fully.”</p><small>8:41 pm · Go To Crate</small></div></div>
+  <div class="nt new"><span class="o" style="background:var(--peach)"><i data-lucide="list-plus"></i></span><div><b>A step was added to Go To Crate · Level 4</b><p>Christophe tuned it after tonight’s check-in.</p><small>8:43 pm</small></div></div>
+  <div class="nt"><span class="av" style="width:42px;height:42px;background:#fff">J</span><div><b>Jaime finished Intro to Recall with Milou</b><p>That’s 22 quests done as a family.</p><small>5:10 pm</small></div></div>
+</div>
+<div class="grp">This week</div>
+<div class="list">
+  <div class="nt"><span class="o" style="background:var(--yellow)"><i data-lucide="trophy"></i></span><div><b>Achievement unlocked: 5-day streak</b><span class="perk"><i data-lucide="gift" class="sm"></i>10% off a toy at Paws &amp; Co</span><small>Tue</small></div></div>
+  <div class="nt"><span class="o" style="background:var(--sky)"><i data-lucide="activity"></i></span><div><b>Weekly Pulse Survey is ready</b><p>Two minutes. How did week 13 feel?</p><small>Mon</small></div></div>
+</div>
+</div>
+<div class="empty" id="empty" hidden><div class="c"><img class="bob" src="assets/training.png" alt=""></div><h2>All caught up</h2><p>No news is good news. Go play with Milou; we’ll ping you when Christophe replies.</p></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  if (Q.has('empty')) { document.getElementById('full').hidden = true; document.getElementById('empty').hidden = false; }
+  stagger('.nt', 100, 70, 'a-rise'); boot({ tab: 'Quests' });
+</script>
+</body></html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Contact history</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .sum{display:grid;grid-template-columns:repeat(3,1fr);background:#fff;padding:16px 8px;border-bottom:1px solid var(--line)}
+  .sum div{text-align:center}
+  .sum div + div{border-left:1px solid var(--line)}
+  .sum b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em}
+  .sum span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .ev{padding:15px 18px 16px}
+  .ev .chev{bottom:16px}
+  .open .nt{white-space:normal;color:var(--ink-2)}
+  .open .chev{transform:rotate(180deg);color:var(--blue)}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Contact history" data-right='["x"]'></span>
+</header>
+<section class="list" id="list" data-stagger style="margin-top:10px"></section>
+<span data-tabs="Leads"></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const E = [
+    ['call', 'phone', 'Discovery call', 'Sep 21, 2020 · 14:05', 'Asked about pricing for three client books. Wants the Growth plan before the partners meet on Thursday.', '12m 27s', 0],
+    ['mail', 'mail', 'Pricing sent', 'Sep 21, 2020 · 14:40', 'Growth plan one-pager and the case study from Lumen Dental.', '', 0],
+    ['call', 'phone', 'Follow-up call', 'Sep 18, 2020 · 10:12', 'Gatekeeper put me through after the second try.', '06m 51s', 0],
+    ['call', 'phone-missed', 'No answer', 'Sep 17, 2020 · 16:30', 'Left a voicemail, try mornings.', '00m 38s', 0],
+    ['mail', 'mail', 'Intro email', 'Sep 16, 2020 · 09:02', 'Sent the Northbridge intro with a line about his firm.', '', 0],
+    ['call', 'phone', 'Cold call', 'Sep 15, 2020 · 11:48', 'Not the decision maker, pointed me to the partners.', '03m 20s', 0],
+  ];
+  list.innerHTML = E.map(e => `<div class="row ev ${e[6] ? 'open' : ''}"><span class="ico ${e[0]}"><i data-lucide="${e[1]}"></i></span><div class="grow"><div class="nm" style="font-size:15px">${e[2]}</div><div class="mt">${e[3]}</div><div class="nt">${e[4]}</div></div><span class="dur num">${e[5]}</span><i data-lucide="chevron-down" class="chev sm"></i></div>`).join('');
+  boot();
+</script></body></html>

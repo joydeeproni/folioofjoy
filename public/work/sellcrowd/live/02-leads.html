@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Leads</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .ptabs{background:var(--bg);justify-content:space-between;padding-right:22px;height:54px}
+  .ptabs span .k{display:inline-block;min-width:20px;margin-left:5px;font-size:11px;font-weight:800;color:var(--ink-3);background:#E4E7F0;border-radius:9px;padding:1px 6px;vertical-align:2px;letter-spacing:0}
+  .ptabs span.on .k{background:var(--ink);color:#fff}
+  .list{height:600px;overflow:hidden}
+  .row{padding:13px 18px}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Leads" data-right='["filter","search","bell"]'></span>
+</header>
+<nav class="ptabs" id="tabs"></nav>
+<section class="list" id="list" data-stagger></section>
+<span data-tabs="Leads"></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const IC = { cold: 'snowflake', warm: 'sun', hot: 'flame', new: 'sparkles' };
+  const L = [
+    ['warm', 'Anderson Partners Accountants', 'Andrew Duncan', 'Accountant', '2d ago', 'GMT+7', 3],
+    ['hot', 'Lumen Dental Group', 'Grace Okafor', 'Manager', 'Demo asked', 'GMT+1', 5],
+    ['cold', 'Harbor Freight Logistics', 'Tom Nguyen', 'Ops lead', '5d ago', 'GMT+7', 2],
+    ['new', 'Brightside Realty', 'Maya Levin', 'Owner', 'Added today', 'GMT−5', 0],
+    ['hot', 'Northwind Coffee Co.', 'Samir Haddad', 'Founder', 'Pricing sent', 'GMT+4', 4],
+    ['warm', 'Keystone Insurance', 'Lena Fischer', 'Office lead', 'Call at 16:00', 'GMT+2', 1],
+    ['cold', 'Pacific Rim Traders', 'Ken Tanaka', 'CFO', '1w ago', 'GMT+9', 2],
+    ['warm', 'Oakridge Clinics', 'Priya Raman', 'Admin', 'Emailed Mon', 'GMT+5', 1],
+  ];
+  const F = Q.get('f') || 'all';
+  const counts = { all: 128, new: 14, cold: 41, warm: 46, hot: 27 };
+  tabs.innerHTML = ['all', 'new', 'cold', 'warm', 'hot'].map(k => `<span class="${k === F ? 'on' : ''}">${k[0].toUpperCase() + k.slice(1)}</span>`).join('');
+  const rows = L.filter(r => F === 'all' || r[0] === F);
+  list.innerHTML = rows.map((r, i) => `<div class="row lead ${i === 0 ? 'sel' : ''}">
+    <span class="tt ${r[0]}"><i data-lucide="${IC[r[0]]}"></i>${r[6] ? `<b class="c num">${r[6]}</b>` : ''}</span>
+    <div class="grow"><div class="co">${r[1]}</div><div class="nm">${r[2]}</div><div class="mt">${r[3]}<i></i>${r[4]}<i></i>${r[5]}</div></div>
+    <span class="callb"><i data-lucide="phone"></i></span></div>`).join('');
+  boot();
+</script></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><link rel="stylesheet" href="ursula.css"><title>Ursula · Swipes</title><style>.stat{padding:16px;display:flex;gap:16px;align-items:center;margin-top:14px}
+.stat b{display:block;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.stat span{font-size:13px;color:var(--ink-3)}
+.tl{margin-top:14px;padding:4px 16px}
+.ev{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);position:relative}
+.ev:last-child{border:0}
+.ev .d{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.ev b{font-weight:650;font-size:15px}.ev span{display:block;font-size:12.5px;color:var(--ink-3)}
+.ev time{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.swz{position:absolute;left:20px;right:20px;bottom:104px}
+.swz .note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;color:var(--ink-3);margin-top:10px}
+.off{margin:4px 20px 0;padding:12px 14px;border-radius:14px;background:var(--amber-100);color:var(--amber-600);display:flex;gap:10px;font-size:13.5px;align-items:flex-start}
+.off b{display:block;color:var(--ink)}</style></head><body>
+<div id="sb"></div><div id="ab"></div>
+<div class="pg">
+  <div class="h1">Today</div><div class="sub" id="st">You're in since 13:14</div>
+  <div class="card stat"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--field)" stroke-width="8"/><circle id="ring" cx="32" cy="32" r="26" fill="none" stroke="url(#g)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 32 32)"/><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#8A00FC"/><stop offset="1" stop-color="#00D8EC"/></linearGradient></defs></svg>
+    <div><b class="num" id="wk">6 h 18 m</b><span>worked today · 8 h shift</span></div><span class="chip g" style="margin-left:auto" id="stc">In</span></div>
+  <div class="card tl" id="tl"></div>
+  <div class="card" style="margin-top:12px;padding:14px 16px"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b>This week</b><span class="num" style="color:var(--ink-3)" id="wkw">30 h 18 m of 40 h</span></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;align-items:end;height:58px" id="bars"></div></div>
+</div>
+<div class="swz"><div id="sw"></div><div class="note"><i data-lucide="map-pin" class="sm"></i><span id="nt">Working from home · Curepipe · shared with HR</span></div></div>
+<div id="bn"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script><script src="_shared.js"></script><script>
+const Q=new URLSearchParams(location.search), POS=+(Q.get('pos')??0), DONE=Q.get('done')==='1';
+const ev=[['log-in','#11875A','var(--green-100)','In','Main entrance · fingerprint','08:02'],['utensils','#B26A00','var(--amber-100)','Out','Lunch','12:31'],['log-in','#11875A','var(--green-100)','In','Main entrance · fingerprint','13:14']];
+if(DONE) ev.push(['home','#7400D8','var(--violet-100)','Out','Working from home · Curepipe','14:02']);
+document.getElementById('tl').innerHTML=ev.map(([ic,c,bg,n,s,t],i)=>'<div class="ev"><span class="d" style="background:'+bg+';color:'+c+'"><i data-lucide="'+ic+'" class="sm"></i></span><div><b>'+n+'</b><span>'+s+'</span></div><time>'+t+'</time></div>').join('');
+const C=2*Math.PI*26, frac=DONE?7.1/8:6.3/8; document.getElementById('ring').setAttribute('stroke-dasharray',(C*frac)+' '+C);
+if(DONE){document.getElementById('st').textContent='You swiped out at 14:02';document.getElementById('wk').textContent='7 h 06 m';const s=document.getElementById('stc');s.className='chip v';s.textContent='Out';}
+document.getElementById('sw').outerHTML=DONE?'<a class="btn ghost" style="height:72px;border-radius:24px"><i data-lucide="log-in"></i>Swipe in</a>':swiper('Swipe out',POS);
+if(DONE) document.getElementById('nt').textContent='Swiped out from home · synced 14:02';
+document.getElementById('sb').outerHTML=statusBar(true, DONE?'14:02':'13:58');
+const hrs=[8.1,8.0,7.9,DONE?7.1:6.3,0], days=['Mon','Tue','Wed','Thu','Fri'];
+document.getElementById('bars').innerHTML=hrs.map((h,i)=>'<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:100%;height:'+Math.max(4,(h-5)/3.5*36)+'px;border-radius:5px;background:'+(i===3?'var(--grad)':h?'var(--violet-100)':'var(--field)')+'"></span><span style="font-size:11px;color:var(--ink-3)">'+days[i]+'</span></div>').join('');
+if(DONE){document.getElementById('wkw').textContent='31 h 06 m of 40 h';document.getElementById('bars').style.display='none';}document.getElementById('ab').outerHTML=appBar('Swipes','Thu 1 Oct · Sun Coast Resorts');document.getElementById('bn').outerHTML=bottomNav('Swipes',3);boot()</script></body></html>

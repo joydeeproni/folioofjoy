@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>MedForce · Request program</title>
+<link rel="stylesheet" href="mf.css">
+<style>
+  .wz{display:grid;grid-template-columns:210px 1fr 300px;gap:24px;align-items:start}
+  .vs{display:flex;flex-direction:column;gap:2px;position:sticky;top:0}
+  .vs a{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border-radius:10px;font-weight:600;color:var(--text-3);font-size:14px}
+  .vs a .o{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;box-shadow:inset 0 0 0 1.5px var(--ink-300)}
+  .vs a.d{color:var(--text-2)} .vs a.d .o{background:var(--green-100);color:var(--green-700);box-shadow:none}
+  .vs a.on{background:#fff;color:var(--text);box-shadow:var(--sh-1),inset 0 0 0 1px var(--line)} .vs a.on .o{background:var(--navy-600);color:#fff;box-shadow:none}
+  .vs a .o svg{width:13px;height:13px;stroke-width:3}
+  .vs a small{margin-left:auto;font-size:11.5px;color:var(--text-3);font-weight:600}
+  .sec{padding:22px 24px}
+  .sec h2{font-size:18px;font-weight:800;letter-spacing:-.02em}
+  .sec p.h{color:var(--text-2);margin-top:2px}
+  .topic{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--bg)}
+  .topic b{font-weight:700}
+  .sp-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .spk{display:grid;grid-template-columns:48px 1fr auto;gap:14px;align-items:center;padding:14px 16px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line-strong)}
+  .spk .av{width:48px;height:48px;font-size:15px;border-radius:14px}
+  .spk b{font-size:15px;font-weight:700;display:block}
+  .spk .m{font-size:13px;color:var(--text-2)}
+  .spk .tags{display:flex;gap:6px;margin-top:6px}
+  .spk.on{box-shadow:0 0 0 2px var(--navy-600),var(--sh-2);background:var(--navy-50)}
+  .avail{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:12.5px;font-weight:700}
+  .avail .d{display:flex;align-items:center;gap:6px}
+  .avail .d i{width:8px;height:8px;border-radius:50%}
+  .radio{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--ink-300);background:#fff}
+  .spk.on .radio{box-shadow:inset 0 0 0 7px var(--navy-600)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .opt{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:var(--bg);font-weight:600;font-size:14px}
+  .tg{margin-left:auto;width:40px;height:24px;border-radius:99px;background:var(--ink-300);position:relative}
+  .tg::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--sh-1)}
+  .tg.on{background:var(--navy-600)}.tg.on::after{left:19px}
+  .foot{display:flex;align-items:center;gap:10px;margin-top:16px}.foot .sp{flex:1}
+  .rail{display:flex;flex-direction:column;gap:14px}
+  .sum{padding:18px 20px}
+  .sum h3{font-size:14px;font-weight:700;margin-bottom:12px}
+  .sum dl{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;font-size:13.5px}
+  .sum dt{color:var(--text-3);font-weight:600}.sum dd{margin:0;font-weight:650;text-align:right}
+  .budget{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  .bar{height:8px;border-radius:5px;background:var(--bg-2);overflow:hidden;display:flex;margin:8px 0}
+  .bar i{height:100%}
+  .chk{display:flex;gap:10px;font-size:13.5px;padding:7px 0;align-items:flex-start}
+  .chk svg{color:var(--green-600);margin-top:2px}
+  .chk.w svg{color:var(--amber-600)}
+</style></head>
+<body><div class="app"><div class="col"><main class="main">
+  <div class="ph"><div><a class="crumb"><i data-lucide="arrow-left" class="sm"></i>Programs</a><h1>Request a program</h1><p>Draft saved · you can come back anytime</p></div></div>
+  <div class="wz">
+    <nav class="vs">
+      <a class="d"><span class="o"><i data-lucide="check"></i></span>Program type</a>
+      <a class="d"><span class="o"><i data-lucide="check"></i></span>Date &amp; time</a>
+      <a class="on"><span class="o">3</span>Speaker</a>
+      <a><span class="o">4</span>Location</a>
+      <a><span class="o">5</span>Attendees</a>
+      <a><span class="o">6</span>A/V needs</a>
+      <a><span class="o">7</span>Expenses</a>
+      <a><span class="o">8</span>Review &amp; submit</a>
+    </nav>
+    <div>
+      <section class="card sec">
+        <h2>Who's presenting?</h2><p class="h">Showing speakers trained on your topic and free on Mon, Jun 21.</p>
+        <div class="topic"><i data-lucide="presentation" class="sm" style="color:var(--navy-600)"></i><span>Topic</span><b>Expert insights · Restasis 2027</b><a class="btn quiet" style="margin-left:auto;height:28px">Change</a></div>
+        <div class="sp-list">
+          <div class="spk on"><span class="av" style="background:var(--violet-100);color:var(--violet-600)">LB</span><div><b>Dr. Lindsey Bull, MD</b><span class="m">Ophthalmology · Mount Airy Eye Associates · 4 mi from venue</span><div class="tags"><span class="chip green">Trained Mar 2027</span><span class="chip">32 programs</span></div></div><div class="avail"><span class="d" style="color:var(--green-700)"><i style="background:var(--green-600)"></i>Available</span><span class="radio"></span></div></div>
+          <div class="spk"><span class="av" style="background:var(--sky-100);color:var(--sky-600)">MB</span><div><b>Dr. Marc Bloomstein, OD</b><span class="m">Optometry · Newburyport Vision · needs travel</span><div class="tags"><span class="chip green">Trained Jan 2027</span><span class="chip">41 programs</span></div></div><div class="avail"><span class="d" style="color:var(--amber-600)"><i style="background:var(--amber-600)"></i>Tentative</span><span class="radio"></span></div></div>
+          <div class="spk" style="opacity:.6"><span class="av">KD</span><div><b>Dr. Khalvdia Dedova, OD</b><span class="m">Optometry · Raleigh Eye Center</span><div class="tags"><span class="chip rose">Training expires May 30</span></div></div><div class="avail"><span class="d" style="color:var(--text-3)"><i style="background:var(--ink-300)"></i>Unavailable</span><span class="radio"></span></div></div>
+        </div>
+        <div class="opts">
+          <div class="opt"><i data-lucide="plane" class="sm"></i>Speaker needs travel arrangements<span class="tg"></span></div>
+          <div class="opt"><i data-lucide="phone-call" class="sm"></i>I've made initial contact<span class="tg on"></span></div>
+        </div>
+      </section>
+      <div class="foot"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Date &amp; time</a><span class="sp"></span><a class="btn quiet">Add alternate speaker</a><a class="btn primary xl">Continue to location<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </div>
+    <aside class="rail">
+      <div class="card sum">
+        <h3>Request summary</h3>
+        <dl><dt>Program</dt><dd>Restasis 2027</dd><dt>Type</dt><dd>Dinner · 20 HCPs</dd><dt>Date</dt><dd class="num">Mon, Jun 21 · 7 PM</dd><dt>Speaker</dt><dd>Dr. Lindsey Bull</dd></dl>
+        <div class="budget"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span class="label">Est. cost</span><b class="num">$480</b></div>
+          <div class="bar"><i style="width:86.4%;background:var(--navy-600)"></i><i style="width:12%;background:var(--sky-500)"></i></div>
+          <div style="font-size:12.5px;color:var(--text-3)" class="num">Leaves $64 of your Q2 budget</div></div>
+      </div>
+      <div class="card sum">
+        <h3>Compliance checks</h3>
+        <div class="chk"><i data-lucide="circle-check" class="sm"></i><span>Speaker trained on this topic</span></div>
+        <div class="chk"><i data-lucide="circle-check" class="sm"></i><span>Under annual HCP honoraria cap</span></div>
+        <div class="chk w"><i data-lucide="circle-alert" class="sm"></i><span>Venue must be confirmed 10 days before</span></div>
+      </div>
+    </aside>
+  </div>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ portal: 'rep', nav: 'Programs' });</script></body></html>

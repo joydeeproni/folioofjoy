@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Sales script</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .acc{margin-top:12px}
+  .wave{display:flex;align-items:center;gap:10px;margin:12px 0 0 52px;background:var(--violet-50);border-radius:14px;padding:10px 12px}
+  .wave .pl{width:34px;height:34px;border-radius:50%;background:var(--violet);color:#fff;display:grid;place-items:center;flex:none}
+  .wave .pl svg{fill:#fff;margin-left:2px}
+  .wave .bars{flex:1;display:flex;align-items:center;gap:2px;height:28px}
+  .wave .bars i{flex:1;border-radius:2px;background:rgba(98,70,234,.35)}
+  .wave .bars i.p{background:var(--violet)}
+  .wave span{font-size:12px;font-weight:800;color:var(--violet)}
+  .done{font-size:11px;font-weight:800;color:var(--green);background:var(--green-50);padding:2px 7px;border-radius:7px;margin-left:6px;vertical-align:2px}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Sales script" data-left="back" data-right='["search"]'></span>
+</header>
+<section class="acc" id="acc" data-stagger></section>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const I = [['file-text', '', 'Opening lines that work', 'Three openers, by who picks up', 1], ['file-text', '', 'Qualifying questions', 'Team size, current accountant, software', 1],
+    ['audio-lines', 'au', 'Top call: pricing pushback', 'Recording · 02:23', 0], ['file-text', '', 'Booking the demo', 'Offer two times, confirm by email', 1],
+    ['audio-lines', 'au', 'Top call: gatekeeper', 'Recording · 01:48', 0], ['file-text', '', 'Voicemail script', 'Under 20 seconds', 0], ['file-text', '', 'Follow-up emails', 'Day 1, day 3, day 7', 0]];
+  const bars = Array.from({ length: 38 }, (_, i) => `<i class="${i < 14 ? 'p' : ''}" style="height:${30 + Math.round(60 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * .6)))}%"></i>`).join('');
+  acc.innerHTML = I.map(r => `<div class="it ic"><div class="hd"><span class="fi"><i data-lucide="${r[0]}"></i></span><div class="grow"><h3>${r[2]}</h3><div class="ds">${r[3]}</div></div><i data-lucide="chevron-down" class="cv"></i></div>${r[5] ? `<div class="wave"><span class="pl"><i data-lucide="play" class="sm"></i></span><span class="bars">${bars}</span><span class="num">0:52</span></div><div class="body"><p>Jamie’s call with a firm that said “too expensive”. Listen for how she moves the talk from price to the hours they spend on payroll.</p></div>` : ''}</div>`).join('');
+  boot();
+</script></body></html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Sell · Documents</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .stp{display:flex;align-items:center;margin-bottom:22px}
+  .s{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-3)}
+  .s i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:13px;box-shadow:inset 0 0 0 2px var(--line-2);background:#fff}
+  .s.d{color:var(--ink-2)}.s.d i{background:var(--green-100);color:var(--green-700);box-shadow:none}
+  .s.on{color:var(--ink)}.s.on i{background:var(--navy-700);color:#fff;box-shadow:0 0 0 5px var(--navy-100)}
+  .ln{width:80px;height:2px;background:var(--green-600);margin:0 14px}
+  .lay{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+  .f{padding:26px}
+  .f h2{font-size:20px;font-weight:700;letter-spacing:-.015em}
+  .f .h{color:var(--ink-2);margin-top:2px;font-size:14px}
+  .up{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+  .file{padding:16px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--line-2);display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}
+  .file .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--red-100);color:var(--red-600);font-weight:800;font-size:11px}
+  .file b{display:block;font-size:14px}.file span.s2{font-size:12.5px;color:var(--ink-3)}
+  .file .pg{height:5px;border-radius:3px;background:var(--navy-100);margin-top:8px;overflow:hidden}.file .pg i{display:block;height:100%;background:var(--blue-500);border-radius:3px}
+  .file.ok{background:#fff}
+  .drop{padding:18px;border-radius:14px;border:1.5px dashed var(--line-2);display:flex;align-items:center;gap:12px;color:var(--ink-2);font-size:14px;grid-column:1/-1}
+  .drop .ic{width:44px;height:44px;border-radius:12px;background:var(--navy-50);color:var(--navy-700);display:grid;place-items:center}
+  .drop a{color:var(--blue-600);font-weight:600}
+  .params{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+  .params h3{font-size:16px;font-weight:700}
+  .params p{font-size:14px;color:var(--ink-2);margin-top:2px}
+  .pr{display:grid;grid-template-columns:1fr 1fr 40px;gap:12px;margin-top:12px;align-items:center}
+  .pr .x{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:var(--ink-3)}
+  .sugg{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink-3)}
+  .sugg span.c{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px var(--line-2);font-weight:600;color:var(--ink-2);font-size:13px}
+  .actions{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .actions .sp{flex:1}
+  .sum{padding:22px}
+  .sum .who{display:flex;gap:12px;align-items:center}
+  .sum .who b{display:block;font-weight:700;line-height:1.25}.sum .who span{font-size:13px;color:var(--ink-3)}
+  .sum .deal{margin-top:16px}
+  .sum dl{display:grid;grid-template-columns:1fr auto;gap:10px 16px;margin-top:18px;font-size:14px}
+  .sum dt{color:var(--ink-2)}.sum dd{margin:0;font-weight:700;text-align:right}
+  .sum .edit{font-size:13px;color:var(--blue-600);font-weight:600}
+  .done{position:fixed;inset:0;background:rgba(26,29,51,.45);display:none;align-items:center;justify-content:center}
+  body.is-done .done{display:flex}
+  .done .m{width:480px;background:#fff;border-radius:20px;padding:32px;text-align:center;box-shadow:0 40px 90px -20px rgba(20,24,50,.5)}
+  .done .ok{width:64px;height:64px;border-radius:50%;background:var(--green-100);color:var(--green-700);display:grid;place-items:center;margin:0 auto}
+  .done .ok svg{width:30px;height:30px}
+  .done h3{font-size:24px;letter-spacing:-.02em;margin-top:18px}
+  .done p{color:var(--ink-2);margin-top:8px}
+  .done .tl{display:flex;justify-content:space-between;margin:24px 0 6px;text-align:left;gap:10px}
+  .done .tl div{flex:1;font-size:12.5px;color:var(--ink-3);display:flex;flex-direction:column;gap:6px}
+  .done .tl div::before{content:"";height:4px;border-radius:3px;background:var(--navy-100)}
+  .done .tl div.d::before{background:var(--green-600)}
+  .done .tl div.on{color:var(--ink);font-weight:700}.done .tl div.on::before{background:linear-gradient(90deg,var(--amber-600) 40%,var(--navy-100) 40%)}
+  .done .btn{margin-top:22px;width:100%}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Sell your AIF units</h1><p>Listings are reviewed within one working day before they go live.</p></div></div>
+  <div class="stp"><span class="s d"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></i>Choose fund</span><span class="ln"></span><span class="s d"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></i>Units &amp; amounts</span><span class="ln"></span><span class="s on"><i>3</i>Documents</span></div>
+  <div class="lay">
+    <section class="card f">
+      <h2>Documents</h2><p class="h">Only our review team sees these. Buyers see that the listing is verified.</p>
+      <div class="up">
+        <div class="file ok"><span class="ic">PDF</span><div><b>Statement of account · Jun</b><span class="s2">184 KB · units and commitment match your listing</span></div><i data-lucide="circle-check" style="color:var(--green-600)"></i></div>
+        <div class="file"><span class="ic">PDF</span><div><b>NAV statement · 30 Jun</b><span class="s2">Uploading · 1.2 of 1.9 MB</span><div class="pg"><i style="width:64%"></i></div></div><i data-lucide="x" class="sm" style="color:var(--ink-3)"></i></div>
+        <div class="drop"><span class="ic"><i data-lucide="upload" class="sm"></i></span><span>Anything else a buyer should know, like a capital call notice. <a>Browse files</a> or drop them here. PDF or image, up to 10 MB.</span></div>
+      </div>
+      <div class="params">
+        <h3>Details buyers ask about</h3><p>Add anything that isn't in the standard fields. These show on your listing.</p>
+        <div class="pr"><div class="inp">Lock-in ends</div><div class="inp">March 2027</div><span class="x"><i data-lucide="trash-2" class="sm"></i></span></div>
+        <div class="pr"><div class="inp">Next capital call</div><div class="inp focus">None expected<span style="width:1.5px;height:20px;background:var(--blue-500);margin-left:-8px"></span></div><span class="x"><i data-lucide="trash-2" class="sm"></i></span></div>
+        <div class="sugg">Suggested<span class="c"><i data-lucide="plus" class="sm"></i>Hurdle rate</span><span class="c"><i data-lucide="plus" class="sm"></i>Carry</span><span class="c"><i data-lucide="plus" class="sm"></i>Expected exit</span><span class="c"><i data-lucide="plus" class="sm"></i>Custom field</span></div>
+      </div>
+      <div class="actions"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Back</a><span class="sp"></span><span style="color:var(--ink-3);font-size:14px">Draft saved</span><a class="btn primary">Submit for review<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </section>
+    <aside class="card sum">
+      <span class="label" style="display:flex;justify-content:space-between">Your listing<span class="edit">Edit</span></span>
+      <div class="who" style="margin-top:12px"><span class="fm" style="background:#1E3A5F">MIO</span><div><b>Meridian Income Opportunities Fund</b><span>Meridian Capital · AIF Cat II</span></div></div>
+      <div class="deal"><div class="bar"><span class="ask" style="width:70%"></span><span class="gap" style="left:70%;right:0"></span></div><div class="lg"><span>Ask <b>₹8.7487</b></span><span>NAV ₹12.4981</span></div></div>
+      <dl><dt>Units</dt><dd>1,00,000</dd><dt>Discount</dt><dd style="color:var(--green-700)">30%</dd><dt>Total asking value</dt><dd>₹8,74,870.00</dd><dt>Balance amount payable</dt><dd>₹7,50,000.00</dd><dt>Default case</dt><dd>No</dd><dt>Lock-in ends</dt><dd>March 2027</dd></dl>
+    </aside>
+  </div>
+</main>
+<div id="foot"></div>
+<div class="done"><div class="m"><span class="ok"><i data-lucide="check"></i></span><h3>Listing submitted</h3><p>We're checking your units against your statement of account. You'll get an email when it's live, usually within one working day.</p>
+  <div class="tl"><div class="d">Submitted</div><div class="on">In review</div><div>Live</div></div>
+  <a class="btn navy">Go to your listings</a></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>if (Q.get('done') === '1') document.body.classList.add('is-done'); boot({ mode: 'sell', active: 'Dashboard' });</script>
+</body></html>

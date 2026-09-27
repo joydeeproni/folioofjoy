@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Setting up Showroom Chat</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .wrap{display:grid;grid-template-columns:1fr 420px;gap:28px;padding:36px 48px 40px}
+  .sec{padding:22px;margin-top:16px}
+  .sec h3{font-size:16px;font-weight:800}
+  .sec p.h{font-size:13.5px;color:var(--ink-3);margin-top:2px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .f label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+  .f .b{height:46px;border-radius:12px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:flex;align-items:center;padding:0 14px;gap:10px;font-size:14.5px;background:#fff}
+  .f .b.fo{box-shadow:inset 0 0 0 2px var(--red-500),0 0 0 4px rgba(236,70,47,.14)}
+  .sw{display:flex;gap:8px;margin-top:6px}
+  .sw span{width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+  .sw span.on{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--ink)}
+  .pos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+  .pos div{height:74px;border-radius:12px;background:var(--bg);position:relative;box-shadow:inset 0 0 0 1.5px var(--line)}
+  .pos div i{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--ink-3)}
+  .pos div.on{box-shadow:inset 0 0 0 2px var(--red-500);background:var(--red-50)} .pos div.on i{background:var(--red-500)}
+  .foot{display:flex;align-items:center;gap:10px;margin-top:22px}.foot .sp{flex:1}
+  .prev{position:sticky;top:20px}
+  .site{border-radius:18px;overflow:hidden;box-shadow:var(--sh-3),inset 0 0 0 1px var(--line);background:#fff;height:620px;position:relative}
+  .site .bar{height:34px;background:var(--bg-2);display:flex;align-items:center;gap:6px;padding:0 12px}
+  .site .bar i{width:9px;height:9px;border-radius:50%;background:#d6d1c6}
+  .site .bar span{margin-left:10px;flex:1;height:20px;border-radius:6px;background:#fff;font-size:11px;color:var(--ink-3);display:flex;align-items:center;padding-left:10px}
+  .hero{height:200px;background:linear-gradient(135deg,#1c2a3f,#3a4c66);position:relative;overflow:hidden}
+  .hero b{position:absolute;left:20px;top:26px;color:#fff;font-size:22px;letter-spacing:-.02em;line-height:1.1;font-weight:800}
+  .hero .car{position:absolute;right:-20px;bottom:-10px;width:260px;height:90px;border-radius:60px 80px 20px 20px;background:linear-gradient(180deg,#d8332a,#9c1d16)}
+  .skel{padding:16px 20px;display:grid;gap:10px}.skel i{height:12px;border-radius:6px;background:var(--bg-2)}
+  .chat{position:absolute;right:16px;bottom:16px;width:290px;border-radius:18px;background:#fff;box-shadow:0 24px 50px -16px rgba(0,0,0,.35),0 0 0 1px var(--line);overflow:hidden}
+  .ch{background:var(--red-500);color:#fff;padding:12px 14px;display:flex;gap:10px;align-items:center}
+  .ch .av{background:rgba(255,255,255,.2);color:#fff}
+  .ch b{display:block;font-size:14px}.ch span{font-size:11.5px;opacity:.85}
+  .msgs{padding:12px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+  .m{padding:9px 12px;border-radius:14px;max-width:82%}
+  .m.bot{background:var(--bg);border-bottom-left-radius:4px}
+  .m.me{background:var(--navy-700);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+  .card-car{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}
+  .card-car i{width:54px;height:36px;border-radius:8px;background:linear-gradient(135deg,#9aa6b4,#5b6776)}
+  .card-car b{display:block;font-size:12.5px}.card-car span{font-size:11.5px;color:var(--ink-3)}
+</style></head>
+<body>
+<div data-onb="4"></div>
+<main class="wrap">
+  <section>
+    <span class="label">Step 5 of 6 · Showroom Chat · part 1 of 3</span>
+    <h1 class="h1" style="margin-top:6px">Make the chat sound like your showroom</h1>
+    <p class="lead">Buyers see this on your website. The preview updates as you go.</p>
+    <div class="card sec"><h3>Basics</h3><p class="h">Name, greeting and colour</p>
+      <div class="row"><div class="f"><label>Assistant name</label><div class="b">Stevie</div></div><div class="f"><label>Dealership name</label><div class="b">Stevens Creek Hyundai</div></div></div>
+      <div class="row"><div class="f" style="grid-column:1/-1"><label>First message</label><div class="b fo">Hi! Looking for a new Tucson or something in our pre-owned lot?</div></div></div>
+      <div class="row"><div class="f"><label>Colour</label><div class="sw"><span class="on" style="background:#EC462F"></span><span style="background:#093B7D"></span><span style="background:#1F1F1F"></span><span style="background:#1F8A55"></span><span style="background:#fff"></span></div></div>
+        <div class="f"><label>Tone</label><div class="b">Friendly and brief<i data-lucide="chevron-down" class="sm" style="margin-left:auto"></i></div></div></div>
+    </div>
+    <div class="card sec"><h3>Position on your website</h3>
+      <div class="pos"><div><i style="left:12px;top:12px"></i></div><div><i style="right:12px;top:12px"></i></div><div><i style="left:12px;bottom:12px"></i></div><div class="on"><i style="right:12px;bottom:12px"></i></div></div></div>
+    <div class="foot"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Team</a><span class="sp"></span><a class="btn quiet">Save and exit</a><a class="btn primary">Next: inventory & CRM<i data-lucide="arrow-right" class="sm"></i></a></div>
+  </section>
+  <aside class="prev"><span class="label">Live preview · stevenscreekhyundai.com</span>
+    <div class="site" style="margin-top:8px">
+      <div class="bar"><i></i><i></i><i></i><span>stevenscreekhyundai.com</span></div>
+      <div class="hero"><b>The all-new<br>Tucson is here.</b><span class="car"></span></div>
+      <div class="skel"><i style="width:60%"></i><i></i><i style="width:80%"></i><i style="width:40%"></i></div>
+      <div class="chat"><div class="ch"><span class="av">S</span><div><b>Stevie · Stevens Creek Hyundai</b><span>Usually replies instantly</span></div></div>
+        <div class="msgs"><div class="m bot">Hi! Looking for a new Tucson or something in our pre-owned lot?</div><div class="m me">New Tucson, under $35k</div>
+          <div class="card-car"><i></i><div><b>2021 Tucson SEL · Blue</b><span>$28,745 · 3 in stock</span></div></div><div class="m bot">Want to book a test drive this week?</div></div></div>
+    </div>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script><script>boot()</script>
+</body></html>

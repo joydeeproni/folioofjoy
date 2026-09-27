@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Sell units</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .stp{display:flex;align-items:center;gap:0;margin-bottom:22px}
+  .s{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-3)}
+  .s i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:13px;box-shadow:inset 0 0 0 2px var(--line-2);background:#fff}
+  .s.d{color:var(--ink-2)}.s.d i{background:var(--green-100);color:var(--green-700);box-shadow:none}
+  .s.on{color:var(--ink)}.s.on i{background:var(--navy-700);color:#fff;box-shadow:0 0 0 5px var(--navy-100)}
+  .ln{width:80px;height:2px;background:var(--line-2);margin:0 14px}.ln.d{background:var(--green-600)}
+  .lay{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+  .f{padding:26px}
+  .f h2{font-size:20px;font-weight:700;letter-spacing:-.015em}
+  .f .h{color:var(--ink-2);margin-top:2px;font-size:14px}
+  .fund{display:flex;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--navy-50)}
+  .fund b{display:block}.fund span{font-size:13px;color:var(--ink-3)}
+  .fund a{margin-left:auto;color:var(--blue-600);font-weight:600;font-size:14px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 18px;margin-top:22px}
+  .in label{display:block;font-size:13.5px;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+  .box{height:48px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line-2);background:#fff;display:flex;align-items:center;padding:0 14px;font-size:16px;font-weight:600;gap:8px}
+  .box .pre,.box .suf{color:var(--ink-3);font-weight:500}
+  .box .suf{margin-left:auto}
+  .box.focus{box-shadow:inset 0 0 0 1.5px var(--blue-500),0 0 0 4px rgba(18,132,252,.14)}
+  .box.calc{background:var(--navy-50);box-shadow:none}
+  .help{font-size:12.5px;color:var(--ink-3);margin-top:6px}
+  .seg{display:inline-flex;background:var(--navy-50);border-radius:10px;padding:3px;height:48px}
+  .seg span{padding:0 22px;border-radius:8px;display:flex;align-items:center;font-weight:600;color:var(--ink-2)}
+  .seg span.on{background:#fff;color:var(--ink);box-shadow:var(--sh-1)}
+  .actions{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .actions .sp{flex:1}
+  .pv{padding:22px;position:sticky;top:0}
+  .pv .label{display:flex;align-items:center;gap:6px}
+  .pc{margin-top:12px;padding:18px;border-radius:14px;box-shadow:var(--sh-2),inset 0 0 0 1px var(--line)}
+  .pc .who{display:flex;gap:12px;align-items:center}
+  .pc .who b{display:block;font-weight:700;line-height:1.25}
+  .pc .who span{font-size:13px;color:var(--ink-3)}
+  .pc .deal{margin-top:16px}
+  .pc .figs{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;gap:8px}
+  .pc .figs b{display:block;font-size:18px;font-weight:700}
+  .note{margin-top:14px;display:flex;gap:10px;font-size:13.5px;color:var(--ink-2);padding:12px 14px;border-radius:12px;background:var(--yellow-100)}
+  .note svg{color:var(--amber-600);flex:none;margin-top:2px}
+  .nx{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .nx .st{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:8px 0;position:relative}
+  .nx .st i{width:26px;height:26px;border-radius:50%;background:var(--navy-50);color:var(--navy-700);font-style:normal;font-weight:700;font-size:12.5px;display:grid;place-items:center}
+  .nx .st b{display:block;font-size:14px}.nx .st span{font-size:13px;color:var(--ink-3)}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Sell your AIF units</h1><p>Listings are reviewed within one working day before they go live.</p></div></div>
+  <div class="stp"><span class="s d"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></i>Choose fund</span><span class="ln d"></span><span class="s on"><i>2</i>Units &amp; amounts</span><span class="ln"></span><span class="s"><i>3</i>Documents</span></div>
+  <div class="lay">
+    <section class="card f">
+      <h2>Units and amounts</h2><p class="h">Enter what you'd like to sell. Amounts format themselves as you type.</p>
+      <div class="fund"><span class="fm" style="background:#1E3A5F;width:40px;height:40px;font-size:13px">MIO</span><div><b>Meridian Income Opportunities Fund</b><span>AIF Cat II · Series II</span></div><a>Change</a></div>
+      <div class="grid">
+        <div class="in"><label>Units selling</label><div class="box">1,00,000<span class="suf">units</span></div><div class="help">You hold 1,00,000 units</div></div>
+        <div class="in"><label>Discount (%)</label><div class="box focus"><span id="dv">30</span><span class="caret" style="width:1.5px;height:20px;background:var(--blue-500);margin-left:-6px"></span><span class="suf">% off NAV</span></div><div class="help">Latest NAV ₹12.4981 per unit, 30 June</div></div>
+        <div class="in"><label>Commitment amount</label><div class="box"><span class="pre">₹</span>25,00,000.00</div></div>
+        <div class="in"><label>Amount paid</label><div class="box"><span class="pre">₹</span>17,50,000.00</div></div>
+        <div class="in"><label>Balance amount payable</label><div class="box calc"><span class="pre">₹</span>7,50,000.00<span class="suf">calculated</span></div><div class="help">Called by the fund but not yet paid</div></div>
+        <div class="in"><label>Is this a default case?</label><div class="seg"><span>Yes</span><span class="on">No</span></div></div>
+      </div>
+      <div class="actions"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Back</a><span class="sp"></span><span style="color:var(--ink-3);font-size:14px">Draft saved</span><a class="btn primary">Continue to documents<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </section>
+    <aside class="card pv">
+      <span class="label"><i data-lucide="eye" class="sm"></i>How buyers will see it</span>
+      <div class="pc">
+        <div class="who"><span class="fm" style="background:#1E3A5F">MIO</span><div><b>Meridian Income Opportunities Fund</b><span>Meridian Capital · AIF Cat II</span></div></div>
+        <div id="pdeal"></div>
+        <div class="figs"><div><span class="label">Discount</span><b style="color:var(--green-700)" id="pd">30%</b></div><div><span class="label">Units</span><b>1,00,000</b></div><div><span class="label">Ask value</span><b id="pv">₹8.75 L</b></div></div>
+      </div>
+      <div class="note"><i data-lucide="lock" class="sm"></i><span>You don't share client details here. Buyers see the fund, the units and your price until you choose to connect.</span></div>
+      <div class="nx"><span class="label" style="display:block;margin-bottom:10px">After you submit</span>
+        <div class="st"><i>1</i><div><b>We review your listing</b><span>Units checked against your statement of account. Usually within one working day.</span></div></div>
+        <div class="st"><i>2</i><div><b>It goes live</b><span>Buyers who saved a matching search get an email.</span></div></div>
+        <div class="st"><i>3</i><div><b>Prospects reach out</b><span>You decide who gets your details, from your dashboard.</span></div></div></div>
+    </aside>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const D = +(new URLSearchParams(location.search).get('d') ?? 30), NAV = 12.4981, ask = NAV * (1 - D / 100);
+  document.getElementById('dv').textContent = D || '';
+  document.getElementById('pd').textContent = D + '%';
+  document.getElementById('pv').textContent = '₹' + (ask * 100000 / 1e5).toFixed(2) + ' L';
+  document.getElementById('pdeal').outerHTML = deal(NAV, ask);
+  boot({ mode: 'sell', active: 'Dashboard' });
+</script></body></html>

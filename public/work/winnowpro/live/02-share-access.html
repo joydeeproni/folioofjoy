@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Share access</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .wrap{display:grid;grid-template-columns:1fr 390px;gap:28px;padding:36px 48px 40px;max-width:1440px}
+  .grp{margin-top:18px;overflow:hidden}
+  .gh{display:flex;align-items:center;gap:14px;padding:18px 22px}
+  .gh h2{font-size:18px;font-weight:800;letter-spacing:-.01em}
+  .gh .why{font-size:13px;color:var(--ink-3);font-weight:600}
+  .gh .sp{flex:1}
+  .meter{display:flex;gap:3px}
+  .meter i{width:22px;height:6px;border-radius:3px;background:var(--bg-2)}.meter i.d{background:var(--green-600)}.meter i.w{background:var(--yellow-500)}
+  .rows{border-top:1px solid var(--line)}
+  .r{display:flex;align-items:center;gap:14px;padding:13px 22px;border-bottom:1px solid var(--line)}
+  .r:last-child{border-bottom:0}
+  .logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
+  .r b{font-weight:700;display:block}.r small{font-size:12.5px;color:var(--ink-3)}
+  .r .end{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .r .btn{height:36px;padding:0 14px;font-size:13.5px;border-radius:10px}
+  .r.err{background:var(--yellow-100)}
+  .collapsed .gh{padding:16px 22px}
+  .foot{display:flex;align-items:center;gap:10px;margin-top:22px}.foot .sp{flex:1}
+  .priv{padding:18px 20px;margin-top:16px;display:flex;gap:12px;font-size:13.5px;color:var(--ink-2)}
+  .priv b{display:block;color:var(--ink);font-size:14px}
+</style></head>
+<body>
+<div data-onb="2"></div>
+<main class="wrap">
+  <section>
+    <span class="label">Step 3 of 6</span>
+    <h1 class="h1" style="margin-top:6px">Share access to your digital properties</h1>
+    <p class="lead">So we can analyse your data, run your campaigns and track what sells cars. Connect each one with your own login; we never see your passwords.</p>
+
+    <div class="card grp">
+      <div class="gh"><h2>Essentials</h2><span class="chip green">3 of 5 connected</span><span class="why">Needed for paid ads</span><span class="sp"></span><span class="meter"><i class="d"></i><i class="d"></i><i class="d"></i><i class="w"></i><i></i></span><i data-lucide="chevron-up" style="color:var(--ink-3)"></i></div>
+      <div class="rows">
+        <div class="r"><span class="logo" style="background:#E8F0FE;color:#1A73E8">G</span><div><b>Google Ads</b><small>Account 482-117-9034</small></div><div class="end"><span class="chip green"><i data-lucide="check" class="sm"></i>Connected</span></div></div>
+        <div class="r"><span class="logo" style="background:#FEF3E0;color:#E37400">GA</span><div><b>Google Analytics</b><small>stevenscreekhyundai.com · GA4</small></div><div class="end"><span class="chip green"><i data-lucide="check" class="sm"></i>Connected</span></div></div>
+        <div class="r"><span class="logo" style="background:#E7F0FF;color:#1877F2">f</span><div><b>Facebook Business Page</b><small>@stevenscreekhy</small></div><div class="end"><span class="chip green"><i data-lucide="check" class="sm"></i>Connected</span></div></div>
+        <div class="r err"><span class="logo" style="background:#fff;color:#1877F2">f</span><div><b>Facebook Ads</b><small>Your admin role expired. Ask the page owner, then retry.</small></div><div class="end"><a class="btn ghost"><i data-lucide="rotate-cw" class="sm"></i>Retry</a></div></div>
+        <div class="r"><span class="logo" style="background:var(--navy-100);color:var(--navy-700)">H</span><div><b>Manufacturer ad planner</b><small>Hyundai dealer co-op site access</small></div><div class="end"><a class="btn primary">Connect</a></div></div>
+      </div>
+    </div>
+    <div class="card grp collapsed"><div class="gh"><h2>Data 360</h2><span class="chip">0 of 4</span><span class="why">Needed to track which ads sell cars · CRM, phone logs, custom lists</span><span class="sp"></span><i data-lucide="chevron-down" style="color:var(--ink-3)"></i></div></div>
+    <div class="card grp collapsed"><div class="gh"><h2>Targeting</h2><span class="chip">0 of 3</span><span class="why">Optional · sharpens who sees your ads</span><span class="sp"></span><i data-lucide="chevron-down" style="color:var(--ink-3)"></i></div></div>
+
+    <div class="foot"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Back</a><span class="sp"></span><a class="btn quiet">I'll do this later</a><a class="btn primary">Continue to your team<i data-lucide="arrow-right" class="sm"></i></a></div>
+  </section>
+  <aside>
+    <div data-launch="3,1"></div>
+    <div class="card priv"><i data-lucide="shield-check" style="color:var(--green-600)"></i><div><b>Your data stays yours</b>Access is read-only where possible and you can revoke it any time from each platform.</div></div>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script><script>boot()</script>
+</body></html>

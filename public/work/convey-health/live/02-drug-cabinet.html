@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Drug cabinet</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  .search{margin-top:24px;display:flex;gap:10px}
+  .field{flex:1;height:52px;border-radius:var(--r-md);background:#fff;box-shadow:inset 0 0 0 1.5px var(--petrol-500),0 0 0 4px rgba(50,100,125,.12);display:flex;align-items:center;gap:12px;padding:0 16px;font-size:16px}
+  .field svg{color:var(--text-3)}
+  .field .caret{width:1.5px;height:22px;background:var(--petrol-600);margin-left:-10px}
+  .field .hint{margin-left:auto;font-size:13px;color:var(--text-3)}
+  .add{margin-top:14px;padding:0;overflow:hidden}
+  .add .hd{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--line)}
+  .pill-ic{width:44px;height:44px;border-radius:12px;background:var(--petrol-50);color:var(--petrol-600);display:grid;place-items:center}
+  .add h3{font-size:19px;font-weight:700;letter-spacing:-.015em}
+  .add .hd p{font-size:14px;color:var(--text-3)}
+  .add .body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .opts{padding:22px 24px;display:flex;flex-direction:column;gap:20px}
+  .grp .label{margin-bottom:8px;display:block;font-weight:600;color:var(--text-2)}
+  .radios{display:flex;gap:8px;flex-wrap:wrap}
+  .radio{height:40px;padding:0 14px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line-strong);display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;background:#fff}
+  .radio .o{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink-300)}
+  .radio.on{box-shadow:inset 0 0 0 1.5px var(--petrol-600);background:var(--petrol-50);color:var(--petrol-800)}
+  .radio.on .o{box-shadow:inset 0 0 0 5px var(--petrol-600)}
+  .qty{display:flex;align-items:center;gap:10px}
+  .stepper{display:flex;align-items:center;height:40px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line-strong);background:#fff}
+  .stepper button{width:40px;height:40px;display:grid;place-items:center;color:var(--text-2)}
+  .stepper span{min-width:44px;text-align:center;font-weight:700}
+  .qty .label{margin:0}
+  .swap{margin:18px 18px 18px 0;border-radius:var(--r-md);background:var(--sage-50);box-shadow:inset 0 0 0 1px var(--sage-200);padding:20px}
+  .swap .t{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--sage-700);font-size:14px}
+  .swap h4{font-size:17px;margin-top:8px;letter-spacing:-.01em}
+  .swap p{font-size:14px;color:var(--ink-600);margin-top:4px}
+  .choice{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+  .choice .c{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);font-size:14px;font-weight:600}
+  .choice .c .o{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink-300);flex:none}
+  .choice .c.on{box-shadow:inset 0 0 0 1.5px var(--sage-600)}
+  .choice .c.on .o{box-shadow:inset 0 0 0 5.5px var(--sage-700)}
+  .choice .c small{margin-left:auto;font-weight:700;color:var(--sage-700)}
+  .choice .c small.m{color:var(--text-3);font-weight:600}
+  .add .ft{display:flex;justify-content:flex-end;gap:8px;padding:14px 24px;border-top:1px solid var(--line);background:var(--surface)}
+  .added{margin-top:28px}
+  .added h2{font-size:18px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .added h2 .chip{height:24px}
+  .drug{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .drug:last-child{border-bottom:0}
+  .drug .n{flex:1}
+  .drug .n b{font-weight:650;display:block}
+  .drug .n span{font-size:13px;color:var(--text-3)}
+  .drug .q{font-size:14px;color:var(--text-2);width:130px}
+  .drug .acts{display:flex;gap:4px}
+  .icon-btn{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;color:var(--text-3)}
+  .icon-btn:hover{background:var(--surface)}
+  .new{animation:none}
+  @media (prefers-reduced-motion:no-preference){.new{animation:flash 1.6s var(--ease) both}@keyframes flash{0%{background:var(--sage-100)}100%{background:#fff}}}
+  .nav-row{display:flex;align-items:center;margin-top:28px}
+  .nav-row .sp{flex:1}
+</style>
+</head><body>
+<div id="chrome"></div>
+
+<main class="wrap page">
+  <section>
+    <div class="head rise">
+      <h1>What medications do you take?</h1>
+      <p>Adding drugs gives a better estimate of cost for each plan. Skip this step if you don't use any medications.</p>
+    </div>
+
+    <div class="search">
+      <div class="field"><i data-lucide="search"></i><span>Lipitor</span><span class="caret"></span><span class="hint">Tip: have your prescription bottles handy</span></div>
+    </div>
+
+    <div class="card add">
+      <div class="hd">
+        <span class="pill-ic"><i data-lucide="pill" class="lg"></i></span>
+        <div style="flex:1"><h3>Lipitor</h3><p>atorvastatin calcium · oral tablet · brand name</p></div>
+        <button class="icon-btn" aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <div class="body">
+        <div class="opts">
+          <div class="grp"><span class="label">Dosage</span>
+            <div class="radios">
+              <span class="radio"><span class="o"></span>10 mg</span>
+              <span class="radio on"><span class="o"></span>20 mg</span>
+              <span class="radio"><span class="o"></span>40 mg</span>
+              <span class="radio"><span class="o"></span>80 mg</span>
+            </div>
+          </div>
+          <div class="grp"><span class="label">Package</span>
+            <div class="radios">
+              <span class="radio on"><span class="o"></span>Bottle of 30</span>
+              <span class="radio"><span class="o"></span>Bottle of 90</span>
+            </div>
+          </div>
+          <div class="grp qty"><span class="label" style="flex:1">How many per month?</span>
+            <div class="stepper"><button aria-label="Less"><i data-lucide="minus" class="sm"></i></button><span class="num">30</span><button aria-label="More"><i data-lucide="plus" class="sm"></i></button></div>
+          </div>
+        </div>
+        <div class="swap">
+          <span class="t"><i data-lucide="badge-dollar-sign" class="sm"></i>Switch &amp; save money</span>
+          <h4>A generic version is available</h4>
+          <p>Generic drugs usually cost less than brand name drugs and work the same way.</p>
+          <div class="choice">
+            <span class="c on"><span class="o"></span>Yes, switch to atorvastatin<small class="num">Save ~$26/mo</small></span>
+            <span class="c"><span class="o"></span>No, keep Lipitor<small class="m">Brand name</small></span>
+          </div>
+        </div>
+      </div>
+      <div class="ft"><a class="btn ghost sm">Cancel</a><a class="btn primary sm"><i data-lucide="plus" class="sm"></i>Add to cabinet</a></div>
+    </div>
+
+    <div class="added">
+      <h2>Your drug cabinet <span class="chip petrol num">3 drugs</span></h2>
+      <div class="card" style="margin-top:12px">
+        <div class="drug new"><span class="pill-ic" style="width:38px;height:38px;border-radius:10px"><i data-lucide="pill" class="sm"></i></span><div class="n"><b>Atorvastatin 20 mg</b><span>Generic for Lipitor · switched</span></div><span class="q num">30 per month</span><div class="acts"><button class="icon-btn" aria-label="Edit"><i data-lucide="pencil" class="sm"></i></button><button class="icon-btn" aria-label="Remove"><i data-lucide="trash-2" class="sm"></i></button></div></div>
+        <div class="drug"><span class="pill-ic" style="width:38px;height:38px;border-radius:10px"><i data-lucide="pill" class="sm"></i></span><div class="n"><b>Metformin ER 500 mg</b><span>Generic · tablet</span></div><span class="q num">60 per month</span><div class="acts"><button class="icon-btn" aria-label="Edit"><i data-lucide="pencil" class="sm"></i></button><button class="icon-btn" aria-label="Remove"><i data-lucide="trash-2" class="sm"></i></button></div></div>
+        <div class="drug"><span class="pill-ic" style="width:38px;height:38px;border-radius:10px"><i data-lucide="syringe" class="sm"></i></span><div class="n"><b>Lisinopril 10 mg</b><span>Generic · tablet</span></div><span class="q num">30 per month</span><div class="acts"><button class="icon-btn" aria-label="Edit"><i data-lucide="pencil" class="sm"></i></button><button class="icon-btn" aria-label="Remove"><i data-lucide="trash-2" class="sm"></i></button></div></div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <a class="btn quiet"><i data-lucide="arrow-left" class="sm"></i>Back</a>
+      <span class="sp"></span>
+      <a class="btn quiet" style="margin-right:8px">Skip, I don't take medications</a>
+      <a class="btn primary">Continue to pharmacy <i data-lucide="arrow-right" class="sm"></i></a>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <div class="receipt">
+      <div class="top">
+        <div class="kicker"><i data-lucide="receipt" class="sm"></i>Your summary</div>
+        <div class="big num">$38<small>/ month in drugs</small></div>
+        <div class="sub">Lowest estimate across 18 local plans. Down $26 since you switched to a generic.</div>
+      </div>
+      <div class="perf"><i></i></div>
+      <div class="rows">
+        <div class="row"><span class="ic"><i data-lucide="map-pin" class="sm"></i></span><span class="t"><b>Location</b>Brooklyn, NY 11212</span><a class="btn quiet sm">Edit</a></div>
+        <div class="row"><span class="ic"><i data-lucide="pill" class="sm"></i></span><span class="t"><b>Drug cabinet</b>3 drugs</span></div>
+        <div class="row"><span class="ic" style="color:var(--text-3)"><i data-lucide="store" class="sm"></i></span><span class="t"><b style="color:var(--text-3)">Pharmacy</b>Next step</span></div>
+        <div class="row"><span class="ic" style="color:var(--text-3)"><i data-lucide="stethoscope" class="sm"></i></span><span class="t"><b style="color:var(--text-3)">Doctors</b>Optional</span></div>
+      </div>
+    </div>
+    <div class="tip"><i data-lucide="lightbulb"></i><div><b>Medicare tip</b>Plans put drugs in tiers. Generics are usually Tier 1, the lowest copay.</div></div>
+  </aside>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ step: 1 });</script>
+</body></html>

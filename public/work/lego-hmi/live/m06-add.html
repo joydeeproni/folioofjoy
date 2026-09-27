@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Moulding · Add eLog entry</title><link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="mobile.css">
+<style>
+  .f{padding:0 16px}
+  .fl{font-size:12px;letter-spacing:.32px;color:var(--cds-text-secondary);margin:18px 0 8px}
+  .types{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .ty{height:72px;background:var(--cds-layer-01);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;position:relative}
+  .ty b{font-size:22px;font-weight:600}.ty small{font-size:11px;color:var(--cds-text-secondary)}
+  .ty.on{box-shadow:inset 0 0 0 2px #4589ff;background:#0f2a66}
+  .ty.on::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#4589ff}
+  .sel{height:48px;background:var(--cds-field-01);border-bottom:1px solid var(--cds-border-strong-01);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:15px}
+  .ok{display:grid;grid-template-columns:1fr 1fr;border:1px solid #6f6f6f}
+  .ok span{height:48px;display:grid;place-items:center;font-size:15px;color:var(--cds-text-secondary)}
+  .ok span.on{background:#fa4d56;color:#fff;font-weight:600}
+  .photos{display:flex;gap:8px}
+  .photos .p{width:96px;height:72px;background:linear-gradient(160deg,#8d8d8d,#393939 70%);position:relative;overflow:hidden}
+  .photos .p::before{content:"";position:absolute;left:14px;top:18px;width:46px;height:30px;border:3px solid #da1e28;border-radius:50%}
+  .photos .p span{position:absolute;left:6px;bottom:4px;font-size:10px;color:#e0e0e0;font-family:'IBM Plex Mono'}
+  .photos .add{width:96px;height:72px;border:1px dashed #6f6f6f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#78a9ff;font-size:12px}
+  .ta{min-height:76px;background:var(--cds-field-01);border-bottom:1px solid var(--cds-border-strong-01);padding:12px 14px;font-size:15px;line-height:21px}
+  .ft{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 34px;background:var(--cds-layer-01);display:grid;grid-template-columns:1fr 1.5fr;gap:1px;border-top:1px solid var(--cds-border-subtle-01)}
+</style></head><body>
+<div class="body" style="bottom:110px">
+  <div class="f">
+    <div class="fl">Type</div>
+    <div class="types"><div class="ty"><b style="color:#be95ff">Q</b><small>Quality</small></div><div class="ty"><b style="color:#3ddbd9">M</b><small>Mould</small></div><div class="ty on"><b style="color:#ff7eb6">E</b><small>Equipment</small></div><div class="ty"><b style="color:#82cfff">I</b><small>Info</small></div></div>
+    <div class="fl">Reason</div><div class="sel">Hot runner over temperature<span data-ci="chevron--down" data-s="16"></span></div>
+    <div class="fl">Action</div><div class="sel">Handover to technician<span data-ci="chevron--down" data-s="16"></span></div>
+    <div class="fl">Elements after action</div><div class="ok"><span>OK</span><span class="on">NOT OK</span></div>
+    <div class="fl">Evidence</div><div class="photos"><div class="p"><span>14:25 · zone 3</span></div><div class="add"><span data-ci="camera" data-s="20"></span>Add photo</div></div>
+    <div class="fl">Comment</div><div class="ta">Zone 3 at 268 °C, limit 255. TC3 connector looks fine; heater band current is high.</div>
+  </div>
+</div>
+<div class="ft"><button class="cds--btn cds--btn--secondary full">Cancel</button><button class="cds--btn cds--btn--primary full" id="log">Log entry<span data-ci="checkmark"></span></button></div>
+<script src="icons.js"></script><script src="icons-extra.js"></script><script src="m-shared.js"></script>
+<script>mboot({ title: 'New eLog entry', sub: 'Machine 152662 · 14:26', back: true, tab: false, right: '<span class="ib"><span data-ci="close"></span></span>' });</script>
+</body></html>

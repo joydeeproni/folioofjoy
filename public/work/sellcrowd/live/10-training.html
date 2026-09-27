@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Training</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .cl{display:flex;align-items:center;gap:12px;background:#fff;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .cl .lg{width:40px;height:40px;border-radius:12px;background:#0E3B5C;color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+  .cl b{display:block;font-size:15px} .cl span{font-size:12.5px;color:var(--ink-3)}
+  .cl a{margin-left:auto;font-size:13px;font-weight:700;color:var(--blue)}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 16px 4px}
+  .tile{height:118px;border-radius:6px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;position:relative;overflow:hidden}
+    .tile .t{display:flex;justify-content:space-between;align-items:flex-start}
+  .tile .t svg.lucide{width:28px;height:28px}
+  .tile .t b{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .tile .l{font-size:15px;font-weight:800}
+  .tile .p{height:5px;border-radius:3px;background:rgba(255,255,255,.28);margin-top:8px;overflow:hidden}
+  .tile .p i{display:block;height:100%;background:#fff;border-radius:3px}
+  .tile.y{color:#3A2A00} .tile.y .p{background:rgba(58,42,0,.15)} .tile.y .p i{background:#3A2A00}
+  .res .ico{width:30px;color:var(--ink-2);display:grid;place-items:center;flex:none}
+  .res .ico svg.lucide{width:24px;height:24px;stroke-width:1.7}
+  
+  .res .d{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .cta{position:absolute;left:16px;right:16px;bottom:34px}
+  .cta .hint{text-align:center;font-size:12.5px;color:var(--ink-3);font-weight:600;margin-bottom:10px}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Training" data-right='["x"]'></span>
+</header>
+<div class="tiles" data-stagger>
+  <div class="tile" style="background:#5B4BE8"><div class="t"><i data-lucide="info"></i><b class="num" data-count="300">34</b></div><div><div class="l">Company</div></div></div>
+  <div class="tile" style="background:#FFC700"><div class="t"><i data-lucide="package-open"></i><b class="num" data-count="300">16</b></div><div><div class="l">Product &amp; services</div></div></div>
+  <div class="tile" style="background:#3B8FE8"><div class="t"><i data-lucide="newspaper"></i><b class="num" data-count="300">53</b></div><div><div class="l">Sales script</div></div></div>
+  <div class="tile" style="background:#5AC8FA"><div class="t"><i data-lucide="message-circle"></i><b class="num" data-count="300">78</b></div><div><div class="l">Objection handling</div></div></div>
+</div>
+<div class="sechd"><span>Latest resources</span></div>
+<section class="list" data-stagger style="--d:300ms">
+  <div class="row res"><span class="ico"><i data-lucide="newspaper"></i></span><div class="grow"><div class="nm" style="font-size:15px">Opening lines that work</div><div class="d">Sales script · 3 min read</div></div><span class="tm num">24/09/20</span></div>
+  <div class="row res"><span class="ico au"><i data-lucide="audio-lines"></i></span><div class="grow"><div class="nm" style="font-size:15px">Top call: pricing pushback</div><div class="d">Recording · 02:23</div></div><span class="tm num">23/09/20</span></div>
+  <div class="row res"><span class="ico"><i data-lucide="message-circle"></i></span><div class="grow"><div class="nm" style="font-size:15px">“We already have an accountant”</div><div class="d">Objection handling</div></div><span class="tm num">22/09/20</span></div>
+</section>
+<div class="cta"><a class="btn solid block" data-rise style="--d:500ms">Get qualified<i data-lucide="arrow-right"></i></a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script></body></html>

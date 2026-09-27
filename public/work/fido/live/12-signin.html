@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Sign in</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .wrap{padding:8px 24px 0}
+  .bar{display:flex;justify-content:space-between;align-items:center}
+  .bar span.j{font-size:14px;color:rgba(255,255,255,.6)}.bar b{color:#fff}
+  .ill{height:220px;border-radius:30px;background:var(--pink);margin-top:18px;position:relative;overflow:hidden}
+  .ill img{position:absolute;left:50%;bottom:-18px;width:250px;transform:translateX(-50%)}
+  h1{font-size:32px;font-weight:300;letter-spacing:-.025em;margin-top:24px}
+  .sub{font-size:14.5px;color:rgba(255,255,255,.7);margin-top:6px}
+  .fg{display:block;text-align:right;font-size:14px;font-weight:600;color:var(--yellow);margin-top:12px}
+  .or{text-align:center;font-size:13px;color:rgba(255,255,255,.45);margin:14px 0}
+  .soc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:8;animation:fade .3s both}
+  .sheet{position:absolute;z-index:9;left:0;right:0;bottom:0;border-radius:30px 30px 0 0;background:var(--char);padding:14px 24px 40px}
+  .grab{width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.25);margin:0 auto 22px}
+  .sheet .ic{width:60px;height:60px;border-radius:50%;background:var(--yellow);color:var(--char);display:grid;place-items:center}
+  .sheet h2{font-size:26px;font-weight:400;letter-spacing:-.02em;margin-top:18px}
+  .sheet p{font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.7);margin-top:8px}
+</style></head>
+<body class="black">
+<div class="wrap">
+  <div class="bar"><span class="sq o"><i data-lucide="chevron-left"></i></span><span class="j">New here? <b>Join</b></span></div>
+  <div class="ill a-riseS"><img class="bob" src="assets/love.png" alt=""></div>
+  <h1>Welcome back</h1>
+  <p class="sub">Milou’s next quest is waiting.</p>
+  <label class="field"><span>Email</span><div class="input">vivian.lee@gmail.com</div></label>
+  <label class="field"><span>Password</span><div class="input focus" style="justify-content:space-between"><span style="letter-spacing:.2em">••••••••</span><i data-lucide="eye" class="sm" style="color:#9A9CA4"></i></div></label>
+  <a class="fg" id="fg">Forgot password?</a>
+  <a class="btn white press" id="go" style="width:100%;margin-top:18px">Sign in</a>
+  <div class="or">or</div>
+  <div class="soc"><a class="btn ghost press"><i data-lucide="apple" class="sm"></i>Apple</a><a class="btn ghost press"><i data-lucide="chrome" class="sm"></i>Google</a></div>
+</div>
+<div id="forgot" hidden><div class="scrim"></div><div class="sheet a-sheet"><div class="grab"></div><span class="ic a-pop" style="animation-delay:.3s"><i data-lucide="mail-check" class="lg"></i></span>
+  <h2>Check your inbox</h2><p>We sent a reset link to <b style="color:#fff">vivian.lee@gmail.com</b>. It works for 30 minutes.</p>
+  <a class="btn white press" style="width:100%;margin-top:22px">Open Mail</a><p style="text-align:center;margin-top:14px">Didn’t get it? <b style="color:#fff">Resend in 0:42</b></p></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>if (Q.has('forgot')) document.getElementById('forgot').hidden = false; boot({});</script>
+</body></html>

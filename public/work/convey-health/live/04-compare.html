@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Convey · Compare plans</title>
+<link rel="stylesheet" href="convey.css">
+<style>
+  .cmp-page{padding-top:28px;padding-bottom:64px}
+  .top-row{display:flex;align-items:flex-end;gap:16px}
+  .top-row .sp{flex:1}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--petrol-600);margin-bottom:10px}
+  .grid{margin-top:24px;display:grid;grid-template-columns:280px repeat(3,1fr);background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);overflow:hidden}
+  .grid > div{padding:14px 20px;border-bottom:1px solid var(--line);font-size:15px;display:flex;align-items:center;gap:8px}
+  .grid .lab{color:var(--text-2);font-size:14px}
+  .grid .col-best{background:linear-gradient(var(--petrol-50),var(--petrol-50));}
+  .ph{padding:22px 20px 18px !important;flex-direction:column;align-items:flex-start !important;gap:4px !important;position:relative}
+  .ph .tag{font-size:12px;font-weight:650;color:var(--petrol-700);display:flex;align-items:center;gap:6px;height:22px}
+  .ph .tag.m{color:transparent}
+  .ph h3{font-size:17px;font-weight:700;letter-spacing:-.015em;line-height:1.25}
+  .ph .id{font-size:13px;color:var(--text-3)}
+  .ph .price{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:10px;line-height:1}
+  .ph .price small{font-size:13px;color:var(--text-3);font-weight:600;letter-spacing:0}
+  .ph .acts{display:flex;gap:8px;margin-top:14px;width:100%}
+  .ph .acts .btn{flex:1}
+  .ph .x{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--text-3)}
+  .sec{grid-column:1/-1;background:var(--surface);font-weight:700;font-size:13px !important;color:var(--text-2);padding:10px 20px !important;letter-spacing:.01em}
+  .val{font-weight:650}
+  .best-dot{font-size:12px;font-weight:650;color:var(--sage-700);background:var(--sage-100);border-radius:var(--r-pill);padding:2px 8px}
+  .yes{color:var(--sage-700)} .no{color:var(--coral-600)}
+  .muted{color:var(--text-3);font-weight:500;font-size:13px}
+  .tier{font-size:12px;font-weight:650;color:var(--text-3);background:var(--surface-2);border-radius:6px;padding:1px 6px}
+  .sum{margin-top:16px;font-size:13px;color:var(--text-3)}
+</style>
+</head><body>
+<div id="chrome"></div>
+
+<main class="wrap cmp-page">
+  <div class="top-row">
+    <div class="head rise">
+      <a class="back"><i data-lucide="arrow-left" class="sm"></i>Back to plans</a>
+      <h1>Compare your 3 plans</h1>
+      <p>Costs are estimated for your 3 drugs at Linden Pharmacy and visits with Dr. Peterson.</p>
+    </div>
+    <span class="sp"></span>
+    <a class="btn ghost sm"><i data-lucide="printer" class="sm"></i>Print</a>
+    <a class="btn ghost sm"><i data-lucide="mail" class="sm"></i>Email to family</a>
+  </div>
+
+  <div class="grid">
+    <div class="ph" style="justify-content:flex-end"><span class="label">3 of 3 selected</span><span class="muted" style="margin-top:2px">You can compare up to 3 plans at a time.</span><label style="display:flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;font-weight:600"><span style="width:36px;height:22px;border-radius:99px;background:var(--petrol-600);position:relative;display:inline-block"><span style="position:absolute;right:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:var(--sh-1)"></span></span>Highlight differences</label></div>
+    <div class="ph col-best"><span class="tag"><i data-lucide="sparkles" class="sm"></i>Lowest yearly cost</span><h3>Convey Advantage Plus (HMO)</h3><span class="id num">H0000-001 · <span data-stars="4.5"></span></span><div class="price num">$600<small> est. / year</small></div><div class="acts"><a class="btn primary sm">Enroll</a><a class="btn ghost sm">Details</a></div><button class="x" aria-label="Remove"><i data-lucide="x" class="sm"></i></button></div>
+    <div class="ph"><span class="tag m">.</span><h3>MAPD Comprehensive (PPO)</h3><span class="id num">H0000-014 · <span data-stars="4"></span></span><div class="price num">$792<small> est. / year</small></div><div class="acts"><a class="btn primary sm">Enroll</a><a class="btn ghost sm">Details</a></div><button class="x" aria-label="Remove"><i data-lucide="x" class="sm"></i></button></div>
+    <div class="ph"><span class="tag m">.</span><h3>Convey Value Rx (HMO-POS)</h3><span class="id num">H0000-022 · <span data-stars="3.5"></span></span><div class="price num">$852<small> est. / year</small></div><div class="acts"><a class="btn primary sm">Enroll</a><a class="btn ghost sm">Details</a></div><button class="x" aria-label="Remove"><i data-lucide="x" class="sm"></i></button></div>
+
+    <div class="sec">Costs</div>
+    <div class="lab">Monthly premium</div><div class="col-best val num">$12</div><div class="val num">$19</div><div class="val num">$0 <span class="best-dot">Lowest</span></div>
+    <div class="lab">Annual prescription deductible</div><div class="col-best val num">$0 <span class="best-dot">Lowest</span></div><div class="val num">$100</div><div class="val num">$545</div>
+    <div class="lab">Medical deductible, in-network</div><div class="col-best val num">$250</div><div class="val num">$0 <span class="best-dot">Lowest</span></div><div class="val num">$0 <span class="best-dot">Lowest</span></div>
+    <div class="lab">Out-of-pocket maximum</div><div class="col-best val num">$4,900</div><div class="val num">$6,700</div><div class="val num">$5,500</div>
+    <div class="lab">Primary care visit</div><div class="col-best val num">$0</div><div class="val num">$10</div><div class="val num">$5</div>
+
+    <div class="sec">Your drugs</div>
+    <div class="lab">Atorvastatin 20 mg</div><div class="col-best val num">$8 <span class="tier">Tier 1</span></div><div class="val num">$12 <span class="tier">Tier 1</span></div><div class="val num">$4 <span class="tier">Tier 1</span> <span class="best-dot">Lowest</span></div>
+    <div class="lab">Metformin ER 500 mg</div><div class="col-best val num">$10 <span class="tier">Tier 1</span></div><div class="val num">$15 <span class="tier">Tier 2</span></div><div class="val num">$5 <span class="tier">Tier 1</span> <span class="best-dot">Lowest</span></div>
+    <div class="lab">Lisinopril 10 mg</div><div class="col-best val num">$20 <span class="tier">Tier 2</span> <span class="best-dot">Lowest</span></div><div class="val num">$20 <span class="tier">Tier 2</span> <span class="best-dot">Lowest</span></div><div class="no val"><i data-lucide="x" class="sm"></i>Not covered · $62</div>
+
+    <div class="sec">Your doctors</div>
+    <div class="lab">Dr. Amy Peterson, MD</div><div class="col-best yes val"><i data-lucide="check" class="sm"></i>In network</div><div class="yes val"><i data-lucide="check" class="sm"></i>In network</div><div class="yes val"><i data-lucide="check" class="sm"></i>In network</div>
+
+    <div class="sec">Extra benefits</div>
+    <div class="lab">Dental, vision &amp; hearing</div><div class="col-best val">All three</div><div class="val">Vision only</div><div class="val">Dental &amp; vision</div>
+    <div class="lab" style="border-bottom:0">Fitness membership</div><div class="col-best yes val" style="border-bottom:0"><i data-lucide="check" class="sm"></i>Included</div><div class="muted" style="border-bottom:0">Not included</div><div class="yes val" style="border-bottom:0"><i data-lucide="check" class="sm"></i>Included</div>
+  </div>
+  <p class="sum">Estimates use 2027 plan data and your current drug list. Your actual costs may vary.</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ step: 4 });</script>
+</body></html>

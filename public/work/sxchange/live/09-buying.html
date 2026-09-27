@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Buying dashboard</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+  .k{padding:18px 20px}.k b{display:block;font-size:28px;letter-spacing:-.025em;font-weight:700;margin-top:4px}
+  .k .s{font-size:13px;color:var(--ink-3)}
+  .lay{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+  .tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .tabs span{padding:10px 0;font-weight:600;color:var(--ink-3);margin-bottom:-1px}
+  .tabs span.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--navy-700)}
+  .tabs .n{font-size:12px;background:var(--navy-50);border-radius:99px;padding:1px 7px;margin-left:6px;color:var(--ink-2)}
+  .rq{padding:18px 20px}
+  .rq + .rq{border-top:1px solid var(--line)}
+  .rq .top{display:grid;grid-template-columns:minmax(0,1fr) 200px 150px;gap:20px;align-items:center}
+  .who{display:flex;gap:12px;align-items:center;min-width:0}
+  .who b{display:block;font-weight:700;line-height:1.25}.who span{font-size:13px;color:var(--ink-3)}
+  .fig .label{display:block}.fig b{font-size:16px;font-weight:700}
+  .trk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;margin-left:56px}
+  .trk div{font-size:12.5px;color:var(--ink-3);display:flex;flex-direction:column;gap:6px}
+  .trk div::before{content:"";height:4px;border-radius:3px;background:var(--navy-100)}
+  .trk div.d{color:var(--ink-2)}.trk div.d::before{background:var(--green-600)}
+  .trk div.on{color:var(--ink);font-weight:700}.trk div.on::before{background:linear-gradient(90deg,var(--green-600) 50%,var(--navy-100) 50%)}
+  .contact{margin:14px 0 0 56px;padding:12px 14px;border-radius:12px;background:var(--green-100);display:flex;align-items:center;gap:12px;font-size:14px}
+  .contact .av{background:var(--green-700);color:#fff;width:32px;height:32px;font-size:12px}
+  .contact b{display:block}.contact span{font-size:12.5px;color:var(--ink-2)}
+  .contact .sp{flex:1}
+  .contact .btn{background:#fff}
+  .box{padding:20px 22px}.box h3{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .box h3 a{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--blue-600)}
+  .al{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+  .al:first-of-type{border-top:0}
+  .al b{font-weight:700}.al p{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+  .al .d2{display:inline-flex;align-items:center;gap:4px;font-weight:700;color:var(--green-700)}
+  .rv{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .rv:first-of-type{border-top:0}
+  .rv b{display:block;font-weight:700;line-height:1.25;font-size:14px}.rv span.s{font-size:12.5px;color:var(--ink-3)}
+  .rv .off{margin-left:auto;font-size:18px}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Good morning, Joydeep</h1><p>2 sellers have shared their details with you. 1 transfer is with the fund manager.</p></div><span class="sp"></span><a class="btn ghost"><i data-lucide="bell-ring" class="sm"></i>Saved searches · 2</a><a class="btn primary"><i data-lucide="search" class="sm"></i>Browse listings</a></div>
+  <div class="kpis">
+    <div class="card k"><span class="label">Requests sent</span><b>5</b><span class="s">2 this week</span></div>
+    <div class="card k"><span class="label">Seller details received</span><b>3</b><span class="s">1 waiting on the seller</span></div>
+    <div class="card k"><span class="label">In transfer</span><b style="color:var(--amber-600)">1</b><span class="s">With Sahyadri Partners</span></div>
+    <div class="card k"><span class="label">Wishlist</span><b>4</b><span class="s">Avg 21% off NAV</span></div>
+  </div>
+  <div class="lay">
+    <div>
+      <div class="tabs"><span class="on">Requests<span class="n">5</span></span><span>Viewed<span class="n">18</span></span><span>Past<span class="n">1</span></span><span>Wishlist<span class="n">4</span></span></div>
+      <section class="card" style="overflow:hidden">
+        <div class="rq"><div class="top"><div class="who">${F1}<div><b>Meridian Income Opportunities Fund</b><span>You asked for 50,000 units · today, 10:24</span></div></div><div data-deal="12.4981,8.7487"></div><span><span class="chip green">Seller details received</span></span></div>
+          <div class="trk"><div class="d">Requested</div><div class="on">Seller shared details</div><div>Terms agreed</div><div>Transfer approved</div></div>
+          <div class="contact"><span class="av">RK</span><div><b>Rohan K. · Seller since 2017</b><span>rohan.k@••••.com · +91 98••• ••421 · replies within a day</span></div><span class="sp"></span><a class="btn ghost sm"><i data-lucide="mail" class="sm"></i>Email Rohan</a><a class="btn ghost sm"><i data-lucide="phone" class="sm"></i>Call</a></div></div>
+        <div class="rq"><div class="top"><div class="who">${F4}<div><b>Sahyadri Growth Partners Fund</b><span>42,500 units at ₹6.9874 · agreed 12 Sep</span></div></div><div data-deal="8.7343,6.9874"></div><span><span class="chip amber">With fund manager</span></span></div>
+          <div class="trk"><div class="d">Requested</div><div class="d">Seller shared details</div><div class="d">Terms agreed</div><div class="on">Transfer approved</div></div></div>
+        <div class="rq"><div class="top"><div class="who">${F3}<div><b>Deccan Venture Fund IV</b><span>You asked for all 18,000 units · yesterday</span></div></div><div data-deal="15.612,11.709"></div><span><span class="chip">Waiting for seller</span></span></div>
+          <div class="trk"><div class="on">Requested</div><div>Seller shared details</div><div>Terms agreed</div><div>Transfer approved</div></div></div>
+        <div class="rq"><div class="top"><div class="who">${F5}<div><b>Narmada Real Estate Credit Fund</b><span>You asked for 20,000 units · Mon</span></div></div><div data-deal="11.0815,8.9761"></div><span><span class="chip green">Seller details received</span></span></div>
+          <div class="trk"><div class="d">Requested</div><div class="on">Seller shared details</div><div>Terms agreed</div><div>Transfer approved</div></div></div>
+      </section>
+    </div>
+    <aside style="display:flex;flex-direction:column;gap:16px">
+      <section class="card box"><h3><i data-lucide="bell" class="sm"></i>Price alerts<a>Manage</a></h3>
+        <div class="al"><span class="fm" style="background:#5B3E8C;width:40px;height:40px;font-size:12px;border-radius:11px">KCA</span><div><b>Konkan Credit Alpha</b> discount widened <span class="d2">10% → 14%</span><p>Seller lowered the ask to ₹8.7901 · 2 h ago</p></div></div>
+        <div class="al"><span class="fm" style="background:#1E3A5F;width:40px;height:40px;font-size:12px;border-radius:11px">MIO</span><div><b>New seller</b> for Meridian Income Opportunities<p>1,25,000 units at 20% off · yesterday</p></div></div>
+        <div class="al"><span class="fm" style="background:#6B5A1E;width:40px;height:40px;font-size:12px;border-radius:11px">NRC</span><div>Your saved search <b>Private credit, 15%+ off</b> has 1 new match<p>Narmada Real Estate Credit · Mon</p></div></div>
+      </section>
+      <section class="card box"><h3><i data-lucide="history" class="sm"></i>Recently viewed<a>See all 18</a></h3>
+        <div id="rv"></div></section>
+    </aside>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const m = document.querySelector('main');
+  m.innerHTML = m.innerHTML.replace('${F1}', fm(fundById('MIO'))).replace('${F4}', fm(fundById('SGP'))).replace('${F3}', fm(fundById('DVF'))).replace('${F5}', fm(fundById('NRC')));
+  document.getElementById('rv').innerHTML = ['ASF', 'TLS', 'KCA'].map(id => { const f = fundById(id); return `<div class="rv">${fm(f, 36, 11)}<div><b>${f.name}</b><span class="s">${f.cat} · ${units(f.units)} units</span></div><span class="off">${offPct(f)}<small style="font-size:12px">%</small></span></div>`; }).join('');
+  boot({ mode: 'buy', active: 'Dashboard' });
+</script></body></html>

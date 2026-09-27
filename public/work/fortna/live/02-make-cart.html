@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Make cart</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  .body{grid-template-columns:1fr 280px}
+  .cartcard{display:flex;flex-direction:column}
+  .cartcard .hd{display:flex;align-items:center;gap:10px;padding:14px 18px 0}.cartcard .hd b{font-size:15px}
+  .side{display:flex;flex-direction:column;gap:14px}
+  .prog{padding:18px;text-align:center}
+  .prog .big{font-size:56px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:8px;font-variant-numeric:tabular-nums}
+  .prog .big small{font-size:22px;color:var(--ink-3);font-weight:600}
+  .bar{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:14px}
+  .bar i{height:10px;border-radius:3px;background:var(--bg)}.bar i.on{background:var(--steel-500)}.bar i.nw{background:var(--lime-500)}
+  .last{padding:14px 16px}
+  .last .r{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+  .last .r:first-of-type{border-top:0}
+  .last .r b{font-variant-numeric:tabular-nums}.last .r span{margin-left:auto;color:var(--ink-3);font-size:13px}
+  .side .btn{width:100%}
+</style></head>
+<body>
+<div id="top"></div>
+<div class="cue" id="cue"><span class="ic"><i data-lucide="scan-barcode"></i></span><div><b>Scan an empty tote</b><br><span>It goes into the next open slot, shown with a dashed outline</span></div></div>
+<main class="body">
+  <section class="card cartcard"><div class="hd"><b>Cart C00225</b><span class="pill steel" style="height:26px">3 shelves · 12 slots</span></div><div id="cartbox"></div></section>
+  <aside class="side">
+    <section class="card prog"><span class="label">Totes on cart</span><div class="big"><span id="n">7</span><small> / 12</small></div><div class="bar" id="bar"></div></section>
+    <section class="card last"><span class="label">Last scanned</span><div id="last"></div></section>
+    <span style="flex:1"></span>
+    <a class="btn ghost"><i data-lucide="undo-2"></i>Remove last tote</a>
+    <a class="btn primary" id="done" style="opacity:.45"><i data-lucide="check"></i>Cart complete</a>
+  </aside>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const N = +(new URLSearchParams(location.search).get('n') ?? 7);
+  const IDS = ['T-1234', 'T-1075', 'T-4017', 'T-1414', 'T-4129', 'T-6464', 'T-6968', 'T-4567', 'T-1259', 'T-1268', 'T-8329', 'T-1142'];
+  const cells = IDS.map((id, i) => ({ id, slot: SLOTS[i], state: i < N ? (i === N - 1 ? 'new' : 'tote') : 'empty', label: i === N ? 'Next' : '' }));
+  document.getElementById('cartbox').innerHTML = cart(cells);
+  document.getElementById('n').textContent = N;
+  document.getElementById('bar').innerHTML = IDS.map((_, i) => `<i class="${i < N - 1 ? 'on' : i === N - 1 ? 'nw' : ''}"></i>`).join('');
+  document.getElementById('last').innerHTML = IDS.slice(Math.max(0, N - 3), N).reverse().map((id, k) => `<div class="r"><i data-lucide="${k ? 'check' : 'plus'}" class="sm" style="color:${k ? '#7C8120' : '#44718F'}"></i><b>${id}</b><span>${SLOTS[N - 1 - k]}</span></div>`).join('');
+  if (N >= 12) {
+    const c = document.getElementById('cue'); c.className = 'cue lime';
+    c.innerHTML = '<span class="ic"><i data-lucide="check-check"></i></span><div><b>Cart complete · 12 totes</b><br><span>Assigned to wave 14 · first stop aisle 675</span></div>';
+    const d = document.getElementById('done'); d.style.opacity = 1; d.className = 'btn go'; d.innerHTML = '<i data-lucide="navigation"></i>Start picking';
+  }
+  boot({ task: 'Make cart', sub: 'Wave 14 · 12 totes needed', pills: '<span class="pill steel"><i data-lucide="shopping-cart" class="sm"></i>Cart <b>C00225</b></span><span class="pill">Status <b>Making cart</b></span>' });
+</script></body></html>

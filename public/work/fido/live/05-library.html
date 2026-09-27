@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Library</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .list{position:absolute;left:32px;right:32px;top:196px;display:flex;flex-direction:column;gap:16px}
+  .it{border-radius:30px;background:var(--peach);color:var(--char);padding:24px 24px 22px}
+  .it b{display:block;font-size:16.5px;font-weight:400;line-height:1.35;letter-spacing:-.005em}
+  .it .lvl{display:block;margin-top:20px}
+  .it .st{float:right;margin-top:16px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:5px;opacity:.7}
+  .pills{position:relative}
+  .pills .ind{position:absolute;left:24px;top:0;height:30px;border-radius:99px;background:var(--yellow);transition:transform .35s var(--ease),width .35s var(--ease)}
+  .pills span{position:relative}
+  .pills span.on{background:none}
+</style></head>
+<body>
+<header class="head"><h1>Library</h1><span class="sq press"><i data-lucide="search"></i></span></header>
+<nav class="pills" id="pl"><i class="ind" id="ind"></i><span class="on">Adventure</span><span>Learn</span><span>Train</span><span>Evaluate</span></nav>
+<div class="list">
+  <div class="it"><b>Learning to Potty On the Pad (Pre-vaccination) For the First Time</b><span class="lvl">Level 1 <span class="st"><i data-lucide="check" class="sm"></i>Done</span></span></div>
+  <div class="it"><b>Moving Potty Pad by the Exit</b><span class="lvl">Level 1 <span class="st"><i data-lucide="check" class="sm"></i>Done</span></span></div>
+  <div class="it" id="go"><b>Complete a Potty Log Tracking One Day</b><span class="lvl">Level 1 <span class="st"><i data-lucide="play" class="sm" style="fill:currentColor"></i>In progress</span></span></div>
+  <div class="it"><b>Poop Eating at a Young Age</b><span class="lvl">Level 1</span></div>
+  <div class="it"><b>Potty Bell Training</b><span class="lvl">Level 2</span></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  stagger('.list .it', 120, 90, 'a-rise');
+  const on = document.querySelector('#pl span.on'), ind = document.getElementById('ind');
+  ind.style.width = on.offsetWidth + 'px'; ind.style.transform = `translateX(${on.offsetLeft - 24}px)`;
+  boot({ tab: 'Library' });
+</script>
+</body></html>

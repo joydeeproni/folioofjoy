@@ -1,0 +1,54 @@
+/* Foovy — redesign tokens.
+   Kept from 2020 v4: dark UI, iOS green #34C759 primary, section colours from the Add Items flow
+   (Fridge green, Freezer blue, Cupboard yellow), freshness stages from client feedback
+   (fresh green · eat me amber · not so fresh red). */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fredoka:wght@600;700&display=swap');
+:root{
+  --bg:#0C0D0B; --bg-2:#151713; --card:#1B1D19; --card-2:#23261F; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --text:#F4F3EE; --text-2:rgba(244,243,238,.68); --text-3:rgba(244,243,238,.44);
+  --green:#34C759; --green-d:#1F9E43; --green-ink:#06260F; --green-soft:rgba(52,199,89,.14);
+  --fridge:#34C759; --freezer:#4FA8F5; --cupboard:#F5C33B;
+  --fresh:#34C759; --eatme:#FF9F2E; --stale:#FF5A4E;
+  --glass:#D6EEFB; --glass-2:#BFE3F7;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+  --font:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);width:375px;height:812px;overflow:hidden;background:var(--bg);color:var(--text);font-size:15px;line-height:1.4;position:relative}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;border:0;background:none}
+svg.lucide{width:20px;height:20px;flex:none} svg.lucide.sm{width:16px;height:16px} svg.lucide.lg{width:24px;height:24px}
+
+.status{height:47px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 32px;font-weight:600;font-size:16px;position:relative;z-index:5}
+.status .r{display:flex;gap:6px;align-items:center}
+.homebar{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.9);z-index:30}
+
+/* tab bar */
+.tabs{position:absolute;left:0;right:0;bottom:0;height:86px;padding:8px 10px 0;background:rgba(12,13,11,.86);backdrop-filter:blur(20px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:20}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:4px;height:48px;justify-content:flex-start;font-size:11px;font-weight:600;color:var(--text-3)}
+.tabs a.on{color:var(--green)}
+.tabs a svg.lucide{height:22px}
+.tabs a.add span.plus{width:26px;height:22px;border-radius:9px;background:var(--green);color:var(--green-ink);display:grid;place-items:center}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:54px;border-radius:16px;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.btn.primary{background:var(--green);color:var(--green-ink)}
+.btn.ghost{background:var(--card-2);color:var(--text)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:99px;font-size:13px;font-weight:600;background:var(--card-2);color:var(--text-2);white-space:nowrap}
+.label{font-size:12.5px;font-weight:600;color:var(--text-3);letter-spacing:.01em}
+.h1{font-size:32px;line-height:1.05;letter-spacing:-.03em;font-weight:700}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 10px}
+.sec-h b{font-size:19px;font-weight:700;letter-spacing:-.015em}
+.sec-h a{font-size:14px;font-weight:600;color:var(--green)}
+
+/* signature: freshness ring */
+.ring{position:relative;width:64px;height:64px;flex:none}
+.ring svg.r{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring img{position:absolute;inset:9px;width:46px;height:46px;object-fit:contain}
+.ring .d{position:absolute;right:-4px;bottom:-4px;min-width:26px;height:22px;padding:0 6px;border-radius:11px;font-size:11.5px;font-weight:800;display:grid;place-items:center;color:#0C0D0B;border:2px solid var(--bg);font-variant-numeric:tabular-nums}
+
+/* fridge interior */
+.shelves{background:linear-gradient(180deg,var(--glass),var(--glass-2));border-radius:22px;padding:10px 12px 16px;box-shadow:inset 0 0 0 6px rgba(255,255,255,.35),0 20px 40px -20px rgba(0,0,0,.6)}
+.shelf{display:flex;justify-content:space-around;align-items:flex-end;padding:12px 4px 10px;position:relative}
+.shelf::after{content:"";position:absolute;left:-4px;right:-4px;bottom:0;height:7px;border-radius:4px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(170,210,232,.9));box-shadow:0 4px 8px -2px rgba(40,90,120,.35)}
+.shelves .ring .d{border-color:#cde8f8}

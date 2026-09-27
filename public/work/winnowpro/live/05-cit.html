@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>WinnowPro · Competitive Intelligence</title>
+<link rel="stylesheet" href="wp.css">
+<style>
+  .hdr{display:flex;align-items:flex-end;gap:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:20px}
+  .score{padding:22px;background:var(--ink);color:#fff;box-shadow:none}
+  .score .label{color:rgba(255,255,255,.6)}
+  .score b{display:block;font-size:56px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:10px}
+  .score b small{font-size:22px;color:rgba(255,255,255,.5)}
+  .score p{color:rgba(255,255,255,.72);font-size:14px;margin-top:10px}
+  .rank{padding:18px 20px}
+  .rank h3,.map h3,.kw h3{font-size:15px;font-weight:800;margin-bottom:8px}
+  .rk{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+  .rk:first-of-type{border-top:0}
+  .rk .n{width:22px;font-weight:800;color:var(--ink-3)}
+  .rk .st{margin-left:auto;display:flex;align-items:center;gap:6px;font-weight:800;font-variant-numeric:tabular-nums}
+  .rk.me{background:var(--red-50);margin:0 -20px;padding:9px 20px}
+  .map{padding:18px 20px}
+  .map svg{width:100%;height:210px;border-radius:14px;background:#EFEDE6}
+  .row2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:14px}
+  .vis{padding:18px 20px}
+  .vis .hd{display:flex;align-items:center;gap:10px}.vis .hd .sp{flex:1}
+  .vis svg{width:100%;height:210px;margin-top:10px}
+  .legend{display:flex;gap:14px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap;margin-top:6px}
+  .legend span{display:flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border-radius:3px}
+  .kw{padding:18px 20px;position:relative;overflow:hidden}
+  .kwr{display:grid;grid-template-columns:1fr 70px 60px;gap:8px;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+  .kwr:first-of-type{border-top:0}
+  .kwr b{font-weight:700}.kwr span{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  .lock{position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(rgba(255,255,255,0),#fff 45%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
+</style></head>
+<body><div class="app"><div data-side="Competitive intel"></div><div>
+<div data-atop></div>
+<main class="main">
+  <div class="hdr"><div><span class="label">Competitive Intelligence Tool · free report</span><h1 class="h1" style="font-size:30px;margin-top:4px">How you stack up in San Jose</h1><p class="lead" style="margin-top:4px">Stevens Creek Hyundai vs 3 competitors within 10 miles · keywords: new cars</p></div><span style="flex:1"></span><a class="btn ghost"><i data-lucide="refresh-cw" class="sm"></i>Regenerate</a><a class="btn primary"><i data-lucide="download" class="sm"></i>Download report</a></div>
+  <div class="grid">
+    <section class="card score"><span class="label">Your rating</span><b class="num">3.8<small> / 5</small></b><p>Based on 481 reviews. Two competitors nearby rate higher; they win more searches for “Hyundai dealer near me”.</p></section>
+    <section class="card rank"><h3>Local ranking</h3>
+      <div class="rk"><span class="n">1</span>Lexus Stevens Creek<span class="st"><i data-lucide="star" class="sm" style="color:#E8C930;fill:#E8C930"></i>4.5</span></div>
+      <div class="rk"><span class="n">2</span>Stevens Creek Nissan<span class="st"><i data-lucide="star" class="sm" style="color:#E8C930;fill:#E8C930"></i>4.2</span></div>
+      <div class="rk me"><span class="n">3</span><b>You · Stevens Creek Hyundai</b><span class="st"><i data-lucide="star" class="sm" style="color:#E8C930;fill:#E8C930"></i>3.8</span></div>
+      <div class="rk"><span class="n">4</span>Frontier Ford<span class="st"><i data-lucide="star" class="sm" style="color:#E8C930;fill:#E8C930"></i>3.9</span></div></section>
+    <section class="card map"><h3>Around you</h3><svg id="map" viewBox="0 0 400 210"></svg></section>
+  </div>
+  <div class="row2">
+    <section class="card vis"><div class="hd"><b>Paid search visibility</b><span class="sp"></span><span class="chip">Mar 1 – Mar 31</span></div><svg id="vis" viewBox="0 0 700 210" preserveAspectRatio="none"></svg>
+      <div class="legend"><span><i style="background:#EC462F"></i>You</span><span><i style="background:#093B7D"></i>Lexus Stevens Creek</span><span><i style="background:#E8C930"></i>Stevens Creek Nissan</span><span><i style="background:#A6A6A6"></i>Frontier Ford</span></div></section>
+    <section class="card kw"><h3>Untapped keywords</h3><div class="label" style="margin-bottom:6px">Competitors rank for these; you don't</div>
+      <div class="kwr"><b>hyundai tucson lease deals</b><span>2,400/mo</span><span>$3.12</span></div>
+      <div class="kwr"><b>santa fe hybrid san jose</b><span>880/mo</span><span>$2.64</span></div>
+      <div class="kwr"><b>certified used hyundai near me</b><span>1,900/mo</span><span>$2.05</span></div>
+      <div class="kwr"><b>ioniq 5 test drive</b><span>1,300/mo</span><span>$1.88</span></div>
+      <div class="kwr"><b>hyundai service coupons</b><span>720/mo</span><span>$0.94</span></div>
+      <div class="lock"><a class="btn navy"><i data-lucide="lock-open" class="sm"></i>Unlock 46 more with CIT Pro</a></div></section>
+  </div>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('map').innerHTML = `
+    <path d="M0 150 C80 130 160 170 240 140 S360 120 400 130" stroke="#fff" stroke-width="14" fill="none"/><path d="M120 0 L150 210" stroke="#fff" stroke-width="10"/><path d="M280 0 L260 210" stroke="#fff" stroke-width="8"/>
+    <circle cx="200" cy="105" r="80" fill="rgba(236,70,47,.06)" stroke="rgba(236,70,47,.3)" stroke-dasharray="4 4"/>
+    ${[[200, 105, '#EC462F', 'You'], [140, 70, '#093B7D', ''], [262, 80, '#E8C930', ''], [240, 160, '#A6A6A6', '']].map(([x, y, c, t]) => `<circle cx="${x}" cy="${y}" r="${t ? 11 : 8}" fill="${c}" stroke="#fff" stroke-width="3"/>${t ? `<text x="${x + 16}" y="${y + 4}" font-family="Manrope" font-weight="800" font-size="12" fill="#1F1F1F">${t}</text>` : ''}`).join('')}`;
+  const S = [['#EC462F', [32, 30, 34, 31, 28, 30, 33, 35, 32, 30, 31, 34, 36, 33, 35]], ['#093B7D', [48, 50, 47, 52, 55, 51, 49, 53, 56, 54, 52, 55, 57, 55, 58]], ['#E8C930', [40, 42, 39, 41, 44, 43, 45, 42, 40, 43, 45, 44, 46, 45, 44]], ['#A6A6A6', [22, 24, 25, 23, 21, 24, 26, 25, 23, 24, 27, 26, 25, 27, 26]]];
+  const W = 700, H = 200, x = i => i / 14 * W, y = v => H - v / 65 * H + 5;
+  document.getElementById('vis').innerHTML = [20, 40, 60].map(v => `<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(0,0,0,.06)"/>`).join('') +
+    S.map(([c, d], k) => `<polyline points="${d.map((v, i) => `${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="${k ? 1.8 : 3}" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="${k ? .8 : 1}"/>`).join('');
+  boot();
+</script></body></html>

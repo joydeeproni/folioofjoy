@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Teen Health Planner · Health record</title>
+<link rel="stylesheet" href="thp.css">
+<style>
+  .cal{margin:6px 16px 0;padding:14px 12px 10px}
+  .mh{display:flex;align-items:center;justify-content:space-between;padding:0 6px 10px}
+  .mh b{font-size:18px;letter-spacing:-.01em}
+  .mh .b{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--bg)}
+  .dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+  .dow span{font-size:12px;font-weight:700;color:var(--ink-3);padding:4px 0}
+  .d{height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;border-radius:12px}
+  .d.out{color:#CFC6C9}
+  .d .dots{display:flex;gap:2px;height:5px}
+  .d .dots i{width:5px;height:5px;border-radius:50%}
+  .d.sel{background:var(--ink);color:#fff}
+  .d.sel .dots i{background:#fff !important}
+  .d.fut{color:var(--ink-3)}
+  .legend{display:flex;gap:12px;justify-content:center;padding:8px 0 2px;font-size:12px;color:var(--ink-3);font-weight:600}
+  .legend span{display:flex;gap:5px;align-items:center}.legend i{width:8px;height:8px;border-radius:50%}
+  h2{font-size:17px;font-weight:700;padding:18px 20px 10px;letter-spacing:-.01em}
+  .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px}
+  .s{padding:12px;display:flex;flex-direction:column;gap:6px}
+  .s b{font-size:24px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .s b small{font-size:13px;color:var(--ink-3);font-weight:600}
+  .s span{font-size:12px;color:var(--ink-2);line-height:1.3}
+  .s .bar{height:5px;border-radius:5px;background:var(--bg);overflow:hidden}.s .bar i{display:block;height:100%;border-radius:5px}
+</style></head>
+<body>
+<div class="nav"><span class="b"><i data-lucide="chevron-left"></i></span><h1>Health record</h1><span class="b"><i data-lucide="sliders-horizontal"></i></span></div>
+<section class="card cal">
+  <div class="mh"><span class="b"><i data-lucide="chevron-left" class="sm"></i></span><b>June 2020</b><span class="b"><i data-lucide="chevron-right" class="sm"></i></span></div>
+  <div class="dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+  <div class="grid" id="g"></div>
+  <div class="legend"><span><i style="background:var(--violet)"></i>Meds</span><span><i style="background:#C9564B"></i>Events</span><span><i style="background:var(--orange)"></i>Mood</span><span><i style="background:var(--teal)"></i>Docs</span></div>
+</section>
+<h2>During this month…</h2>
+<div class="sum">
+  <div class="card s"><span class="ico red" style="width:36px;height:36px"><i data-lucide="calendar-check" class="sm"></i></span><b>3<small>/3</small></b><span>Attended all events</span><div class="bar"><i style="width:100%;background:#C9564B"></i></div></div>
+  <div class="card s"><span class="ico violet" style="width:36px;height:36px"><i data-lucide="pill" class="sm"></i></span><b>24<small>/25</small></b><span>Meds taken on time</span><div class="bar"><i style="width:96%;background:var(--violet)"></i></div></div>
+  <div class="card s"><span class="ico orange" style="width:36px;height:36px"><i data-lucide="smile" class="sm"></i></span><b>25<small>/25</small></b><span>Tracked mood daily</span><div class="bar"><i style="width:100%;background:var(--orange)"></i></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  // June 2020 starts on a Monday; today is Thu 25
+  const ev = { 4: 1, 16: 1, 25: 1 }, doc = { 10: 1, 24: 1 };
+  let h = '';
+  for (let d = 1; d <= 35; d++) {
+    const n = d <= 30 ? d : d - 30, out = d > 30, fut = !out && d > 25;
+    const dots = out || fut ? '' : `<i style="background:var(--violet);opacity:${d === 23 ? .25 : 1}"></i>${ev[d] ? '<i style="background:#C9564B"></i>' : ''}<i style="background:var(--orange)"></i>${doc[d] ? '<i style="background:var(--teal)"></i>' : ''}`;
+    h += `<div class="d ${out ? 'out' : ''} ${fut ? 'fut' : ''} ${d === 25 ? 'sel' : ''}">${n}<span class="dots">${dots}</span></div>`;
+  }
+  document.getElementById('g').innerHTML = h;
+  boot({ tab: 'Search' });
+</script></body></html>

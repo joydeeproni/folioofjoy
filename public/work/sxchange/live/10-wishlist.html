@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Wishlist</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .w{padding:22px;display:flex;flex-direction:column;gap:16px}
+  .w.sel{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--blue-500)}
+  .w .hd{display:flex;gap:14px;align-items:flex-start}
+  .w .hd b{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  .w .hd .s{font-size:13px;color:var(--ink-3);margin-top:2px}
+  .w .hd .sp{flex:1}
+  .ckb{width:22px;height:22px;border-radius:6px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:grid;place-items:center;flex:none}
+  .ckb.on{background:var(--blue-500);box-shadow:none}
+  .w .figs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+  .w .figs b{display:block;font-size:17px;font-weight:700}
+  .chg{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:10px 12px;border-radius:10px;background:var(--bg);color:var(--ink-2)}
+  .chg.up{background:var(--green-100);color:var(--green-700)}
+  .chg b{color:inherit}
+  .w .ft{display:flex;gap:8px;align-items:center}
+  .w .ft .sp{flex:1}
+  .w .ft .rm{color:var(--ink-3);font-size:13.5px;display:flex;gap:6px;align-items:center}
+  .tray{position:relative;margin:28px auto 0;width:760px;background:var(--navy-950);color:#fff;border-radius:16px;padding:12px 12px 12px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 30px 60px -20px rgba(20,24,50,.55)}
+  .tray .ms{display:flex}
+  .tray .ms .fm{width:36px;height:36px;font-size:11px;border-radius:10px;box-shadow:0 0 0 2px var(--navy-950);margin-left:-6px}
+  .tray .ms .fm:first-child{margin-left:0}
+  .tray .slot{width:36px;height:36px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.3);margin-left:-6px;background:var(--navy-950)}
+  .tray span.t{font-size:14.5px;font-weight:600}.tray span.t small{display:block;font-weight:500;color:rgba(255,255,255,.6);font-size:12.5px}
+  .tray .sp{flex:1}
+  .empty{display:none;padding:80px 40px;text-align:center;align-items:center;flex-direction:column}
+  .empty .ic{width:72px;height:72px;border-radius:22px;background:var(--red-100);color:var(--red-600);display:grid;place-items:center}
+  .empty .ic svg{width:30px;height:30px}
+  .empty h2{font-size:24px;letter-spacing:-.02em;margin-top:20px}
+  .empty p{color:var(--ink-2);margin-top:6px;max-width:44ch}
+  body.is-empty .empty{display:flex}
+  body.is-empty .grid,body.is-empty .tray,body.is-empty .filt{display:none}
+  .filt{display:flex;gap:8px;margin-bottom:16px;align-items:center}
+  .filt .sp{flex:1}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><h1>Wishlist</h1><p>Funds you're watching. We'll tell you when a price changes or a new seller lists.</p></div></div>
+  <div class="filt"><span class="chip" style="background:var(--navy-700);color:#fff">All · 4</span><span class="chip">Price changed · 1</span><span class="chip">New seller · 1</span><span class="sp"></span><span style="font-size:14px;color:var(--ink-2)">Sort by <b style="color:var(--ink)">Recently added</b></span></div>
+  <div class="grid" id="g"></div>
+  <div class="tray"><div class="ms"><span class="fm" style="background:#1E3A5F">MIO</span><span class="fm" style="background:#5B3E8C">KCA</span><span class="slot"></span></div><span class="t">2 of 3 selected<small>Add one more, or compare these two</small></span><span class="sp"></span><a class="btn ghost sm" style="background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)">Clear</a><a class="btn primary sm"><i data-lucide="columns-3" class="sm"></i>Compare 2 funds</a></div>
+  <div class="card empty"><span class="ic"><i data-lucide="heart"></i></span><h2>Nothing saved yet</h2><p>Tap the heart on any listing to watch it. You'll get an email when its price changes or a new seller lists the same fund.</p><a class="btn primary" style="margin-top:22px"><i data-lucide="search" class="sm"></i>Browse 25 listings</a></div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  if (Q.get('empty') === '1') document.body.classList.add('is-empty');
+  const items = [
+    { id: 'MIO', sel: true, note: '<i data-lucide="user-plus" class="sm"></i>A second seller listed 1,25,000 units at 20% off', cls: '' , added: 'Added 12 Sep' },
+    { id: 'KCA', sel: true, note: '<i data-lucide="trending-down" class="sm"></i>Seller lowered the ask. Discount <b>10% → 14%</b>', cls: 'up', added: 'Added 3 Sep', ask: 8.7901 },
+    { id: 'DVF', sel: false, note: '<i data-lucide="clock" class="sm"></i>No change since you added it', cls: '', added: 'Added 28 Aug' },
+    { id: 'NRC', sel: false, note: '<i data-lucide="send" class="sm"></i>You requested seller information on Monday', cls: '', added: 'Added 21 Aug' },
+  ];
+  document.getElementById('g').innerHTML = items.map(it => { const f = { ...fundById(it.id) }; if (it.ask) f.ask = it.ask;
+    return `<article class="card w ${it.sel ? 'sel' : ''}"><div class="hd">${fm(f)}<div><b>${f.name}</b><div class="s">${f.mgr} · ${f.cat} · ${it.added}</div></div><span class="sp"></span><span class="ckb ${it.sel ? 'on' : ''}">${it.sel ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg>' : ''}</span></div>
+      ${deal(f.nav, f.ask)}
+      <div class="figs"><div><span class="label">Discount</span><b style="color:var(--green-700)">${offPct(f)}%</b></div><div><span class="label">Units</span><b>${units(f.units)}</b></div><div><span class="label">Ask value</span><b>${lakh(f.ask * f.units)}</b></div><div><span class="label">Vintage</span><b>${f.vintage}</b></div></div>
+      <div class="chg ${it.cls}">${it.note}</div>
+      <div class="ft"><a class="btn ${it.id === 'KCA' ? 'primary' : 'ghost'} sm">${it.id === 'NRC' ? 'View request' : 'Request seller info'}</a><a class="btn quiet sm">View details</a><span class="sp"></span><span class="rm"><i data-lucide="heart-off" class="sm"></i>Remove</span></div></article>`; }).join('');
+  boot({ mode: 'buy', active: 'Wishlist' });
+</script></body></html>

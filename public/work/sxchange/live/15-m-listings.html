@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SXchange · Mobile listings</title>
+<link rel="stylesheet" href="sx.css"><link rel="stylesheet" href="m.css">
+<style>
+  .srch{width:auto;margin-top:12px;height:42px;background:var(--bg)}
+  .chips{display:flex;gap:8px;padding:12px 20px;overflow:hidden;white-space:nowrap}
+  .chips span{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px var(--line-2);font-size:13px;font-weight:600;color:var(--ink-2);flex:none}
+  .chips span.on{background:var(--navy-700);color:#fff;box-shadow:none}
+  .sum{margin:0 20px;display:grid;grid-template-columns:1fr 1fr;padding:14px 16px}
+  .sum b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em}
+  .sum div+div{border-left:1px solid var(--line);padding-left:16px}
+  .lst{padding:14px 20px 110px;display:flex;flex-direction:column;gap:10px}
+  .c{padding:16px}
+  .c .t{display:flex;gap:12px;align-items:center}
+  .c .t b{display:block;font-size:15px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+  .c .t span.s{font-size:12.5px;color:var(--ink-3)}
+  .c .t .off{margin-left:auto;font-size:22px}
+  .c .t .off small{font-size:12px}
+  .c .deal{margin-top:14px}
+  .c .ft{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+  .c .ft .sp{flex:1}
+  .c.hot{box-shadow:var(--sh-2),inset 0 0 0 1.5px var(--navy-200)}
+  .hdr{display:flex;justify-content:space-between;align-items:baseline;padding:0 20px;margin-top:16px}
+  .hdr h1{font-size:24px;letter-spacing:-.025em;font-weight:800}
+  .hdr span{font-size:13px;color:var(--ink-2)}
+</style></head>
+<body>
+<div class="sb"><span>9:41</span><span class="ic"><i data-lucide="signal" class="sm"></i><i data-lucide="wifi" class="sm"></i><i data-lucide="battery-full" class="sm"></i></span></div>
+<header class="mh"><div class="r1"><img class="logo" src="assets/logo.png" alt="Client logo (blurred)"><span class="sp"></span><div class="mode"><span class="on">Buying</span><span>Selling</span></div></div>
+  <div class="srch"><i data-lucide="search" class="sm"></i>Search funds, managers</div></header>
+<div class="chips"><span class="on"><i data-lucide="sliders-horizontal" class="sm"></i>Filters · 2</span><span>Cat II</span><span>10%+ off</span><span>Private credit</span><span>Vintage</span></div>
+<div class="card sum"><div><span class="label">Listings live</span><b>25</b></div><div><span class="label">Average discount</span><b style="color:var(--green-700)">24.6%</b></div></div>
+<div class="hdr"><h1>AIF units for sale</h1><span>Biggest discount</span></div>
+<div class="lst" id="l"></div>
+<nav class="tabbar"><a class="on"><i data-lucide="layout-list"></i>Listings</a><a><i data-lucide="heart"></i>Wishlist<span class="ct">1</span></a><a><i data-lucide="layout-dashboard"></i>Dashboard</a><a><i data-lucide="user"></i>Account</a><span class="home"></span></nav>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('l').innerHTML = ['MIO', 'ASF', 'DVF', 'SGP'].map((id, i) => { const f = fundById(id);
+    return `<article class="card c ${i === 0 ? 'hot' : ''}"><div class="t">${fm(f, 42, 13)}<div style="min-width:0"><b>${f.name}</b><span class="s">${f.cat} · ${f.strat}</span></div><span class="off">${offPct(f)}<small>%</small></span></div>${deal(f.nav, f.ask)}
+      <div class="ft"><span>${units(f.units)} units</span>·<span>${lakh(f.ask * f.units)}</span><span class="sp"></span>${f.isNew ? '<span class="tag-new">New</span>' : ''}<i data-lucide="heart" class="sm" ${['MIO','DVF'].includes(id) ? 'fill="#D1353F" style="color:#D1353F"' : ''}></i></div></article>`; }).join('');
+  boot({});
+</script></body></html>

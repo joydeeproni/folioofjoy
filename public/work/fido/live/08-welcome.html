@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Welcome</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .logo{position:absolute;left:28px;top:62px;height:40px;filter:blur(4px);opacity:.95}
+  .inv{position:absolute;right:24px;top:66px}
+  .art{position:absolute;left:0;right:0;top:120px;height:330px}
+  .art .card{position:absolute;left:24px;right:24px;top:0;bottom:0;border-radius:30px;background:var(--lilac);overflow:hidden}
+  .art img{position:absolute;left:50%;bottom:-6px;width:330px;transform:translateX(-50%)}
+  .copy{position:absolute;left:28px;right:28px;top:478px}
+  .copy h1{font-size:36px;font-weight:300;letter-spacing:-.03em;line-height:1.08}
+  .copy h1 b{font-weight:600;color:var(--yellow)}
+  .copy p{font-size:15px;line-height:1.5;color:rgba(255,255,255,.7);margin-top:14px}
+  .acts{position:absolute;left:24px;right:24px;bottom:36px;display:flex;flex-direction:column;gap:10px}
+  .acts .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .acts p{text-align:center;font-size:14px;color:rgba(255,255,255,.6);margin-top:6px}.acts p b{color:#fff}
+</style></head>
+<body>
+<img class="logo" src="assets/fido-white.png" alt="Client logo (blurred)">
+<span class="chipo inv press a-fade"><i data-lucide="ticket" class="sm"></i>Have an invite?</span>
+<div class="art"><div class="card a-riseS"><img class="bob" src="assets/mom-gives-a-dog-to-her-son.png" alt=""></div></div>
+<div class="copy a-rise" style="animation-delay:.2s"><h1>Welcome to the <b>club</b>.</h1><p>Short training quests for you and your puppy, and a real trainer who reads every check-in.</p></div>
+<div class="acts a-rise" style="animation-delay:.3s">
+  <a class="btn white press" id="go"><i data-lucide="apple" style="fill:currentColor"></i>Continue with Apple</a>
+  <div class="row"><a class="btn ghost press"><i data-lucide="chrome" class="sm"></i>Google</a><a class="btn ghost press"><i data-lucide="mail" class="sm"></i>Email</a></div>
+  <p>Already a member? <b>Sign in</b></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({});</script>
+</body></html>

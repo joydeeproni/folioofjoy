@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Compare</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  .grid{display:grid;grid-template-columns:240px repeat(3,1fr);background:#fff;border-radius:16px;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);overflow:hidden}
+  .grid > div{padding:14px 20px;border-bottom:1px solid var(--line);font-size:15px;display:flex;align-items:center}
+  .grid .lab{color:var(--ink-2);font-size:14px}
+  .hd{flex-direction:column;align-items:flex-start !important;gap:10px;padding:22px 20px !important;position:relative}
+  .hd b{font-size:17px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+  .hd .s{font-size:13px;color:var(--ink-3)}
+  .hd .x{position:absolute;top:14px;right:14px;color:var(--ink-3)}
+  .hd .btn{width:100%}
+  .sec{grid-column:1/-1;background:var(--navy-50);font-weight:700;font-size:13px !important;color:var(--ink-2);padding:10px 20px !important}
+  .v{font-weight:700}
+  .best{margin-left:8px}
+  .g{color:var(--green-700)}
+  .col1{background:linear-gradient(var(--blue-50),var(--blue-50))}
+  .grid .deal{width:100%}
+</style></head>
+<body>
+<div id="nav"></div>
+<main class="page">
+  <div class="ph"><div><a class="crumb"><i data-lucide="arrow-left" class="sm"></i>Listings</a><h1>Compare 3 funds</h1><p>Prices use each listing's asking price and the latest NAV on file.</p></div></div>
+  <div class="grid">
+    <div class="hd lab" style="justify-content:flex-end"><span class="label">3 of 3 selected</span></div>
+    <div class="hd col1"><span class="fm" style="background:#1E3A5F">MIO</span><b>Meridian Income Opportunities Fund</b><span class="s">AIF Cat II · Special situations</span><a class="btn primary sm">Request seller info</a><i data-lucide="x" class="sm x"></i></div>
+    <div class="hd"><span class="fm" style="background:#8A2E4F">DVF</span><b>Deccan Venture Fund IV</b><span class="s">AIF Cat I · Early-stage venture</span><a class="btn ghost sm">Request seller info</a><i data-lucide="x" class="sm x"></i></div>
+    <div class="hd"><span class="fm" style="background:#5B3E8C">KCA</span><b>Konkan Credit Alpha Trust</b><span class="s">AIF Cat II · Performing credit</span><a class="btn ghost sm">Request seller info</a><i data-lucide="x" class="sm x"></i></div>
+    <div class="sec">Price</div>
+    <div class="lab">Ask vs NAV</div><div class="col1"><div data-deal="12.4981,8.7487" style="width:100%"></div></div><div><div data-deal="15.612,11.709" style="width:100%"></div></div><div><div data-deal="10.221,9.1989" style="width:100%"></div></div>
+    <div class="lab">Discount to NAV</div><div class="col1 v g">30%<span class="chip green best">Best</span></div><div class="v g">25%</div><div class="v g">10%</div>
+    <div class="lab">Units on offer</div><div class="col1 v">1,00,000</div><div class="v">18,000</div><div class="v">25,000</div>
+    <div class="lab">Minimum lot</div><div class="col1 v">10,000 units</div><div class="v">All units</div><div class="v">5,000 units</div>
+    <div class="lab">Total asking value</div><div class="col1 v">₹8,74,870.00</div><div class="v">₹2,10,762.00</div><div class="v">₹2,29,972.50</div>
+    <div class="sec">Commitment</div>
+    <div class="lab">Balance amount payable</div><div class="col1 v">₹7,50,000.00</div><div class="v">₹0.00<span class="chip green best">Fully paid</span></div><div class="v">₹1,25,000.00</div>
+    <div class="lab">Default case</div><div class="col1 v">No</div><div class="v">No</div><div class="v">No</div>
+    <div class="sec">Fund</div>
+    <div class="lab">Manager</div><div class="col1 v">Meridian Capital</div><div class="v">Deccan Ventures</div><div class="v">Konkan Advisors</div>
+    <div class="lab">Sellers of this fund</div><div class="col1 v">3 listings</div><div class="v">1 listing</div><div class="v">1 listing</div>
+    <div class="lab">Vintage · term left</div><div class="col1 v">2017 · 2 yrs 4 mo</div><div class="v">2015 · 1 yr 2 mo</div><div class="v">2019 · 4 yrs</div>
+    <div class="lab" style="border-bottom:0">Distributions to date</div><div class="col1 v" style="border-bottom:0">₹3.40 / unit</div><div class="v" style="border-bottom:0">₹6.10 / unit</div><div class="v" style="border-bottom:0">₹1.85 / unit</div>
+  </div>
+</main>
+<div id="foot"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot({ mode: 'buy', active: 'Compare' });</script></body></html>

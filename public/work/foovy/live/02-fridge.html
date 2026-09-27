@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=375"><title>Foovy · Inside Fridge</title>
+<link rel="stylesheet" href="foovy.css">
+<style>
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:2px 16px 0}
+  .ib{width:38px;height:38px;border-radius:50%;background:var(--card-2);display:grid;place-items:center}
+  .nav a{font-size:15px;font-weight:600;color:var(--green)}
+  .ttl{padding:10px 20px 0}
+  .ttl p{color:var(--text-3);font-size:14px;margin-top:4px}
+  .seg{margin:14px 20px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--bg-2);border-radius:16px;padding:5px}
+  .seg button{height:46px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13.5px;font-weight:700;color:var(--text-2);line-height:1.1}
+  .seg button small{font-size:11px;font-weight:500;color:var(--text-3)}
+  .seg button.on{background:var(--fridge);color:var(--green-ink)} .seg button.on small{color:rgba(6,38,15,.65)}
+  .seg button i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+  .wrap{margin:16px 20px 0}
+  .shelves{position:relative}
+  .shelves .tag{position:absolute;left:14px;top:-11px;background:#0C0D0B;color:#fff;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:99px;z-index:2}
+  .ring.sel{filter:drop-shadow(0 0 10px rgba(52,199,89,.7))}
+  .ring .tick{position:absolute;left:-3px;top:-3px;width:22px;height:22px;border-radius:50%;background:var(--green);display:grid;place-items:center;border:2px solid #cde8f8}
+  .selbar{display:flex;align-items:center;gap:10px;margin:12px 20px 0;font-size:13.5px;color:var(--text-2)}
+  .selbar b{color:var(--text)}
+  .cta{position:absolute;left:20px;right:20px;bottom:100px}
+  .drawer{margin:14px 2px 0;border-radius:16px;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 2px rgba(255,255,255,.8);padding:18px 8px 8px;display:flex;justify-content:space-around;position:relative}
+  .drawer .dl{position:absolute;left:12px;top:5px;font-size:10.5px;font-weight:700;color:#3d6b85;letter-spacing:.02em}
+  .drawer .ring .d{border-color:#e4f3fb}
+  .dim .ring:not(.sel){opacity:.5}
+</style></head>
+<body>
+<div data-status></div>
+<div class="nav"><span class="ib"><i data-lucide="chevron-left"></i></span><a id="mode">Select</a></div>
+<div class="ttl"><div class="h1">Inside Fridge</div><p id="hint">Tap an item for details · press and hold for more</p></div>
+<div class="seg"><button class="on"><span><i style="background:#06260F"></i>Fridge</span><small>Cold items · 11</small></button><button><span><i style="background:var(--freezer)"></i>Freezer</span><small>Frozen · 2</small></button><button><span><i style="background:var(--cupboard)"></i>Cupboard</span><small>Outside · 5</small></button></div>
+<div class="wrap"><div class="shelves" id="sh"><span class="tag">Main area</span></div></div>
+<div class="selbar" id="selbar" style="display:none"></div>
+<div class="cta"><a class="btn primary" id="cta"><i data-lucide="chef-hat"></i>Show Recipes</a></div>
+<div data-tabs="Fridge"></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const SEL = (new URLSearchParams(location.search).get('sel') || '').split(',').filter(Boolean);
+  const rows = [[['leafy_green', 2, 7], ['tomato', 1, 10], ['eggplant', 5, 10], ['egg', 12, 21]],
+                [['bread', 4, 7], ['cheese_wedge', 12, 21], ['bell_pepper', 6, 10], ['bacon', 7, 14]],
+                [['grapes', 8, 10], ['avocado', 6, 10], ['cherries', 5, 7]]];
+  const crisper = [['carrot', 9, 14], ['broccoli', 3, 7], ['cucumber', 5, 10], ['lemon', 14, 21]];
+  document.getElementById('sh').insertAdjacentHTML('beforeend', rows.map(r => `<div class="shelf">${r.map(([f, d, t]) => `<span data-ring="${f},${d},${t},62,${SEL.includes(f) ? 1 : 0}"></span>`).join('')}</div>`).join('') + `<div class="drawer"><span class="dl">Crisper drawer</span>${crisper.map(([f, d, t]) => `<span data-ring="${f},${d},${t},52,0"></span>`).join('')}</div>`);
+  if (SEL.length) {
+    document.getElementById('sh').classList.add('dim');
+    document.getElementById('mode').textContent = 'Cancel';
+    document.getElementById('hint').textContent = 'Pick what you want to use up';
+    const names = { tomato: 'Tomatoes', cheese_wedge: 'Cheese', bacon: 'Bacon' };
+    const sb = document.getElementById('selbar'); sb.style.display = 'flex';
+    sb.innerHTML = `<i data-lucide="check-circle-2" class="sm" style="color:var(--green)"></i><span><b>${SEL.length} selected</b> · ${SEL.map(s => names[s] || s).join(', ')}</span>`;
+    document.getElementById('cta').innerHTML = `<i data-lucide="chef-hat"></i>Show Recipes · ${SEL.length}`;
+  }
+  boot();
+</script></body></html>

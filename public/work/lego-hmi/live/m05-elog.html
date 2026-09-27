@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Moulding · eLog</title><link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="mobile.css">
+<style>
+  .seg{display:grid;grid-template-columns:repeat(5,1fr);margin:12px 16px 0;border:1px solid #6f6f6f}
+  .seg span{height:40px;display:grid;place-items:center;font-size:14px;color:var(--cds-text-secondary);border-left:1px solid #393939}
+  .seg span:first-child{border-left:0}.seg span.on{background:#f4f4f4;color:#161616;font-weight:600}
+  .day{padding:16px 16px 8px}
+  .en{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:14px 16px;background:var(--cds-layer-01);border-bottom:1px solid var(--cds-border-subtle-01)}
+  .en .tm{font-family:'IBM Plex Mono';font-size:13px;color:var(--cds-text-secondary);padding-top:2px}
+  .en h4{font-size:15px;font-weight:500;line-height:20px;display:flex;gap:8px;align-items:center}
+  .en p{font-size:13px;line-height:18px;color:var(--cds-text-secondary);margin-top:4px}
+  .en .mt{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--cds-text-secondary)}
+  .en .ph{width:64px;height:44px;margin-top:8px;background:linear-gradient(135deg,#6f6f6f,#393939);position:relative;overflow:hidden}
+  .en .ph::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 3px,transparent 3px 9px)}
+  .en.new{background:linear-gradient(90deg,rgba(15,98,254,.22),rgba(15,98,254,.04) 70%),var(--cds-layer-01);box-shadow:inset 3px 0 0 #4589ff}
+  #fab{position:absolute;right:16px;bottom:99px;width:56px;height:56px;background:#0f62fe;display:grid;place-items:center;color:#fff;z-index:15;box-shadow:0 8px 20px rgba(0,0,0,.45)}
+</style></head><body>
+<div class="body">
+  <div class="seg"><span class="on">All</span><span>Q</span><span>M</span><span>E</span><span>I</span></div>
+  <div class="day lab">Today · machine 152662 · 8 entries</div>
+  <div id="list"></div>
+</div>
+<span id="fab"><span data-ci="add" data-s="28"></span></span>
+<script src="icons.js"></script><script src="icons-extra.js"></script><script src="m-shared.js"></script>
+<script>
+const T = { Q: 'purple', M: 'teal', E: 'magenta', I: 'cyan' };
+const L = [
+  ['13:05', 'Q', 'Short shot on cavity 4', 'Raised holding pressure +10 bar. 20 test parts passed the gauge.', 'OK', 'M. Hansen', 1],
+  ['10:40', 'M', 'Ejector pin cleaned', 'Residue on pin 6 after granulate change. Cleaned, no damage.', 'OK', 'J. Nielsen'],
+  ['08:15', 'I', 'Granulate lot changed', 'ABS Nature 4130402 · lot 88213. Dryer at 80 °C.', 'OK', 'M. Hansen'],
+  ['06:02', 'I', 'Shift B started', 'Handover from shift A: cavity 4 to watch.', 'OK', 'M. Hansen'],
+];
+let rows = L;
+if (MQ.get('new') === '1') rows = [['14:26', 'E', 'Hot runner zone 3 over temperature', 'Zone 3 at 268 °C against a 255 °C limit. Handed over to technician.', 'NOT OK', 'M. Hansen', 1, 1], ...L];
+document.getElementById('list').innerHTML = rows.map(([t, ty, h, p, e, w, ph, nw]) => '<div class="en ' + (nw ? 'new' : '') + '"><span class="tm">' + t + '</span><div><h4><span class="cds--tag cds--tag--' + T[ty] + ' cds--tag--sm"><span class="cds--tag__label">' + ty + '</span></span>' + h + '</h4><p>' + p + '</p>' + (ph ? '<div class="ph"></div>' : '') + '<div class="mt"><span class="cds--tag cds--tag--' + (e === 'OK' ? 'green' : 'red') + ' cds--tag--sm"><span class="cds--tag__label">' + e + '</span></span>' + w + (nw ? ' · Breakdown · VITS 3' : '') + '</div></div></div>').join('');
+mboot({ title: 'eLog', sub: 'Machine 152662 · shift B', tab: 'eLog', alarms: MQ.get('new') ? 0 : 1, right: '<span class="ib"><span data-ci="filter"></span></span><span class="ib"><span data-ci="search"></span></span>' });
+</script></body></html>

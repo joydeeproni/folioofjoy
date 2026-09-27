@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nikai Egypt · Request support</title>
+<link rel="stylesheet" href="nikai.css">
+<style>
+  body{width:1440px}
+  .head{background:var(--ink);color:#fff;padding-bottom:64px}
+  .head h1{font-size:68px;margin-top:56px;max-width:14ch}
+  .head p{color:rgba(255,255,255,.65);font-size:18px;margin-top:16px;max-width:48ch}
+  .qk{display:flex;gap:10px;margin-top:30px}
+  .qk span{display:flex;align-items:center;gap:10px;height:48px;padding:0 18px;border-radius:99px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);font-weight:600;font-size:14.5px}
+  .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;margin-top:-40px}
+  .form{border-radius:28px;background:#fff;box-shadow:var(--sh-2),inset 0 0 0 1px var(--line);padding:34px}
+  .form h2{font-size:30px}
+  .form .sub{color:var(--ink-3);margin-top:6px}
+  .steps{display:flex;gap:8px;margin-top:22px}
+  .steps span{flex:1;height:5px;border-radius:4px;background:var(--bg-2)}
+  .steps span.on{background:var(--red-500)}
+  .lab{font-size:13px;font-weight:600;color:var(--ink-2);margin:22px 0 10px;display:block}
+  .types{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .ty{border-radius:18px;box-shadow:inset 0 0 0 1.5px var(--line-2);padding:16px;display:flex;flex-direction:column;gap:8px;font-weight:600}
+  .ty svg{color:var(--ink-3)}
+  .ty small{font-weight:500;color:var(--ink-3);font-size:13px}
+  .ty.on{box-shadow:0 0 0 2px var(--red-500);background:var(--red-50)}
+  .ty.on svg{color:var(--red-500)}
+  .prods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .pr{border-radius:18px;background:var(--bg);padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:600;height:118px;justify-content:flex-end}
+  .pr img{max-height:62px;max-width:90%;margin-bottom:auto}
+  .pr.on{box-shadow:0 0 0 2px var(--ink);background:#fff}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .in{height:52px;border-radius:14px;box-shadow:inset 0 0 0 1.5px var(--line-2);display:flex;align-items:center;padding:0 16px;font-size:15px;color:var(--ink-4);gap:10px}
+  .in.v{color:var(--ink)}
+  .in.f{box-shadow:inset 0 0 0 2px var(--ink)}
+  .form .end{display:flex;align-items:center;justify-content:space-between;margin-top:26px}
+  .form .end span{font-size:13.5px;color:var(--ink-3);display:flex;gap:8px;align-items:center}
+  .find{border-radius:28px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);overflow:hidden;display:flex;flex-direction:column}
+  .find .h{padding:28px 30px 0}
+  .find h3{font-size:28px}
+  .find .sub{color:var(--ink-3);margin-top:6px}
+  .find .mapw{height:430px;background:radial-gradient(60% 60% at 50% 40%,#F7F7F5,#ECECE9);margin-top:18px;padding:20px 30px;position:relative}
+  .cityc{position:absolute;right:22px;top:22px;width:250px;background:#fff;border-radius:18px;box-shadow:var(--sh-2);padding:16px}
+  .cityc h5{font-size:18px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+  .cityc .r{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px;margin-top:8px}
+  .cityc .r b{display:block;font-size:14px}
+  .cityc .r span{color:var(--ink-3)}
+  .find .b{display:flex;gap:10px;padding:20px 30px 28px}
+  .cc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+  .cc .c{border-radius:24px;background:#fff;box-shadow:var(--sh-1),inset 0 0 0 1px var(--line);padding:24px;display:flex;gap:16px;align-items:flex-start}
+  .cc .ic{width:48px;height:48px;border-radius:14px;background:var(--bg);display:grid;place-items:center;flex:none}
+  .cc b{display:block;font-size:17px;letter-spacing:-.02em}
+  .cc span{color:var(--ink-3);font-size:14.5px}
+  .foot{background:#0B0B0D;color:#fff;margin-top:120px;padding:72px 0 30px}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  .fgrid h5{font-size:13px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:14px}
+  .fgrid a{display:block;color:rgba(255,255,255,.82);font-size:15px;padding:5px 0}
+  .news{display:flex;gap:6px;margin-top:26px;background:rgba(255,255,255,.07);border-radius:99px;padding:5px;max-width:380px}
+  .news input{flex:1;background:none;border:0;color:#fff;padding:0 14px;font:inherit;font-size:14.5px}
+  .fbot{display:flex;gap:22px;margin-top:56px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:13.5px;color:rgba(255,255,255,.5)}
+  .fbot .sp{flex:1}
+</style></head>
+<body>
+<section class="head"><div class="wrap"><div data-nav='{"dark":true,"on":"Contact"}'></div>
+  <span class="chip dark" style="margin-top:40px"><i data-lucide="headset" class="sm"></i>Customer support</span>
+  <h1>How can we help you?</h1>
+  <p>Get your questions answered about product setup, use and care, repair and maintenance. We can help.</p>
+  <div class="qk"><span><i data-lucide="phone" class="sm"></i>(+20) 2-2306-7326</span><span><i data-lucide="mail" class="sm"></i>info@nikaiegypt.com</span><span><i data-lucide="clock" class="sm"></i>Sat–Thu, 9am–6pm</span></div>
+</div></section>
+<main class="wrap">
+  <div class="grid">
+    <section class="form">
+      <h2>Request support</h2><p class="sub">Three quick steps. We'll call you back within one working day.</p>
+      <div class="steps"><span class="on"></span><span class="on"></span><span></span></div>
+      <span class="lab">What do you need?</span>
+      <div class="types"><div class="ty on"><i data-lucide="wrench"></i>Installation<small>New product setup</small></div><div class="ty"><i data-lucide="hammer"></i>Repair<small>Something isn't working</small></div><div class="ty"><i data-lucide="shield-check"></i>Warranty<small>Register or claim</small></div></div>
+      <span class="lab">Which product?</span>
+      <div class="prods"><div class="pr on"><img src="img/tv-65.png" alt="">TVs</div><div class="pr"><img class="mult" src="img/oven.jpg" alt="">Electric ovens</div><div class="pr"><img class="mult" src="img/heater.png" alt="">Water heaters</div><div class="pr"><img class="mult" src="img/iron.png" alt="">Irons</div></div>
+      <span class="lab">Your details</span>
+      <div class="row2"><div class="in v">Ahmed Mostafa</div><div class="in v num">+20 100 482 3391</div><div class="in f v">65″ UHD Smart TV · NE65SUHD-M</div><div class="in">Area, landmark</div></div>
+      <div class="end"><span><i data-lucide="lock" class="sm"></i>We only use this to reach you.</span><a class="btn red">Send request<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </section>
+    <section class="find">
+      <div class="h"><h3>Find a service center</h3><p class="sub">With a service center right here in the city, we promise a quick turnaround.</p></div>
+      <div class="mapw"><div data-map='{"w":400,"h":360,"sel":"Alexandria","only":["Alexandria","Cairo","Asyut","Sohag"]}' style="width:62%;height:100%"></div>
+        <div class="cityc"><h5><i data-lucide="map-pin" class="sm" style="color:var(--red-500)"></i>Alexandria</h5>
+          <div class="r"><i data-lucide="building-2" class="sm"></i><div><b>Nikai service center</b><span>Smouha · open today</span></div></div>
+          <div class="r"><i data-lucide="store" class="sm"></i><div><b>B.TECH · Raya</b><span>4 showrooms</span></div></div></div></div>
+      <div class="b"><a class="btn ink sm"><i data-lucide="navigation" class="sm"></i>Directions</a><a class="btn ghost sm">Call center</a></div>
+    </section>
+  </div>
+  <div class="cc">
+    <div class="c"><span class="ic"><i data-lucide="building"></i></span><div><b>Main office, Cairo</b><span>Office 302, Trivium Business Complex, North Teseen St., 5th Settlement, New Cairo</span></div></div>
+    <div class="c"><span class="ic"><i data-lucide="file-text"></i></span><div><b>Manuals &amp; catalogue</b><span>Download the product catalogue and user guides.</span></div></div>
+    <div class="c"><span class="ic"><i data-lucide="message-circle"></i></span><div><b>Ask us. We'll help you.</b><span>Write to us with any subject; we reply within a day.</span></div></div>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script>
+</body></html>

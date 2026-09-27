@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Nikai Egypt · mobile</title>
+<link rel="stylesheet" href="nikai.css">
+<style>
+  body{width:390px;background:var(--bg)}
+  .status{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 32px;font-weight:600;color:#fff;font-size:15px}
+  .status span:last-child{display:flex;gap:6px}
+  .hero{background:radial-gradient(90% 50% at 60% 65%,rgba(227,20,30,.28),rgba(227,20,30,0) 60%),#0A0A0C;color:#fff;padding-bottom:28px}
+  .mn{display:flex;align-items:center;padding:6px 16px 0;gap:10px}
+  .mn img{height:24px;filter:blur(3.8px)}
+  .mn .sp{flex:1}
+  .mn .ib{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+  .hero .in{padding:26px 20px 0}
+  .hero h1{font-size:44px;line-height:.98;letter-spacing:-.045em;margin-top:16px}
+  .hero h1 em{font-style:normal;color:#ff3b44}
+  .hero p{color:rgba(255,255,255,.68);margin-top:12px;font-size:15.5px}
+  .hero .tv{margin:22px -10px 0 10px}
+  .hero .tv img{width:100%;filter:drop-shadow(0 30px 40px rgba(0,0,0,.7))}
+  .hero .sz{display:flex;gap:6px;padding:14px 20px 0;overflow:hidden}
+  .hero .sz span{height:36px;min-width:56px;border-radius:99px;display:grid;place-items:center;font-size:13.5px;font-weight:600;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);color:rgba(255,255,255,.72)}
+  .hero .sz span.on{background:#fff;color:var(--ink)}
+  .hero .ct{display:flex;gap:8px;padding:18px 20px 0}
+  .hero .ct .btn{flex:1;height:48px;font-size:15px;padding:0 12px}
+  .sec{padding:30px 16px 0}
+  .sec h2{font-size:30px}
+  .cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .c{border-radius:22px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);height:168px;padding:14px;position:relative;overflow:hidden}
+  .c b{font-size:17px;letter-spacing:-.02em}
+  .c span{display:block;font-size:12px;color:var(--ink-3)}
+  .c img{position:absolute;right:10px;bottom:10px}
+  .c.tv{grid-column:1/-1;background:#0B0B0D;color:#fff;height:190px}
+  .c.tv span{color:rgba(255,255,255,.6)}
+  .c.tv img{right:-20px;bottom:-6px;width:250px}
+  .wtb{margin-top:16px;border-radius:24px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);padding:16px}
+  .wtb .mp{height:250px;border-radius:16px;background:#F1F1EE;padding:12px}
+  .wtb .ch{display:flex;gap:6px;margin-top:12px;overflow:hidden}
+  .wtb .ch span{height:34px;padding:0 12px;border-radius:99px;box-shadow:inset 0 0 0 1px var(--line-2);display:grid;place-items:center;font-size:13px;font-weight:600;white-space:nowrap}
+  .wtb .ch span.on{background:var(--ink);color:#fff;box-shadow:none}
+  .dock{position:fixed;left:12px;right:12px;bottom:18px;height:62px;border-radius:20px;background:rgba(14,14,16,.92);backdrop-filter:blur(12px);display:flex;align-items:center;padding:0 8px;gap:4px;box-shadow:0 20px 40px -10px rgba(0,0,0,.5)}
+  .dock a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:rgba(255,255,255,.6);font-size:11px;font-weight:600}
+  .dock a.on{color:#fff}
+  .dock .sup{flex:1.3;height:46px;border-radius:14px;background:var(--red-500);flex-direction:row;justify-content:center;gap:8px;color:#fff;font-size:13.5px}
+</style></head>
+<body>
+<section class="hero">
+  <div class="status"><span class="num">9:41</span><span><i data-lucide="signal" class="sm"></i><i data-lucide="wifi" class="sm"></i><i data-lucide="battery-full"></i></span></div>
+  <div class="mn"><img src="_logo.jpg" alt="Nikai (logo blurred)"><span class="sp"></span><span class="ib ar" style="font-size:14px">ع</span><span class="ib"><i data-lucide="search" class="sm"></i></span><span class="ib"><i data-lucide="menu" class="sm"></i></span></div>
+  <div class="in"><span class="chip dark"><span class="dot"></span>Now in Egypt</span>
+    <h1>Change the way you watch. <em>Get the big picture.</em></h1>
+    <p>Nikai Smart UHD and LED TVs, with superior picture and sound.</p></div>
+  <div class="tv"><img src="img/tv-65.png" alt=""></div>
+  <div class="sz"><span class="on">65″</span><span>55″</span><span>50″</span><span>43″</span><span>32″</span></div>
+  <div class="ct"><a class="btn red">Explore TVs</a><a class="btn ghost-d"><i data-lucide="map-pin" class="sm"></i>Where to buy</a></div>
+</section>
+<section class="sec"><span class="eyebrow">Product categories</span><h2 style="margin-top:8px">For every room.</h2>
+  <div class="cats">
+    <div class="c tv"><b>TVs</b><span>UHD · Smart · LED</span><img src="img/tv-55.png" alt=""></div>
+    <div class="c"><b>Kitchen</b><span>Ovens, air fryers</span><img class="mult" src="img/airfryer.jpg" alt="" style="width:100px"></div>
+    <div class="c"><b>Home care</b><span>Irons, vacuums</span><img class="mult" src="img/vacuum.png" alt="" style="width:92px"></div>
+    <div class="c"><b>Comfort</b><span>Fans, heaters</span><img src="img/fan.png" alt="" style="height:120px"></div>
+    <div class="c"><b>Water</b><span>Dispensers</span><img class="mult" src="img/dispenser.png" alt="" style="height:120px"></div>
+  </div>
+</section>
+<section class="sec" style="padding-bottom:110px"><span class="eyebrow">Where to buy</span><h2 style="margin-top:8px">Find Nikai in your city.</h2>
+  <div class="wtb"><div class="mp" data-map='{"w":330,"h":226,"sel":"Cairo","only":["Alexandria","Cairo","Asyut"]}'></div>
+    <div class="ch"><span class="on">Cairo 6</span><span>Giza 3</span><span>Alexandria 4</span><span>Mansoura 2</span></div></div>
+</section>
+<nav class="dock"><a class="on"><i data-lucide="home" class="sm"></i>Home</a><a><i data-lucide="layout-grid" class="sm"></i>Products</a><a><i data-lucide="map-pin" class="sm"></i>Stores</a><a class="sup"><i data-lucide="wrench" class="sm"></i>Support</a></nav>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>boot();</script>
+</body></html>

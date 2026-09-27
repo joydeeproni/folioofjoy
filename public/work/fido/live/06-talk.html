@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Talk</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .head p{font-size:13.5px;color:rgba(255,255,255,.6);margin-top:4px}
+  .head .l{display:flex;align-items:center;gap:12px}
+  .head .av{width:46px;height:46px;background:var(--lilac);font-size:17px}
+  .head h1{font-size:26px}
+  .pills{margin-top:18px}
+  .feed{position:absolute;left:20px;right:20px;top:190px;bottom:170px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px}
+  .day{align-self:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:4px}
+  .qr{border-radius:26px;background:var(--lilac);color:var(--char);padding:18px 20px}
+  .qr .cat{font-size:12.5px;font-weight:600;opacity:.75}
+  .qr b{display:block;font-size:19px;font-weight:400;margin-top:8px;letter-spacing:-.01em}
+  .qr p{font-size:14px;line-height:1.45;margin-top:8px}
+  .b{max-width:84%;padding:13px 16px;border-radius:22px;font-size:14.5px;line-height:1.45}
+  .b.tr{background:var(--char);color:#fff;align-self:flex-start;border-bottom-left-radius:8px}
+  .b.me{background:var(--peach);color:var(--char);align-self:flex-end;border-bottom-right-radius:8px}
+  .typing{align-self:flex-start;background:var(--char);border-radius:20px;padding:14px 16px;display:flex;gap:5px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#fff;animation:typing 1.2s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  .comp{position:absolute;left:16px;right:16px;bottom:106px;height:52px;border-radius:18px;background:#1A1B21;display:flex;align-items:center;gap:10px;padding:0 6px 0 18px;color:rgba(255,255,255,.5);font-size:15px}
+  .comp .s{margin-left:auto;width:40px;height:40px;border-radius:13px;background:var(--yellow);color:var(--char);display:grid;place-items:center}
+</style></head>
+<body>
+<header class="head"><div class="l"><span class="av">C</span><div><h1>Christophe</h1><p>Your trainer · replies in about 2 hours</p></div></div><span class="sq press"><i data-lucide="phone" style="fill:currentColor"></i></span></header>
+<nav class="pills"><span class="on">All</span><span>Go To Crate</span><span>Errands</span><span>Recall</span></nav>
+<div class="feed" id="feed">
+  <span class="day">Today 8:32 pm</span>
+  <div class="qr" data-at="0"><span class="cat">Check-in · Go To Crate · Level 3</span><b>How did it go?</b><p>She goes in fine, but when I touch the door she cries and jumps right out.</p></div>
+  <div class="b tr" data-at="1">Very common at this level. Try this: close the door halfway, treat, open. Five reps before you close it fully. I’ve added a step to your next quest.</div>
+  <div class="b me" data-at="2">That was so much easier! She stayed in for 20 seconds</div>
+  <div class="typing" id="ty"><i></i><i></i><i></i></div>
+  <div class="b tr" data-at="4" id="last">Great job, the two of you! We’ll move to level 4 on Monday.</div>
+</div>
+<div class="comp">Send message<span class="s press"><i data-lucide="arrow-up" class="sm"></i></span></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  // messages arrive one by one; the trainer "types" before the last reply
+  const items = [...document.querySelectorAll('#feed [data-at]')], ty = document.getElementById('ty');
+  if (STATIC) ty.style.display = 'none';
+  else tween((t) => {
+    items.forEach((el) => { const at = 300 + (+el.dataset.at) * 650; const u = clamp((t - at) / 380); el.style.display = u > 0 ? '' : 'none'; el.style.opacity = eo(u); el.style.transform = `translateY(${(1 - eo(u)) * 14}px)`; });
+    const tOn = 300 + 2.6 * 650, tOff = 300 + 4 * 650; ty.style.display = t > tOn && t < tOff ? 'flex' : 'none';
+  });
+  boot({ tab: 'Talk', badge: 1 });
+</script>
+</body></html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1024"><title>WES · Go to location</title>
+<link rel="stylesheet" href="wes.css">
+<style>
+  .body{grid-template-columns:420px 1fr;grid-template-rows:1fr auto}
+  .loc{padding:18px 20px}
+  .codes{display:grid;grid-template-columns:repeat(3,1fr);margin-top:10px;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+  .codes div{padding:12px 14px}.codes div + div{border-left:1px solid var(--line)}
+  .codes b{display:block;font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--steel-800);font-variant-numeric:tabular-nums;margin-top:4px}
+  .codes div.hl{background:var(--lime-100)}.codes div.hl b{color:var(--lime-700)}
+  .az{display:flex;gap:10px;margin-top:12px}
+  .next{display:flex;gap:12px;align-items:center;margin-top:14px;padding:12px;border-radius:12px;background:var(--bg)}
+  .next img{width:56px;height:56px;object-fit:contain;background:#fff;border-radius:10px}
+  .next b{display:block;font-size:15px}.next span{font-size:13px;color:var(--ink-3)}
+  .cap{padding:16px 20px;display:flex;gap:18px;align-items:center}
+  .cap .st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:1}
+  .cap .st div{background:var(--bg);border-radius:10px;padding:8px 10px}
+  .cap .st b{display:block;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+  .map{padding:14px;display:flex;flex-direction:column}
+  .map .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}.map .hd b{font-size:15px}.map .hd .sp{flex:1}
+  .map svg{flex:1;width:100%}
+  .acts{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr 1.6fr;gap:10px}
+</style></head>
+<body>
+<div id="top"></div>
+<div class="cue"><span class="ic"><i data-lucide="navigation"></i></span><div><b>Go to aisle 675 · bay 082 · loc 24B</b><br><span>42 m · about 35 seconds · rack R10</span></div><span class="sp"></span><span class="pill" style="background:rgba(255,255,255,.12);color:#fff">Stop 4 of 18</span></div>
+<main class="body">
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <section class="card loc">
+      <span class="label">Next location</span>
+      <div class="codes"><div><span class="label">Aisle</span><b>675</b></div><div><span class="label">Bay</span><b>082</b></div><div class="hl"><span class="label">Location</span><b>24B</b></div></div>
+      <div class="az"><span class="pill">Area <b>415</b></span><span class="pill">Zone <b>306</b></span><span class="pill">Level <b>2 of 4</b></span></div>
+      <div class="next"><img src="assets/toolset.jpg" alt=""><div><b>Pick 5 × Husky Mechanics Tool Set</b><span>For tote T-4633 · slot 0007</span></div></div>
+    </section>
+    <section class="card cap">
+      <svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="42" fill="none" stroke="#E2EBF1" stroke-width="12"/>
+        <circle cx="52" cy="52" r="42" fill="none" stroke="#B2B83A" stroke-width="12" stroke-dasharray="${0}" id="r1"/>
+        <text x="52" y="50" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="26" fill="#232628">28</text><text x="52" y="68" text-anchor="middle" font-family="Archivo" font-size="11" fill="#6E7275">totes</text></svg>
+      <div class="st"><div><span class="label">In progress</span><b>16</b></div><div><span class="label">Completed</span><b style="color:var(--lime-700)">10</b></div><div><span class="label">Empty</span><b>2</b></div></div>
+    </section>
+  </div>
+  <section class="card map">
+    <div class="hd"><b>Route</b><span class="pill steel" style="height:26px">Hall 2 · pick face</span><span class="sp"></span><span class="label">You · target</span></div>
+    <svg id="map" viewBox="0 0 540 380"></svg>
+  </section>
+  <div class="acts">
+    <a class="btn ghost"><i data-lucide="skip-forward"></i>Skip</a>
+    <a class="btn ghost"><i data-lucide="package-open"></i>Dump cart</a>
+    <a class="btn ghost"><i data-lucide="shopping-cart"></i>Make cart</a>
+    <a class="btn primary"><i data-lucide="scan-line"></i>Scan location label</a>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  // capacity ring: 26 of 28 used (16 in progress + 10 completed)
+  const C = 2 * Math.PI * 42; const r = document.getElementById('r1');
+  r.setAttribute('stroke-dasharray', `${C * 10 / 28} ${C}`); r.setAttribute('transform', 'rotate(-90 52 52)');
+  const r2 = r.cloneNode(); r2.setAttribute('stroke', '#5D87A1'); r2.setAttribute('stroke-dasharray', `${C * 16 / 28} ${C}`); r2.setAttribute('transform', `rotate(${-90 + 360 * 10 / 28} 52 52)`); r.after(r2);
+  // floor plan redrawn from the client's warehouse map (racks R = reserve, F = forward pick)
+  const R = [[20, 14, 60, 'R1'], [96, 14, 36, 'R2'], [152, 14, 36, 'R3'], [206, 14, 36, 'R4'], [262, 14, 36, 'R5'], [318, 14, 70, 'R6'], [404, 14, 36, 'R7'], [140, 150, 70, 'R8'], [140, 186, 70, 'R10'], [222, 150, 34, 'R9'], [222, 186, 34, 'R11'], [138, 300, 40, 'R12'], [196, 300, 40, 'R13'], [254, 300, 40, 'R14'], [360, 300, 40, 'R15'], [420, 300, 40, 'R16']];
+  const F = [[20, 50, 60, 'F1'], [96, 50, 36, 'F2'], [152, 50, 36, 'F3'], [206, 50, 36, 'F4'], [262, 50, 36, 'F5'], [318, 50, 70, 'F6'], [404, 50, 36, 'F7'], [140, 114, 70, 'F8'], [222, 114, 34, 'F9'], [140, 222, 70, 'F10'], [222, 222, 34, 'F11'], [138, 264, 40, 'F12'], [196, 264, 40, 'F13'], [254, 264, 40, 'F14']];
+  const box = ([x, y, w, n], fill, tc, hl) => `<rect x="${x}" y="${y}" width="${w}" height="26" rx="4" fill="${fill}" ${hl ? 'stroke="#979D2B" stroke-width="2.5"' : ''}/><text x="${x + w / 2}" y="${y + 17}" text-anchor="middle" font-family="Archivo" font-size="10.5" font-weight="700" fill="${tc}">${n}</text>`;
+  const tall = (x, y, h, n) => `<rect x="${x}" y="${y}" width="26" height="${h}" rx="4" fill="#DDE3E8"/><text x="${x + 13}" y="${y + h / 2 + 4}" text-anchor="middle" font-family="Archivo" font-size="10.5" font-weight="700" fill="#4C4C4C">${n}</text>`;
+  document.getElementById('map').innerHTML = `
+    <rect x="4" y="4" width="532" height="372" rx="12" fill="#F4F7F9" stroke="#DDE3E8"/>
+    ${F.map(b => box(b, '#DDE3E8', '#4C4C4C')).join('')}
+    ${R.map(b => box(b, b[3] === 'R10' ? '#B2B83A' : '#C9D8E2', b[3] === 'R10' ? '#1d1f08' : '#2A4D63', b[3] === 'R10')).join('')}
+    ${tall(20, 110, 60, 'F18')}${tall(100, 110, 60, 'F19')}${tall(270, 150, 60, 'F20')}${tall(20, 250, 60, 'F17')}${tall(370, 210, 70, 'F15')}${tall(430, 210, 70, 'F16')}${tall(490, 190, 90, 'F21')}
+    <path d="M470 352 L470 95 L133 95 L133 199" fill="none" stroke="#2A4D63" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9"/>
+    <circle cx="470" cy="352" r="10" fill="#2A4D63"/><circle cx="470" cy="352" r="18" fill="#2A4D63" opacity=".15"/>
+    <g transform="translate(133 199)"><circle r="9" fill="#B2B83A" stroke="#fff" stroke-width="3"/></g>
+    <g font-family="Archivo" font-weight="700" font-size="12"><rect x="430" y="358" width="0" height="0"/><text x="486" y="357" fill="#2A4D63">You</text><text x="52" y="214" fill="#7C8120">24B</text></g>`;
+  boot({ task: 'Cart picking', sub: 'Wave 14 · Zone 306 · Area 415', pills: '<span class="pill steel"><i data-lucide="shopping-cart" class="sm"></i>Cart <b>C00225</b></span><span class="pill lime">6 of 12 totes done</span>' });
+</script></body></html>

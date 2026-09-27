@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>MedForce · Programs</title>
+<link rel="stylesheet" href="mf.css">
+<style>
+  .lay{display:grid;grid-template-columns:1fr 360px;gap:16px}
+  .cal{overflow:hidden}
+  .cal .hd{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .cal .hd h2{font-size:18px;font-weight:800;letter-spacing:-.02em}
+  .cal .hd .sp{flex:1}
+  .nb{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line-strong)}
+  .dow,.days{display:grid;grid-template-columns:repeat(7,1fr)}
+  .dow span{font-size:12px;font-weight:700;color:var(--text-3);padding:10px 12px;border-bottom:1px solid var(--line)}
+  .day{height:124px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px;display:flex;flex-direction:column;gap:4px}
+  .day:nth-child(7n){border-right:0}
+  .day .n{font-size:12.5px;font-weight:700;color:var(--text-2);font-variant-numeric:tabular-nums}
+  .day.out .n{color:var(--ink-300)}
+  .day.today .n{background:var(--navy-600);color:#fff;border-radius:6px;width:24px;height:22px;display:grid;place-items:center}
+  .ev{font-size:12px;font-weight:650;padding:4px 7px;border-radius:7px;line-height:1.25;border-left:0;display:flex;flex-direction:column}
+  .ev small{font-weight:600;opacity:.8;font-size:11px}
+  .ev.req{background:var(--navy-50);color:var(--navy-700);box-shadow:inset 0 0 0 1px var(--navy-200)}
+  .ev.ok{background:var(--green-100);color:var(--green-700)}
+  .ev.occ{background:var(--amber-100);color:var(--amber-600)}
+  .ev.sel{background:var(--navy-600);color:#fff;box-shadow:0 6px 14px -6px rgba(31,90,163,.7)}
+  .pv{padding:20px}
+  .pv .top-l{display:flex;align-items:center;gap:8px}
+  .pv h3{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.2}
+  .pv .sub{color:var(--text-2);font-size:13.5px;margin-top:2px}
+  .steps{margin:18px 0;display:flex;flex-direction:column}
+  .st{display:grid;grid-template-columns:22px 1fr auto;gap:10px;padding-bottom:12px;position:relative;font-size:13.5px}
+  .st::before{content:"";position:absolute;left:10px;top:20px;bottom:0;width:2px;background:var(--bg-2)}
+  .st:last-child{padding:0}.st:last-child::before{display:none}
+  .st.d::before{background:var(--navy-500)}
+  .st .o{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 2px var(--ink-300);background:#fff;z-index:1}
+  .st.d .o{background:var(--navy-600);box-shadow:none;color:#fff}
+  .st.cur .o{box-shadow:inset 0 0 0 2px var(--navy-600)} .st.cur .o::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--navy-600)}
+  .st .o svg{width:12px;height:12px;stroke-width:3}
+  .st b{font-weight:650}.st.fut b{color:var(--text-3);font-weight:600}
+  .st time{font-size:12px;color:var(--text-3)}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:13.5px;padding:16px 0;border-top:1px solid var(--line)}
+  .kv dt{color:var(--text-3);font-weight:600}.kv dd{margin:0;font-weight:600}
+  .money{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+  .money div{background:var(--bg);border-radius:10px;padding:10px 12px}
+  .money b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .acts{display:flex;gap:8px;margin-top:16px}.acts .btn{flex:1}
+</style></head>
+<body><div class="app"><div class="col"><main class="main">
+  <div class="ph"><div><h1>Programs</h1><p>12 this quarter · 3 need action</p></div><span class="sp"></span>
+    <div class="seg"><button><i data-lucide="list" class="sm"></i>List</button><button class="on"><i data-lucide="calendar-days" class="sm"></i>Calendar</button></div>
+    <span class="filt">Status <b>All</b><i data-lucide="chevron-down" class="sm"></i></span><span class="filt">Brand <b>All</b><i data-lucide="chevron-down" class="sm"></i></span></div>
+  <div class="lay">
+    <section class="card cal">
+      <div class="hd"><h2>June 2027</h2><span class="sp"></span><span class="nb"><i data-lucide="chevron-left" class="sm"></i></span><a class="btn ghost" style="height:34px">Today</a><span class="nb"><i data-lucide="chevron-right" class="sm"></i></span></div>
+      <div class="dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+      <div class="days" id="days"></div>
+    </section>
+    <aside class="card pv">
+      <div class="top-l"><span class="chip navy num">#25539</span><span class="chip">Restasis 2027</span><span style="margin-left:auto" class="nb"><i data-lucide="x" class="sm"></i></span></div>
+      <h3>Expert insights dinner</h3><div class="sub">Mon, Jun 21 · 7:00 PM ET · 20 HCP seats</div>
+      <div class="steps">
+        <div class="st d"><span class="o"><i data-lucide="check"></i></span><b>Requested</b><time>Jun 02</time></div>
+        <div class="st d"><span class="o"><i data-lucide="check"></i></span><b>Approved by manager</b><time>Jun 04</time></div>
+        <div class="st cur"><span class="o"></span><b>Confirm speaker &amp; venue</b><time>Due Jun 10</time></div>
+        <div class="st fut"><span class="o"></span><b>Occurred</b><time>Jun 21</time></div>
+        <div class="st fut"><span class="o"></span><b>Closed · attendance filed</b><time></time></div>
+      </div>
+      <dl class="kv"><dt>Speaker</dt><dd>Dr. Lindsey Bull, MD</dd><dt>Venue</dt><dd>13 Bones Restaurant<br><span style="font-weight:500;color:var(--text-2)">502 S Andy Griffith Pkwy, Mount Airy, NC</span></dd><dt>Coordinator</dt><dd>Eric Nadler · 416-268-0923</dd></dl>
+      <div class="money"><div><span class="label">Honoraria</span><b>$2,440</b></div><div><span class="label">Meeting</span><b>$3,754</b></div><div><span class="label">Speaker travel</span><b>$1,180</b></div><div><span class="label">Total value</span><b>$7,374</b></div></div>
+      <div class="acts"><a class="btn ghost">Manage attendance</a><a class="btn primary">Open program</a></div>
+    </aside>
+  </div>
+</main></div></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  const ev = { 3: [['occ', 'Glaucoma drops', '25203 · Occurred']], 10: [['ok', 'Dry eye lunch', '25531 · Confirmed']], 14: [['ok', 'Restasis 2027', '25537 · Confirmed']], 17: [['req', 'Hub: MGD update', 'Virtual']], 21: [['sel', 'Restasis 2027', '25539 · Approved']], 24: [['req', 'Glaucoma drops', '25548 · Requested']], 27: [['ok', 'Restasis lunch', '25541 · Confirmed']] };
+  let h = '';
+  // June 2027 starts on a Tuesday: cell 0 is Mon May 31, cells 31+ spill into July
+  for (let i = 0; i < 35; i++) {
+    const out = i === 0 || i > 30;
+    const shown = i === 0 ? 31 : i > 30 ? i - 30 : i;
+    const items = out ? [] : (ev[i] || []);
+    h += `<div class="day ${out ? 'out' : ''} ${i === 9 ? 'today' : ''}"><span class="n">${shown}</span>${items.map(([c, t, s]) => `<span class="ev ${c}">${t}<small>${s}</small></span>`).join('')}</div>`;
+  }
+  document.getElementById('days').innerHTML = h;
+  boot({ portal: 'rep', nav: 'Programs' });
+</script></body></html>

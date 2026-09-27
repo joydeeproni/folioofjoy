@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Profile</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .who{padding:36px 32px 0}
+  .who h2{font-size:22px;font-weight:400;letter-spacing:-.01em}
+  .who .e{display:block;color:var(--yellow);font-size:15px;margin-top:10px}
+  .who .p{display:block;color:rgba(255,255,255,.7);font-size:15px;margin-top:8px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;text-align:center;margin-top:36px}
+  .stats b{display:block;font-size:26px;font-weight:600}
+  .stats span{display:block;font-size:13px;color:rgba(255,255,255,.65);margin-top:6px}
+  .scene{position:absolute;left:0;right:0;top:404px;height:250px}
+  .scene svg{width:100%;height:100%}
+  .ground{position:absolute;left:0;right:0;top:640px;bottom:0;background:var(--cream)}
+  .fb{position:absolute;z-index:2;left:0;right:0;top:640px;height:110px;color:var(--char);display:flex;align-items:flex-start;gap:12px;padding:12px 28px 0}
+  .fb p{font-size:13px;line-height:1.45;flex:1;padding-top:4px}
+  .fb a{height:34px;padding:0 14px;border-radius:9px;background:var(--char);color:#fff;font-size:14px;font-weight:600;display:inline-flex;align-items:center}
+</style></head>
+<body>
+<header class="head"><h1>Profile</h1><span class="sq press"><i data-lucide="user-pen" style="fill:currentColor"></i></span></header>
+<nav class="pills"><span class="on">Your Info</span><span>Pet’s Info</span><span>App Settings</span></nav>
+<div class="who a-rise" style="animation-delay:.1s"><h2>Vivian Lee</h2><span class="e">vivian.lee@gmail.com</span><span class="p num">+1 415 555 0132</span></div>
+<div class="stats a-rise" style="animation-delay:.2s"><div><b class="num" id="c1">21</b><span>Completed Quests</span></div><div><b class="num" id="c2">3</b><span>Ongoing Quests</span></div></div>
+<div class="ground"></div>
+<div class="scene a-fade" style="animation-delay:.3s" id="sc"></div>
+<div class="fb"><p>If you like what we are doing,<br>help us improve.</p><a class="press" id="go">Give Feedback</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('sc').innerHTML = ILL.planet();
+  countUp(document.getElementById('c1'), 21, 300, 1200); countUp(document.getElementById('c2'), 3, 300, 900);
+  boot({ tab: 'Me' });
+</script>
+</body></html>

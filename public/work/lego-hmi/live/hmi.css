@@ -1,0 +1,51 @@
+/* Moulding HMI — layout on top of the official Carbon v11 stylesheet (carbon.min.css).
+   Theme: g10 content + g100 UI shell header. Accent: Carbon Blue 60 (#0F62FE). */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+body{margin:0;width:1280px;height:800px;overflow:hidden;font-family:'IBM Plex Sans',sans-serif;background:var(--cds-background);color:var(--cds-text-primary);-webkit-font-smoothing:antialiased}
+.num,.mono{font-variant-numeric:tabular-nums}
+.mono{font-family:'IBM Plex Mono',monospace}
+svg.ci{flex:none}
+
+/* UI shell header (Carbon g100) */
+.cds--header{position:relative;height:48px}
+.hdr-logo{height:26px;width:26px;margin:0 12px 0 16px;filter:blur(2.2px);flex:none;border-radius:2px}
+.cds--header__name{padding:0 16px 0 0;font-size:14px}
+.mach-id{display:flex;align-items:center;gap:10px;padding:0 16px;height:100%;border-left:1px solid #393939;color:#c6c6c6;font-size:14px}
+.mach-id b{color:#f4f4f4;font-weight:600}
+.hdr-sp{flex:1}
+.hdr-item{display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;color:#c6c6c6;font-size:14px;border-left:1px solid #393939}
+.hdr-item.clock{color:#f4f4f4;font-size:16px;font-family:'IBM Plex Mono',monospace}
+.hdr-item .badge{min-width:18px;height:18px;border-radius:9px;background:#da1e28;color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 5px}
+.hdr-item.op{gap:10px}
+.hdr-item.op .av{width:28px;height:28px;border-radius:50%;background:#0f62fe;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600}
+
+/* body grid */
+.shell{display:grid;grid-template-columns:200px 1fr;height:752px}
+.nav{background:var(--cds-layer-01);border-right:1px solid var(--cds-border-subtle-01);display:flex;flex-direction:column;padding:8px 0}
+.nav a{display:flex;align-items:center;gap:14px;height:56px;padding:0 18px;color:var(--cds-text-secondary);font-size:16px;text-decoration:none;position:relative}
+.nav a.on{background:var(--cds-layer-selected-01);color:var(--cds-text-primary);font-weight:600}
+.nav a.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cds-border-interactive)}
+.nav a .n{margin-left:auto;background:#da1e28;color:#fff;font-size:12px;font-weight:600;min-width:20px;height:20px;border-radius:10px;display:grid;place-items:center;padding:0 6px}
+.nav .sp{flex:1}
+.nav .conn{margin:0 12px 8px;padding:12px;background:var(--cds-layer-02,#fff);font-size:12px;color:var(--cds-text-secondary);border:1px solid var(--cds-border-subtle-01)}
+.nav .conn b{display:flex;align-items:center;gap:6px;color:var(--cds-text-primary);font-size:13px;font-weight:600}
+.nav .conn i{width:8px;height:8px;border-radius:50%;background:#24a148}
+.main{padding:20px 24px;overflow:hidden;position:relative}
+.ph{display:flex;align-items:flex-end;gap:12px;margin-bottom:16px}
+.ph h1{font-size:28px;font-weight:400;line-height:36px;letter-spacing:0}
+.ph p{font-size:14px;color:var(--cds-text-secondary);margin-top:2px}
+.ph .sp{flex:1}
+
+/* Carbon-ish helpers built on tokens */
+.tile{background:var(--cds-layer-01);padding:16px;position:relative}
+.label-01{font-size:12px;line-height:16px;letter-spacing:.32px;color:var(--cds-text-secondary)}
+.heading-03{font-size:20px;line-height:28px;font-weight:400}
+.big{font-size:32px;line-height:40px;font-weight:300;font-variant-numeric:tabular-nums}
+.big small{font-size:14px;color:var(--cds-text-secondary);font-weight:400;margin-left:4px}
+.cds--btn{touch-action:manipulation;align-items:center}
+/* Trailing button icon: pinned to the right padding, vertically centred, never touching the label */
+.cds--btn > svg.bi{position:absolute;right:16px;top:50%;transform:translateY(-50%)}
+.cds--btn:has(> svg.bi){padding-right:60px}
+.cds--btn > svg.bi-lead{margin-right:10px}
+.cds--btn:has(> svg.bi-lead){justify-content:flex-start;padding-left:16px}
+.cds--tag{margin:0}

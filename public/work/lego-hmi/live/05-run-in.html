@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1280">
+<title>Moulding HMI · Run-in</title>
+<link rel="stylesheet" href="carbon.min.css"><link rel="stylesheet" href="hmi.css">
+<style>
+  .ri{display:grid;grid-template-columns:420px 1fr 440px;position:relative}
+  .col-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .col-h h3{font-size:14px;font-weight:600}
+  .params,.results{display:flex;flex-direction:column;gap:2px}
+  .p{background:var(--cds-layer-01);height:74px;display:flex;align-items:center;gap:12px;padding:0 16px;position:relative}
+  .p .nm{flex:1;font-size:14px}
+  .p .nm small{display:block;color:var(--cds-text-secondary);font-size:12px}
+  .p .cds--number{width:178px}
+  .p .cds--form-item{flex:none}
+  .p .cds--number input{height:48px;font-size:20px;font-family:'IBM Plex Mono';padding-right:104px;min-width:0}
+  .p .cds--number__control-btn{width:48px;height:48px}
+  .p .was{width:36px;text-align:right;font-size:12px;color:var(--cds-text-secondary);font-family:'IBM Plex Mono'}
+  .p.act{box-shadow:inset 4px 0 0 #0f62fe;background:#edf5ff}
+  .p.act .was{color:#0f62fe;font-weight:600}
+  .p.act .cds--number input{outline:2px solid #0f62fe;outline-offset:-2px}
+  .port{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px #a8a8a8;transform:translateY(-50%)}
+  .p .port{right:-5px} .r .port{left:-5px}
+  .p.act .port,.r.hit .port{box-shadow:inset 0 0 0 3px #0f62fe}
+  .r{background:var(--cds-layer-01);height:74px;display:grid;grid-template-columns:130px 1fr 90px;align-items:center;gap:16px;padding:0 16px 0 20px;position:relative}
+  .r.hit{background:#edf5ff}
+  .r .nm{font-size:14px}.r .nm small{display:block;color:var(--cds-text-secondary);font-size:12px}
+  .g{position:relative;height:24px}
+  .g .tr{position:absolute;left:0;right:0;top:10px;height:4px;background:#e0e0e0}
+  .g .band{position:absolute;top:6px;height:12px;background:#a7f0ba}
+  .g .tg{position:absolute;top:2px;width:2px;height:20px;background:#161616}
+  .g .dot{position:absolute;top:5px;width:14px;height:14px;border-radius:50%;transform:translateX(-7px);box-shadow:0 0 0 2px #fff}
+  .g .ghost{position:absolute;top:5px;width:14px;height:14px;border-radius:50%;transform:translateX(-7px);box-shadow:inset 0 0 0 2px #0f62fe;background:#fff}
+  .g .ar{position:absolute;top:11px;height:2px;background:#0f62fe}
+  .r .v{text-align:right;font-family:'IBM Plex Mono';font-size:20px}
+  .r .v small{display:block;font-size:12px;font-family:'IBM Plex Sans';color:var(--cds-text-secondary)}
+  .r .v.bad{color:#da1e28}.r .v.warn{color:#b28600}
+  .r .v small.pred{color:#0f62fe;font-weight:600}
+  svg.wires{position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .foot{display:flex;align-items:center;gap:1px;margin-top:14px}
+  .foot .sp{flex:1}
+  .foot .cds--btn{height:64px}
+  .shots{display:flex;align-items:center;gap:12px;background:var(--cds-layer-01);padding:0 16px;height:64px;margin-right:16px;font-size:14px}
+  .shots .cds--progress-bar{width:180px}
+</style></head>
+<body class="cds--g10">
+<div class="shell"><main class="main">
+  <div class="ph"><div><h1>Run-in</h1><p>GULI MODUL · Mould 2357023 · adjust settings, then take a test shot</p></div></div>
+  <div class="ri" id="ri">
+    <section><div class="col-h"><h3>Machine settings</h3><span class="label-01">Change</span></div><div class="params" id="params"></div></section>
+    <div></div>
+    <section><div class="col-h"><h3>Process result</h3><span class="label-01">Green band = tolerance · ○ predicted</span></div><div class="results" id="results"></div></section>
+    <svg class="wires" id="wires"></svg>
+  </div>
+  <div class="foot">
+    <button class="cds--btn cds--btn--ghost" style="height:48px"><span data-ci="document" data-s="16"></span>Run-in guide</button>
+    <span class="sp"></span>
+    <div class="shots"><span id="sn">Test shot 12 of 20</span><div class="cds--progress-bar cds--progress-bar--small"><div class="cds--progress-bar__track"><div class="cds--progress-bar__bar" id="sb" style="transform:scaleX(.6)"></div></div></div></div>
+    <button class="cds--btn cds--btn--secondary">Back</button>
+    <button class="cds--btn cds--btn--primary" id="shot">Take test shot<span data-ci="play--filled"></span></button>
+  </div>
+</main></div>
+<script src="icons.js"></script><script src="_shared.js"></script>
+<script>
+  const Q = new URLSearchParams(location.search), V = +(Q.get('v') ?? 52), DONE = Q.get('done') === '1', dv = V - 45;
+  const P = [['bp', 'Back pressure', 'bar', 80, 1], ['ds', 'Dosage stroke', 'mm', '45.0', .1], ['is', 'Injection speed', 'mm/s', V, 1], ['sw', 'Switch-over stroke', 'mm', '12.5', .1], ['hp', 'Holding pressure', 'bar', 450, 5], ['mt', 'Nozzle temperature', '°C', 238, 1]];
+  const numInput = v => `<div class="cds--form-item"><div class="cds--number"><div class="cds--number__input-wrapper"><input type="text" inputmode="decimal" value="${v}" aria-label="value"><div class="cds--number__controls">
+    <button class="cds--number__control-btn down-icon" aria-label="Decrease">${ci('subtract', 16)}</button><div class="cds--number__rule-divider"></div>
+    <button class="cds--number__control-btn up-icon" aria-label="Increase">${ci('add', 16)}</button><div class="cds--number__rule-divider"></div></div></div></div></div>`;
+  document.getElementById('params').innerHTML = P.map(([k, n, u, v]) => {
+    const act = k === 'is' && dv > 0 && !DONE;
+    return `<div class="p ${act ? 'act' : ''}" data-k="${k}"><div class="nm">${n}<small>${u}</small></div>${numInput(v)}<span class="was">${k === 'is' && dv > 0 ? '+' + dv : ''}</span><span class="port"></span></div>`;
+  }).join('');
+  // results: [key, name, unit, target, tol, min, max, actual, predicted]
+  let pit = null, pct = null, it = 0.97, ct = 19.4;
+  if (DONE) { it = 0.86; ct = 18.3; } else if (dv > 0) { pit = +(0.97 - dv * 0.11 / 7).toFixed(2); pct = +(19.4 - dv * 1.1 / 7).toFixed(1); }
+  const R = [['ct', 'Cycle time', 's', 18.0, .6, 15, 21, ct, pct], ['mbp', 'Back pressure', 'bar', 80, 4, 60, 100, 78], ['it', 'Injection time', 's', 0.85, .04, .6, 1.1, it, pit], ['cu', 'Cushion', 'mm', 6.0, .8, 3, 9, 5.8], ['mhp', 'Holding pressure', 'bar', 450, 15, 380, 520, 450], ['mmt', 'Mass temperature', '°C', 230, 5, 210, 250, 229]];
+  document.getElementById('results').innerHTML = R.map(([k, n, u, t, tol, mn, mx, a, p]) => {
+    const x = v => ((v - mn) / (mx - mn) * 100) + '%';
+    const off = Math.abs(a - t) > tol * 2 ? 'bad' : Math.abs(a - t) > tol ? 'warn' : 'ok';
+    const col = { bad: '#da1e28', warn: '#f1c21b', ok: '#24a148' }[off];
+    const sub = p != null ? `<small class="pred">→ ${p}</small>` : `<small>${off === 'ok' ? 'in tolerance' : off === 'bad' ? 'off target' : 'over target'}</small>`;
+    return `<div class="r ${p != null ? 'hit' : ''}" data-k="${k}"><div class="nm">${n}<small>Target ${t} ${u}</small></div>
+      <div class="g"><span class="tr"></span><span class="band" style="left:${x(t - tol)};width:calc(${x(t + tol)} - ${x(t - tol)})"></span><span class="tg" style="left:${x(t)}"></span>
+      ${p != null ? `<span class="ar" style="left:${x(Math.min(p, a))};width:calc(${x(Math.max(p, a))} - ${x(Math.min(p, a))})"></span><span class="ghost" style="left:${x(p)}"></span>` : ''}
+      <span class="dot" style="left:${x(a)};background:${col}"></span></div>
+      <div class="v ${off === 'ok' ? '' : off}">${a}${sub}</div><span class="port"></span></div>`;
+  }).join('');
+  if (DONE) { document.getElementById('sn').textContent = 'Test shot 13 of 20'; document.getElementById('sb').style.transform = 'scaleX(.65)'; }
+  boot({ nav: 'Process', status: 'Setup' });
+  const MAP = { bp: ['mbp'], ds: ['cu'], is: ['it', 'ct'], sw: ['cu'], hp: ['mhp', 'cu'], mt: ['mmt'] };
+  const ACTIVE = dv > 0 && !DONE ? 'is' : null;
+  function wire() {
+    const box = document.getElementById('ri').getBoundingClientRect();
+    const port = el => { const r = el.querySelector('.port').getBoundingClientRect(); return [r.x + r.width / 2 - box.x, r.y + r.height / 2 - box.y]; };
+    let base = '', top = '';
+    for (const [k, outs] of Object.entries(MAP)) for (const o of outs) {
+      const a = port(document.querySelector(`.p[data-k="${k}"]`)), b = port(document.querySelector(`.r[data-k="${o}"]`)), dx = (b[0] - a[0]) * .5;
+      const d = `M${a[0] + 5} ${a[1]} C${a[0] + dx} ${a[1]} ${b[0] - dx} ${b[1]} ${b[0] - 5} ${b[1]}`;
+      if (k === ACTIVE) top += `<path d="${d}" fill="none" stroke="#0f62fe" stroke-width="2.5"/>`;
+      else base += `<path d="${d}" fill="none" stroke="#c6c6c6" stroke-width="1.25"/>`;
+    }
+    document.getElementById('wires').innerHTML = base + top;
+  }
+  document.fonts.ready.then(wire);
+</script></body></html>

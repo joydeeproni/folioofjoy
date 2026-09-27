@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>Fido · Who are we training?</title>
+<link rel="stylesheet" href="fido.css">
+<style>
+  .wrap{padding:26px 24px 0}
+  h1{font-size:30px;font-weight:300;letter-spacing:-.025em;line-height:1.12}
+  .photo{width:104px;height:104px;border-radius:30px;background:var(--white);margin-top:22px;position:relative;display:grid;place-items:center;overflow:hidden}
+  .photo img{width:120px;margin-top:14px}
+  .photo.empty{color:#9A9CA4}
+  .cam{position:absolute;right:-8px;bottom:-6px;width:34px;height:34px;border-radius:11px;background:var(--char);color:#fff;display:grid;place-items:center}
+  .breeds{display:flex;flex-wrap:wrap;gap:8px}
+  .breeds span{height:38px;padding:0 15px;border-radius:12px;background:var(--white);display:inline-flex;align-items:center;gap:6px;font-size:14.5px;font-weight:500}
+  .breeds span.on{background:var(--char);color:#fff}
+  .age{display:flex;align-items:center;justify-content:space-between}
+  .st{display:flex;gap:6px}.st b{width:40px;height:40px;border-radius:12px;background:#F0F1F3;display:grid;place-items:center}
+  .note{display:flex;gap:10px;margin-top:18px;font-size:13.5px;line-height:1.45;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.55)}
+  .foot{position:absolute;left:24px;right:24px;bottom:36px}.foot .btn{width:100%}
+</style></head>
+<body class="peach">
+<div id="onb"></div>
+<div class="wrap">
+  <h1>Who are we training?</h1>
+  <div style="position:relative;width:104px"><div class="photo" id="ph"><img src="assets/cute-dog.png" alt=""></div><span class="cam"><i data-lucide="camera" class="sm"></i></span></div>
+  <label class="field"><span>Name</span><div class="input" id="nm">Milou</div></label>
+  <div class="field"><span>Breed</span><div class="breeds" id="br"><span class="on">Golden mix</span><span>Frenchie</span><span>Pomeranian</span><span>Doodle</span><span><i data-lucide="search" class="sm"></i>Other</span></div></div>
+  <div class="field"><span>Age</span><div class="input age"><b class="num" id="ag" style="font-weight:500">14 weeks</b><span class="st"><b><i data-lucide="minus" class="sm"></i></b><b><i data-lucide="plus" class="sm"></i></b></span></div></div>
+  <p class="note"><i data-lucide="sparkles" class="sm" style="margin-top:2px"></i>Your plan follows Milou’s age, week by week, not a school curriculum.</p>
+</div>
+<div class="foot"><a class="btn char press" id="go">Continue</a></div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  document.getElementById('onb').outerHTML = onbBar(1);
+  const s = +(Q.get('s') ?? 3);
+  const nm = document.getElementById('nm'), br = document.getElementById('br'), ph = document.getElementById('ph');
+  if (s < 1) { nm.className = 'input ph focus'; nm.innerHTML = '<span class="caret"></span>Your dog’s name'; }
+  else if (s < 2) { nm.className = 'input focus'; nm.innerHTML = 'Milou<span class="caret" style="margin-left:2px"></span>'; }
+  if (s < 3) br.querySelector('.on').classList.remove('on');
+  if (s < 2) { ph.className = 'photo empty'; ph.innerHTML = '<i data-lucide="image-plus" class="lg"></i>'; document.getElementById('ag').textContent = '— weeks'; }
+  if (s >= 3 && !STATIC && !Q.has('s')) {   // live: type the name, pick the breed
+    const full = 'Milou'; nm.className = 'input focus';
+    tween((t) => { const n = Math.floor(clamp((t - 400) / 900) * full.length); nm.innerHTML = full.slice(0, n) + (t < 1500 ? '<span class="caret" style="margin-left:2px"></span>' : ''); if (t > 1500) nm.className = 'input'; br.querySelector('span').classList.toggle('on', t > 1900); });
+  }
+  boot({});
+</script>
+</body></html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=390"><title>SellCrowd · Dashboard</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="sc.css">
+<style>
+  .appbar{padding-bottom:64px}
+  .ptabs{justify-content:space-between;padding-right:24px}
+  .stats{display:grid;grid-template-columns:1.25fr 1fr 1fr;row-gap:26px;padding:20px 22px 0;position:relative;z-index:1}
+  .stats span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+  .stats b{display:block;font-size:27px;font-weight:800;letter-spacing:-.03em;margin-top:3px;line-height:1.1}
+  .earn{margin:-36px 18px 0;position:relative;z-index:2;height:72px;border-radius:36px;background:#fff;box-shadow:var(--sh-2);display:flex;align-items:center;padding:0 24px 0 28px;gap:18px}
+  .earn span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);line-height:1.25;width:66px}
+  .earn b{font-size:27px;font-weight:800;letter-spacing:-.03em;flex:1;color:#3A4058}
+  .earn .up{color:#2FD28A}
+  .earn .up svg{width:30px;height:30px;stroke-width:2.2}
+  .target{background:#fff;margin-top:-36px;padding:62px 22px 26px}
+  .track{height:10px;border-radius:5px;background:#E8EBF3;position:relative;margin:4px 0 16px}
+  .track .fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,#FF7A8A,var(--coral))}
+  .track .thumb{position:absolute;top:50%;width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 4px 12px -2px rgba(242,71,95,.45),0 0 0 1px var(--line);transform:translate(-50%,-50%);display:grid;place-items:center;color:var(--coral)}
+  .track .thumb svg{width:17px;height:17px}
+  .tl{display:flex;justify-content:space-between;align-items:flex-end}
+  .tl span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .tl b{font-size:17px;font-weight:800;letter-spacing:-.01em}
+  .tl .r{text-align:right}
+  .client{background:#fff;margin-top:8px;padding:20px 22px 22px}
+  .client .h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .client .h b{font-size:17px;font-weight:800;letter-spacing:-.015em}
+  .client .h a{font-size:13.5px;font-weight:700;color:var(--blue)}
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .tile{height:140px;border-radius:6px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;font-weight:800;font-size:15px}
+  .tile svg.lucide{width:28px;height:28px}
+</style></head>
+<body>
+<header class="appbar">
+  <span data-status="light"></span>
+  <span data-bar="Dashboard" data-right='["bell"]'></span>
+  <div class="ptabs light"><span class="on">Shift</span><span>Today</span><span>Week</span><span>Year</span></div>
+  <div class="stats">
+    <div><span>Talk time</span><b class="num" data-count>3h 12m</b></div>
+    <div><span>Calls</span><b class="num" data-count>41</b></div>
+    <div><span>Income</span><b class="num" id="inc" data-count>$312</b></div>
+    <div><span>Meetings</span><b class="num" id="mt" data-count>4</b></div>
+    <div><span>Sales</span><b class="num" data-count>2</b></div>
+    <div><span>Commission</span><b class="num" id="com" data-count>$186</b></div>
+  </div>
+</header>
+<div class="earn" data-fade style="--d:250ms"><span>Total earnings</span><b class="num" id="tot" data-count="200">$2,233</b><span class="up"><i data-lucide="arrow-up-right"></i></span></div>
+<section class="target">
+  <div class="track"><div class="fill" id="fill" style="width:80%" data-w="80%" data-delay="400"></div><div class="thumb" id="thumb" style="left:80%" data-w="80%" data-prop="left" data-delay="400"><i data-lucide="rocket"></i></div></div>
+  <div class="tl"><div><span>Target</span><b>5 meetings</b></div><div class="r"><span>Progress</span><b class="num" id="pct" data-count="400" data-dur="1300">80%</b></div></div>
+</section>
+<section class="client">
+  <div class="h"><b>Northbridge Accounting</b><a>Change client</a></div>
+  <div class="tiles" data-stagger style="--d:500ms">
+    <div class="tile" style="background:#6A3DE8"><i data-lucide="timer"></i>Shifts</div>
+    <div class="tile" style="background:#5AC8FA"><i data-lucide="shuffle"></i>Pipelines</div>
+    <div class="tile" style="background:#FFCC00"><i data-lucide="book-open"></i>Trainings</div>
+  </div>
+</section>
+<span data-tabs="Home"></span>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>
+  if (Q.get('m') === '5') {
+    mt.textContent = '5'; inc.textContent = '$372'; com.textContent = '$246'; tot.textContent = '$2,293'; pct.textContent = '100%';
+    for (const el of [fill, thumb]) el.dataset.w = '100%';
+    fill.style.width = '100%'; thumb.style.left = '100%'; thumb.dataset.w = 'calc(100% - 17px)'; thumb.style.left = 'calc(100% - 17px)';
+    fill.style.background = 'linear-gradient(90deg,#3FD39A,#18A56C)'; thumb.style.color = '#18A56C'; thumb.innerHTML = '<i data-lucide="check"></i>';
+  }
+  boot();
+</script></body></html>

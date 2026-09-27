@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440"><title>SXchange · Register</title>
+<link rel="stylesheet" href="sx.css">
+<style>
+  body{background:#fff}
+  .top{height:68px;display:flex;align-items:center;padding:0 40px;border-bottom:1px solid var(--line)}
+  .top .logo{height:62px;margin:-16px -20px;filter:none}
+  .top .sp{flex:1}
+  .top span.q{font-size:14px;color:var(--ink-2)}.top span.q a{color:var(--blue-600);font-weight:600}
+  .wrap{display:grid;grid-template-columns:520px 1fr;min-height:892px}
+  .side{background:var(--navy-700);color:#fff;padding:56px 56px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .side h2{font-size:34px;letter-spacing:-.035em;line-height:1.12;font-weight:800;max-width:15ch}
+  .side p{color:rgba(255,255,255,.7);margin-top:14px;font-size:16px;max-width:36ch}
+  .side .card{margin-top:auto;background:#fff;color:var(--ink);padding:18px;border-radius:16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+  .side .card .who{display:flex;gap:12px;align-items:center}
+  .side .card b{display:block;font-size:14.5px;line-height:1.25}
+  .side .card .s{font-size:12.5px;color:var(--ink-3)}
+  .side .card .deal{margin-top:14px}
+  .side .card .deal .lg b{display:inline;font-size:12.5px}
+  .side .stripe{position:absolute;right:-70px;top:120px;width:300px;height:300px;border-radius:48px;background:repeating-linear-gradient(135deg,rgba(252,174,24,.18) 0 12px,transparent 12px 24px);transform:rotate(14deg)}
+  .main{padding:56px 96px}
+  .stp{display:flex;align-items:center;gap:0;margin-bottom:34px}
+  .s{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink-3);font-size:14.5px}
+  .s i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:12.5px;box-shadow:inset 0 0 0 2px var(--line-2)}
+  .s.d{color:var(--ink-2)}.s.d i{background:var(--green-100);color:var(--green-700);box-shadow:none}
+  .s.on{color:var(--ink)}.s.on i{background:var(--navy-700);color:#fff;box-shadow:0 0 0 5px var(--navy-100)}
+  .ln{width:64px;height:2px;background:var(--green-600);margin:0 14px}
+  .main h1{font-size:34px;letter-spacing:-.035em;font-weight:800}
+  .main .sub{color:var(--ink-2);margin-top:6px;font-size:16px}
+  .form{max-width:600px;margin-top:30px;display:flex;flex-direction:column;gap:22px}
+  .types{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .types div{padding:14px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line-2);display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600}
+  .types div svg{color:var(--ink-3)}
+  .types div span{font-weight:500;font-size:12.5px;color:var(--ink-3)}
+  .types div.on{box-shadow:inset 0 0 0 1.5px var(--navy-700),0 0 0 4px var(--navy-100)}
+  .types div.on svg{color:var(--navy-700)}
+  .dd{position:relative}
+  .menu{position:absolute;left:0;right:0;top:86px;background:#fff;border-radius:14px;box-shadow:0 24px 50px -12px rgba(27,30,46,.28),0 0 0 1px var(--line);padding:6px;z-index:2}
+  .menu .o{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:10px;border-radius:10px;font-size:14.5px}
+  .menu .o.hl{background:var(--navy-50)}
+  .menu .o .lg{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff}
+  .menu .o b{display:block;font-weight:700}.menu .o span.s2{font-size:12.5px;color:var(--ink-3)}
+  .menu .o mark{background:var(--yellow-200);color:inherit;border-radius:3px;padding:0 1px}
+  .menu .add{border-top:1px solid var(--line);margin-top:6px;padding-top:12px}
+  .menu .add .lg{background:var(--blue-100);color:var(--blue-700)}
+  .menu .add b{color:var(--blue-700)}
+  .addorg{display:none;padding:20px;border-radius:14px;background:var(--navy-50);flex-direction:column;gap:16px}
+  body.is-add .addorg{display:flex}
+  body.is-add .menu{display:none}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .acts{display:flex;align-items:center;gap:12px;margin-top:10px;padding-top:22px;border-top:1px solid var(--line)}
+  .acts .sp{flex:1}
+  .agree{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
+  .agree i{width:18px;height:18px;border-radius:5px;background:var(--navy-700);display:grid;place-items:center;flex:none;margin-top:1px}
+</style></head>
+<body>
+<header class="top"><img class="logo" src="assets/logo.png" alt="Client logo (blurred)"><span class="sp"></span><span class="q">Already registered? <a>Log in</a></span></header>
+<div class="wrap">
+  <aside class="side"><span class="stripe"></span>
+    <h2>One account to buy and sell AIF units.</h2>
+    <p>Tell us who you invest for. We use it to verify listings and to show sellers who is asking.</p>
+    <div class="card"><div class="who"><span class="fm" style="background:#1E3A5F">MIO</span><div><b>Meridian Income Opportunities Fund</b><span class="s">AIF Cat II · 1,00,000 units</span></div><span class="off" style="margin-left:auto;font-size:24px">30<small style="font-size:13px">%</small></span></div>
+      <div class="deal"><div class="bar"><span class="ask" style="width:70%"></span><span class="gap" style="left:70%;right:0"></span></div><div class="lg"><span>Ask <b>₹8.7487</b></span><span>NAV ₹12.4981</span></div></div></div>
+  </aside>
+  <main class="main">
+    <div class="stp"><span class="s d"><i><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></i>Your details</span><span class="ln"></span><span class="s on"><i>2</i>Your organisation</span></div>
+    <h1>Who do you invest for?</h1><p class="sub">Step 2 of 2. You can change this later in account settings.</p>
+    <div class="form">
+      <div><span class="fl">I'm registering as</span>
+        <div class="types">
+          <div><i data-lucide="user"></i>Individual<span>Investing my own money</span></div>
+          <div class="on"><i data-lucide="briefcase"></i>Wealth manager<span>For clients</span></div>
+          <div><i data-lucide="home"></i>Family office<span>For a family</span></div>
+          <div><i data-lucide="landmark"></i>Institution<span>Bank, NBFC, fund</span></div>
+        </div></div>
+      <div class="dd"><span class="fl">Organisation</span>
+        <div class="inp focus"><i data-lucide="search" class="sm" style="color:var(--ink-3)"></i><span id="q">Kalyan</span><span class="caret" style="width:1.5px;height:20px;background:var(--blue-500);margin-left:-8px"></span></div>
+        <div class="menu">
+          <div class="o hl"><span class="lg" style="background:#3E5C76">KW</span><div><b><mark>Kalyan</mark> Wealth Advisors</b><span class="s2">Wealth manager · Pune · 14 members</span></div><span class="chip green">On SXchange</span></div>
+          <div class="o"><span class="lg" style="background:#7A4A2E">KC</span><div><b><mark>Kalyan</mark>i Capital Partners</b><span class="s2">Family office · Mumbai · 3 members</span></div><span></span></div>
+          <div class="o add"><span class="lg"><i data-lucide="plus" class="sm"></i></span><div><b>Add "Kalyan Family Office" as a new organisation</b><span class="s2">We'll verify it before your first listing goes live</span></div><span></span></div>
+        </div>
+        <div class="addorg" style="margin-top:12px">
+          <div class="row2"><div><span class="fl">Organisation name</span><div class="inp">Kalyan Family Office</div></div><div><span class="fl">City</span><div class="inp">Bengaluru</div></div></div>
+          <div class="row2"><div><span class="fl">Your role</span><div class="inp">Principal<i data-lucide="chevron-down" class="sm suf"></i></div></div><div><span class="fl">Website <span style="font-weight:500;color:var(--ink-3)">(optional)</span></span><div class="inp ph">kalyanfo.in</div></div></div>
+        </div>
+      </div>
+      <div class="agree"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></i><span>I understand AIF units are for accredited and eligible investors, and I agree to the <a style="color:var(--blue-600);font-weight:600">terms</a> and <a style="color:var(--blue-600);font-weight:600">privacy policy</a>.</span></div>
+      <div class="acts"><a class="btn ghost"><i data-lucide="arrow-left" class="sm"></i>Back</a><span class="sp"></span><a class="btn primary" style="height:48px;padding:0 22px">Create account<i data-lucide="arrow-right" class="sm"></i></a></div>
+    </div>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="_shared.js"></script>
+<script>if (Q.get('add') === '1') document.body.classList.add('is-add'); boot({});</script>
+</body></html>
