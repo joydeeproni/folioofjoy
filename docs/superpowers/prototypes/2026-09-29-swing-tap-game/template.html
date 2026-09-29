@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Swing tap game — prototype</title>
+<style>
+  @font-face { font-family: 'Praktikal'; font-weight: 400; src: url(data:font/otf;base64,__PRAKTIKAL_REG__) format('opentype'); }
+  @font-face { font-family: 'Praktikal'; font-weight: 700; src: url(data:font/otf;base64,__PRAKTIKAL__) format('opentype'); }
+  @font-face { font-family: 'Geist Pixel'; src: url(data:font/ttf;base64,__FONT__) format('truetype'); }
+  :root { --green: #2CA152; --yellow: #f4c51b; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; color: #fff; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; -webkit-tap-highlight-color: transparent; }
+  .pixel { font-family: 'Geist Pixel', monospace; }
+  .mono { font-family: 'Praktikal', monospace; font-weight: 400; font-variant-numeric: tabular-nums; }
+
+  /* Homepage chrome — everything here fades out in game mode */
+  .chrome { transition: opacity .45s ease, filter .45s ease; }
+  body.playing .chrome, body.results .chrome { opacity: 0; pointer-events: none; filter: blur(2px); }
+  nav { position: fixed; top: 1.5rem; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 2rem; font-size: 14px; z-index: 5; }
+  nav a, .preview a { color: rgba(255,255,255,.9); text-decoration: none; }
+  .strip { position: fixed; top: 50%; left: 12px; font: 10px ui-monospace, monospace; letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(255,255,255,.25); white-space: nowrap; transform: rotate(-90deg) translateX(-50%); transform-origin: 0 0; }
+  .preview { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: 14px; }
+
+  .stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 24px; }
+  .quote { color: var(--green); font-size: clamp(2.2rem, 13.4vw, 9rem); max-width: min(90vw, 16ch); line-height: 1.06;
+    letter-spacing: -.025em; word-spacing: -.2em; text-align: justify; margin: 0; }
+  .quote b { color: #fff; font-weight: 400; }
+
+  .swing { position: absolute; width: 88vw; max-width: 720px; border: 0; background: none; padding: 0; cursor: pointer;
+    touch-action: manipulation; user-select: none; -webkit-user-select: none; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  @media (min-width: 768px) { .swing { width: 62vw; } }
+  body.playing .swing { transform: scale(1.08); }
+  .swing canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; pointer-events: none; }
+  .swing .hit { position: absolute; inset: 0; clip-path: polygon(15% 6%, 85% 28%, 97% 84%, 71% 95%, 4% 73%, 3% 65%); }
+  .hint { position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 12px ui-monospace, monospace;
+    color: rgba(255,255,255,.7); pointer-events: none; transition: opacity .2s; }
+  .pips { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
+  .pips i { width: 6px; height: 6px; background: rgba(255,255,255,.2); display: block; }
+  .pips i.on { background: var(--yellow); }
+  body.playing .hint, body.results .hint { opacity: 0; }
+
+  /* HUD — synth-style energy readout */
+  .hud { position: fixed; top: calc(1.25rem + env(safe-area-inset-top)); left: 50%; transform: translate(-50%, -12px); opacity: 0;
+    width: min(86vw, 380px); pointer-events: none; transition: opacity .3s, transform .3s; z-index: 10; }
+  body.playing .hud { opacity: 1; transform: translate(-50%, 0); }
+  .readout { display: flex; align-items: center; gap: 12px; font-size: 18px; line-height: 1; white-space: nowrap; }
+  .readout .count { color: #efe4ce; font-variant-numeric: tabular-nums; min-width: 2.2ch; }
+  .readout .rate { color: #43c779; min-width: 4.2ch; }
+  .readout canvas.spark { flex: 1; min-width: 0; height: 18px; image-rendering: pixelated; }
+  .readout .time { color: #e83c35; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 7px; }
+  .readout .clock { width: 18px; height: 18px; }
+  canvas.graph { display: block; width: 100%; height: 96px; margin-top: 10px; image-rendering: pixelated; }
+  .quit { position: fixed; top: calc(1.25rem + env(safe-area-inset-top)); right: 1.5rem; z-index: 11; background: none; border: 0; color: rgba(255,255,255,.5);
+    font: 20px ui-monospace, monospace; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .3s; }
+  body.playing .quit { opacity: 1; pointer-events: auto; }
+  @media (max-width: 560px) { .hud { top: calc(3.75rem + env(safe-area-inset-top)); } }
+
+  /* Results — full-bleed black, no card */
+  body.results .swing { opacity: 0; pointer-events: none; }
+  .swing { transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s; }
+  .board { position: fixed; inset: 0; z-index: 12; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px 20px; background: #000; opacity: 0; pointer-events: none; transition: opacity .35s; overflow-y: auto; }
+  body.results .board { opacity: 1; pointer-events: auto; }
+  .board .col { width: min(100%, 400px); transform: translateY(10px); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+  body.results .board .col { transform: none; }
+  .head { text-align: center; }
+  .head .big { font-size: 72px; line-height: 1; color: var(--yellow); }
+  .head .your { margin-top: 14px; font-size: 15px; }
+  .head .who { margin-top: 10px; font-size: 16px; }
+  .head .note { font: 11px ui-monospace, monospace; color: rgba(255,255,255,.4); margin-top: 8px; min-height: 1em; }
+  .head .note.best { color: #43c779; }
+  ol { list-style: none; padding: 0; margin: 40px 0 0; }
+  li { display: grid; grid-template-columns: 2.4em 1.8em 1fr auto; gap: 4px; align-items: center; padding: 0 4px; height: 40px;
+    font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.07); }
+  li .n { color: rgba(255,255,255,.35); font: 11px ui-monospace, monospace; }
+  li .f { font-size: 12px; }
+  li .s { font-size: 16px; line-height: 1; transform: translateY(3px); } /* Praktikal sits high on its line box */
+  li.you { background: #1c1a08; color: #e8d84a; }
+  li.gap { display: block; height: 22px; line-height: 16px; text-align: center; color: rgba(255,255,255,.25); border: 0; font-size: 12px; }
+  .actions { display: flex; justify-content: space-between; margin-top: 52px; }
+  /* Port of components/circle-button.tsx: dark disc + short yellow label;
+     hover/press/focus → brand-yellow disc with the full text spinning round. */
+  .cb { --size: 72px; position: relative; width: var(--size); height: var(--size); border-radius: 50%; border: 0; padding: 0;
+    background: #2C2C2C; cursor: pointer; display: grid; place-items: center; user-select: none;
+    transition: background-color .2s; font-family: 'Praktikal', monospace; font-weight: 700; text-transform: uppercase; }
+  .cb:hover, .cb:active, .cb:focus-visible { background: #E9D80C; outline: none; }
+  .cb .lbl { color: #E9D80C; font-size: 12px; transition: opacity .15s; }
+  .cb:hover .lbl, .cb:active .lbl, .cb:focus-visible .lbl { opacity: 0; }
+  .cb .arc { position: absolute; inset: 0; opacity: 0; transition: opacity .15s; color: #2C2C2C; font-size: 10px; }
+  .cb:hover .arc, .cb:active .arc, .cb:focus-visible .arc { opacity: 1; }
+  .cb .spin { position: absolute; inset: 0; animation: spin 12s linear infinite; }
+  .cb .spin span { position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(calc(360deg / var(--total) * var(--i))) translateY(-4.44ch); }
+  /* Primary variant: yellow at rest (the mock's left disc) */
+  .cb.primary { background: #E9D80C; }
+  .cb.primary .lbl { color: #2C2C2C; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .proto { position: fixed; bottom: 8px; right: 10px; font: 10px ui-monospace, monospace; color: rgba(255,255,255,.3); z-index: 20; }
+  .proto button { font: inherit; color: inherit; background: none; border: 1px solid rgba(255,255,255,.2); cursor: pointer; margin-left: 6px; }
+</style>
+</head>
+<body>
+  <nav class="chrome"><a href="#">Photography</a><a href="#">Joy Sengupta</a><a href="#">Writings</a></nav>
+  <p class="strip chrome">Folio of Joy — always work in progress · Joydeep Sengupta © 2077 · København, Danmark</p>
+
+  <div class="stage">
+    <p class="quote pixel chrome">i awoke and saw that <b>life</b> was <b>service</b>. i acted and behold, <b>service</b> was <b>joy</b>.</p>
+    <button class="swing" id="swing" type="button" aria-label="Push the swing">
+      <canvas id="canvas" width="320" height="260"></canvas>
+      <span class="hit"></span>
+      <span class="hint" id="hint"></span>
+    </button>
+  </div>
+
+  <div class="preview chrome"><a href="#">Preview Work</a></div>
+
+  <div class="hud" aria-live="off">
+    <div class="readout mono">
+      <span class="count" id="count">0</span>
+      <span class="rate" id="rate">♩+0</span>
+      <canvas class="spark" id="spark" width="120" height="18"></canvas>
+      <span class="time"><span id="time">10.0</span><svg class="clock" viewBox="0 0 9 9" fill="currentColor" aria-hidden="true" shape-rendering="crispEdges"><path d="M3 0h3v1H3zM1 1h2v1H1zM6 1h2v1H6zM0 3h1v3H0zM8 3h1v3H8zM1 2h1v1H1zM7 2h1v1H7zM1 6h1v1H1zM7 6h1v1H7zM1 7h2v1H1zM6 7h2v1H6zM3 8h3v1H3zM4 2h1v3H4zM5 4h2v1H5z"/></svg></span>
+    </div>
+    <canvas class="graph" id="graph" width="380" height="96"></canvas>
+  </div>
+  <button class="quit" id="quit" aria-label="Quit game">×</button>
+
+  <div class="board" role="dialog" aria-label="Your score">
+    <div class="col">
+      <div class="head">
+        <div class="big mono" id="rScore">0</div>
+        <div class="your">your score</div>
+        <div class="who"><span id="rName"></span> <span id="rRank"></span></div>
+        <div class="note" id="rNote" hidden></div>
+      </div>
+      <ol id="rows"></ol>
+      <div class="actions">
+        <button class="cb primary" id="again" data-arc="PLAY AGAIN" aria-label="Play again"><span class="lbl">RETRY</span></button>
+        <button class="cb" id="done" data-arc="BACK TO HOME" aria-label="Back to home"><span class="lbl">BACK</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="proto">prototype · fake leaderboard<button id="reset">reset me</button></div>
+
+<script>__SCENE__</script>
+<script>
+(() => {
+  // ——— Tunables (all from the design) ———
+  const WARMUP = 5, WARMUP_GAP = 1500, DURATION = 10000;
+
+  // ——— Swing physics, ported from swing-set.tsx ———
+  const deg = (d) => d * Math.PI / 180;
+  const IDLE = deg(12), HOVER = deg(18), PUSH = deg(26), GAME_MAX = deg(70);
+  const FREQUENCY = 2 * Math.PI / 3.6;
+  const ctx = document.getElementById('canvas').getContext('2d');
+  const s = { angle: 0, velocity: FREQUENCY * IDLE, boost: 0, speed: 1 };
+  let energized = false, effect, lastPush = -Infinity, cap = PUSH;
+
+  function push() {
+    const now = performance.now();
+    if (now - lastPush < 120) return;   // throttle MOTION only — every tap still counts
+    lastPush = now;
+    s.boost = Math.min(1, s.boost + 0.75);
+    const limit = FREQUENCY * Math.sqrt(Math.max(0, 2 * (Math.cos(s.angle) - Math.cos(cap))));
+    const dir = Math.sign(s.velocity) || -Math.sign(s.angle) || 1;
+    s.velocity = dir * Math.min(limit, Math.abs(s.velocity) + 0.16 + (cap - PUSH) * 0.25);
+    effect = { age: 0, angle: s.angle };
+  }
+
+  let last = performance.now();
+  function frame(t) {
+    const elapsed = Math.min((t - last) / 1000, 0.05); last = t;
+    const steps = Math.max(1, Math.ceil(elapsed * 240)), dt = elapsed / steps;
+    for (let i = 0; i < steps; i++) {
+      s.boost *= Math.exp(-dt / 3);
+      s.speed += (1 + 0.75 * s.boost - s.speed) * (1 - Math.exp(-dt / 0.18));
+      const base = energized ? HOVER : IDLE;
+      const target = base + (cap - base) * s.boost;
+      const targetEnergy = FREQUENCY ** 2 * (1 - Math.cos(target));
+      const energy = s.velocity ** 2 / 2 + FREQUENCY ** 2 * (1 - Math.cos(s.angle));
+      const drive = 1.5 * Math.max(-2, 1 - energy / targetEnergy);
+      s.velocity += (-(FREQUENCY ** 2) * Math.sin(s.angle) + drive * s.velocity) * dt * s.speed;
+      s.angle += s.velocity * dt * s.speed;
+    }
+    if (effect) { effect.age += elapsed; if (effect.age >= 0.6) effect = undefined; }
+    paintSwingScene(ctx, s.angle, s.velocity, effect);
+    tick(t);
+    requestAnimationFrame(frame);
+  }
+
+  // ——— Sound: same triangle chirp, pitched up as the count climbs ———
+  let audio;
+  function chirp(pitch = 1) {
+    try {
+      audio ??= new AudioContext();
+      if (audio.state === 'suspended') audio.resume();
+      const o = audio.createOscillator(), g = audio.createGain(), n = audio.currentTime;
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(390 * pitch, n);
+      o.frequency.exponentialRampToValueAtTime(780 * pitch, n + 0.07);
+      o.frequency.exponentialRampToValueAtTime(590 * pitch, n + 0.17);
+      g.gain.setValueAtTime(0, n);
+      g.gain.linearRampToValueAtTime(0.05, n + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.001, n + 0.19);
+      o.connect(g); g.connect(audio.destination); o.start(n); o.stop(n + 0.22);
+    } catch {}
+  }
+
+  // ——— Identity: cute animal + flag (real version derives this from the server's visitor hash) ———
+  const ADJ = ['Cute','Fluffy','Sleepy','Tiny','Bouncy','Cheeky','Snuggly','Wobbly','Giggly','Fuzzy','Sunny','Dozy','Plucky','Squishy','Zippy','Humble'];
+  const ANIMALS = ['Panda','Hedgehog','Otter','Bunny','Penguin','Kitten','Duckling','Koala','Fox','Hamster','Seal','Lamb','Owl','Axolotl','Capybara','Quokka','Red Panda','Corgi'];
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const flag = (cc) => cc.toUpperCase().replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
+  const myCountry = (navigator.language.match(/-([A-Z]{2})/) || [, 'DK'])[1];
+  let me = JSON.parse(localStorage.getItem('swingProtoMe') || 'null');
+  if (!me) { me = { name: `${pick(ADJ)} ${pick(ANIMALS)}`, cc: myCountry, best: 0 }; save(); }
+  function save() { localStorage.setItem('swingProtoMe', JSON.stringify(me)); }
+
+  // Fake field so the board looks lived-in
+  const FAKE = [[171,'Zippy Quokka','JP'],[158,'Bouncy Otter','US'],[149,'Cheeky Fox','GB'],[142,'Plucky Penguin','DE'],
+    [133,'Tiny Hamster','IN'],[127,'Giggly Seal','BR'],[119,'Sunny Capybara','DK'],[111,'Fuzzy Koala','AU'],[104,'Wobbly Duckling','FR'],
+    [98,'Snuggly Lamb','SE'],[91,'Sleepy Panda','CN'],[86,'Humble Owl','NL'],[77,'Squishy Axolotl','MX'],[64,'Dozy Corgi','CA'],[52,'Cute Bunny','ES']]
+    .map(([score, name, cc]) => ({ score, name, cc }));
+  const TOTAL_EXTRA = 303; // pretend there are more players below the fold
+
+  // ——— Game state machine: idle → playing → results ———
+  const $ = (id) => document.getElementById(id);
+  const body = document.body, hint = $('hint'), countEl = $('count'), rateEl = $('rate'), timeEl = $('time');
+  let mode = 'idle', warm = [], count = 0, startedAt = 0;
+
+  // ——— Energy graph: the x-axis IS the 10s timer ———
+  // energy ≈ taps per second: each tap adds 1/TAU, then it decays with time
+  // constant TAU. That gives the jagged saw-tooth of real tapping for free.
+  const TAU = 0.3, MIN_SCALE = 14;
+  const graph = $('graph'), gx = graph.getContext('2d');
+  const spark = $('spark'), sx = spark.getContext('2d');
+  const COLS = graph.width / 2, ROWS = graph.height / 2;   // draw at 2px "pixels"
+  let energy = 0, samples = [], lastT = 0, trace = [];
+
+  function resetGraph() { energy = 0; samples = []; trace = []; lastT = performance.now(); }
+
+  function sampleGraph(t, progress) {
+    const dt = Math.max(0, (t - lastT) / 1000); lastT = t;
+    energy *= Math.exp(-dt / TAU);
+    const head = Math.min(COLS - 1, Math.floor(progress * COLS));
+    while (samples.length <= head) samples.push(energy);
+    samples[head] = Math.max(samples[head], energy);
+    trace.push(s.angle); if (trace.length > spark.width) trace.shift();
+  }
+
+  const px = (x, y, w = 1, h = 1) => gx.fillRect(x * 2, y * 2, w * 2, h * 2);
+  let scale = MIN_SCALE;
+  const yOf = (v) => ROWS - 2 - Math.round(Math.min(1, v / scale) * (ROWS - 6));
+
+  function drawGraph() {
+    gx.clearRect(0, 0, graph.width, graph.height);
+    gx.fillStyle = '#1f3a2c'; px(0, ROWS - 1, COLS, 1);                  // baseline
+    if (!samples.length) return;
+    scale = Math.max(MIN_SCALE, Math.max(...samples) * 1.12);
+    gx.fillStyle = '#43c779';
+    let prev = yOf(samples[0]);
+    samples.forEach((v, x) => {                                            // stepped line
+      const y = yOf(v);
+      px(x, Math.min(prev, y), 1, Math.abs(prev - y) + 1);
+      prev = y;
+    });
+    const head = samples.length - 1;
+    let peak = 0; samples.forEach((v, i) => { if (v > samples[peak]) peak = i; });
+    const dashed = (x, color) => { gx.fillStyle = color; for (let y = 0; y < ROWS - 1; y += 3) px(x, y); };
+    const ring = (x, y, color) => {
+      gx.fillStyle = color;
+      px(x - 1, y - 3, 3, 1); px(x - 1, y + 3, 3, 1); px(x - 3, y - 1, 1, 3); px(x + 3, y - 1, 1, 3);
+      px(x - 2, y - 2); px(x + 2, y - 2); px(x - 2, y + 2); px(x + 2, y + 2); px(x, y);
+    };
+    if (peak !== head && samples[peak] > 1) { dashed(peak, '#3b4a52'); ring(peak, yOf(samples[peak]), '#f7eedc'); }
+    dashed(head, '#4a6470'); ring(head, yOf(samples[head]), '#7b93ff');
+  }
+
+  function drawSpark() {
+    sx.clearRect(0, 0, spark.width, spark.height);
+    const mid = spark.height / 2, n = trace.length;
+    trace.forEach((a, i) => {
+      sx.fillStyle = i > n - 18 ? '#43c779' : '#2f6b66';
+      sx.fillRect(i, Math.round(mid - a * 11), 1, 2);
+    });
+  }
+
+  function renderHint() {
+    const n = warm.length;
+    hint.innerHTML = n === 0 ? ''
+      : `keep going<span class="pips">${Array.from({ length: WARMUP }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+  }
+
+  function onTap(e) {
+    if (e.type === 'keydown') { if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return; e.preventDefault(); }
+    if (mode === 'results') return;
+    if (mode === 'idle') {
+      const now = performance.now();
+      if (warm.length && now - warm[warm.length - 1] > WARMUP_GAP) warm = [];
+      warm.push(now);
+      push(); chirp();
+      renderHint();
+      if (warm.length >= WARMUP) start();
+      return;
+    }
+    // playing — every pointerdown counts, no throttle
+    count++;
+    energy += 1 / TAU;
+    countEl.textContent = count;
+    cap = PUSH + (GAME_MAX - PUSH) * Math.min(1, count / 120);
+    push(); chirp(1 + Math.min(count, 150) / 250);
+  }
+
+  function start() {
+    mode = 'playing'; count = 0; startedAt = performance.now(); warm = [];
+    countEl.textContent = '0'; body.className = 'playing'; renderHint(); resetGraph();
+  }
+
+  function tick(t) {
+    if (mode !== 'playing') return;
+    const progress = Math.min(1, (t - startedAt) / DURATION);
+    sampleGraph(t, progress);
+    drawGraph(); drawSpark();
+    rateEl.textContent = `♩+${Math.round(energy)}`;
+    timeEl.textContent = ((1 - progress) * DURATION / 1000).toFixed(1);
+    if (progress === 1) finish();
+  }
+
+  function finish() {
+    mode = 'results'; body.className = 'results';
+    const prev = me.best, improved = count > prev;
+    if (improved) { me.best = count; save(); }
+    const all = [...FAKE, { score: me.best, name: me.name, cc: me.cc, you: true }].sort((a, b) => b.score - a.score);
+    const rank = all.findIndex((r) => r.you) + 1;
+    $('rScore').textContent = count;
+    $('rName').textContent = `${flag(me.cc)} ${me.name}`;
+    $('rRank').textContent = `· #${rank} of ${all.length + TOTAL_EXTRA}`;
+    const note = $('rNote');
+    note.className = 'note' + (improved ? ' best' : '');
+    note.textContent = improved ? (prev ? `new best! (was ${prev})` : 'you’re on the board!') : `your best is still ${prev}`;
+    const row = (r, i) => `<li class="${r.you ? 'you' : ''}"><span class="n">${i + 1}</span><span class="f">${flag(r.cc)}</span><span>${r.name}</span><span class="s mono">${r.score}</span></li>`;
+    let html = all.slice(0, 10).map(row).join('');
+    if (rank > 10) html += `<li class="gap">⋯</li>` + row(all[rank - 1], rank - 1);
+    $('rows').innerHTML = html;
+  }
+
+  function exit() {
+    mode = 'idle'; body.className = ''; cap = PUSH; warm = []; renderHint();
+  }
+
+  const swing = $('swing');
+  swing.addEventListener('pointerdown', onTap);
+  swing.addEventListener('keydown', onTap);
+  swing.addEventListener('click', (e) => e.preventDefault());
+  swing.addEventListener('pointerenter', () => energized = true);
+  swing.addEventListener('pointerleave', () => energized = false);
+  // Build the spinning ring of letters for each circle button
+  document.querySelectorAll('.cb').forEach((b) => {
+    const letters = [...b.dataset.arc, ' '];
+    b.insertAdjacentHTML('beforeend', `<span class="arc" aria-hidden="true"><span class="spin">${
+      letters.map((l, i) => `<span style="--i:${i};--total:${letters.length}">${l === ' ' ? '&nbsp;' : l}</span>`).join('')}</span></span>`);
+  });
+  $('again').onclick = start;
+  $('done').onclick = exit;
+  $('quit').onclick = exit;
+  $('reset').onclick = () => { localStorage.removeItem('swingProtoMe'); location.reload(); };
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && mode !== 'idle') exit(); });
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
