@@ -1,18 +1,29 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import { CenterStage } from './center-stage';
 import { ScrambleSwapText } from '@/components/scramble-swap-text';
+import type { SwingSetHandle } from './swing-set';
+import { useSwingGame } from './swing-game/use-swing-game';
 
 const INSTAGRAM = 'https://www.instagram.com/joyingntravelling/';
 
 export function HomeStage() {
   const linkCls = 'text-white/90 hover:text-[#2CA152] transition-colors';
+  const swingRef = useRef<SwingSetHandle>(null);
+  const game = useSwingGame(swingRef);
+  // During a run the page steps aside: chrome fades out and leaves the tab order.
+  const away = game.mode !== 'idle';
+  const chromeCls = `transition-opacity duration-[450ms] ${away ? 'opacity-0 pointer-events-none' : ''}`;
 
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-black text-white">
       {/* Nav — plain links; no hover preview */}
-      <nav className="fixed top-[calc(1.5rem+var(--sat))] left-0 right-0 z-50 flex items-center justify-between pl-[calc(2rem+var(--sal))] pr-[calc(2rem+var(--sar))] text-sm font-sans">
+      <nav
+        inert={away}
+        className={`fixed top-[calc(1.5rem+var(--sat))] left-0 right-0 z-50 flex items-center justify-between pl-[calc(2rem+var(--sal))] pr-[calc(2rem+var(--sar))] text-sm font-sans ${chromeCls}`}
+      >
         <a
           href={INSTAGRAM}
           target="_blank"
@@ -37,7 +48,8 @@ export function HomeStage() {
 
       {/* Rotated copyright strip on the left edge */}
       <p
-        className="hidden md:block fixed top-1/2 left-3 z-50 text-[10px] font-mono uppercase tracking-[0.2em] whitespace-nowrap pointer-events-none"
+        inert={away}
+        className={`hidden md:block fixed top-1/2 left-3 z-50 text-[10px] font-mono uppercase tracking-[0.2em] whitespace-nowrap pointer-events-none ${chromeCls}`}
         style={{ transform: 'rotate(-90deg) translateX(-50%)', transformOrigin: '0 0', color: 'rgba(255, 255, 255, 0.25)' }}
       >
         Folio of Joy — always work in progress
@@ -47,7 +59,7 @@ export function HomeStage() {
         K&oslash;benhavn, Danmark
       </p>
 
-      <CenterStage hoverTarget={null} />
+      <CenterStage hoverTarget={null} game={game} swingRef={swingRef} />
     </div>
   );
 }

@@ -1,9 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { useWork, useWritings } from '@/components/content-provider';
 import { scrambleReveal } from '@/lib/scramble';
-import { SwingSet } from './swing-set';
+import { SwingSet, type SwingSetHandle } from './swing-set';
+import type { SwingGame } from './swing-game/use-swing-game';
+import { GameHud } from './swing-game/game-hud';
+import { GameResults } from './swing-game/game-results';
+import { WarmupDots } from './swing-game/warmup-dots';
 import { DitherReveal } from './dither-reveal';
 import Link from 'next/link';
 import { BRAND } from '@/lib/brand';
@@ -31,9 +35,13 @@ const YELLOW = '#F2E30C';
 export function CenterStage({
   hoverTarget,
   hoverOrigin,
+  game,
+  swingRef,
 }: {
   hoverTarget: HoverTarget;
   hoverOrigin?: { x: number; y: number } | null;
+  game: SwingGame;
+  swingRef: RefObject<SwingSetHandle | null>;
 }) {
   const WORK_ITEMS = useWork();
   const WRITINGS = useWritings();
@@ -47,6 +55,8 @@ export function CenterStage({
     wordSpacing: -0.2,
     color: GREEN,
   };
+  const away = game.mode !== 'idle';
+  const chromeCls = `transition-opacity duration-[450ms] ${away ? 'opacity-0 pointer-events-none' : ''}`;
 
   const quoteRef = useRef<HTMLParagraphElement | null>(null);
   const hasScrambled = useRef(false);
@@ -73,7 +83,8 @@ export function CenterStage({
         <p
           ref={quoteRef}
           suppressHydrationWarning
-          className="font-pixel"
+          inert={away}
+          className={`font-pixel ${chromeCls}`}
           style={{
             color: q.color,
             // Fluid size, bounded so phones and ultrawides don't hit extremes.
@@ -105,12 +116,18 @@ export function CenterStage({
               )
             : QUOTE}
         </p>
-        <SwingSet interactive className="absolute w-[88vw] md:w-[62vw] max-w-[720px] h-auto" />
+        <div
+          className={`absolute w-[88vw] md:w-[62vw] max-w-[720px] transition-transform duration-500 ease-[cubic-bezier(.2,.8,.2,1)] ${game.mode === 'playing' ? 'scale-[1.08]' : ''}`}
+        >
+          <SwingSet ref={swingRef} interactive onTap={game.onTap} className="relative block w-full h-auto" />
+          {game.mode === 'idle' && <WarmupDots count={game.warm} />}
+        </div>
       </div>
 
       {/* Preview Work — opens the full-screen work-preview reel */}
       <div
-        className="fixed bottom-[calc(2rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 text-sm font-sans"
+        inert={away}
+        className={`fixed bottom-[calc(2rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 text-sm font-sans ${chromeCls}`}
         hidden={hoverTarget !== null}
       >
         <Link href="/preview" className="text-white/90 hover:text-[#2CA152] transition-colors">
@@ -172,6 +189,23 @@ export function CenterStage({
           ))}
         </div>
       </div>
+
+      {game.mode === 'playing' && (
+        <>
+          <GameHud run={game.run} swing={swingRef} />
+          <button
+            type="button"
+            onClick={game.exit}
+            aria-label="Quit game"
+            className="fixed right-6 top-[calc(1.25rem+var(--sat))] z-[56] cursor-pointer border-0 bg-transparent font-mono text-xl text-white/50 hover:text-white"
+          >
+            ×
+          </button>
+        </>
+      )}
+      {game.mode === 'results' && game.result && (
+        <GameResults result={game.result} onRetry={game.retry} onBack={game.exit} />
+      )}
 
       {/* Full-page dither transition for nav-hover previews (drifts from link) */}
       <DitherReveal trigger={hoverTarget ?? 'none'} origin={hoverOrigin} />
