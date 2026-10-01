@@ -5,7 +5,7 @@ import type { SwingSetHandle } from '../swing-set';
 import type { BoardView } from '@/lib/swing-game/board';
 import { fetchBoard, fetchTicket, submitScore } from '@/lib/swing-game/client';
 import { decay, tapImpulse } from '@/lib/swing-game/energy';
-import { RUN_MS, WARMUP_GAP_MS, WARMUP_TAPS, acceptsRunTap, arcCapFor, warmupTap } from '@/lib/swing-game/rules';
+import { RUN_MS, WARMUP_GAP_MS, WARMUP_TAPS, acceptsRunTap, arcCapFor, ticketSubmitDelay, warmupTap } from '@/lib/swing-game/rules';
 
 export type GameMode = 'idle' | 'playing' | 'results';
 export type RunStatus = 'saving' | 'saved' | 'unsaved' | 'unavailable';
@@ -32,7 +32,7 @@ export function useSwingGame(swing: RefObject<SwingSetHandle | null>): SwingGame
   const warmReset = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [result, setResult] = useState<RunResult | null>(null);
   const run = useRef<RunState>({ count: 0, startedAt: 0, energy: 0, energyAt: 0 });
-  const ticketReq = useRef<Promise<string | null>>(Promise.resolve(null));
+  const ticketReq = useRef<Promise<{ ticket: string; arrivedAt: number } | null>>(Promise.resolve(null));
   const boardReq = useRef<Promise<BoardView | null>>(Promise.resolve(null));
   // Bumped on every start/exit so a slow submit from an abandoned run can't
   // overwrite the screen of a newer one.
@@ -50,7 +50,7 @@ export function useSwingGame(swing: RefObject<SwingSetHandle | null>): SwingGame
     const now = performance.now();
     runId.current++;
     run.current = { count: 0, startedAt: now, energy: 0, energyAt: now };
-    ticketReq.current = fetchTicket().catch(() => null);
+    ticketReq.current = fetchTicket().then((ticket) => ({ ticket, arrivedAt: performance.now() }), () => null);
     boardReq.current = fetchBoard().catch(() => null);
     clearWarm();
     setResult(null);
@@ -76,8 +76,11 @@ export function useSwingGame(swing: RefObject<SwingSetHandle | null>): SwingGame
     let status: RunStatus = 'unsaved';
     const ticket = await ticketReq.current;
     if (ticket) {
+      const wait = ticketSubmitDelay(ticket.arrivedAt, performance.now());
+      if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
+      if (id !== runId.current) return;
       try {
-        board = await submitScore(ticket, score);
+        board = await submitScore(ticket.ticket, score);
         status = 'saved';
       } catch {
         // 403 (e.g. the network changed mid-run) or 500 — fall back to the prefetched board.

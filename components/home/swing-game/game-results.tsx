@@ -1,10 +1,14 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CircleButton } from '@/components/circle-button';
 import type { BoardEntry } from '@/lib/swing-game/board';
 import { flagEmoji } from '@/lib/swing-game/flag';
 import type { RunResult } from './use-swing-game';
+
+// Players are still mid-tap when time runs out; the buttons ignore input this
+// long so a late tap can't fire RETRY or BACK before the score is seen.
+const ARM_MS = 700;
 
 const NOTE: Record<RunResult['status'], string> = {
   saving: 'saving…',
@@ -27,7 +31,12 @@ function Row({ e }: { e: BoardEntry }) {
 
 export function GameResults({ result, onRetry, onBack }: { result: RunResult; onRetry: () => void; onBack: () => void }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { rootRef.current?.querySelector<HTMLButtonElement>('button')?.focus(); }, []);
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    rootRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    const t = setTimeout(() => setArmed(true), ARM_MS);
+    return () => clearTimeout(t);
+  }, []);
 
   const { score, board, status } = result;
   const me = board?.me ?? null;
@@ -40,10 +49,11 @@ export function GameResults({ result, onRetry, onBack }: { result: RunResult; on
       role="dialog"
       aria-modal="true"
       aria-label="Your score"
-      className="fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-y-auto bg-black px-5 py-8 text-white animate-in fade-in duration-300"
+      className="fixed inset-0 z-[60] flex flex-col items-center overflow-y-auto bg-black px-5 py-8 text-white animate-in fade-in duration-300"
     >
       <p className="sr-only" aria-live="polite">You scored {score} taps.</p>
-      <div className="w-[min(100%,400px)]">
+      {/* my-auto, not justify-center: centred when it fits, scrollable from the top when it doesn't. */}
+      <div className="my-auto w-[min(100%,400px)]">
         <div className="text-center">
           <div className="font-mono text-[72px] leading-none tabular-nums text-[#f4c51b]">{score}</div>
           <div className="mt-3.5 text-[15px]">your score</div>
@@ -69,8 +79,8 @@ export function GameResults({ result, onRetry, onBack }: { result: RunResult; on
         )}
 
         <div className="mt-[52px] flex justify-between">
-          <CircleButton label="RETRY" arcText="PLAY AGAIN" tone="yellow" size={72} onClick={onRetry} />
-          <CircleButton label="BACK" arcText="BACK TO HOME" size={72} onClick={onBack} />
+          <CircleButton label="RETRY" arcText="PLAY AGAIN" tone="yellow" size={72} onClick={armed ? onRetry : undefined} />
+          <CircleButton label="BACK" arcText="BACK TO HOME" size={72} onClick={armed ? onBack : undefined} />
         </div>
       </div>
     </div>

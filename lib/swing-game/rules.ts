@@ -39,6 +39,12 @@ export function countsAsPointerTap(e: { pointerType: string; button: number }): 
   return e.button === 0;
 }
 
+// Screen readers and voice control activate a button with a bare click
+// (detail 0) — no pointerdown, no keydown — so that click has to count too.
+export function isAssistiveClick(e: { detail: number }): boolean {
+  return e.detail === 0;
+}
+
 export function countsAsKeyTap(e: { key: string; repeat: boolean }): boolean {
   return !e.repeat && (e.key === ' ' || e.key === 'Enter');
 }
@@ -46,4 +52,12 @@ export function countsAsKeyTap(e: { key: string; repeat: boolean }): boolean {
 // Frantic tapping should look frantic: the swing's arc cap opens up with the count.
 export function arcCapFor(count: number): number {
   return ARC_START_RAD + (ARC_MAX_RAD - ARC_START_RAD) * Math.min(1, count / ARC_FULL_AT);
+}
+
+// The server stamps a ticket when it answers, which can be well after the run
+// began if that first request was slow (cold start, mobile). Waiting until the
+// ticket is old enough by the client's own clock guarantees the server sees a
+// valid age, and costs nothing when the ticket came back promptly.
+export function ticketSubmitDelay(arrivedAt: number, now: number): number {
+  return Math.max(0, arrivedAt + TICKET_MIN_AGE_MS - now);
 }

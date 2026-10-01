@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   ARC_MAX_RAD, ARC_START_RAD, MAX_SCORE, RUN_MS, WARMUP_GAP_MS,
-  acceptsRunTap, arcCapFor, countsAsKeyTap, countsAsPointerTap, isValidScore, warmupTap,
+  TICKET_MIN_AGE_MS, acceptsRunTap, arcCapFor, countsAsKeyTap, countsAsPointerTap, isAssistiveClick, isValidScore,
+  ticketSubmitDelay, warmupTap,
 } from './rules';
 
 describe('isValidScore', () => {
@@ -58,5 +59,21 @@ describe('arcCapFor', () => {
     expect(arcCapFor(60)).toBeCloseTo((ARC_START_RAD + ARC_MAX_RAD) / 2);
     expect(arcCapFor(120)).toBeCloseTo(ARC_MAX_RAD);
     expect(arcCapFor(500)).toBeCloseTo(ARC_MAX_RAD);
+  });
+});
+
+describe('ticketSubmitDelay', () => {
+  it('waits until the ticket is at least the minimum age, measured from when it arrived', () => {
+    expect(ticketSubmitDelay(1000, 1000 + TICKET_MIN_AGE_MS)).toBe(0);
+    expect(ticketSubmitDelay(1000, 1000 + TICKET_MIN_AGE_MS + 500)).toBe(0);
+    // ticket came back 2s into the run: at the 10s mark it is only 8s old
+    expect(ticketSubmitDelay(2000, 10_000)).toBe(TICKET_MIN_AGE_MS - 8000);
+  });
+});
+
+describe('isAssistiveClick', () => {
+  it('treats a click with no pointer detail (screen reader, voice control) as a tap', () => {
+    expect(isAssistiveClick({ detail: 0 })).toBe(true);
+    expect(isAssistiveClick({ detail: 1 })).toBe(false);
   });
 });

@@ -3,7 +3,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useSyncExternalStore } from 'react';
 import { useAnimationFrame } from 'motion/react';
 import { paintSwingScene, type PushEffect } from './swing-scene';
-import { ARC_START_RAD, countsAsKeyTap, countsAsPointerTap } from '@/lib/swing-game/rules';
+import { ARC_START_RAD, countsAsKeyTap, countsAsPointerTap, isAssistiveClick } from '@/lib/swing-game/rules';
 
 export interface SwingSetHandle {
   readonly element: HTMLCanvasElement | null;
@@ -61,6 +61,17 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
         oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
       } catch {
         // The push still works when audio is unavailable.
+      }
+    }, []);
+
+    // iOS only unlocks audio on touch-end, not touch-start, so taps routed through
+    // pointerdown also need this on pointerup or the chirp never sounds there.
+    const unlockAudio = useCallback(() => {
+      try {
+        const audio = audioRef.current ??= new AudioContext();
+        if (audio.state === 'suspended') void audio.resume().catch(() => {});
+      } catch {
+        // No audio; the push still works.
       }
     }, []);
 
@@ -149,9 +160,13 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
       aria-label="Push the swing. Tap quickly five times to play"
       // With onTap the parent owns every tap (the tap game counts them); pointerdown
       // fires on touch-start, so counting has no click delay. Without it, a click pushes.
-      onClick={onTap ? undefined : () => kick()}
+      // Screen readers and voice control send only a click (detail 0), so it counts too.
+      onClick={onTap ? (e) => { if (isAssistiveClick(e)) onTap(); } : () => kick()}
       onPointerDown={onTap ? (e) => { if (countsAsPointerTap(e)) onTap(); } : undefined}
+      onPointerUp={onTap ? unlockAudio : undefined}
       onKeyDown={onTap ? (e) => { if (countsAsKeyTap(e)) { e.preventDefault(); onTap(); } } : undefined}
+      // Space would otherwise fire a keyboard click on release and count twice.
+      onKeyUp={onTap ? (e) => { if (e.key === ' ') e.preventDefault(); } : undefined}
       onPointerEnter={() => energize(true)}
       onPointerLeave={() => energize(false)}
       onFocus={() => energize(true)}
