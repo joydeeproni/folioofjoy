@@ -1,18 +1,21 @@
 'use client';
 
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState, useSyncExternalStore } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useSyncExternalStore } from 'react';
 import { useAnimationFrame } from 'motion/react';
 import { paintSwingScene, type PushEffect } from './swing-scene';
+import { ARC_START_RAD, countsAsKeyTap, countsAsPointerTap } from '@/lib/swing-game/rules';
 
 export interface SwingSetHandle {
   readonly element: HTMLCanvasElement | null;
+  readonly angle: number;
   energize: (active: boolean) => void;
-  kick: () => void;
+  kick: (pitch?: number) => void;
+  setArcCap: (radians: number | null) => void; // null restores the default 26° cap
 }
 
 const IDLE = 12 * Math.PI / 180;
 const HOVER = 18 * Math.PI / 180;
-const PUSH = 26 * Math.PI / 180;
+const PUSH = ARC_START_RAD;
 const FREQUENCY = 2 * Math.PI / 3.6;
 const MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 function subscribeMotion(onChange: () => void) {
@@ -23,20 +26,19 @@ function subscribeMotion(onChange: () => void) {
 const reducedMotion = () => window.matchMedia(MOTION_QUERY).matches;
 const serverMotion = () => true;
 
-export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interactive?: boolean }>(
-  function SwingSet({ className, interactive = false }, ref) {
+export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interactive?: boolean; onTap?: () => void }>(
+  function SwingSet({ className, interactive = false, onTap }, ref) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const contextRef = useRef<CanvasRenderingContext2D | null>(null);
     const audioRef = useRef<AudioContext | null>(null);
-    const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastPush = useRef(-Infinity);
     const effect = useRef<PushEffect | undefined>(undefined);
     const energized = useRef(false);
+    const cap = useRef(PUSH);
     const state = useRef({ angle: 0, velocity: FREQUENCY * IDLE, boost: 0, speed: 1 });
-    const [pushed, setPushed] = useState(false);
     const reduce = useSyncExternalStore(subscribeMotion, reducedMotion, serverMotion);
 
-    const playPush = useCallback(() => {
+    const playPush = useCallback((pitch = 1) => {
       // Only create/resume audio in a user gesture; no autoplay or downloaded asset.
       try {
         const audio = audioRef.current ??= new AudioContext();
@@ -45,9 +47,9 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
         const gain = audio.createGain();
         const now = audio.currentTime;
         oscillator.type = 'triangle';
-        oscillator.frequency.setValueAtTime(390, now);
-        oscillator.frequency.exponentialRampToValueAtTime(780, now + 0.07);
-        oscillator.frequency.exponentialRampToValueAtTime(590, now + 0.17);
+        oscillator.frequency.setValueAtTime(390 * pitch, now);
+        oscillator.frequency.exponentialRampToValueAtTime(780 * pitch, now + 0.07);
+        oscillator.frequency.exponentialRampToValueAtTime(590 * pitch, now + 0.17);
         gain.gain.setValueAtTime(0, now);
         gain.gain.linearRampToValueAtTime(0.055, now + 0.008);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
@@ -63,7 +65,7 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
     }, []);
 
     const energize = useCallback((active: boolean) => { energized.current = active; }, []);
-    const kick = useCallback(() => {
+    const kick = useCallback((pitch = 1) => {
       const now = performance.now();
       if (now - lastPush.current < 120) return;
       lastPush.current = now;
@@ -71,27 +73,27 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
         const s = state.current;
         s.boost = Math.min(1, s.boost + 0.75);
         // Add momentum in the current direction, capped at the maximum arc.
-        // Position never jumps, even when clicking at a turning point.
-        const limit = FREQUENCY * Math.sqrt(Math.max(0, 2 * (Math.cos(s.angle) - Math.cos(PUSH))));
+        // Position never jumps, even when clicking at a turning point. A
+        // raised cap (the tap game) also adds a harder shove per push.
+        const limit = FREQUENCY * Math.sqrt(Math.max(0, 2 * (Math.cos(s.angle) - Math.cos(cap.current))));
         const direction = Math.sign(s.velocity) || -Math.sign(s.angle) || 1;
-        s.velocity = direction * Math.min(limit, Math.abs(s.velocity) + 0.16);
+        s.velocity = direction * Math.min(limit, Math.abs(s.velocity) + 0.16 + (cap.current - PUSH) * 0.25);
         effect.current = { age: 0, angle: s.angle };
       }
-      playPush();
-      setPushed(true);
-      if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
-      feedbackTimer.current = setTimeout(() => setPushed(false), 650);
+      playPush(pitch);
     }, [reduce, playPush]);
+    const setArcCap = useCallback((radians: number | null) => { cap.current = radians ?? PUSH; }, []);
     useImperativeHandle(ref, () => ({
-      get element() { return canvasRef.current; }, energize, kick,
-    }), [energize, kick]);
+      get element() { return canvasRef.current; },
+      get angle() { return state.current.angle; },
+      energize, kick, setArcCap,
+    }), [energize, kick, setArcCap]);
 
     useEffect(() => {
       contextRef.current = canvasRef.current?.getContext('2d') ?? null;
       if (contextRef.current) paintSwingScene(contextRef.current, 0, 0);
       return () => {
         contextRef.current = null;
-        if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
         if (audioRef.current) void audioRef.current.close().catch(() => {});
         audioRef.current = null;
       };
@@ -117,7 +119,7 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
         s.boost *= Math.exp(-dt / 3);
         s.speed += (1 + 0.75 * s.boost - s.speed) * (1 - Math.exp(-dt / 0.18));
         const base = energized.current ? HOVER : IDLE;
-        const target = base + (PUSH - base) * s.boost;
+        const target = base + (cap.current - base) * s.boost;
         const targetEnergy = FREQUENCY ** 2 * (1 - Math.cos(target));
         const energy = s.velocity ** 2 / 2 + FREQUENCY ** 2 * (1 - Math.cos(s.angle));
         const drive = 1.5 * Math.max(-2, 1 - energy / targetEnergy);
@@ -144,8 +146,12 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
     if (!interactive) return <div className={className} aria-hidden="true">{canvas}</div>;
     return <button
       type="button"
-      aria-label="Push the swing — plays a short sound"
-      onClick={kick}
+      aria-label="Push the swing. Tap quickly five times to play"
+      // With onTap the parent owns every tap (the tap game counts them); pointerdown
+      // fires on touch-start, so counting has no click delay. Without it, a click pushes.
+      onClick={onTap ? undefined : () => kick()}
+      onPointerDown={onTap ? (e) => { if (countsAsPointerTap(e)) onTap(); } : undefined}
+      onKeyDown={onTap ? (e) => { if (countsAsKeyTap(e)) { e.preventDefault(); onTap(); } } : undefined}
       onPointerEnter={() => energize(true)}
       onPointerLeave={() => energize(false)}
       onFocus={() => energize(true)}
@@ -156,9 +162,6 @@ export const SwingSet = forwardRef<SwingSetHandle, { className?: string; interac
       {/* Keep the empty corners transparent to the quote links behind the art. */}
       <span aria-hidden="true" className="absolute inset-0 pointer-events-auto"
         style={{ clipPath: 'polygon(15% 6%, 85% 28%, 97% 84%, 71% 95%, 4% 73%, 3% 65%)' }} />
-      <span aria-hidden="true" className={`absolute bottom-[4%] left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] md:text-xs ${pushed ? 'text-[#f4c51b] opacity-100' : 'text-white/70 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100'}`}>
-        {pushed ? 'one more?' : 'click to push ♪'}
-      </span>
     </button>;
   },
 );
