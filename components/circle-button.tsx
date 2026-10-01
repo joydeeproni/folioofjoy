@@ -6,7 +6,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { SpinningText } from '@/components/ui/spinning-text';
 import { BRAND } from '@/lib/brand';
 
-// Circular action button (back / view live / explore / read case study).
+// Circular action button (back / view live / explore / read case study / game actions).
 // Two states:
 //   default — dark disc, short yellow label (Praktikal bold, left-aligned,
 //             6 characters MAX — longer labels are truncated with a dev warning);
@@ -20,11 +20,12 @@ const YELLOW = BRAND.yellow;
 export interface CircleButtonProps {
   label: string; // default-state text, max 6 chars
   arcText: string; // full text spun around the disc on hover/press
-  href: string;
+  href?: string; // omit to render a <button> driven by onClick
   external?: boolean; // render an <a target="_blank"> instead of a Next <Link>
   size?: number; // disc diameter in px — every button uses the default for a uniform size
+  tone?: 'dark' | 'yellow'; // yellow = primary action: yellow disc at rest, dark label
   className?: string;
-  onClick?: MouseEventHandler<HTMLAnchorElement>;
+  onClick?: MouseEventHandler<HTMLElement>;
 }
 
 // Maps a work link's label (lib/work/local.ts) to the disc's two texts.
@@ -41,6 +42,7 @@ export function CircleButton({
   href,
   external,
   size = 60,
+  tone = 'dark',
   className = '',
   onClick,
 }: CircleButtonProps) {
@@ -65,10 +67,11 @@ export function CircleButton({
   const arcRadius = (size * 0.37) / (arcSize * 0.6);
 
   const commonProps = {
-    href,
     onClick,
     'aria-label': arcText,
-    className: `group relative inline-flex shrink-0 items-center justify-center rounded-full select-none bg-[#2C2C2C] transition-[background-color,transform] duration-200 hover:bg-[#E9D80C] active:bg-[#E9D80C] focus-visible:bg-[#E9D80C] focus-visible:outline-none ${
+    className: `group relative inline-flex shrink-0 items-center justify-center rounded-full select-none ${
+      tone === 'yellow' ? 'bg-[#E9D80C]' : 'bg-[#2C2C2C]'
+    } transition-[background-color,transform] duration-200 hover:bg-[#E9D80C] active:bg-[#E9D80C] focus-visible:bg-[#E9D80C] focus-visible:outline-none ${
       tiny ? 'origin-top-left hover:scale-[2.2] active:scale-[2.2] focus-visible:scale-[2.2]' : ''
     } ${className}`,
     style: { width: size, height: size },
@@ -84,7 +87,7 @@ export function CircleButton({
       <span
         aria-hidden
         className="inline-flex items-center gap-px font-mono font-bold uppercase transition-opacity duration-150 group-hover:opacity-0 group-active:opacity-0 group-focus-visible:opacity-0"
-        style={{ color: YELLOW, fontSize: labelSize }}
+        style={{ color: tone === 'yellow' ? DARK : YELLOW, fontSize: labelSize }}
       >
         {short}
         {external && <ArrowUpRight strokeWidth={1} style={{ width: labelSize, height: labelSize }} />}
@@ -107,11 +110,20 @@ export function CircleButton({
     </>
   );
 
+  if (!href) {
+    return (
+      <button type="button" {...commonProps} className={`${commonProps.className} cursor-pointer border-0 p-0`}>
+        {body}
+      </button>
+    );
+  }
   return external ? (
-    <a {...commonProps} target="_blank" rel="noopener noreferrer">
+    <a {...commonProps} href={href} target="_blank" rel="noopener noreferrer">
       {body}
     </a>
   ) : (
-    <Link {...commonProps}>{body}</Link>
+    <Link {...commonProps} href={href}>
+      {body}
+    </Link>
   );
 }
