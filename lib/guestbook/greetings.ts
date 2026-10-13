@@ -32,7 +32,12 @@ export type StampFont =
   | 'thai'
   | 'hebrew'
   | 'arabic'
-  | 'greek';
+  | 'greek'
+  | 'cyrillic'
+  | 'ethiopic'
+  | 'myanmar'
+  | 'khmer'
+  | 'georgian';
 
 export interface Greeting {
   hello: string;

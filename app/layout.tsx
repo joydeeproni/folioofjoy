@@ -17,7 +17,9 @@ import './globals.css'
 // designs animate — wdth is the important one (25–151); GRAD and ROND are held at
 // 0 by the design but requested so the values are settable rather than baked.
 const googleSansFlex = Google_Sans_Flex({
-  subsets: ['latin'],
+  // latin-ext + vietnamese so stamp place names like ČESKO or CZEŚĆ don't fall
+  // back to another face mid-word; unicode-range keeps them off other pages.
+  subsets: ['latin', 'latin-ext', 'vietnamese'],
   axes: ['GRAD', 'ROND', 'opsz', 'slnt', 'wdth'],
   variable: '--font-google-sans-flex',
   display: 'swap',

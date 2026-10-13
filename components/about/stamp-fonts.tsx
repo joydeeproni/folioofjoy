@@ -80,5 +80,31 @@ export const SCRIPT_FONTS: Record<StampFont, { family: string; tracking: number;
     tracking: 0.9,
     scale: 1.0,
   },
+  // Cyrillic letters Geist Sans doesn't carry, e.g. Kazakh Ә.
+  cyrillic: {
+    family: "'Noto Sans', 'Helvetica Neue', Arial, sans-serif",
+    tracking: 0.6,
+    scale: 1.0,
+  },
+  ethiopic: {
+    family: "'Noto Sans Ethiopic', 'Kefa III', Kefa, Nyala, 'Ebrima', sans-serif",
+    tracking: 0.3,
+    scale: 1.15,
+  },
+  myanmar: {
+    family: "'Noto Sans Myanmar', 'Myanmar Sangam MN', 'Myanmar MN', 'Myanmar Text', sans-serif",
+    tracking: 0,
+    scale: 1.1,
+  },
+  khmer: {
+    family: "'Noto Sans Khmer', 'Khmer Sangam MN', 'Khmer MN', 'Leelawadee UI', sans-serif",
+    tracking: 0,
+    scale: 1.15,
+  },
+  georgian: {
+    family: "'Noto Sans Georgian', 'Helvetica Neue', 'Sylfaen', sans-serif",
+    tracking: 0.3,
+    scale: 1.05,
+  },
 };
 

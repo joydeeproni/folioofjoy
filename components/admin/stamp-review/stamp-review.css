@@ -1,0 +1,358 @@
+@import './tokens.css';
+
+/* Inter comes from next/font in the page (exposed as --jds-inter), not Google's
+   CSS endpoint, so the font roles point at it first. */
+.jds {
+  --font-ui: var(--jds-inter), 'Inter', sans-serif;
+  --font-data: var(--jds-inter), 'Inter', sans-serif;
+  --font-brand: var(--jds-inter), 'Inter', sans-serif;
+  font-family: var(--font-ui);
+  font-size: var(--size-s);
+  line-height: var(--line-s);
+  letter-spacing: var(--letter-spacing-s);
+  font-weight: var(--weight-ui-regular);
+  color: var(--neutral-10);
+  background: var(--neutral-2);
+  min-height: 100dvh;
+  text-wrap: pretty;
+}
+.jds *,
+.jds *::before,
+.jds *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- page ---------- */
+.sr-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-l);
+  background: var(--neutral-1);
+  box-shadow: inset 0 calc(-1 * var(--border-s)) 0 0 var(--border-default-color);
+}
+.sr-title {
+  margin: 0;
+  font-size: var(--size-m);
+  line-height: var(--line-m);
+  letter-spacing: var(--letter-spacing-m);
+  font-weight: var(--weight-ui-heavy);
+}
+.sr-meta {
+  color: var(--neutral-7);
+  font-size: var(--size-xs);
+  line-height: var(--line-xs);
+  letter-spacing: var(--letter-spacing-xs);
+  font-variant-numeric: tabular-nums;
+}
+.sr-spacer {
+  flex: 1;
+}
+.sr-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .sr-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- controls ---------- */
+.sr-seg {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border-radius: var(--radius-s);
+  background: var(--neutral-3);
+  box-shadow: var(--surface-recessed-shadow);
+}
+.sr-seg button {
+  border: 0;
+  border-radius: calc(var(--radius-s) - 2px);
+  padding: var(--space-xxs) var(--space-s);
+  background: none;
+  color: var(--neutral-7);
+  font: inherit;
+  font-size: var(--size-xs);
+  line-height: var(--line-xs);
+  letter-spacing: var(--letter-spacing-xs);
+  font-weight: var(--weight-ui-medium);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--motion-duration) var(--motion-easing), color var(--motion-duration) var(--motion-easing);
+}
+.sr-seg button:hover {
+  color: var(--neutral-10);
+}
+.sr-seg button[aria-pressed='true'] {
+  background: var(--neutral-1);
+  color: var(--neutral-10);
+  box-shadow: var(--border-shadow-s), var(--shadow-s);
+}
+.sr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  border: 0;
+  border-radius: var(--radius-s);
+  padding: var(--space-xs) var(--space-m);
+  background: var(--neutral-1);
+  color: var(--neutral-10);
+  font: inherit;
+  font-size: var(--size-s);
+  line-height: var(--line-s);
+  letter-spacing: var(--letter-spacing-s);
+  font-weight: var(--weight-ui-medium);
+  cursor: pointer;
+  box-shadow: var(--border-shadow-s), var(--shadow-s);
+  transition: background-color var(--motion-duration) var(--motion-easing);
+}
+.sr-btn:hover {
+  background: var(--neutral-2);
+}
+.sr-btn:active {
+  transform: translateY(var(--motion-press-distance));
+}
+.sr-btn--ghost {
+  background: none;
+  box-shadow: none;
+  padding: var(--space-xs);
+}
+.sr-btn--ghost:hover {
+  background: var(--neutral-3-transparent);
+}
+.sr-btn:focus-visible,
+.sr-seg button:focus-visible,
+.sr-card:focus-visible,
+.sr-swatch:focus-visible,
+.sr-input:focus-visible,
+.sr-textarea:focus-visible {
+  outline: var(--focus-ring-outline);
+  outline-offset: 2px;
+}
+.sr-btn svg,
+.sr-seg svg {
+  width: 16px;
+  height: 16px;
+}
+.sr-input,
+.sr-textarea {
+  border: 0;
+  border-radius: var(--radius-s);
+  padding: var(--space-xs) var(--space-s);
+  background: var(--neutral-1);
+  color: var(--neutral-10);
+  font: inherit;
+  font-size: var(--size-s);
+  line-height: var(--line-s);
+  box-shadow: inset 0 0 0 var(--border-s) var(--neutral-4), inset 0 1px 2px 0 var(--neutral-10-transparent);
+}
+.sr-input {
+  width: 200px;
+}
+.sr-textarea {
+  width: 100%;
+  min-height: 132px;
+  resize: vertical;
+}
+.sr-input::placeholder,
+.sr-textarea::placeholder {
+  color: var(--neutral-6);
+}
+
+/* ---------- grid ---------- */
+.sr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: var(--space-m);
+  padding: var(--space-l);
+}
+.sr-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-m);
+}
+.sr-card .sr-paper {
+  border-radius: var(--radius-m);
+  box-shadow: var(--border-shadow-s), var(--shadow-s);
+  transition: box-shadow var(--motion-duration) var(--motion-easing);
+}
+.sr-card:hover .sr-paper {
+  box-shadow: var(--border-shadow-m), var(--shadow-m);
+}
+.sr-card[aria-current='true'] .sr-paper {
+  box-shadow: 0 0 0 var(--border-l) var(--neutral-10), var(--shadow-m);
+}
+.sr-cap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-xxs);
+  font-size: var(--size-xs);
+  line-height: var(--line-xs);
+  letter-spacing: var(--letter-spacing-xs);
+}
+.sr-cap-rank {
+  color: var(--neutral-6);
+  font-variant-numeric: tabular-nums;
+}
+.sr-cap-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--weight-ui-medium);
+}
+.sr-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex: none;
+  box-shadow: inset 0 0 0 1.5px var(--neutral-5);
+}
+.sr-dot[data-status='approved'] {
+  background: var(--success);
+  box-shadow: none;
+}
+.sr-dot[data-status='changes'] {
+  background: var(--warning);
+  box-shadow: none;
+}
+.sr-cap svg {
+  width: 12px;
+  height: 12px;
+  color: var(--neutral-6);
+  flex: none;
+}
+.sr-empty {
+  padding: var(--space-xxl) var(--space-l);
+  color: var(--neutral-7);
+}
+
+/* ---------- paper the stamps sit on (content, not chrome) ---------- */
+.sr-paper {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.sr-paper[data-paper='notebook'] {
+  background-color: #0e0e0e;
+  background-image: radial-gradient(rgba(237, 234, 224, 0.17) 1px, transparent 1.2px);
+  background-size: 14px 14px;
+}
+.sr-paper[data-paper='notebook'] .sr-stamp {
+  mix-blend-mode: screen;
+}
+.sr-paper[data-paper='paper'] {
+  background-color: #efe9dc;
+  background-image: radial-gradient(rgba(60, 40, 10, 0.07) 1px, transparent 1.2px);
+  background-size: 5px 7px;
+}
+.sr-paper[data-paper='paper'] .sr-stamp {
+  mix-blend-mode: multiply;
+}
+.sr-stamp {
+  width: 78%;
+  height: 78%;
+}
+
+/* ---------- inspector ---------- */
+.sr-inspector {
+  position: sticky;
+  top: 61px;
+  max-height: calc(100dvh - 61px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  padding: var(--space-l);
+  background: var(--neutral-1);
+  box-shadow: inset var(--border-s) 0 0 0 var(--border-default-color);
+}
+.sr-inspector .sr-paper {
+  border-radius: var(--radius-m);
+  box-shadow: var(--border-shadow-s);
+}
+.sr-inspector .sr-stamp {
+  width: 84%;
+  height: 84%;
+}
+.sr-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.sr-h2 {
+  margin: 0;
+  font-size: var(--size-l);
+  line-height: var(--line-l);
+  letter-spacing: var(--letter-spacing-l);
+  font-weight: var(--weight-ui-heavy);
+}
+.sr-specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-xxs) var(--space-m);
+  margin: 0;
+  font-size: var(--size-xs);
+  line-height: var(--line-xs);
+  letter-spacing: var(--letter-spacing-xs);
+}
+.sr-specs dt {
+  color: var(--neutral-7);
+}
+.sr-specs dd {
+  margin: 0;
+}
+.sr-label {
+  font-weight: var(--weight-ui-medium);
+}
+.sr-swatch {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: inset 0 0 0 var(--border-m) rgba(0, 0, 0, 0.15);
+}
+.sr-swatch[aria-pressed='true'] {
+  box-shadow: 0 0 0 2px var(--neutral-1), 0 0 0 3.5px var(--neutral-10);
+}
+.sr-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.sr-hint {
+  color: var(--neutral-7);
+  font-size: var(--size-xs);
+  line-height: var(--line-xs);
+  letter-spacing: var(--letter-spacing-xs);
+}
+.sr-hint[data-tone='error'] {
+  color: var(--error);
+}
+kbd.sr-kbd {
+  font: inherit;
+  padding: 0 var(--space-xxs);
+  border-radius: var(--radius-xs);
+  background: var(--neutral-3);
+}
