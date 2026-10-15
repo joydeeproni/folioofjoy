@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { SiteLink } from '@/components/site-link'
 import { BackLink } from '@/components/back-link'
 import { WorkMarquee } from '@/components/home/work-marquee'
 
@@ -11,12 +11,12 @@ export default function PreviewPage() {
       <BackLink />
       {/* Cases sits opposite BackLink, on the same inset the disc uses so the
           two corners line up. Homepage nav link styling. */}
-      <Link
+      <SiteLink
         href="/writings?tab=cases"
         className="fixed top-[calc(1.25rem+var(--sat))] right-[calc(1.25rem+var(--sar))] z-50 font-sans text-sm text-white/90 transition-colors hover:text-[#2CA152]"
       >
         Cases
-      </Link>
+      </SiteLink>
       <WorkMarquee />
       {/* Pinned to the bottom of the screen, independent of the reel. Stays
           pointer-events-none so it never eats a drag meant for the reel. */}

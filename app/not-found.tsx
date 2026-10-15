@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 
 export default function NotFound() {
   return (
@@ -15,12 +15,12 @@ export default function NotFound() {
           <p className="mt-6 max-w-[34ch] font-sans text-lg leading-relaxed text-[#EDEAE0]/65">
             This path doesn&rsquo;t lead anywhere. Let&rsquo;s get you back somewhere familiar.
           </p>
-          <Link
+          <SiteLink
             href="/"
             className="mt-8 inline-flex items-center rounded-full border border-[#EDEAE0]/20 px-5 py-2.5 font-mono text-xs uppercase tracking-[0.16em] transition-colors hover:border-[#2CA152] hover:bg-[#2CA152] hover:text-white"
           >
             Back to the entrance
-          </Link>
+          </SiteLink>
         </section>
 
         <figure className="relative mx-auto aspect-[3/2] w-full max-w-[760px] overflow-hidden rounded-xl">

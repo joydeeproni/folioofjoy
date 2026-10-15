@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import { usePathname } from 'next/navigation';
+import { stripBase } from '@/lib/review-path';
 import { getTracks, type Track } from '@/lib/music';
 import { themeForTrack, accessibleTheme, DEFAULT_THEME, type ThemeColors } from '@/lib/color';
 import { CassetteButton } from '@/components/cassette-button';
@@ -268,14 +269,15 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
 export function AudioUI() {
   const { playerVisible } = useAudio();
-  const pathname = usePathname();
+  const pathname = stripBase(usePathname() ?? '/');
 
   // Avoid SSR mismatch — render nothing on the server
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
-  // The cassette lives only on the home page; other routes stay clean.
+  // The cassette lives only on the home page (public or review copy); other
+  // routes stay clean.
   if (pathname !== '/') return null;
 
   return (

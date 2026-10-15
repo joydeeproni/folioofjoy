@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CircleButton } from '@/components/circle-button';
+import { useSiteHref } from '@/components/site-link';
 
 // Full text spun around the disc on hover, per destination.
 const ARC_BY_DEST: Record<string, string> = {
@@ -16,6 +17,7 @@ const ARC_BY_DEST: Record<string, string> = {
 // keyboard.
 export function BackLink({ href = '/' }: { href?: string }) {
   const router = useRouter();
+  const siteHref = useSiteHref();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -25,11 +27,11 @@ export function BackLink({ href = '/' }: { href?: string }) {
       // A modal (e.g. the Lightbox) handles its own Escape-to-close; if one is
       // open, let it close without also navigating away from the page.
       if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
-      router.push(href);
+      router.push(siteHref(href));
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [href, router]);
+  }, [href, router, siteHref]);
 
   // Sized and placed like the Next.js dev-tools indicator: a small disc tucked
   // into the corner, growing out of it while hovered/pressed.

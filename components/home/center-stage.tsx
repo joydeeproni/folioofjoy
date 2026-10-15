@@ -9,7 +9,7 @@ import { GameHud } from './swing-game/game-hud';
 import { GameResults } from './swing-game/game-results';
 import { WarmupDots } from './swing-game/warmup-dots';
 import { DitherReveal } from './dither-reveal';
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { BRAND } from '@/lib/brand';
 
 export type HoverTarget = null | 'about' | 'photography' | 'writings';
@@ -103,13 +103,13 @@ export function CenterStage({
           {revealed
             ? QUOTE_SEGMENTS.map((s, i) =>
                 s.href ? (
-                  <Link
+                  <SiteLink
                     key={i}
                     href={s.href}
                     className="text-white transition-colors hover:text-[#2CA152]"
                   >
                     {s.t}
-                  </Link>
+                  </SiteLink>
                 ) : (
                   <span key={i}>{s.t}</span>
                 ),
@@ -130,9 +130,9 @@ export function CenterStage({
         className={`fixed bottom-[calc(2rem+var(--sab))] left-1/2 -translate-x-1/2 z-30 text-sm font-sans ${chromeCls}`}
         hidden={hoverTarget !== null}
       >
-        <Link href="/preview" className="text-white/90 hover:text-[#2CA152] transition-colors">
+        <SiteLink href="/preview" className="text-white/90 hover:text-[#2CA152] transition-colors">
           Preview Work
-        </Link>
+        </SiteLink>
       </div>
 
       {/* ABOUT preview — yellow pixel "about" + 6502 + swing set */}
