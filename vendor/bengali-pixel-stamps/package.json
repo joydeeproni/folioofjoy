@@ -1,0 +1,28 @@
+{
+  "name": "bengali-pixel-stamps",
+  "version": "1.0.0",
+  "description": "197 pixel postage stamps, one per country, with season, year and country code",
+  "type": "module",
+  "main": "bengali-pixel-stamps.js",
+  "module": "bengali-pixel-stamps.js",
+  "types": "bengali-pixel-stamps.d.ts",
+  "browser": "bengali-pixel-stamps.global.js",
+  "exports": {
+    ".": {
+      "types": "./bengali-pixel-stamps.d.ts",
+      "default": "./bengali-pixel-stamps.js"
+    },
+    "./global": "./bengali-pixel-stamps.global.js",
+    "./svg/*": "./svg/*",
+    "./countries.json": "./countries.json"
+  },
+  "files": [
+    "*.js",
+    "*.d.ts",
+    "svg",
+    "countries.json",
+    "README.md"
+  ],
+  "sideEffects": true,
+  "license": "OFL-1.1"
+}

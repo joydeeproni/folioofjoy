@@ -4,6 +4,7 @@ import { hexFor } from '@/lib/guestbook/types';
 import type { Stamp } from '@/lib/guestbook/types';
 import { STAMP_DEFAULTS, type StampDesign } from '@/lib/guestbook/design';
 import { PIXEL, PIXEL_GAPS, SANS, SCRIPT_FONTS } from './stamp-fonts';
+import { BengaliStamp } from './bengali-stamp';
 import { GlobeStamp, PassportStamp } from './stamp-styles';
 
 // Arc paths for the two rings of text. Both run LEFT-TO-RIGHT (x=10 → x=90);
@@ -117,8 +118,8 @@ export function GuestbookStamp({
         // still read as layered ink.
         //
         // The globe is the exception: it's a solid disc, and screening a solid fill
-        // against near-black paper washes it out. Postal and passport are both line
-        // art on transparent, so they layer as ink.
+        // against near-black paper washes it out. Postal, passport and bengali are
+        // all line art on transparent, so they layer as ink.
         mixBlendMode:
           style === 'globe' ? 'normal' : (design.blend as React.CSSProperties['mixBlendMode']),
         opacity: preview ? design.opacity * 0.42 : design.opacity,
@@ -130,6 +131,7 @@ export function GuestbookStamp({
 
       {style === 'passport' && <PassportStamp stamp={stamp} uid={uid} />}
       {style === 'globe' && <GlobeStamp stamp={stamp} uid={uid} />}
+      {style === 'bengali' && <BengaliStamp stamp={stamp} />}
 
       {style === 'postal' && (
         <>
