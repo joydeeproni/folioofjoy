@@ -1,11 +1,14 @@
 import { BRAND, BRAND_ORDER, type BrandColor } from '@/lib/brand';
 import type { StampFont } from './greetings';
 
-// The three stamp designs. 'postal' is the original ring stamp; 'passport' and
+// The stamp designs. 'postal' is the original ring stamp; 'passport' and
 // 'globe' come from the Tactile Create V3 Figma (node 451:6770) and are built on
-// Google Sans Flex's wdth axis plus the shared continents mask.
-export type StampStyle = 'postal' | 'passport' | 'globe';
-export const STAMP_STYLES: StampStyle[] = ['postal', 'passport', 'globe'];
+// Google Sans Flex's wdth axis plus the shared continents mask. 'bengali' is the
+// per-country pixel stamp from vendor/bengali-pixel-stamps, and the only one new
+// presses get — the other three stay so stamps already in the book still render.
+export type StampStyle = 'postal' | 'passport' | 'globe' | 'bengali';
+export const STAMP_STYLES: StampStyle[] = ['postal', 'passport', 'globe', 'bengali'];
+export const NEW_STAMP_STYLE: StampStyle = 'bengali';
 
 // A single stamp pressed into the guestbook.
 export interface Stamp {
@@ -48,15 +51,9 @@ export interface StampRequest {
 export const PAGE_CAPACITY = 24;
 export const MAX_PAGES = 24;
 
-// Derived from a server-owned seed, so a spread gets a mix of all three designs
-// without letting the client choose arbitrary visual properties. The GET preview
-// and POST use the same visitor/page seed, so what is hovered is what gets pressed.
-export function stampStyleFor(seed: string): StampStyle {
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) h = (h * 37 + seed.charCodeAt(i)) >>> 0;
-  return STAMP_STYLES[h % STAMP_STYLES.length];
-}
-
+// Colour and rotation come from a server-owned seed, so the client can't choose
+// arbitrary visual properties. The GET preview and POST use the same
+// visitor/page seed, so what is hovered is what gets pressed.
 export function stampColor(seed: string): BrandColor {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;

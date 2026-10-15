@@ -54,9 +54,9 @@ function makeStamp(country: string, i: number, color?: BrandColor, style: StampS
 
 export function StampLab() {
   const [tab, setTab] = useState<'tiers' | 'countries' | 'notebook' | 'styles'>('styles');
-  // Which of the three designs the grids render. The notebook tab always mixes all
-  // three, since that's what a real spread looks like.
-  const [style, setStyle] = useState<StampStyle>('passport');
+  // Which design the grids render. The notebook tab always mixes them all,
+  // since that's what a real spread looks like.
+  const [style, setStyle] = useState<StampStyle>('bengali');
 
   // ---- Stamp geometry ----
   const geo = useDialKit('Stamp · geometry', {
@@ -132,7 +132,7 @@ export function StampLab() {
     () => Object.keys(GREETINGS).map((c, i) => makeStamp(c, i, undefined, style)),
     [style],
   );
-  // Side-by-side of the three designs in all four brand colours.
+  // Side-by-side of every design in all four brand colours.
   const styleMatrix = useMemo(
     () =>
       STAMP_STYLES.flatMap((st) =>
@@ -167,7 +167,7 @@ export function StampLab() {
         <nav className="mt-6 flex flex-wrap gap-2">
           {(
             [
-              ['styles', 'All 3 styles × 4 colours'],
+              ['styles', 'All 4 styles × 4 colours'],
               ['tiers', 'Font tiers (12)'],
               ['countries', `All countries (${Object.keys(GREETINGS).length})`],
               ['notebook', 'Notebook'],
@@ -296,7 +296,7 @@ function NotebookPreview({
     // Deterministic scatter — a fixed lattice with a hash-based jitter, so the
     // layout doesn't reshuffle on every dial tweak and you can compare frames.
     return Array.from({ length: count }, (_, i) => {
-      const s = makeStamp(codes[(i * 7) % codes.length], i);
+      const s = makeStamp(codes[(i * 7) % codes.length], i, undefined, STAMP_STYLES[i % STAMP_STYLES.length]);
       const h = (i * 2654435761) % 1000;
       return {
         ...s,

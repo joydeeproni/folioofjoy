@@ -6,10 +6,10 @@ import { safeStampPosition } from '@/lib/guestbook/layout';
 import { pageCounts, readPage, writeStamp } from '@/lib/guestbook/store';
 import {
   MAX_PAGES,
+  NEW_STAMP_STYLE,
   PAGE_CAPACITY,
   stampColor,
   stampRotation,
-  stampStyleFor,
   type Stamp,
 } from '@/lib/guestbook/types';
 
@@ -56,7 +56,7 @@ export async function GET(req: Request) {
           country,
           ...greetingFor(country),
           color: stampColor(seed),
-          style: stampStyleFor(seed),
+          style: NEW_STAMP_STYLE,
           rot: stampRotation(seed),
         },
       },
@@ -120,7 +120,7 @@ export async function POST(req: Request) {
       y: position.y,
       rot,
       color: stampColor(seed),
-      style: stampStyleFor(seed),
+      style: NEW_STAMP_STYLE,
       country,
       hello: g.hello,
       place: g.place,
