@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { X } from 'lucide-react';
 import { MobileGallery } from './mobile-gallery';
 import { WorkCarousel } from './work/work-carousel';
@@ -119,14 +119,14 @@ export function WorkLink() {
           {/* Cases mirrors the close button's corner and drops in on the same
               choreography. stopPropagation because the overlay's own onClick
               closes the carousel — no point tearing it down mid-navigation. */}
-          <Link
+          <SiteLink
             href="/writings?tab=cases"
             onClick={(e) => e.stopPropagation()}
             className={`absolute top-6 right-6 z-20 font-sans text-sm text-white/90 transition-all duration-300 hover:text-[#2CA152] ${carouselVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
             style={{ transitionDelay: carouselVisible ? '200ms' : '0ms' }}
           >
             Cases
-          </Link>
+          </SiteLink>
 
           <div className={`relative z-10 w-full transition-all duration-500 ${carouselVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             <WorkCarousel items={WORK_ITEMS} />

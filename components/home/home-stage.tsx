@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { CenterStage } from './center-stage';
 import { ScrambleSwapText } from '@/components/scramble-swap-text';
 import type { SwingSetHandle } from './swing-set';
@@ -32,7 +32,7 @@ export function HomeStage() {
         >
           Photography
         </a>
-        <Link href="/about" className={linkCls} aria-label="Joy Sengupta">
+        <SiteLink href="/about" className={linkCls} aria-label="Joy Sengupta">
           {/* Logo on mobile, name on desktop — the name scrambles to “About Me” on hover */}
           <img src="/icon.svg" alt="Joy Sengupta" className="w-10 h-10 md:hidden" />
           <ScrambleSwapText
@@ -40,10 +40,10 @@ export function HomeStage() {
             hoverLabel="About Me"
             className="hidden md:inline-block"
           />
-        </Link>
-        <Link href="/writings" className={linkCls}>
+        </SiteLink>
+        <SiteLink href="/writings" className={linkCls}>
           Writings
-        </Link>
+        </SiteLink>
       </nav>
 
       {/* Rotated copyright strip on the left edge */}

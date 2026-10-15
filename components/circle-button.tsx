@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type MouseEventHandler } from 'react';
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { ArrowUpRight } from 'lucide-react';
 import { SpinningText } from '@/components/ui/spinning-text';
 import { BRAND } from '@/lib/brand';
@@ -122,8 +122,8 @@ export function CircleButton({
       {body}
     </a>
   ) : (
-    <Link {...commonProps} href={href}>
+    <SiteLink {...commonProps} href={href}>
       {body}
-    </Link>
+    </SiteLink>
   );
 }

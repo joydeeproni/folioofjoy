@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 // Global bottom-right control: a cassette that opens the Lounge. Replaces the
@@ -10,13 +10,13 @@ export function CassetteButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Link
+        <SiteLink
           href="/zen"
           aria-label="Enter the Lounge"
           className="fixed bottom-[calc(1.5rem+var(--sab))] right-[calc(1.5rem+var(--sar))] z-50 block transition-transform hover:scale-105"
         >
           <img src="/cassette.svg" alt="" className="w-20 md:w-24 h-auto" />
-        </Link>
+        </SiteLink>
       </TooltipTrigger>
       <TooltipContent side="left">Lounge</TooltipContent>
     </Tooltip>

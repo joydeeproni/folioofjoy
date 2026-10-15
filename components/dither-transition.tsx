@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useSitePathname } from '@/components/site-link';
 import { useAudio } from '@/lib/audio-context';
 import {
   DEFAULT_DITHER,
@@ -18,7 +18,7 @@ export function DitherTransition() {
   const seedRef = useRef(0);
   const initialReadyRef = useRef(false);
 
-  const pathname = usePathname();
+  const pathname = useSitePathname();
   const { gateOpen } = useAudio();
 
   const play = useCallback(() => {

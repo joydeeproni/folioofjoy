@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { SiteLink } from '@/components/site-link';
 import { useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import type { WritingListItem } from '@/lib/content/types';
@@ -154,9 +154,9 @@ function Row({
       {body}
     </a>
   ) : (
-    <Link href={href} className={`group ${cls}`} {...hoverProps}>
+    <SiteLink href={href} className={`group ${cls}`} {...hoverProps}>
       {body}
-    </Link>
+    </SiteLink>
   );
 
   if (!wip) return row;
