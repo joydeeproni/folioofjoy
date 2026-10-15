@@ -3,7 +3,8 @@ import type { MetadataRoute } from 'next'
 // Served by Next.js at /manifest.webmanifest. `display: standalone` + the Apple
 // web-app meta tags in layout.tsx make the site launch chrome-free when added to
 // the Home Screen. background_color matches the near-black --background token;
-// theme_color matches the default themeColor (updated live per-track on mobile).
+// theme_color is the standalone app chrome; in the browser, ViewportEdges keeps
+// the theme-color meta on the colour at the top edge.
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Folio of Joy',

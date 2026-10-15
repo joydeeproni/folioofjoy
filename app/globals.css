@@ -196,19 +196,21 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
-  /* Root background tracks the live theme so the mobile status bar / address
-     bar area and desktop overscroll blend with the page instead of showing
-     a black crop. */
+  /* html takes the colour at the top edge and body the colour at the bottom
+     edge (see ViewportEdges), so Safari's status bar / toolbar and overscroll
+     blend with the page. Before hydration both fall back to the live theme. */
   html,
   body {
-    background-color: var(--theme-bg);
     /* App-like feel: no rubber-band overscroll, no grey tap-flash. */
     overscroll-behavior: none;
     -webkit-tap-highlight-color: transparent;
   }
+  html {
+    background-color: var(--edge-top-background, var(--theme-bg));
+  }
   body {
     @apply text-foreground;
-    transition: background-color 1000ms ease-in-out;
+    background-color: var(--edge-bottom-background, var(--theme-bg));
   }
   /* Kill the 300ms tap delay / double-tap-to-zoom on interactive elements
      without disabling pinch-zoom (accessibility). */
@@ -221,6 +223,43 @@ body {
   textarea {
     touch-action: manipulation;
   }
+}
+
+/* Viewport edge strips (components/viewport-edges.tsx): thin fixed bands at
+   the top and bottom edges, painted the colour of the surface they touch, so
+   Safari tints its status bar and toolbar from them. At least 12px, or the
+   full safe-area inset where there is one. Above page content and modals,
+   below the dither transition; controls sit further in (1.25rem + inset), so
+   the strips never cover them. `color` exposes the resolved theme background
+   to the script as its fallback. */
+.edge-top,
+.edge-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 400;
+  pointer-events: none;
+  color: var(--theme-bg);
+}
+.edge-top {
+  top: 0;
+  height: max(12px, env(safe-area-inset-top));
+}
+.edge-bottom {
+  bottom: 0;
+  height: max(12px, env(safe-area-inset-bottom));
+}
+.edge-top::after,
+.edge-bottom::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.edge-top::after {
+  background-color: var(--edge-top-background, var(--theme-bg));
+}
+.edge-bottom::after {
+  background-color: var(--edge-bottom-background, var(--theme-bg));
 }
 
 /* Green highlight when selecting any text across the site. Kept UNLAYERED so

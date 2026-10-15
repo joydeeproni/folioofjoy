@@ -197,7 +197,7 @@ export function CenterStage({
             type="button"
             onClick={game.exit}
             aria-label="Quit game"
-            className="fixed right-6 top-[calc(1.25rem+var(--sat))] z-[56] cursor-pointer border-0 bg-transparent font-mono text-xl text-white/50 hover:text-white"
+            className="fixed right-[calc(1.5rem+var(--sar))] top-[calc(1.25rem+var(--sat))] z-[56] cursor-pointer border-0 bg-transparent font-mono text-xl text-white/50 hover:text-white"
           >
             ×
           </button>
