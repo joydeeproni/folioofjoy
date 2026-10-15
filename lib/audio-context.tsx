@@ -139,18 +139,14 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setTheme(themeForTrack(idx < 0 ? 0 : idx));
   }, [currentTrack, tracks, accessibleMode, isPlaying]);
 
-  // Publish theme tokens as CSS variables so any element can reference them,
-  // and sync the mobile browser-chrome color (status bar / address bar) so it
-  // blends with the page instead of showing a black crop.
+  // Publish theme tokens as CSS variables so any element can reference them.
+  // The browser chrome (theme-color, html/body backgrounds) is owned by
+  // ViewportEdges, which follows whatever surface is painted at each edge.
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--theme-bg', theme.background);
     root.style.setProperty('--theme-fg', theme.foreground);
     root.style.setProperty('--theme-highlight', theme.accent);
-    root.style.backgroundColor = theme.background;
-    document.body.style.backgroundColor = theme.background;
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme.background);
   }, [theme]);
 
   // Persist the accessibility preference across sessions.

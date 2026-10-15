@@ -7,6 +7,7 @@ import { DialRoot } from 'dialkit'
 import { Providers } from './providers'
 import { AudioUI } from '@/lib/audio-context'
 import { DitherTransition } from '@/components/dither-transition'
+import { ViewportEdges } from '@/components/viewport-edges'
 import { ContentProvider } from '@/components/content-provider'
 import { AgentationDev } from '@/components/dev/agentation-dev'
 import { getWork, getWritingsNav } from '@/lib/content'
@@ -88,9 +89,9 @@ export const metadata: Metadata = {
 }
 
 // Pure black so the mobile browser chrome blends with the black homepage on
-// first paint; updated live per-track by the audio context. `viewport-fit:
-// cover` lets content extend into the notch / home-indicator regions — the
-// prerequisite for the safe-area insets.
+// first paint; ViewportEdges then keeps it on the colour at the top edge.
+// `viewport-fit: cover` lets content extend into the notch / home-indicator
+// regions — the prerequisite for the safe-area insets.
 export const viewport: Viewport = {
   themeColor: '#000000',
   width: 'device-width',
@@ -120,6 +121,8 @@ export default async function RootLayout({
           <AudioUI />
           <DitherTransition />
         </Providers>
+        {/* Direct child of <body> so the fixed edge strips have no transformed ancestor. */}
+        <ViewportEdges />
         {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}
         {process.env.NODE_ENV !== 'production' && <AgentationDev />}
         {process.env.NODE_ENV === 'production' && <Analytics />}
