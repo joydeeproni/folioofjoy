@@ -54,7 +54,7 @@ export function CenterStage({
     maxWidth: [16, 8, 40, 0.5], // characters per line (ch) — locks line breaks across widths
     lineHeight: [1.06, 0.6, 2, 0.01],
     letterSpacing: [0.035, -0.15, 0.4, 0.005],
-    wordSpacing: [0.2, -0.4, 1.5, 0.01],
+    wordSpacing: [0.3, -0.4, 1.5, 0.01],
     kerning: { type: 'select' as const, options: ['auto', 'normal', 'none'], default: 'auto' },
     align: { type: 'select' as const, options: ['justify', 'left', 'center'], default: 'justify' },
     stylisticAlts: true, // 'salt'
