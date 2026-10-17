@@ -10,6 +10,7 @@ import { DitherTransition } from '@/components/dither-transition'
 import { ViewportEdges } from '@/components/viewport-edges'
 import { ContentProvider } from '@/components/content-provider'
 import { AgentationDev } from '@/components/dev/agentation-dev'
+import { DisplayFontDials } from '@/components/dev/display-font-dials'
 import { getWork, getWritingsNav } from '@/lib/content'
 import 'dialkit/styles.css'
 import './globals.css'
@@ -124,6 +125,7 @@ export default async function RootLayout({
         {/* Direct child of <body> so the fixed edge strips have no transformed ancestor. */}
         <ViewportEdges />
         {process.env.NODE_ENV !== 'production' && <DialRoot position="top-right" />}
+        {process.env.NODE_ENV !== 'production' && <DisplayFontDials />}
         {process.env.NODE_ENV !== 'production' && <AgentationDev />}
         {process.env.NODE_ENV === 'production' && <Analytics />}
         {process.env.NODE_ENV === 'production' && (
