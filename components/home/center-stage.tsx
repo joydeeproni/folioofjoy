@@ -48,13 +48,13 @@ export function CenterStage({
   const WRITINGS = useWritings();
 
   // Hero quote typography — live dialkit panel (dev only) while Labor Union is
-  // on trial. Defaults are the values baked in for Geist Pixel.
+  // on trial. Defaults are the values tuned for Labor Union.
   const q = useDialKit('Homepage Quote · Labor Union', {
     sizeVw: [13.4, 2, 20, 0.05],
     maxWidth: [16, 8, 40, 0.5], // characters per line (ch) — locks line breaks across widths
     lineHeight: [1.06, 0.6, 2, 0.01],
-    letterSpacing: [-0.025, -0.15, 0.4, 0.005],
-    wordSpacing: [-0.2, -0.4, 1.5, 0.01],
+    letterSpacing: [0.035, -0.15, 0.4, 0.005],
+    wordSpacing: [0.2, -0.4, 1.5, 0.01],
     kerning: { type: 'select' as const, options: ['auto', 'normal', 'none'], default: 'auto' },
     align: { type: 'select' as const, options: ['justify', 'left', 'center'], default: 'justify' },
     stylisticAlts: true, // 'salt'
