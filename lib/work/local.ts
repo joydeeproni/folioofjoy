@@ -42,6 +42,13 @@ export const LOCAL_WORK: WorkItem[] = [
   { src: `${BLOB}/tactile-releases-dashboard.png`, caption: "Managing app releases in the Tactile Releases Dashboard — builds organized across production, staged rollouts, managed publishing.", category: 'DTY', links: [] },
   { src: `${BLOB}/game-canvas-panel.png`, caption: "All-in-one panel to manage your game, liveops, events and build configurations.", category: 'DTY', links: [] },
 
+  // Figma UI kits (2026, self-initiated). Hues differ, so orderWork() spreads
+  // them across the preview rather than bunching them up.
+  { src: `${BLOB}/quayline-yard.png`, caption: "Quayline, a Figma kit for container terminals — the yard view, where every stack's height reads at a glance.", category: 'JOY', links: [] },
+  { src: `${BLOB}/ledgerlens-transactions.png`, caption: "Ledgerlens, a Figma kit for AML analysts — follow the money as a ribbon, then decide who gets reported.", category: 'JOY', links: [] },
+  { src: `${BLOB}/gridwork-inspections.png`, caption: "Gridwork, a Figma kit for utility crews — a season of drone findings as a heatmap, worst feeder first.", category: 'JOY', links: [] },
+  { src: `${BLOB}/shiftboard-absence.png`, caption: "Shiftboard, a Figma kit for rostering — a month of absences where letter, colour and pattern all say the same thing.", category: 'JOY', links: [] },
+
   // Personal bits + palette-cleansers scattered through the preview. The paintings
   // aren't my work — winter paintings that calm me, credited to their artists.
   { src: `${BLOB}/painting-christmas-window.jpg`, caption: 'Christmas Window — Elena Sokolova. A winter palette-cleanser.', category: 'JOY', links: [] },
