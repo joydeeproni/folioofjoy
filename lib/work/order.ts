@@ -72,6 +72,10 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   '6c3293fa2ea4d08c34d286423348a3a8083cd217-2457x1477.png': { hue: 225, type: 'web', hash: '62aa5d7e27a4' },
   '2b92ccb1a684f606d4e32c4eac32e1592cde9c48-2457x1842.png': { hue: 235, type: 'web', hash: '9e5b1836492b' },
   'def2f904068bf508129457fa6b1f1bf152a06e98-1824x1365.png': { hue: 235, type: 'web', hash: 'b52856902536' },
+  'quayline-yard.png': { hue: 225, type: 'web', hash: '613178f697ad' },
+  'ledgerlens-transactions.png': { hue: 355, type: 'web', hash: '46c3a66a94c8' },
+  'gridwork-inspections.png': { hue: 175, type: 'web', hash: 'b887ced2670f' },
+  'shiftboard-absence.png': { hue: 260, type: 'web', hash: '5a745ddd26ad' },
 }
 
 export function workKey(src: string): string {
