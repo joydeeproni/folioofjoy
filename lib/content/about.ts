@@ -115,6 +115,7 @@ export const INSPIRATION: InspirationItem[] = [
   { category: "Creatives", name: "Philip Linnemann", note: "Someone whose portfolio is all over public places in Denmark" },
   { category: "Creatives", name: "Matt D. Smith", note: "His videos turned me into a designer" },
   { category: "Creatives", name: "Gawx", note: "You don’t need time, space & equipment to create" },
+  { category: "Creatives", name: "Anton Sokolov", note: "His unique aesthetics and visual, sound and art discography" },
   { category: "Companies", name: "March Tee", note: "Small non-luxury boutique t-shirt company, who aren’t sellouts" },
   { category: "Companies", name: "Pigeon & Co", note: "They know how to have fun in their work" },
   { category: "Companies", name: "Xiaomi", note: "Very underrated tech company, often judged and overlooked" },
