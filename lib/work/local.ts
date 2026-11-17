@@ -37,6 +37,7 @@ export const LOCAL_WORK: WorkItem[] = [
 
   // Tactile tooling + client work (2025–26 exports).
   { src: `${BLOB}/tactile-build-server-toggle.gif`, caption: "Tactile Build Server — a toggle that exposes options progressively rather than cluttering the page.", category: 'DTY', links: [] },
+  { src: `${BLOB}/storyboard-panel-redesign.mp4`, caption: "Tactile Create — redesigning the storyboard generator panel: one long form folded into numbered, collapsible steps.", category: 'JOY', links: [] },
   { src: `${BLOB}/tactile-core-tools.mp4`, caption: "A preview of Tactile Core Tools — the tools I designed that run game-dev operations behind the scenes.", category: 'DTY', links: [] },
   { src: `${BLOB}/rug-brand-landing.mp4`, caption: "Editorial-style landing page for a designer rug brand from India.", category: 'BIZ', links: [] },
   { src: `${BLOB}/tactile-releases-dashboard.png`, caption: "Managing app releases in the Tactile Releases Dashboard — builds organized across production, staged rollouts, managed publishing.", category: 'DTY', links: [] },
