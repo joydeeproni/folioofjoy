@@ -76,6 +76,7 @@ export const WORK_META: Record<string, { hue: number; type: WorkType; hash: stri
   'ledgerlens-transactions.png': { hue: 355, type: 'web', hash: '46c3a66a94c8' },
   'gridwork-inspections.png': { hue: 175, type: 'web', hash: 'b887ced2670f' },
   'shiftboard-absence.png': { hue: 260, type: 'web', hash: '5a745ddd26ad' },
+  'storyboard-panel-redesign.mp4': { hue: 145, type: 'web', hash: '0272353256a6' },
 }
 
 export function workKey(src: string): string {
